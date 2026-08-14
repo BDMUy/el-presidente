@@ -63,13 +63,13 @@ export interface Resources {
   /** 0-100. Define los resultados deportivos. */
   plantel: number;
   /** 0-100. Capital político: blindaje, asambleas, gestiones turbias. */
-  rosca: number;
+  influencia: number;
 }
 
 export const RESOURCE_BOUNDS = {
   hinchada: [0, 100],
   plantel: [0, 100],
-  rosca: [0, 100],
+  influencia: [0, 100],
   socios: [0, 200],
 } as const;
 
@@ -92,7 +92,7 @@ export interface Effects {
   hinchada?: number;
   socios?: number;
   plantel?: number;
-  rosca?: number;
+  influencia?: number;
   /** Marcas que otros eventos pueden consultar con `requires`. */
   flags?: Record<string, number | boolean>;
   /** Efectos que recién se aplican N temporadas después. */
@@ -133,8 +133,8 @@ export interface Condition {
   maxHinchada?: number;
   minCaja?: number;
   maxCaja?: number;
-  minRosca?: number;
-  maxRosca?: number;
+  minInfluencia?: number;
+  maxInfluencia?: number;
   minPlantel?: number;
   maxPlantel?: number;
   minSize?: number;

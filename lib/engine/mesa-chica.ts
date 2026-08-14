@@ -20,7 +20,7 @@ const EMPTY: MesaChicaAssignment = { plantel: 0, dt: 0, hinchada: 0, prensa: 0, 
  * El índice dentro de este array es lo que viaja en el log de la partida.
  *
  * Incluye los repartos de menos de tres fichas, y también el de cero: como
- * cada ficha se paga en plata o en rosca, guardárselas es una decisión
+ * cada ficha se paga en plata o en influencia, guardárselas es una decisión
  * legítima y tiene que ser representable.
  */
 export function enumerateAssignments(): MesaChicaAssignment[] {
@@ -72,7 +72,7 @@ export function winProbability(match: BigMatch, assignment: MesaChicaAssignment)
 export function assignmentCost(assignment: MesaChicaAssignment): Effects {
   return {
     caja: -(assignment.plantel * 0.8 + assignment.hinchada * 0.3 + assignment.prensa * 0.5),
-    rosca: -(assignment.gestion * 12),
+    influencia: -(assignment.gestion * 12),
     hinchada: assignment.hinchada * 2,
   };
 }
@@ -87,7 +87,7 @@ export interface MesaChicaOutcome {
  * Resuelve el partido y devuelve las consecuencias.
  *
  * La gestión política es la palanca más fuerte y por eso arrastra la factura
- * más cara: quema rosca ya, y puede estallar como escándalo dos temporadas
+ * más cara: quema influencia ya, y puede estallar como escándalo dos temporadas
  * más tarde, cuando ya te olvidaste de que la usaste.
  */
 export function resolveMesaChica(
@@ -100,12 +100,12 @@ export function resolveMesaChica(
 
   if (won) {
     effects.hinchada = 14;
-    effects.rosca = 6;
+    effects.influencia = 6;
   } else {
     // El blindaje de prensa recién se paga acá: amortigua la derrota.
     const amortiguado = assignment.prensa * 3;
     effects.hinchada = Math.min(0, -16 + amortiguado);
-    effects.rosca = -4;
+    effects.influencia = -4;
   }
 
   const deferred: NonNullable<Effects['deferred']> = [];
@@ -114,7 +114,7 @@ export function resolveMesaChica(
       deferred.push({
         inSeasons: rand.int(1, 2),
         text: 'Salieron a la luz los audios de aquella final. La gente ata cabos.',
-        effects: { hinchada: -12, rosca: -10, caja: -2 },
+        effects: { hinchada: -12, influencia: -10, caja: -2 },
       });
     }
   }
@@ -152,7 +152,7 @@ function defeatText(match: BigMatch, assignment: MesaChicaAssignment, rand: Rand
     return `${base} Al menos los diarios del lunes te pegaron flojo.`;
   }
   if (assignment.gestion >= 1) {
-    return `${base} Gastaste rosca en una final que perdiste igual: lo peor de los dos mundos.`;
+    return `${base} Gastaste influencia en una final que perdiste igual: lo peor de los dos mundos.`;
   }
   return base;
 }

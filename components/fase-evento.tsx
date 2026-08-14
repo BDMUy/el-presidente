@@ -12,7 +12,7 @@
 import type { Effects, GameEvent } from '@/lib/engine/types';
 import { EVENT_KIND_LABEL } from '@/lib/engine/types';
 import { plataConSigno } from '@/lib/format';
-import { Continuar, Membrete, Papel, Renglon, Sello, Titulo } from './ui';
+import { Continuar, Membrete, Papel, Puntos, Renglon, Sello, Titulo } from './ui';
 
 export function FaseEvento({
   event,
@@ -42,7 +42,7 @@ export function FaseEvento({
 
       <div className="mt-4">
         <Titulo>{event.title}</Titulo>
-        <p className="mt-3 font-body text-[15px] leading-relaxed text-tinta/85">{event.text}</p>
+        <p className="mt-3 font-body text-[16px] leading-relaxed text-tinta">{event.text}</p>
       </div>
 
       <div className="mt-6">
@@ -90,14 +90,15 @@ export function FaseResultadoEvento({
       <p className="mt-2 font-body text-[17px] leading-relaxed text-tinta">{text}</p>
 
       {cambios.length > 0 && (
-        <ul className="mt-6 border-t border-papel-linea pt-3">
+        <ul className="mt-6 border-t border-hoja-linea pt-3">
           {cambios.map((cambio) => (
             <li
               key={cambio.label}
-              className="renglon flex items-baseline py-1 font-acta text-[12px] uppercase"
+              className="flex items-baseline py-1.5 font-acta text-[13px] uppercase"
             >
-              <span className="text-tinta-suave">{cambio.label}</span>
-              <span className={cambio.positivo ? 'text-emerald-700' : 'text-sello'}>
+              <span className="text-tinta-2">{cambio.label}</span>
+              <Puntos />
+              <span className={cambio.positivo ? 'text-emerald-800' : 'text-sello'}>
                 {cambio.valor}
               </span>
             </li>
@@ -108,7 +109,7 @@ export function FaseResultadoEvento({
       {diferidos.length > 0 && (
         // No se dice qué va a pasar ni cuándo: solo que quedó algo pendiente.
         // La consecuencia diferida tiene que sorprender cuando llega.
-        <p className="mt-4 border-l-2 border-bronce pl-3 font-acta text-[11px] leading-relaxed tracking-wide text-tinta-suave uppercase">
+        <p className="mt-4 border-l-2 border-bronce pl-3 font-acta text-[12px] leading-relaxed tracking-wide text-tinta-2 uppercase">
           Queda asentado en el libro de actas. Esto vuelve.
         </p>
       )}
@@ -135,7 +136,7 @@ function listarCambios(effects: Effects): Cambio[] {
     ['hinchada', 'Hinchada'],
     ['socios', 'Socios'],
     ['plantel', 'Plantel'],
-    ['rosca', 'Rosca'],
+    ['influencia', 'Influencia'],
   ] as const) {
     const valor = effects[campo];
     if (valor) {

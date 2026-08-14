@@ -18,20 +18,20 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Darles lo que piden',
         hint: 'Paz social comprada. Vuelven en seis meses por más.',
-        effects: { caja: -1.5, rosca: -5, hinchada: 3, flags: { barra_arreglada: true } },
+        effects: { caja: -1.5, influencia: -5, hinchada: 3, flags: { barra_arreglada: true } },
       },
       {
         label: 'Negarles todo',
         hint: '🎲 Dignidad. Y un problema que no se resuelve solo.',
         random: [
-          { weight: 40, text: 'Se fueron puteando y no pasó nada más. A veces alcanza con plantarse.', effects: { rosca: 8, hinchada: 2 } },
-          { weight: 60, text: 'Al domingo siguiente colgaron un trapo pidiendo tu renuncia. Y bajaron a la platea.', effects: { hinchada: -11, rosca: -6 } },
+          { weight: 40, text: 'Se fueron puteando y no pasó nada más. A veces alcanza con plantarse.', effects: { influencia: 8, hinchada: 2 } },
+          { weight: 60, text: 'Al domingo siguiente colgaron un trapo pidiendo tu renuncia. Y bajaron a la platea.', effects: { hinchada: -11, influencia: -6 } },
         ],
       },
       {
         label: 'Meterlos en el club como "seguridad"',
         hint: 'Los controlás. Ahora son parte de la estructura.',
-        effects: { caja: -0.8, rosca: -10, hinchada: 5, flags: { barra_adentro: true }, deferred: [{ inSeasons: 3, text: 'La barra que metiste adentro ya maneja la puerta del estadio. Y no te consulta.', effects: { rosca: -12, hinchada: -8 } }] },
+        effects: { caja: -0.8, influencia: -10, hinchada: 5, flags: { barra_adentro: true }, deferred: [{ inSeasons: 3, text: 'La barra que metiste adentro ya maneja la puerta del estadio. Y no te consulta.', effects: { influencia: -12, hinchada: -8 } }] },
       },
     ],
   },
@@ -70,8 +70,8 @@ export const HINCHADA: GameEvent[] = [
         label: 'Salir a dar la cara en conferencia',
         hint: '🎲 Puede calmar las aguas o ser gasolina.',
         random: [
-          { weight: 50, text: 'Diste la cara y la gente lo valoró. No te salvó, pero frenó la caída.', effects: { hinchada: 7, rosca: 4 } },
-          { weight: 50, text: 'Te trabaste, te contradijiste y el video circuló todo el día.', effects: { hinchada: -8, rosca: -5 } },
+          { weight: 50, text: 'Diste la cara y la gente lo valoró. No te salvó, pero frenó la caída.', effects: { hinchada: 7, influencia: 4 } },
+          { weight: 50, text: 'Te trabaste, te contradijiste y el video circuló todo el día.', effects: { hinchada: -8, influencia: -5 } },
         ],
       },
       {
@@ -82,7 +82,7 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Anunciar refuerzos que todavía no cerraste',
         hint: 'Ganás dos semanas. Después hay que cumplir.',
-        effects: { hinchada: 9, deferred: [{ inSeasons: 1, text: 'Los refuerzos que anunciaste nunca llegaron. La gente se acuerda de todo.', effects: { hinchada: -14, rosca: -8 } }] },
+        effects: { hinchada: 9, deferred: [{ inSeasons: 1, text: 'Los refuerzos que anunciaste nunca llegaron. La gente se acuerda de todo.', effects: { hinchada: -14, influencia: -8 } }] },
       },
     ],
   },
@@ -113,7 +113,7 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Sorteo entre socios al día',
         hint: 'Justo, transparente y deja cuatro mil enojados.',
-        effects: { hinchada: -2, socios: 2, rosca: 4 },
+        effects: { hinchada: -2, socios: 2, influencia: 4 },
       },
       {
         label: 'Prioridad por antigüedad',
@@ -123,7 +123,7 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Vender el cupo restante a precio de reventa',
         hint: 'Entra plata. Sale un escándalo.',
-        effects: { caja: 2.5, hinchada: -12, rosca: -6 },
+        effects: { caja: 2.5, hinchada: -12, influencia: -6 },
       },
     ],
   },
@@ -137,7 +137,7 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Bajar y hablarles',
         hint: 'Te ponés a la altura del momento.',
-        effects: { hinchada: 7, rosca: 3 },
+        effects: { hinchada: 7, influencia: 3 },
       },
       {
         label: 'Dejar que sea de los jugadores',
@@ -167,7 +167,7 @@ export const HINCHADA: GameEvent[] = [
         label: 'Buscar un sponsor que la pague',
         hint: '🎲 Si aparece, es gratis. Si no, perdiste un año.',
         random: [
-          { weight: 40, text: 'Una empresa puso el nombre y la plata. Salió gratis y salió bien.', effects: { socios: 8, hinchada: 6, rosca: -5 } },
+          { weight: 40, text: 'Una empresa puso el nombre y la plata. Salió gratis y salió bien.', effects: { socios: 8, hinchada: 6, influencia: -5 } },
           { weight: 60, text: 'Nadie quiso poner un peso. Perdiste una temporada entera buscando.', effects: { caja: -0.5, hinchada: -4 } },
         ],
       },
@@ -183,12 +183,12 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Saludar desde el palco',
         hint: 'Te lo ganaste. Disfrutalo.',
-        effects: { hinchada: 4, rosca: 6 },
+        effects: { hinchada: 4, influencia: 6 },
       },
       {
         label: 'Quedarte sentado',
         hint: 'El cargo es prestado y vos lo sabés.',
-        effects: { rosca: 3, hinchada: 2 },
+        effects: { influencia: 3, hinchada: 2 },
       },
     ],
   },

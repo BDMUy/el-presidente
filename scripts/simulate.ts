@@ -48,7 +48,7 @@ function valueOf(effects: Effects | undefined, cajaActual: number): number {
     (effects.hinchada ?? 0) * 1 +
     (effects.plantel ?? 0) * 1.2 +
     (effects.caja ?? 0) * pesoCaja +
-    (effects.rosca ?? 0) * 0.4 +
+    (effects.influencia ?? 0) * 0.4 +
     (effects.socios ?? 0) * 0.8;
 
   for (const d of effects.deferred ?? []) {

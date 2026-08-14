@@ -26,8 +26,8 @@ export const VESTUARIO: GameEvent[] = [
         label: 'Bancarlo en público',
         hint: '🎲 Si se recupera, sos un visionario. Si no, caés con él.',
         random: [
-          { weight: 45, text: 'El equipo reaccionó. Salir a bancarlo fue lo que necesitaba.', effects: { plantel: 5, hinchada: 8, rosca: 6 } },
-          { weight: 55, text: 'Siguió perdiendo. Ahora sos vos el que no tiene salida.', effects: { hinchada: -12, rosca: -8 } },
+          { weight: 45, text: 'El equipo reaccionó. Salir a bancarlo fue lo que necesitaba.', effects: { plantel: 5, hinchada: 8, influencia: 6 } },
+          { weight: 55, text: 'Siguió perdiendo. Ahora sos vos el que no tiene salida.', effects: { hinchada: -12, influencia: -8 } },
         ],
       },
     ],
@@ -50,9 +50,9 @@ export const VESTUARIO: GameEvent[] = [
       },
       {
         label: 'Ofrecerle un año y puesto de dirigente',
-        hint: 'Cuesta rosca convencerlo, pero cierra bien.',
-        requires: { minRosca: 25 },
-        effects: { rosca: -12, hinchada: 5, caja: -0.6 },
+        hint: 'Cuesta influencia convencerlo, pero cierra bien.',
+        requires: { minInfluencia: 25 },
+        effects: { influencia: -12, hinchada: 5, caja: -0.6 },
       },
     ],
   },
@@ -104,8 +104,8 @@ export const VESTUARIO: GameEvent[] = [
         label: 'Adelantar plata de un sponsor',
         hint: '🎲 Si el sponsor acepta, zafás. Si no, se filtra todo.',
         random: [
-          { weight: 60, text: 'El sponsor adelantó el año. Zafaste por poco.', effects: { caja: 3, rosca: -6 } },
-          { weight: 40, text: 'El sponsor dijo que no y alguien filtró la charla. Papelón.', effects: { hinchada: -9, rosca: -8, plantel: -4 } },
+          { weight: 60, text: 'El sponsor adelantó el año. Zafaste por poco.', effects: { caja: 3, influencia: -6 } },
+          { weight: 40, text: 'El sponsor dijo que no y alguien filtró la charla. Papelón.', effects: { hinchada: -9, influencia: -8, plantel: -4 } },
         ],
       },
     ],
@@ -120,7 +120,7 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Multar a los dos y cerrarlo puertas adentro',
         hint: 'Autoridad. El vestuario se ordena, la prensa igual se entera.',
-        effects: { plantel: 1, hinchada: -3, rosca: 3 },
+        effects: { plantel: 1, hinchada: -3, influencia: 3 },
       },
       {
         label: 'Vender al nueve',
@@ -131,8 +131,8 @@ export const VESTUARIO: GameEvent[] = [
         label: 'Hacer de cuenta que no pasó',
         hint: '🎲 O se olvida, o el video sale el domingo.',
         random: [
-          { weight: 50, text: 'No salió nunca. Alguien cobró por no publicarlo.', effects: { caja: -1, rosca: -4 } },
-          { weight: 50, text: 'Salió en todos lados. Quedaron como una manga de improvisados.', effects: { hinchada: -10, plantel: -3, rosca: -6 } },
+          { weight: 50, text: 'No salió nunca. Alguien cobró por no publicarlo.', effects: { caja: -1, influencia: -4 } },
+          { weight: 50, text: 'Salió en todos lados. Quedaron como una manga de improvisados.', effects: { hinchada: -10, plantel: -3, influencia: -6 } },
         ],
       },
     ],
@@ -158,8 +158,8 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Venderlo con recompra',
         hint: 'Menos plata ahora, y una carta para más adelante.',
-        requires: { minRosca: 30 },
-        effects: { caja: 7, plantel: -9, hinchada: -6, rosca: -8, flags: { recompra: true } },
+        requires: { minInfluencia: 30 },
+        effects: { caja: 7, plantel: -9, hinchada: -6, influencia: -8, flags: { recompra: true } },
       },
     ],
   },

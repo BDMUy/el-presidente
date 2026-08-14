@@ -76,7 +76,7 @@ export function Juego() {
   if (cargando) {
     return (
       <main className="flex min-h-dvh items-center justify-center">
-        <p className="font-acta text-[11px] tracking-[0.2em] text-papel/40 uppercase">
+        <p className="font-acta text-[11px] tracking-[0.2em] text-papel-2 uppercase">
           Abriendo el expediente…
         </p>
       </main>
@@ -115,7 +115,7 @@ export function Juego() {
         <button
           type="button"
           onClick={reiniciar}
-          className="font-acta text-[10px] tracking-[0.14em] text-papel/30 uppercase underline underline-offset-4 hover:text-papel/60"
+          className="font-acta text-[11px] tracking-[0.14em] text-papel-2 uppercase underline underline-offset-4 hover:text-papel-2"
         >
           Renunciar y empezar otra
         </button>

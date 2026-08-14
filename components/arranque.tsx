@@ -36,7 +36,7 @@ export function Arranque({ onEmpezar }: { onEmpezar: (clubId: string) => void })
 
   return (
     <div className="mx-auto w-full max-w-xl px-4 pt-10 pb-32">
-      <Membrete>Asamblea ordinaria · elección de autoridades</Membrete>
+      <Membrete sobrePano>Asamblea ordinaria de socios</Membrete>
 
       <h1 className="mt-3 font-display text-[clamp(2.75rem,14vw,4.5rem)] leading-[0.85] font-black tracking-[-0.03em] text-papel uppercase">
         El
@@ -44,17 +44,20 @@ export function Arranque({ onEmpezar }: { onEmpezar: (clubId: string) => void })
         Presidente
       </h1>
 
-      <p className="mt-5 max-w-md font-body text-[15px] leading-relaxed text-papel/70">
+      {/* El énfasis va por peso, no por color: cambiar de color dentro de un
+          párrafo obliga a un segundo tono que compita con el primario. */}
+      <p className="mt-5 max-w-[46ch] font-body text-[16px] leading-relaxed text-papel">
         Ganás la elección y tenés cuatro mandatos para que no te echen. Manejás la caja, la
-        hinchada y la rosca. <span className="text-papel">Vos armás el plantel; el plantel juega.</span>
+        hinchada y la influencia.{' '}
+        <span className="font-semibold">Vos armás el plantel; el plantel juega.</span>
       </p>
 
-      <div className="mt-8 flex items-center justify-between border-t border-papel/15 pt-4">
-        <Membrete>Elegí el club</Membrete>
+      <div className="mt-8 flex items-center justify-between border-t border-linea pt-4">
+        <Membrete sobrePano>Elegí el club</Membrete>
         <button
           type="button"
           onClick={sortear}
-          className="font-acta text-[11px] tracking-[0.1em] text-bronce uppercase underline underline-offset-4 hover:text-papel"
+          className="font-acta text-[11px] tracking-[0.1em] text-bronce-claro uppercase underline underline-offset-4 hover:text-papel"
         >
           Que decida el sorteo
         </button>
@@ -63,7 +66,7 @@ export function Arranque({ onEmpezar }: { onEmpezar: (clubId: string) => void })
       <div className="mt-4 space-y-6">
         {porCategoria.map(({ category, clubes }) => (
           <section key={category}>
-            <h2 className="font-acta text-[10px] tracking-[0.18em] text-papel/40 uppercase">
+            <h2 className="font-acta text-[11px] tracking-[0.18em] text-papel-2 uppercase">
               {CATEGORY_RULES[category].label}
             </h2>
             <ul className="mt-2">
@@ -84,10 +87,10 @@ export function Arranque({ onEmpezar }: { onEmpezar: (clubId: string) => void })
         <div className="fixed inset-x-0 bottom-0 z-30 border-t border-pano-borde bg-pano-alto/95 px-4 py-4 backdrop-blur">
           <div className="mx-auto flex max-w-xl items-center gap-3">
             <div className="min-w-0 flex-1">
-              <p className="truncate font-display text-sm font-black text-papel uppercase">
+              <p className="truncate font-display text-[16px] leading-tight font-black text-papel">
                 {club.name}
               </p>
-              <p className="font-acta text-[10px] tracking-[0.1em] text-papel/50 uppercase">
+              <p className="font-acta text-[11px] tracking-[0.1em] text-papel-2 uppercase">
                 Te esperan {expectedPosition(club, club.category)}° de{' '}
                 {CATEGORY_RULES[club.category].teams}
               </p>
@@ -124,7 +127,7 @@ function FilaClub({
         type="button"
         onClick={onElegir}
         aria-pressed={elegido}
-        className={`flex w-full items-center gap-3 border-b border-papel/10 py-2.5 text-left transition-colors ${
+        className={`flex w-full items-center gap-3 border-b border-linea py-2.5 text-left transition-colors ${
           elegido ? 'bg-papel/10' : 'hover:bg-papel/5'
         }`}
       >
@@ -138,18 +141,18 @@ function FilaClub({
             {club.name}
           </span>
           {club.nickname && (
-            <span className="block truncate font-body text-[12px] text-papel/45">
+            <span className="block truncate font-body text-[13px] text-papel-2">
               {club.nickname}
             </span>
           )}
         </span>
 
         {elegido ? (
-          <Sello tono="bronce" className="shrink-0">
+          <Sello tono="bronce" sobrePano className="shrink-0">
             Elegido
           </Sello>
         ) : (
-          <span className="shrink-0 font-acta text-[10px] tracking-[0.08em] text-papel/35 tabular-nums">
+          <span className="shrink-0 font-acta text-[11px] tracking-[0.08em] text-papel-2 tabular-nums">
             {esperada}°/{teams}
           </span>
         )}

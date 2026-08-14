@@ -56,7 +56,7 @@ export function FaseMercado({
 
       <div className="mt-4">
         <Titulo>Mercado</Titulo>
-        <p className="mt-3 font-body text-[15px] leading-relaxed text-tinta/85">
+        <p className="mt-3 font-body text-[16px] leading-relaxed text-tinta">
           {inhibido
             ? 'El club está inhibido por deuda: no podés incorporar a nadie hasta sanear las cuentas. Lo único que se puede firmar es una salida.'
             : 'Lo que llegó a la mesa esta ventana. Se firma una operación, o ninguna.'}
@@ -73,12 +73,12 @@ export function FaseMercado({
           <button
             type="button"
             onClick={() => onElegir(offers.length)}
-            className="w-full border-t border-b border-papel-linea py-3 text-left transition-colors hover:bg-tinta/5 active:bg-tinta/10"
+            className="w-full border-t border-b border-hoja-linea py-3 text-left transition-colors hover:bg-tinta/5 active:bg-tinta/10"
           >
             <span className="block font-display text-[15px] font-bold tracking-tight text-tinta uppercase">
               No mover nada
             </span>
-            <span className="mt-1 block font-body text-[13px] leading-snug text-tinta-suave">
+            <span className="mt-1 block font-body text-[14px] leading-snug text-tinta-2">
               El plantel se queda como está. Y se desgasta como está.
             </span>
           </button>
@@ -93,22 +93,22 @@ function FilaOferta({ offer, onClick }: { offer: PlayerOffer; onClick: () => voi
     <button
       type="button"
       onClick={onClick}
-      className="w-full border-t border-papel-linea py-3 text-left transition-colors hover:bg-tinta/5 active:bg-tinta/10"
+      className="w-full border-t border-hoja-linea py-3 text-left transition-colors hover:bg-tinta/5 active:bg-tinta/10"
     >
       <span className="flex items-baseline gap-2">
         <span className="font-display text-[15px] font-bold tracking-tight text-tinta uppercase">
           {offer.name}
         </span>
         <span
-          className={`font-acta text-[10px] tracking-[0.1em] uppercase ${
-            offer.kind === 'venta' ? 'text-sello' : 'text-tinta-suave'
+          className={`font-acta text-[11px] tracking-[0.1em] uppercase ${
+            offer.kind === 'venta' ? 'text-sello' : 'text-tinta-2'
           }`}
         >
           {ETIQUETA[offer.kind]}
         </span>
       </span>
 
-      <span className="mt-0.5 block font-body text-[13px] text-tinta-suave">
+      <span className="mt-0.5 block font-body text-[14px] text-tinta-2">
         {offer.archetype}, {offer.age} años. {offer.note}
       </span>
 

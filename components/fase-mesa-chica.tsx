@@ -52,11 +52,11 @@ export function FaseMesaChica({
   return (
     <div className="px-1">
       <div className="text-center">
-        <Membrete>La mesa chica</Membrete>
+        <Membrete sobrePano>La mesa chica</Membrete>
         <h1 className="mt-2 font-display text-2xl leading-tight font-black tracking-tight text-papel uppercase">
           {match.label}
         </h1>
-        <p className="mt-1 font-body text-[14px] text-papel/60">contra {match.rival}</p>
+        <p className="mt-1 font-body text-[15px] text-papel-2">contra {match.rival}</p>
       </div>
 
       {/* El marcador de la apuesta: probabilidad en vivo. */}
@@ -65,7 +65,7 @@ export function FaseMesaChica({
           {Math.round(probabilidad * 100)}
           <span className="text-2xl">%</span>
         </p>
-        <p className="pb-2 font-acta text-[10px] leading-tight tracking-[0.1em] text-papel/45 uppercase">
+        <p className="pb-2 font-acta text-[11px] leading-tight tracking-[0.1em] text-papel-2 uppercase">
           de ganarla
           <br />
           sin mover: {Math.round(base * 100)}%
@@ -79,13 +79,13 @@ export function FaseMesaChica({
             key={i}
             className={`h-7 w-7 rounded-full border-2 transition-all ${
               i < disponibles
-                ? 'border-bronce bg-bronce/25'
-                : 'border-papel/15 bg-transparent'
+                ? 'border-bronce-claro bg-bronce-claro/25'
+                : 'border-linea bg-transparent'
             }`}
             aria-hidden
           />
         ))}
-        <span className="ml-2 font-acta text-[10px] tracking-[0.1em] text-papel/50 uppercase">
+        <span className="ml-2 font-acta text-[11px] tracking-[0.1em] text-papel-2 uppercase">
           {disponibles === 0 ? 'sin fichas' : `${disponibles} por repartir`}
         </span>
       </div>
@@ -97,8 +97,8 @@ export function FaseMesaChica({
             <div
               className={`flex items-center gap-3 border px-3 py-2.5 transition-colors ${
                 reparto[frente.id] > 0
-                  ? 'border-bronce/60 bg-bronce/10'
-                  : 'border-papel/15 bg-pano-alto/40'
+                  ? 'border-bronce-claro/70 bg-bronce-claro/10'
+                  : 'border-linea bg-pano-alto/40'
               }`}
             >
               <button
@@ -109,27 +109,28 @@ export function FaseMesaChica({
                 aria-label={`Poner una ficha en ${frente.label}`}
               >
                 <span className="flex items-baseline gap-2">
-                  <span className="font-display text-[14px] font-bold tracking-tight text-papel uppercase">
+                  {/* En caja baja: son frases, y en mayúsculas se leen más lento. */}
+                  <span className="font-display text-[15px] leading-tight font-bold tracking-tight text-papel">
                     {frente.label}
                   </span>
-                  <span className="font-acta text-[10px] text-papel/40 tabular-nums">
+                  <span className="font-acta text-[11px] text-papel-2 tabular-nums">
                     +{Math.round(frente.winPerFicha * 100)}%
                   </span>
                 </span>
-                <span className="mt-0.5 block font-body text-[12.5px] leading-snug text-papel/55">
+                <span className="mt-0.5 block font-body text-[14px] leading-snug text-papel-2">
                   {frente.desc}
                 </span>
               </button>
 
               <div className="flex shrink-0 items-center gap-1">
                 {Array.from({ length: reparto[frente.id] }, (_, i) => (
-                  <span key={i} className="h-4 w-4 rounded-full bg-bronce" aria-hidden />
+                  <span key={i} className="h-4 w-4 rounded-full bg-bronce-claro" aria-hidden />
                 ))}
                 {reparto[frente.id] > 0 && (
                   <button
                     type="button"
                     onClick={() => sacar(frente.id)}
-                    className="ml-1 px-1 font-acta text-lg leading-none text-papel/50 hover:text-papel"
+                    className="ml-1 flex h-9 w-9 items-center justify-center font-acta text-lg leading-none text-papel-2 hover:text-papel"
                     aria-label={`Sacar una ficha de ${frente.label}`}
                   >
                     ×
@@ -142,15 +143,15 @@ export function FaseMesaChica({
       </ul>
 
       {/* Lo que cuesta el reparto, antes de saber si sirvió. */}
-      <p className="mt-4 text-center font-acta text-[11px] tracking-[0.08em] text-papel/50 uppercase">
+      <p className="mt-4 text-center font-acta text-[11px] tracking-[0.08em] text-papel-2 uppercase">
         Cuesta {plata(Math.abs(costo.caja ?? 0))}
-        {costo.rosca ? ` y ${Math.abs(costo.rosca)} de rosca` : ''}
+        {costo.influencia ? ` y ${Math.abs(costo.influencia)} de influencia` : ''}
       </p>
 
       <button
         type="button"
         onClick={() => onDefinir(assignmentIndex(reparto))}
-        className="mt-3 w-full bg-papel py-3.5 font-display text-sm font-black tracking-[0.14em] text-tinta uppercase transition-transform active:scale-[0.99]"
+        className="mt-3 w-full bg-papel py-4 font-display text-[14px] font-black tracking-[0.12em] text-tinta uppercase transition-transform active:scale-[0.99]"
       >
         {usadas === 0 ? 'No mover un dedo' : 'Que se juegue'}
       </button>
@@ -181,7 +182,7 @@ export function FaseResultadoFinal({
 
       <div className="mt-5">
         <Titulo>{won ? 'Se dio' : 'No se dio'}</Titulo>
-        <p className="mt-3 font-body text-[16px] leading-relaxed text-tinta/85">{text}</p>
+        <p className="mt-3 font-body text-[16px] leading-relaxed text-tinta">{text}</p>
       </div>
 
       <Continuar onClick={onContinuar}>Ver la temporada</Continuar>

@@ -83,7 +83,7 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Bajar los decibeles',
         hint: 'Institucional. Aburrido. Sano.',
-        effects: { rosca: 4, hinchada: -2, plantel: 2 },
+        effects: { influencia: 4, hinchada: -2, plantel: 2 },
       },
     ],
   },
@@ -121,7 +121,7 @@ export const COLOR: GameEvent[] = [
         label: 'Pedir postergación con informe técnico',
         hint: '🎲 Depende de con quién hables.',
         random: [
-          { weight: 45, text: 'Aceptaron postergarlo. Se jugó dos semanas después con la cancha impecable.', effects: { rosca: -4, plantel: 2 } },
+          { weight: 45, text: 'Aceptaron postergarlo. Se jugó dos semanas después con la cancha impecable.', effects: { influencia: -4, plantel: 2 } },
           { weight: 55, text: 'No aceptaron. Se jugó igual y encima quedaste como el que quiso especular.', effects: { hinchada: -4, plantel: -2 } },
         ],
       },
@@ -161,7 +161,7 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Escucharlo y no prometer nada',
         hint: 'Honesto.',
-        effects: { hinchada: 1, rosca: 2 },
+        effects: { hinchada: 1, influencia: 2 },
       },
     ],
   },

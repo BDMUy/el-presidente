@@ -9,6 +9,18 @@ export function plata(millones: number): string {
   return `${signo}US$ ${abs.toFixed(1).replace('.', ',')}M`;
 }
 
+/**
+ * Versión corta para el carnet, sin la unidad: `12,4M`.
+ *
+ * Repetir "US$" en cada celda de una barra de cinco cifras es ruido, y además
+ * no entra: `US$ 12,4M` mide 90px en una celda de 82 y se cortaría sin avisar.
+ * La unidad va en la etiqueta de la columna.
+ */
+export function plataCorta(millones: number): string {
+  const signo = millones < 0 ? '−' : '';
+  return `${signo}${Math.abs(millones).toFixed(1).replace('.', ',')}M`;
+}
+
 export function plataConSigno(millones: number): string {
   if (millones === 0) return 'US$ 0';
   return `${millones > 0 ? '+' : '−'}US$ ${Math.abs(millones).toFixed(1).replace('.', ',')}M`;

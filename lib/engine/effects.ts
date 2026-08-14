@@ -42,8 +42,8 @@ export function applyResources(resources: Resources, effects: Effects): Resource
   if (effects.plantel) {
     next.plantel = clamp(next.plantel + effects.plantel, ...RESOURCE_BOUNDS.plantel);
   }
-  if (effects.rosca) {
-    next.rosca = clamp(next.rosca + effects.rosca, ...RESOURCE_BOUNDS.rosca);
+  if (effects.influencia) {
+    next.influencia = clamp(next.influencia + effects.influencia, ...RESOURCE_BOUNDS.influencia);
   }
 
   return next;
@@ -111,8 +111,8 @@ export function meetsCondition(
   if (condition.maxHinchada !== undefined && resources.hinchada > condition.maxHinchada) return false;
   if (condition.minCaja !== undefined && resources.caja < condition.minCaja) return false;
   if (condition.maxCaja !== undefined && resources.caja > condition.maxCaja) return false;
-  if (condition.minRosca !== undefined && resources.rosca < condition.minRosca) return false;
-  if (condition.maxRosca !== undefined && resources.rosca > condition.maxRosca) return false;
+  if (condition.minInfluencia !== undefined && resources.influencia < condition.minInfluencia) return false;
+  if (condition.maxInfluencia !== undefined && resources.influencia > condition.maxInfluencia) return false;
   if (condition.minPlantel !== undefined && resources.plantel < condition.minPlantel) return false;
   if (condition.maxPlantel !== undefined && resources.plantel > condition.maxPlantel) return false;
 

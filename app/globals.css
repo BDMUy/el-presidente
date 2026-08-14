@@ -5,31 +5,45 @@
  *
  * Tesis: esto no es un estadio, es la mesa directiva. La superficie de la
  * página es el paño verde de la comisión y todo lo que pasa llega como
- * documento institucional: actas, fichas, balances, boletas. El jugador no
- * patea — firma.
+ * documento institucional. El jugador no patea: firma.
  *
- * Elemento firma: el sello de goma. Cada decisión queda estampada, y el
- * epílogo es una hoja cubierta de los sellos de tu presidencia.
+ * Regla dura del sistema de color: la jerarquía NO se hace con opacidad.
+ * Sobre fondo oscuro, `text-papel/40` parece un gris suave y en realidad es un
+ * 2,97:1 ilegible. Cada tono de acá está resuelto contra su fondo real con
+ * `scripts/contraste.ts` y congelado como hex. Antes de agregar un color
+ * nuevo, pasalo por ese script.
  */
 
 @theme {
-  /* El paño de la mesa: la superficie sobre la que pasa todo. */
+  /* ── El paño: la superficie sobre la que pasa todo ────────── */
   --color-pano: #14342a;
   --color-pano-alto: #1c463a;
   --color-pano-borde: #0d241d;
+  /* Borde visible sobre el paño sin gritar. 1,9:1 medido. */
+  --color-linea: #465d52;
 
-  /* El papel: manila institucional, amarilleado por el archivo. */
+  /* ── Texto sobre el paño ──────────────────────────────────── */
+  /* Primario, 10,46:1 */
   --color-papel: #e8e2d4;
-  --color-papel-sombra: #d5cbb4;
-  --color-papel-linea: #c3b89c;
+  /* Secundario, 4,50:1 sobre paño-alto (el fondo más exigente de los dos) */
+  --color-papel-2: #a8b2a5;
 
-  /* Tinta de máquina de escribir: negro cálido, nunca #000. */
+  /* ── El papel: manila institucional, amarilleado por el archivo ── */
+  --color-hoja: #e8e2d4;
+  /* Renglón punteado: 2,20:1, visible sin competir con el texto */
+  --color-hoja-linea: #a29982;
+  /* Tinta de máquina de escribir: negro cálido, nunca #000. 13,72:1 */
   --color-tinta: #1a1815;
-  --color-tinta-suave: #5d564a;
+  /* Secundario sobre papel, 7,00:1 (AAA) */
+  --color-tinta-2: #4e483e;
 
-  /* Sello de goma y placa de bronce: los dos únicos acentos. */
-  --color-sello: #b3261e;
-  --color-bronce: #a98436;
+  /* ── Acentos ──────────────────────────────────────────────────
+     Cada acento tiene dos versiones porque un rojo que funciona sobre
+     papel da 1,62:1 sobre el paño: el mismo hex no sirve para los dos. */
+  --color-sello: #b3261e;        /* sobre papel: 5,06:1 */
+  --color-sello-claro: #e89f98;  /* sobre paño */
+  --color-bronce: #7a5f24;       /* sobre papel */
+  --color-bronce-claro: #c1a66e; /* sobre paño: 4,50:1 */
 
   --font-display: var(--font-chivo);
   --font-body: var(--font-archivo);
@@ -48,119 +62,92 @@ body {
   background-color: var(--color-pano);
   /* Textura de fieltro: dos tramas cruzadas muy tenues, sin imágenes. */
   background-image:
-    repeating-linear-gradient(
-      45deg,
-      rgb(255 255 255 / 0.012) 0 2px,
-      transparent 2px 4px
-    ),
-    repeating-linear-gradient(
-      -45deg,
-      rgb(0 0 0 / 0.03) 0 2px,
-      transparent 2px 4px
-    ),
-    radial-gradient(ellipse 120% 80% at 50% 0%, var(--color-pano-alto) 0%, var(--color-pano) 60%);
+    repeating-linear-gradient(45deg, rgb(255 255 255 / 0.012) 0 2px, transparent 2px 4px),
+    repeating-linear-gradient(-45deg, rgb(0 0 0 / 0.03) 0 2px, transparent 2px 4px),
+    radial-gradient(ellipse 120% 80% at 50% 0%, var(--color-pano-alto) 0%, var(--color-pano) 62%);
   color: var(--color-papel);
   font-family: var(--font-body), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-/* ── El papel ──────────────────────────────────────────────
-   Una hoja apoyada sobre el paño: sombra dura y corta, como
-   un objeto real sobre una mesa, no como una card flotante. */
+/* Courier Prime es una tipografía de guion, pensada para 12pt impresos: su
+   trazo es finísimo. Acá se usa solo en etiquetas chicas —membretes, sellos,
+   cifras— así que va siempre en 700, o se desvanece contra el paño. */
+.font-acta {
+  font-weight: 700;
+}
+
+/* ── El papel ──────────────────────────────────────────────────
+   Una hoja apoyada sobre la mesa: sombra corta y dura, como un objeto
+   real, no como una card flotante de dashboard. */
 .papel {
-  background-color: var(--color-papel);
-  background-image:
-    repeating-linear-gradient(
-      0deg,
-      rgb(0 0 0 / 0.014) 0 1px,
-      transparent 1px 3px
-    );
+  background-color: var(--color-hoja);
+  background-image: repeating-linear-gradient(0deg, rgb(0 0 0 / 0.014) 0 1px, transparent 1px 3px);
   color: var(--color-tinta);
   border-radius: var(--radius-papel);
   box-shadow:
-    0 1px 0 rgb(255 255 255 / 0.18),
-    0 10px 24px -8px rgb(0 0 0 / 0.55),
-    0 2px 6px rgb(0 0 0 / 0.35);
+    0 1px 0 rgb(255 255 255 / 0.2),
+    0 14px 32px -10px rgb(0 0 0 / 0.6),
+    0 3px 8px rgb(0 0 0 / 0.38);
 }
 
 /* La hoja se apoya apenas torcida. Nunca dos con el mismo ángulo. */
-.papel-torcido-1 { transform: rotate(-0.5deg); }
-.papel-torcido-2 { transform: rotate(0.6deg); }
+.papel-torcido-1 { transform: rotate(-0.4deg); }
+.papel-torcido-2 { transform: rotate(0.5deg); }
 
-/* ── El sello ──────────────────────────────────────────────
-   Tinta de goma: irregular, mordida, siempre en diagonal. */
+/* ── El sello: el elemento firma ───────────────────────────────
+   Tinta de goma: mordida, en diagonal, con el borde irregular. */
 .sello {
   font-family: var(--font-acta), monospace;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   color: var(--color-sello);
   border: 2px solid currentColor;
-  padding: 0.2rem 0.55rem;
+  padding: 0.25rem 0.6rem;
   transform: rotate(-4deg);
-  opacity: 0.82;
-  mix-blend-mode: multiply;
   border-radius: 1px;
+  /* El multiply hace que la tinta se coma la trama del papel. */
+  mix-blend-mode: multiply;
 }
 
-.sello-verde {
-  color: #2f6d4f;
-}
+.sello-verde { color: #2c6a4c; }
+.sello-bronce { color: var(--color-bronce); }
 
-.sello-bronce {
-  color: #7a5f24;
+/* Sobre el paño el multiply apaga todo: ahí van los tonos claros. */
+.sello-sobre-pano {
+  mix-blend-mode: normal;
+  color: var(--color-sello-claro);
 }
+.sello-sobre-pano.sello-bronce { color: var(--color-bronce-claro); }
 
 /* El golpe del sello al firmar: baja, muerde y se asienta. */
 @keyframes sellar {
-  0% { transform: rotate(-14deg) scale(2.4); opacity: 0; }
+  0% { transform: rotate(-14deg) scale(2.2); opacity: 0; }
   55% { transform: rotate(-3deg) scale(0.94); opacity: 1; }
   75% { transform: rotate(-4.5deg) scale(1.04); }
-  100% { transform: rotate(-4deg) scale(1); opacity: 0.82; }
+  100% { transform: rotate(-4deg) scale(1); opacity: 1; }
 }
 
-.sello-anim {
-  animation: sellar 340ms cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
-}
+.sello-anim { animation: sellar 340ms cubic-bezier(0.2, 0.9, 0.3, 1.2) both; }
 
 /* La hoja entra desde abajo, como si la deslizaran sobre la mesa. */
 @keyframes deslizar {
-  from { transform: translateY(14px); opacity: 0; }
+  from { transform: translateY(12px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
 
-.deslizar {
-  animation: deslizar 220ms ease-out both;
-}
+.deslizar { animation: deslizar 220ms ease-out both; }
 
-/* ── Renglón punteado ──────────────────────────────────────
-   El puente entre la opción y su consecuencia, como en un
-   formulario donde firmás sobre la línea de puntos. */
-.renglon::after {
-  content: "";
-  flex: 1;
-  border-bottom: 1px dotted var(--color-papel-linea);
-  margin: 0 0.5rem;
-  transform: translateY(-0.2em);
-}
 
-/* ── Accesibilidad ─────────────────────────────────────────*/
+/* ── Accesibilidad ─────────────────────────────────────────────*/
 :focus-visible {
-  outline: 2px solid var(--color-bronce);
+  outline: 2px solid var(--color-bronce-claro);
   outline-offset: 2px;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .sello-anim,
-  .deslizar {
-    animation: none;
-  }
-  *,
-  *::before,
-  *::after {
-    transition-duration: 0.01ms !important;
-  }
+  .deslizar { animation: none; }
+  *, *::before, *::after { transition-duration: 0.01ms !important; }
 }
-
-/* La barra de recursos no debe scrollear con acento visible en móvil. */
-.sin-scrollbar::-webkit-scrollbar { display: none; }
-.sin-scrollbar { scrollbar-width: none; }

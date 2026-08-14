@@ -28,7 +28,7 @@ const courier = Courier_Prime({
 export const metadata: Metadata = {
   title: 'El Presidente — dirigí tu club',
   description:
-    'Ganás la elección y tenés cuatro mandatos para no ser echado. Manejá la caja, la hinchada y la rosca de un club argentino. Vos armás el plantel; el plantel juega.',
+    'Ganás la elección y tenés cuatro mandatos para no ser echado. Manejá la caja, la hinchada y la influencia de un club argentino. Vos armás el plantel; el plantel juega.',
 };
 
 export const viewport: Viewport = {

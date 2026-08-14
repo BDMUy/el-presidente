@@ -27,7 +27,7 @@ const OPOSITORES = [
 export const DEUDA_QUIEBRA = -40;
 
 /**
- * Resuelve una elección. El voto es sobre todo la hinchada, pero la rosca
+ * Resuelve una elección. El voto es sobre todo la hinchada, pero la influencia
  * permite sobrevivir un mandato mediocre: el capital político existe.
  */
 export function resolveElection(state: GameState, rand: Rand): ElectionResult {
@@ -37,7 +37,7 @@ export function resolveElection(state: GameState, rand: Rand): ElectionResult {
 
   let votes =
     resources.hinchada * 0.75 +
-    resources.rosca * 0.25 +
+    resources.influencia * 0.25 +
     titlesThisMandate * 4 +
     rand.normal() * 5;
 
@@ -123,7 +123,7 @@ export function buildEnding(id: EndingId, state: GameState, club: Club): Ending 
     'descenso-fatal': {
       id: 'descenso-fatal',
       title: 'DOS DESCENSOS',
-      text: `Dos descensos en una misma presidencia. No hay rosca que aguante eso. Te fuiste antes de que te echaran, y ni así te ahorraste el escrache en la puerta de tu casa.`,
+      text: `Dos descensos en una misma presidencia. No hay influencia que aguante eso. Te fuiste antes de que te echaran, y ni así te ahorraste el escrache en la puerta de tu casa.`,
     },
   };
 

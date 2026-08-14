@@ -59,15 +59,15 @@ describe('Rand', () => {
 
 describe('efectos', () => {
   it('acota los recursos a sus límites', () => {
-    const base = { caja: 0, hinchada: 95, socios: 10, plantel: 98, rosca: 5 };
-    const next = applyResources(base, { hinchada: 20, plantel: 20, rosca: -20 });
+    const base = { caja: 0, hinchada: 95, socios: 10, plantel: 98, influencia: 5 };
+    const next = applyResources(base, { hinchada: 20, plantel: 20, influencia: -20 });
     expect(next.hinchada).toBe(100);
     expect(next.plantel).toBe(100);
-    expect(next.rosca).toBe(0);
+    expect(next.influencia).toBe(0);
   });
 
   it('deja que la caja vaya a negativo: la deuda es una mecánica', () => {
-    const base = { caja: 2, hinchada: 50, socios: 10, plantel: 50, rosca: 50 };
+    const base = { caja: 2, hinchada: 50, socios: 10, plantel: 50, influencia: 50 };
     expect(applyResources(base, { caja: -20 }).caja).toBe(-18);
   });
 
@@ -111,8 +111,8 @@ describe('resolución deportiva', () => {
     const flojo: number[] = [];
     const fuerte: number[] = [];
     for (let i = 0; i < 400; i++) {
-      flojo.push(resolvePosition({ caja: 0, hinchada: 50, socios: 0, plantel: 45, rosca: 0 }, 'primera', rand));
-      fuerte.push(resolvePosition({ caja: 0, hinchada: 50, socios: 0, plantel: 75, rosca: 0 }, 'primera', rand));
+      flojo.push(resolvePosition({ caja: 0, hinchada: 50, socios: 0, plantel: 45, influencia: 0 }, 'primera', rand));
+      fuerte.push(resolvePosition({ caja: 0, hinchada: 50, socios: 0, plantel: 75, influencia: 0 }, 'primera', rand));
     }
     const avg = (xs: number[]) => xs.reduce((s, x) => s + x, 0) / xs.length;
     expect(avg(fuerte)).toBeLessThan(avg(flojo));
@@ -122,7 +122,7 @@ describe('resolución deportiva', () => {
     const rand = new Rand(11);
     for (let i = 0; i < 500; i++) {
       const pos = resolvePosition(
-        { caja: 0, hinchada: 50, socios: 0, plantel: rand.int(0, 100), rosca: 0 },
+        { caja: 0, hinchada: 50, socios: 0, plantel: rand.int(0, 100), influencia: 0 },
         'primera',
         rand,
       );
@@ -139,7 +139,7 @@ describe('resolución deportiva', () => {
     const rand = new Rand(555);
     const results: number[] = [];
     for (let i = 0; i < 800; i++) {
-      results.push(resolvePosition({ caja: 0, hinchada: 50, socios: 0, plantel, rosca: 0 }, 'primera', rand));
+      results.push(resolvePosition({ caja: 0, hinchada: 50, socios: 0, plantel, influencia: 0 }, 'primera', rand));
     }
     results.sort((a, b) => a - b);
     expect(results[400]).toBeGreaterThan(6);
@@ -314,7 +314,7 @@ describe('finales', () => {
     expect(checkEarlyExit(hundido)).toBe('asamblea');
   });
 
-  it('la quiebra se dispara con la deuda pasada de rosca', () => {
+  it('la quiebra se dispara con la deuda descontrolada', () => {
     const state = startRun({ seed: 1, clubId: 'boca' });
     const fundido = { ...state, resources: { ...state.resources, caja: DEUDA_QUIEBRA - 1 } };
     expect(checkEarlyExit(fundido)).toBe('quiebra');
@@ -327,18 +327,18 @@ describe('finales', () => {
 });
 
 describe('elecciones', () => {
-  it('la rosca permite sobrevivir un mandato mediocre', () => {
+  it('la influencia permite sobrevivir un mandato mediocre', () => {
     const base = startRun({ seed: 3, clubId: 'huracan' });
-    const sinRosca = { ...base, season: 4, resources: { ...base.resources, hinchada: 48, rosca: 0 } };
-    const conRosca = { ...base, season: 4, resources: { ...base.resources, hinchada: 48, rosca: 100 } };
-    const a = resolveElection(sinRosca, new Rand(1));
-    const b = resolveElection(conRosca, new Rand(1));
+    const sinInfluencia = { ...base, season: 4, resources: { ...base.resources, hinchada: 48, influencia: 0 } };
+    const conInfluencia = { ...base, season: 4, resources: { ...base.resources, hinchada: 48, influencia: 100 } };
+    const a = resolveElection(sinInfluencia, new Rand(1));
+    const b = resolveElection(conInfluencia, new Rand(1));
     expect(b.votes).toBeGreaterThan(a.votes);
   });
 
   it('con la hinchada por el piso se pierde la elección', () => {
     const base = startRun({ seed: 3, clubId: 'huracan' });
-    const malo = { ...base, season: 4, resources: { ...base.resources, hinchada: 10, rosca: 0 } };
+    const malo = { ...base, season: 4, resources: { ...base.resources, hinchada: 10, influencia: 0 } };
     expect(resolveElection(malo, new Rand(2)).won).toBe(false);
   });
 });

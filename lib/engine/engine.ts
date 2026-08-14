@@ -69,7 +69,7 @@ export function initialResources(club: Club): Resources {
     hinchada: 55,
     socios: Math.round(s * s * 1.35 * 10) / 10,
     plantel: Math.round(plantelForPosition(esperada, club.category) * 10) / 10,
-    rosca: 30,
+    influencia: 30,
   };
 }
 
@@ -458,7 +458,7 @@ function afterElection(state: GameState, won: boolean): GameState {
   if (!won) return finish(state, 'derrota-electoral', club);
 
   // Ganar la elección renueva el capital político.
-  const renewed = applyEffects(state, { rosca: 12, hinchada: 3 });
+  const renewed = applyEffects(state, { influencia: 12, hinchada: 3 });
   return openMercado(advanceSeason({ ...renewed, mandate: renewed.mandate + 1 }));
 }
 

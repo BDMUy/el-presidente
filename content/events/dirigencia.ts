@@ -1,7 +1,7 @@
 /**
  * Eventos de dirigencia: AFA, negocios, política interna, prensa.
  *
- * Es el frente donde se gana y se pierde rosca, el recurso que te permite
+ * Es el frente donde se gana y se pierde influencia, el recurso que te permite
  * sobrevivir un mandato deportivamente mediocre.
  */
 
@@ -18,17 +18,17 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Votar con ellos',
         hint: 'Te ganás padrinos. Y una deuda de favor.',
-        effects: { rosca: 14, caja: 1.5, flags: { debe_favor: true } },
+        effects: { influencia: 14, caja: 1.5, flags: { debe_favor: true } },
       },
       {
         label: 'Votar en contra',
         hint: 'Independencia. Y una lista de gente que se acuerda.',
-        effects: { rosca: -10, hinchada: 6 },
+        effects: { influencia: -10, hinchada: 6 },
       },
       {
         label: 'Faltar a la asamblea',
         hint: 'No quedás bien con nadie, no quedás mal con nadie.',
-        effects: { rosca: -3 },
+        effects: { influencia: -3 },
       },
     ],
   },
@@ -67,20 +67,20 @@ export const DIRIGENCIA: GameEvent[] = [
         label: 'Abrir todo',
         hint: '🎲 Si está limpio, salís fortalecido.',
         random: [
-          { weight: 60, text: 'No encontraron nada. La transparencia te dio aire político.', effects: { rosca: 12, hinchada: 6 } },
-          { weight: 40, text: 'Encontraron gastos que no sabías explicar. Aunque no sean tuyos, llevan tu firma.', effects: { rosca: -14, hinchada: -10 } },
+          { weight: 60, text: 'No encontraron nada. La transparencia te dio aire político.', effects: { influencia: 12, hinchada: 6 } },
+          { weight: 40, text: 'Encontraron gastos que no sabías explicar. Aunque no sean tuyos, llevan tu firma.', effects: { influencia: -14, hinchada: -10 } },
         ],
       },
       {
         label: 'Trabar el pedido con formalismos',
         hint: 'Ganás tiempo y confirmás la sospecha.',
-        effects: { rosca: -6, hinchada: -8, flags: { auditoria_trabada: true } },
+        effects: { influencia: -6, hinchada: -8, flags: { auditoria_trabada: true } },
       },
       {
         label: 'Negociar con el opositor',
         hint: 'Le das un cargo. Se termina el problema.',
-        requires: { minRosca: 20 },
-        effects: { rosca: -12, caja: -0.8, hinchada: -2 },
+        requires: { minInfluencia: 20 },
+        effects: { influencia: -12, caja: -0.8, hinchada: -2 },
       },
     ],
   },
@@ -99,7 +99,7 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'No vender',
         hint: 'Lo correcto. Y no resuelve nada de lo urgente.',
-        effects: { hinchada: 8, rosca: 5 },
+        effects: { hinchada: 8, influencia: 5 },
       },
       {
         label: 'Alquilar una parte',
@@ -117,7 +117,7 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Mandarle una carta documento',
         hint: 'Le das entidad. Se agranda.',
-        effects: { rosca: -4, hinchada: -3, caja: -0.3 },
+        effects: { influencia: -4, hinchada: -3, caja: -0.3 },
       },
       {
         label: 'Ignorarlo',
@@ -127,7 +127,7 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Pautar publicidad en su programa',
         hint: 'Se compra el silencio. Se paga el silencio.',
-        effects: { caja: -1.5, rosca: -6, hinchada: 4, flags: { prensa_comprada: true } },
+        effects: { caja: -1.5, influencia: -6, hinchada: 4, flags: { prensa_comprada: true } },
       },
     ],
   },
@@ -141,12 +141,12 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Aceptar',
         hint: 'Entra muchísima plata. Dejás de decidir vos.',
-        effects: { caja: 20, rosca: -20, hinchada: -14, flags: { gerenciado: true } },
+        effects: { caja: 20, influencia: -20, hinchada: -14, flags: { gerenciado: true } },
       },
       {
         label: 'Rechazar de plano',
         hint: 'El club sigue siendo de los socios. Y sigue sin plata.',
-        effects: { hinchada: 12, rosca: 8 },
+        effects: { hinchada: 12, influencia: 8 },
       },
     ],
   },
@@ -155,22 +155,22 @@ export const DIRIGENCIA: GameEvent[] = [
     kind: 'dilema',
     title: 'LA DESIGNACIÓN',
     text: 'Te avisan quién dirige el clásico. Es el mismo que te expulsó a dos el año pasado. Podés hacer una gestión para que lo cambien.',
-    requires: { minRosca: 25 },
+    requires: { minInfluencia: 25 },
     options: [
       {
         label: 'Hacer la gestión',
         hint: 'Funciona. Y alguien lo va a saber.',
-        effects: { rosca: -14, plantel: 3, deferred: [{ inSeasons: 2, text: 'Se filtró la gestión por el árbitro del clásico. Quedaste como el que arregla.', effects: { hinchada: -10, rosca: -8 } }] },
+        effects: { influencia: -14, plantel: 3, deferred: [{ inSeasons: 2, text: 'Se filtró la gestión por el árbitro del clásico. Quedaste como el que arregla.', effects: { hinchada: -10, influencia: -8 } }] },
       },
       {
         label: 'Quejarte públicamente',
         hint: 'Le ponés presión al árbitro y quedás como llorón.',
-        effects: { hinchada: 3, rosca: -5 },
+        effects: { hinchada: 3, influencia: -5 },
       },
       {
         label: 'No hacer nada',
         hint: 'Que el equipo se arregle solo.',
-        effects: { rosca: 3 },
+        effects: { influencia: 3 },
       },
     ],
   },
@@ -185,20 +185,20 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Entrar en un plan de pagos',
         hint: 'Duele todos los meses, pero se ordena.',
-        effects: { caja: -3.5, rosca: 4 },
+        effects: { caja: -3.5, influencia: 4 },
       },
       {
         label: 'Judicializarla',
         hint: '🎲 Podés ganar tiempo. O perderlo todo con costas.',
         random: [
-          { weight: 45, text: 'La justicia frenó la ejecución. Ganaste tres años.', effects: { rosca: 6 } },
-          { weight: 55, text: 'Perdiste con costas. Ahora es peor que antes.', effects: { caja: -7, rosca: -8 } },
+          { weight: 45, text: 'La justicia frenó la ejecución. Ganaste tres años.', effects: { influencia: 6 } },
+          { weight: 55, text: 'Perdiste con costas. Ahora es peor que antes.', effects: { caja: -7, influencia: -8 } },
         ],
       },
       {
         label: 'Echarle la culpa en público a la gestión anterior',
         hint: 'Políticamente rendidor. No paga la deuda.',
-        effects: { hinchada: 5, rosca: -3, caja: -1 },
+        effects: { hinchada: 5, influencia: -3, caja: -1 },
       },
     ],
   },

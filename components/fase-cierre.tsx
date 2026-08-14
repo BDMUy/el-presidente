@@ -12,8 +12,8 @@
 import { CATEGORY_RULES, TITLES, type Club, type ElectionResult, type Ending, type GameState, type SeasonResult } from '@/lib/engine/types';
 import { computeScore } from '@/lib/engine/election';
 import { resolveEconomy } from '@/lib/engine/season';
-import { ordinal, plata, plataConSigno, plural } from '@/lib/format';
-import { Continuar, Membrete, Papel, Sello, Titulo } from './ui';
+import { ordinal, plataConSigno, plataCorta, plural } from '@/lib/format';
+import { Continuar, Membrete, Papel, Puntos, Sello, Titulo } from './ui';
 
 export function FaseTemporada({
   state,
@@ -51,23 +51,23 @@ export function FaseTemporada({
 
       <div className="mt-4">
         <Titulo>Temporada {state.season}</Titulo>
-        <p className="mt-3 font-body text-[15px] leading-relaxed text-tinta/85">{result.summary}</p>
+        <p className="mt-3 font-body text-[16px] leading-relaxed text-tinta">{result.summary}</p>
       </div>
 
-      <dl className="mt-6 grid grid-cols-2 gap-4 border-t border-papel-linea pt-4">
+      <dl className="mt-6 grid grid-cols-2 gap-4 border-t border-hoja-linea pt-4">
         <div>
-          <dt className="font-acta text-[10px] tracking-[0.14em] text-tinta-suave uppercase">
+          <dt className="font-acta text-[11px] tracking-[0.14em] text-tinta-2 uppercase">
             Posición
           </dt>
           <dd className="font-display text-2xl font-black tabular-nums text-tinta">
             {ordinal(result.position)}
-            <span className="ml-1 font-acta text-xs font-normal text-tinta-suave">
+            <span className="ml-1 font-acta text-xs font-normal text-tinta-2">
               de {result.teams}
             </span>
           </dd>
         </div>
         <div>
-          <dt className="font-acta text-[10px] tracking-[0.14em] text-tinta-suave uppercase">
+          <dt className="font-acta text-[11px] tracking-[0.14em] text-tinta-2 uppercase">
             Categoría
           </dt>
           <dd className="font-display text-[15px] font-bold text-tinta uppercase">
@@ -95,16 +95,18 @@ export function FaseTemporada({
           {economia.detalle.map((linea) => (
             <li
               key={linea.label}
-              className="renglon flex items-baseline border-t border-papel-linea py-1.5 font-acta text-[12px]"
+              className="flex items-baseline border-t border-hoja-linea py-1.5 font-acta text-[13px]"
             >
-              <span className="text-tinta-suave">{linea.label}</span>
+              <span className="text-tinta-2">{linea.label}</span>
+              <Puntos />
               <span className={linea.amount < 0 ? 'text-sello' : 'text-tinta'}>
                 {plataConSigno(linea.amount)}
               </span>
             </li>
           ))}
-          <li className="renglon flex items-baseline border-t-2 border-tinta py-2 font-acta text-[13px] font-bold uppercase">
-            <span className="text-tinta">Resultado del ejercicio</span>
+          <li className="flex items-baseline border-t-2 border-tinta py-2.5 font-acta text-[13px] font-bold uppercase">
+            <span className="text-tinta">Resultado</span>
+            <Puntos />
             <span className={economia.neto < 0 ? 'text-sello' : 'text-tinta'}>
               {plataConSigno(economia.neto)}
             </span>
@@ -141,12 +143,12 @@ export function FaseEleccion({
           {result.votes}
           <span className="text-2xl">%</span>
         </p>
-        <p className="mt-1 font-acta text-[10px] tracking-[0.16em] text-tinta-suave uppercase">
+        <p className="mt-1 font-acta text-[11px] tracking-[0.16em] text-tinta-2 uppercase">
           de los votos de socios
         </p>
       </div>
 
-      <p className="mt-6 border-t border-papel-linea pt-4 font-body text-[15px] leading-relaxed text-tinta/85">
+      <p className="mt-6 border-t border-hoja-linea pt-4 font-body text-[16px] leading-relaxed text-tinta">
         {result.summary}
       </p>
 
@@ -196,18 +198,17 @@ export function FaseFin({
         {ending.title}
       </h1>
 
-      <p className="mt-4 font-body text-[15px] leading-relaxed text-tinta/85">{ending.text}</p>
+      <p className="mt-4 font-body text-[16px] leading-relaxed text-tinta">{ending.text}</p>
 
-      <dl className="mt-7 grid grid-cols-3 gap-3 border-y border-papel-linea py-4">
+      <dl className="mt-7 grid grid-cols-3 gap-3 border-y border-hoja-linea py-4">
         <Dato label="Temporadas" valor={String(state.season)} />
         <Dato label="Títulos" valor={String(state.titles.length)} />
         <Dato label="Hinchada" valor={String(Math.round(state.resources.hinchada))} />
         <Dato label="Socios" valor={`${Math.round(state.resources.socios)}k`} />
-        <Dato label="Caja" valor={plata(state.resources.caja)} />
-        <Dato
-          label="Asc. / Desc."
-          valor={`${state.ascensos} / ${state.descensos}`}
-        />
+        {/* Formato corto: en una grilla de tres columnas, "−US$ 2,9M" parte en
+            dos líneas y rompe la alineación de toda la fila. */}
+        <Dato label="Caja US$" valor={plataCorta(state.resources.caja)} />
+        <Dato label="Asc./Desc." valor={`${state.ascensos}/${state.descensos}`} />
       </dl>
 
       {porTitulo.size > 0 ? (
@@ -225,7 +226,7 @@ export function FaseFin({
           </ul>
         </div>
       ) : (
-        <p className="mt-5 font-acta text-[11px] tracking-[0.1em] text-tinta-suave uppercase">
+        <p className="mt-5 font-acta text-[11px] tracking-[0.1em] text-tinta-2 uppercase">
           Vitrina vacía. No todas las presidencias dejan una copa.
         </p>
       )}
@@ -237,13 +238,13 @@ export function FaseFin({
       )}
 
       <div className="mt-7 border-t-2 border-tinta pt-4 text-center">
-        <p className="font-acta text-[10px] tracking-[0.2em] text-tinta-suave uppercase">
+        <p className="font-acta text-[11px] tracking-[0.2em] text-tinta-2 uppercase">
           Puntaje de la presidencia
         </p>
         <p className="font-display text-5xl leading-none font-black tabular-nums text-tinta">
           {score.toLocaleString('es-AR')}
         </p>
-        <p className="mt-2 font-body text-[13px] text-tinta-suave">
+        <p className="mt-2 font-body text-[14px] text-tinta-2">
           {plural(state.season, 'temporada', 'temporadas')} al frente de {club.name}
         </p>
       </div>
@@ -256,7 +257,7 @@ export function FaseFin({
 function Dato({ label, valor }: { label: string; valor: string }) {
   return (
     <div>
-      <dt className="font-acta text-[9px] tracking-[0.12em] text-tinta-suave uppercase">{label}</dt>
+      <dt className="font-acta text-[11px] tracking-[0.12em] text-tinta-2 uppercase">{label}</dt>
       <dd className="mt-0.5 font-display text-lg leading-none font-black tabular-nums text-tinta">
         {valor}
       </dd>
