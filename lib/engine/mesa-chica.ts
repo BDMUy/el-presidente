@@ -77,6 +77,17 @@ export function assignmentCost(assignment: MesaChicaAssignment): Effects {
   };
 }
 
+/**
+ * Lo que cuesta una sola ficha en un frente.
+ *
+ * Se deriva de `assignmentCost` en vez de escribirse a mano en cada frente:
+ * una etiqueta hardcodeada que dice "US$ 0,8M" se vuelve mentira en cuanto
+ * alguien cambia el precio, y nadie se entera hasta que un jugador se queja.
+ */
+export function costoPorFicha(frente: Frente): Effects {
+  return assignmentCost({ ...EMPTY, [frente]: 1 });
+}
+
 export interface MesaChicaOutcome {
   won: boolean;
   text: string;

@@ -212,6 +212,15 @@ export interface FrenteDef {
   desc: string;
   /** Cuánta probabilidad de ganar suma cada ficha. */
   winPerFicha: number;
+  /**
+   * Advertencia visible cuando el frente arrastra una consecuencia diferida.
+   *
+   * El riesgo se muestra a propósito: un dilema es más fuerte cuando sabés lo
+   * que estás arriesgando y lo hacés igual. Escondido sería una trampa, y el
+   * jugador se enteraría recién dos temporadas después, sin poder atarlo a
+   * esta decisión.
+   */
+  riesgo?: string;
 }
 
 /**
@@ -219,13 +228,24 @@ export interface FrenteDef {
  *
  * `gestion` es deliberadamente el más eficaz: la opción más sucia tiene que
  * ser también la más tentadora, o el dilema no existe.
+ *
+ * ATENCIÓN: el orden de este array define los índices de reparto que viajan en
+ * el log de la partida y en los links compartidos. Reordenarlo rompe todas las
+ * partidas guardadas y todos los links que ya circulan. Para cambiar el orden
+ * en pantalla existe un orden de presentación aparte en la UI.
  */
 export const FRENTES: readonly FrenteDef[] = [
   { id: 'plantel', label: 'Prima al plantel', desc: 'Plata sobre la mesa. Motiva, y se sabe.', winPerFicha: 0.08 },
   { id: 'dt', label: 'Respaldo al DT', desc: 'Salís a bancarlo en público.', winPerFicha: 0.06 },
   { id: 'hinchada', label: 'Operativo tribuna', desc: 'Que la cancha sea un infierno.', winPerFicha: 0.05 },
   { id: 'prensa', label: 'Blindaje de prensa', desc: 'Si se pierde, que no te maten.', winPerFicha: 0.03 },
-  { id: 'gestion', label: 'Gestión política', desc: 'Llamadas que no conviene detallar.', winPerFicha: 0.12 },
+  {
+    id: 'gestion',
+    label: 'Gestión política',
+    desc: 'Llamadas que no conviene detallar.',
+    winPerFicha: 0.12,
+    riesgo: 'Puede salir a la luz más adelante',
+  },
 ];
 
 export const FICHAS_MESA_CHICA = 3;
