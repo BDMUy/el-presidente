@@ -18,6 +18,7 @@ import { LOGROS_POR_ID } from '@/content/logros';
 import { TITLES, type Club, type Ending, type GameState } from '@/lib/engine/types';
 import { encodeRun, shareUrl } from '@/lib/share';
 import { registrarPartida, type Novedades } from '@/lib/vitrina';
+import { EnvioAlRanking } from './envio-ranking';
 import { Continuar, Membrete, Papel, Sello } from './ui';
 import { ResumenPresidencia } from './resumen-presidencia';
 
@@ -25,11 +26,14 @@ export function FaseFin({
   state,
   club,
   ending,
+  diaria,
   onReiniciar,
 }: {
   state: GameState;
   club: Club;
   ending: Ending;
+  /** Fecha de la Presidencia del Día, o null si fue una partida libre. */
+  diaria: string | null;
   onReiniciar: () => void;
 }) {
   const [novedades, setNovedades] = useState<Novedades | null>(null);
@@ -76,6 +80,8 @@ export function FaseFin({
       <ResumenPresidencia state={state} club={club} ending={ending} />
 
       {novedades && <Novedad novedades={novedades} />}
+
+      <EnvioAlRanking state={state} diaria={diaria} />
 
       <button
         type="button"

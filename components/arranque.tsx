@@ -20,6 +20,7 @@ import { CLUBS } from '@/content/clubs';
 import { expectedPosition } from '@/lib/engine/season';
 import { CATEGORY_RULES, type Category, type Club } from '@/lib/engine/types';
 import { Membrete, Sello } from './ui';
+import { PresidenciaDelDia } from './presidencia-del-dia';
 import { VitrinaPanel } from './vitrina';
 
 const PESTANAS: { id: Category; corto: string }[] = [
@@ -36,7 +37,13 @@ function normalizar(texto: string): string {
     .replace(/[̀-ͯ]/g, '');
 }
 
-export function Arranque({ onEmpezar }: { onEmpezar: (clubId: string) => void }) {
+export function Arranque({
+  onEmpezar,
+  onEmpezarDiaria,
+}: {
+  onEmpezar: (clubId: string) => void;
+  onEmpezarDiaria: () => void;
+}) {
   const [elegido, setElegido] = useState<string | null>(null);
   const [busqueda, setBusqueda] = useState('');
   const [categoria, setCategoria] = useState<Category>('primera');
@@ -101,6 +108,8 @@ export function Arranque({ onEmpezar }: { onEmpezar: (clubId: string) => void })
           hinchada y la influencia.{' '}
           <span className="font-semibold">Vos armás el plantel; el plantel juega.</span>
         </p>
+
+        <PresidenciaDelDia onJugar={onEmpezarDiaria} />
 
         <VitrinaPanel />
 

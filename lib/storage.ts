@@ -25,6 +25,8 @@ export interface PartidaGuardada {
   seed: number;
   clubId: string;
   choices: number[];
+  /** Fecha de la Presidencia del Día si esta partida es la del día. */
+  diaria?: string | null;
 }
 
 export function guardar(partida: Omit<PartidaGuardada, 'version'>): void {
@@ -55,7 +57,7 @@ export function leer(): PartidaGuardada | null {
       return null;
     }
 
-    return parsed as PartidaGuardada;
+    return { ...(parsed as PartidaGuardada), diaria: parsed.diaria ?? null };
   } catch {
     return null;
   }
