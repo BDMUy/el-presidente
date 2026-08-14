@@ -13,7 +13,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { getClub } from '@/content/clubs';
 import { applyChoice, replayRun, startRun } from '@/lib/engine/engine';
 import type { GameState, Resources } from '@/lib/engine/types';
-import { borrar, guardar, leer } from '@/lib/storage';
+import { borrar, guardar, leer, marcarActaVista, vioActa } from '@/lib/storage';
+import { ActaAsuncion } from './acta-asuncion';
 import { Arranque } from './arranque';
 import { FaseEleccion, FaseFin, FaseTemporada } from './fase-cierre';
 import { FaseEvento, FaseResultadoEvento } from './fase-evento';
@@ -34,6 +35,8 @@ interface Partida {
 export function Juego() {
   const [partida, setPartida] = useState<Partida | null>(null);
   const [cargando, setCargando] = useState(true);
+  /** El acta de asunción se muestra una sola vez en la vida del jugador. */
+  const [mostrarActa, setMostrarActa] = useState(false);
 
   // Restaurar la partida en curso, si el contenido no cambió desde entonces.
   // localStorage no existe en el prerender, así que esto solo puede pasar
@@ -54,7 +57,13 @@ export function Juego() {
   const empezar = useCallback((clubId: string) => {
     const seed = Math.floor(Math.random() * 0xffffffff);
     setPartida({ state: startRun({ seed, clubId }), previas: null });
+    setMostrarActa(!vioActa());
     guardar({ seed, clubId, choices: [] });
+  }, []);
+
+  const cerrarActa = useCallback(() => {
+    marcarActaVista();
+    setMostrarActa(false);
   }, []);
 
   const elegir = useCallback((choice: number) => {
@@ -108,7 +117,11 @@ export function Juego() {
       />
 
       <div className="mx-auto w-full max-w-xl flex-1 px-4 py-6">
-        <Pantalla state={state} onElegir={elegir} onReiniciar={reiniciar} />
+        {mostrarActa ? (
+          <ActaAsuncion club={club} resources={state.resources} onAsumir={cerrarActa} />
+        ) : (
+          <Pantalla state={state} onElegir={elegir} onReiniciar={reiniciar} />
+        )}
       </div>
 
       <footer className="mx-auto w-full max-w-xl px-4 pb-6">

@@ -61,6 +61,34 @@ export function leer(): PartidaGuardada | null {
   }
 }
 
+const KEY_ACTA = 'el-presidente:vio-acta';
+
+/**
+ * Si el jugador ya vio el acta de asunción.
+ *
+ * Va en su propia clave y sin versión: es una marca sobre la persona, no sobre
+ * la partida. Empezar una presidencia nueva no debería volver a explicarte qué
+ * es la caja.
+ */
+export function vioActa(): boolean {
+  if (typeof window === 'undefined') return true;
+  try {
+    return window.localStorage.getItem(KEY_ACTA) === '1';
+  } catch {
+    // Sin almacenamiento, mejor no bloquear el arranque con el acta.
+    return true;
+  }
+}
+
+export function marcarActaVista(): void {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.setItem(KEY_ACTA, '1');
+  } catch {
+    // Se va a volver a mostrar la próxima vez. Es molesto, no roto.
+  }
+}
+
 export function borrar(): void {
   if (typeof window === 'undefined') return;
   try {

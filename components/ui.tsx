@@ -167,30 +167,50 @@ export function Continuar({
   );
 }
 
-/** Cifra con su etiqueta, como una línea de balance. */
+/**
+ * Cifra con su etiqueta, como una línea de balance.
+ *
+ * Es un botón: tocarla despliega qué significa el recurso. En un juego que se
+ * juega en el celular, un tooltip de hover no existiría para la mayoría.
+ */
 export function Cifra({
   label,
   valor,
   delta,
   alerta = false,
+  abierta = false,
+  onToggle,
 }: {
   label: string;
   valor: string;
   delta?: number;
   alerta?: boolean;
+  abierta?: boolean;
+  onToggle?: () => void;
 }) {
   return (
-    <div className="min-w-0">
+    <button
+      type="button"
+      onClick={onToggle}
+      aria-expanded={abierta}
+      // El borde inferior en bronce ata visualmente la celda con el panel que
+      // se abre debajo: sin eso, la explicación parece venir de la nada.
+      className={`min-w-0 rounded-sm border-b-2 px-1 pt-0.5 pb-1 text-left transition-colors ${
+        abierta ? 'border-bronce-claro bg-papel/12' : 'border-transparent hover:bg-papel/6'
+      }`}
+    >
       {/* Sin letter-spacing: Courier ya es monoespaciada y separa de sobra. El
           espaciado extra empujaba "INFLUENCIA" fuera de su columna. */}
-      <p className="font-acta text-[11px] leading-none font-bold text-papel-2 uppercase">{label}</p>
-      <p
+      <span className="block truncate font-acta text-[11px] leading-none font-bold text-papel-2 uppercase">
+        {label}
+      </span>
+      <span
         className={`mt-1.5 flex items-baseline gap-0.5 font-display text-[17px] leading-none font-black tabular-nums ${
           alerta ? 'text-sello-claro' : 'text-papel'
         }`}
       >
-        {/* La flecha no se encoge: si algo tiene que ceder, es el número,
-            y por eso el número nunca puede quedar sin lugar. */}
+        {/* La flecha no se encoge: si algo tiene que ceder es el número, y por
+            eso el número nunca puede quedar sin lugar. */}
         <span className="min-w-0 truncate">{valor}</span>
         {delta !== undefined && delta !== 0 && (
           <span
@@ -202,7 +222,7 @@ export function Cifra({
             {delta > 0 ? '▲' : '▼'}
           </span>
         )}
-      </p>
-    </div>
+      </span>
+    </button>
   );
 }

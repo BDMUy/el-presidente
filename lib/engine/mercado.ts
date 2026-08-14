@@ -47,8 +47,16 @@ const ARQUETIPOS_VENTA = [
 /** Escala de precios por categoría, en millones. */
 const PRICE_SCALE: Record<Category, number> = { primera: 1, nacional: 0.35, b: 0.15 };
 
-function nombre(rand: Rand): string {
-  return `${rand.pick(NOMBRES)} ${rand.pick(APELLIDOS)}`;
+/**
+ * Genera un nombre sin repetir apellido dentro de la misma ventana: dos
+ * Ledesma en la misma planilla de pases se lee como un error del juego, no
+ * como una casualidad.
+ */
+function nombre(rand: Rand, usados: Set<string>): string {
+  const disponibles = APELLIDOS.filter((a) => !usados.has(a));
+  const apellido = rand.pick(disponibles.length > 0 ? disponibles : APELLIDOS);
+  usados.add(apellido);
+  return `${rand.pick(NOMBRES)} ${apellido}`;
 }
 
 function round1(value: number): number {
@@ -69,13 +77,14 @@ export function generateOffers(
 ): PlayerOffer[] {
   const scale = PRICE_SCALE[category];
   const offers: PlayerOffer[] = [];
+  const apellidosUsados = new Set<string>();
 
   // Una compra fuerte: cara, pero mueve la aguja.
   const fuerte = rand.pick(ARQUETIPOS_COMPRA);
   const deltaFuerte = rand.int(6, 11);
   offers.push({
     kind: 'compra',
-    name: nombre(rand),
+    name: nombre(rand, apellidosUsados),
     archetype: fuerte.archetype,
     age: rand.int(23, 29),
     plantelDelta: deltaFuerte,
@@ -90,7 +99,7 @@ export function generateOffers(
   const deltaBarato = rand.int(2, 5);
   offers.push({
     kind: 'libre',
-    name: nombre(rand),
+    name: nombre(rand, apellidosUsados),
     archetype: barato.archetype,
     age: rand.int(30, 36),
     plantelDelta: deltaBarato,
@@ -111,7 +120,7 @@ export function generateOffers(
   const primaJuventud = edad < 22 ? 1.25 : edad < 28 ? 1 : 0.75;
   offers.push({
     kind: 'venta',
-    name: nombre(rand),
+    name: nombre(rand, apellidosUsados),
     archetype: venta.archetype,
     age: edad,
     plantelDelta: -deltaVenta,

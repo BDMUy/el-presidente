@@ -6,8 +6,10 @@ import { applyEffects, applyResources, meetsCondition } from './effects';
 import { checkEarlyExit, computeScore, DEUDA_QUIEBRA, resolveElection } from './election';
 import { applyChoice, initialResources, optionCount, replayRun, startRun } from './engine';
 import { assignmentIndex, enumerateAssignments, winProbability } from './mesa-chica';
+import { generateOffers } from './mercado';
 import { Rand, seedFromString } from './rng';
 import { expectedPosition, plantelForPosition, resolvePosition } from './season';
+import { RECURSOS_POR_ID } from '@/lib/recursos';
 import type { GameState } from './types';
 import { FICHAS_MESA_CHICA, HINCHADA_ASAMBLEA, TOTAL_SEASONS } from './types';
 
@@ -364,6 +366,39 @@ describe('puntaje', () => {
     const conPlata = { ...base, resources: { ...base.resources, caja: base.resources.caja + 30 } };
     const conDescenso = { ...conPlata, descensos: 1 };
     expect(computeScore(conDescenso)).toBeLessThan(computeScore(base));
+  });
+});
+
+describe('mercado', () => {
+  it('no repite apellidos dentro de la misma ventana', () => {
+    // Dos Ledesma en la misma planilla se leen como un error del juego.
+    const rand = new Rand(2024);
+    for (let i = 0; i < 300; i++) {
+      const offers = generateOffers('primera', 60, rand);
+      const apellidos = offers.map((o) => o.name.split(' ')[1]);
+      expect(new Set(apellidos).size).toBe(apellidos.length);
+    }
+  });
+
+  it('siempre ofrece una venta, una compra y un libre', () => {
+    const rand = new Rand(99);
+    for (let i = 0; i < 100; i++) {
+      const kinds = generateOffers('nacional', 45, rand).map((o) => o.kind).sort();
+      expect(kinds).toEqual(['compra', 'libre', 'venta']);
+    }
+  });
+});
+
+describe('recursos', () => {
+  it('cada recurso tiene su explicación', () => {
+    // El acta de asunción y las celdas del carnet leen de acá: si falta uno,
+    // el jugador se queda sin saber qué mira.
+    for (const campo of ['caja', 'hinchada', 'socios', 'plantel', 'influencia'] as const) {
+      const def = RECURSOS_POR_ID[campo];
+      expect(def, campo).toBeDefined();
+      expect(def.label.length, campo).toBeGreaterThan(3);
+      expect(def.texto.length, campo).toBeGreaterThan(60);
+    }
   });
 });
 
