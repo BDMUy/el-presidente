@@ -3,14 +3,22 @@
 /**
  * La planilla de pases.
  *
- * Tres operaciones sobre la mesa y la opción de no firmar ninguna. Cada
- * renglón muestra lo que cuesta y lo que mueve, porque el dilema del mercado
- * solo existe si el precio está a la vista antes de decidir.
+ * Tres operaciones sobre la mesa y la opción de no firmar ninguna.
+ *
+ * Comprar, vender y agarrar un libre son decisiones de signo opuesto —una te
+ * saca plata y te mejora, otra te trae plata y te rompe el equipo, la tercera
+ * es una apuesta barata— así que no pueden verse iguales. Cada tipo tiene su
+ * propia marca y la venta, que es la que puede arruinarte la temporada, se
+ * distingue de lejos.
+ *
+ * Las consecuencias van en columnas alineadas en vez de una cadena corrida:
+ * son tres datos distintos —plata, plantel, hinchada— y leerlos comparados
+ * entre ofertas es exactamente lo que el jugador necesita hacer.
  */
 
 import type { PlayerOffer } from '@/lib/engine/types';
-import { plata } from '@/lib/format';
-import { Membrete, Papel, Sello, Titulo } from './ui';
+import { plata, plataCorta } from '@/lib/format';
+import { Membrete, Papel, Puntos, Sello, Titulo } from './ui';
 
 const ETIQUETA: Record<PlayerOffer['kind'], string> = {
   compra: 'Compra',
@@ -18,29 +26,18 @@ const ETIQUETA: Record<PlayerOffer['kind'], string> = {
   venta: 'Venta',
 };
 
-/** La consecuencia de la operación, en el mismo formato que el resto del juego. */
-function resumenOferta(offer: PlayerOffer): string {
-  const dinero =
-    offer.cost > 0 ? `−${plata(offer.cost)}` : offer.cost < 0 ? `+${plata(-offer.cost)}` : 'Gratis';
-  const plantel = offer.plantelDelta >= 0 ? `+${offer.plantelDelta}` : `${offer.plantelDelta}`;
-  const gente =
-    offer.hinchadaDelta > 0
-      ? ', la gente lo festeja'
-      : offer.hinchadaDelta < 0
-        ? ', la gente te lo va a cobrar'
-        : '';
-  return `${dinero} · plantel ${plantel}${gente}`;
-}
-
 export function FaseMercado({
   offers,
   inhibido,
   season,
+  caja,
   onElegir,
 }: {
   offers: PlayerOffer[];
   inhibido: boolean;
   season: number;
+  /** Caja actual, para mostrar en cuánto queda después de cada operación. */
+  caja: number;
   onElegir: (choice: number) => void;
 }) {
   return (
@@ -65,17 +62,22 @@ export function FaseMercado({
 
       <div className="mt-6">
         <Membrete>Operaciones</Membrete>
-        <div className="mt-1">
+        <div className="mt-2 space-y-2">
           {offers.map((offer, index) => (
-            <FilaOferta key={`${offer.name}-${index}`} offer={offer} onClick={() => onElegir(index)} />
+            <FilaOferta
+              key={`${offer.name}-${index}`}
+              offer={offer}
+              caja={caja}
+              onClick={() => onElegir(index)}
+            />
           ))}
 
           <button
             type="button"
             onClick={() => onElegir(offers.length)}
-            className="w-full border-t border-b border-hoja-linea py-3 text-left transition-colors hover:bg-tinta/5 active:bg-tinta/10"
+            className="w-full border border-hoja-linea px-3 py-3 text-left transition-colors hover:bg-tinta/6 active:bg-tinta/12"
           >
-            <span className="block font-display text-[15px] font-bold tracking-tight text-tinta uppercase">
+            <span className="block font-display text-[16px] leading-tight font-bold text-tinta">
               No mover nada
             </span>
             <span className="mt-1 block font-body text-[14px] leading-snug text-tinta-2">
@@ -88,33 +90,104 @@ export function FaseMercado({
   );
 }
 
-function FilaOferta({ offer, onClick }: { offer: PlayerOffer; onClick: () => void }) {
+function FilaOferta({
+  offer,
+  caja,
+  onClick,
+}: {
+  offer: PlayerOffer;
+  caja: number;
+  onClick: () => void;
+}) {
+  const esVenta = offer.kind === 'venta';
+  // `cost` positivo es plata que sale; negativo es plata que entra.
+  const cajaDespues = Math.round((caja - offer.cost) * 10) / 10;
+  const quedaEnRojo = cajaDespues < 0;
+
   return (
     <button
       type="button"
       onClick={onClick}
-      className="w-full border-t border-hoja-linea py-3 text-left transition-colors hover:bg-tinta/5 active:bg-tinta/10"
+      className={`w-full border px-3 py-3 text-left transition-colors hover:bg-tinta/6 active:bg-tinta/12 ${
+        esVenta ? 'border-sello/40 bg-sello/6' : 'border-hoja-linea'
+      }`}
     >
-      <span className="flex items-baseline gap-2">
-        <span className="font-display text-[15px] font-bold tracking-tight text-tinta uppercase">
+      <span className="flex items-baseline justify-between gap-2">
+        <span className="min-w-0 truncate font-display text-[16px] leading-tight font-bold text-tinta">
           {offer.name}
         </span>
         <span
-          className={`font-acta text-[11px] tracking-[0.1em] uppercase ${
-            offer.kind === 'venta' ? 'text-sello' : 'text-tinta-2'
+          className={`shrink-0 font-acta text-[11px] tracking-[0.08em] uppercase ${
+            esVenta ? 'text-sello' : 'text-tinta-2'
           }`}
         >
           {ETIQUETA[offer.kind]}
         </span>
       </span>
 
-      <span className="mt-0.5 block font-body text-[14px] text-tinta-2">
+      <span className="mt-1 block font-body text-[14px] leading-snug text-tinta-2">
         {offer.archetype}, {offer.age} años. {offer.note}
       </span>
 
-      <span className="mt-1.5 block font-acta text-[11px] tracking-[0.06em] text-tinta uppercase">
-        {resumenOferta(offer)}
+      {/* Los tres datos de la decisión, alineados para poder compararlos entre
+          ofertas de un vistazo. Antes iban en una sola cadena en mayúsculas. */}
+      <span className="mt-2.5 grid grid-cols-3 gap-2 border-t border-hoja-linea pt-2">
+        <Dato
+          etiqueta={offer.cost >= 0 ? 'Cuesta' : 'Entra'}
+          valor={offer.cost === 0 ? 'nada' : plataCorta(Math.abs(offer.cost))}
+          tono={offer.cost > 0 ? 'gasto' : 'ingreso'}
+        />
+        <Dato
+          etiqueta="Plantel"
+          valor={conSigno(offer.plantelDelta)}
+          tono={offer.plantelDelta >= 0 ? 'ingreso' : 'gasto'}
+        />
+        <Dato
+          etiqueta="Hinchada"
+          valor={offer.hinchadaDelta === 0 ? '—' : conSigno(offer.hinchadaDelta)}
+          tono={
+            offer.hinchadaDelta === 0 ? 'neutro' : offer.hinchadaDelta > 0 ? 'ingreso' : 'gasto'
+          }
+        />
+      </span>
+
+      {/* El dato que decide de verdad una compra: si te la podés bancar. */}
+      <span className="mt-1.5 flex items-baseline font-acta text-[11px] tracking-[0.04em] uppercase">
+        <span className="text-tinta-2">Te deja en</span>
+        <Puntos />
+        <span className={quedaEnRojo ? 'text-sello' : 'text-tinta'}>{plata(cajaDespues)}</span>
       </span>
     </button>
   );
+}
+
+function Dato({
+  etiqueta,
+  valor,
+  tono,
+}: {
+  etiqueta: string;
+  valor: string;
+  /** `neutro` para cuando no hay cambio: un guion en verde sugiere una mejora. */
+  tono: 'gasto' | 'ingreso' | 'neutro';
+}) {
+  const color =
+    tono === 'gasto' ? 'text-sello' : tono === 'ingreso' ? 'text-emerald-800' : 'text-tinta-2';
+
+  return (
+    <span className="block">
+      <span className="block font-acta text-[10px] leading-none tracking-[0.04em] text-tinta-2 uppercase">
+        {etiqueta}
+      </span>
+      <span
+        className={`mt-1 block font-display text-[15px] leading-none font-black tabular-nums ${color}`}
+      >
+        {valor}
+      </span>
+    </span>
+  );
+}
+
+function conSigno(n: number): string {
+  return n > 0 ? `+${n}` : String(n);
 }

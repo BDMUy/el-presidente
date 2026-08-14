@@ -179,6 +179,7 @@ function Pantalla({
           offers={phase.offers}
           inhibido={phase.inhibido}
           season={state.season}
+          caja={state.resources.caja}
           onElegir={onElegir}
         />
       );

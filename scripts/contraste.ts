@@ -71,6 +71,8 @@ const T = {
   selloClaro: '#e89f98',
   bronce: '#7a5f24',
   bronceClaro: '#c1a66e',
+  // Verde de Tailwind usado para los deltas positivos sobre papel.
+  verde800: '#065f46',
   blanco: '#ffffff',
 };
 
@@ -128,6 +130,7 @@ const CASOS: Caso[] = [
   { donde: 'Membrete, hint y balance', frente: T.tinta2, fondo: T.hoja },
   { donde: 'Sello rojo sobre papel', frente: T.sello, fondo: T.hoja },
   { donde: 'Sello bronce sobre papel', frente: T.bronce, fondo: T.hoja },
+  { donde: 'Delta positivo sobre papel', frente: T.verde800, fondo: T.hoja },
   { donde: 'Renglón punteado (decorativo)', frente: T.hojaLinea, fondo: T.hoja, minimo: 2 },
   { donde: 'Botón Continuar (hoja sobre tinta)', frente: T.hoja, fondo: T.tinta },
 
