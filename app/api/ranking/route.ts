@@ -29,23 +29,30 @@ export async function GET(request: Request) {
 
   const tipo = new URL(request.url).searchParams.get('tipo') === 'global' ? 'global' : 'diario';
 
-  const consulta = db
-    .from('presidencias')
-    .select('nombre, club_id, puntaje, temporadas, titulos, final')
-    .order('puntaje', { ascending: false })
-    .limit(LIMITE);
-
-  const { data, error } =
-    tipo === 'global'
-      ? await consulta.is('fecha_diaria', null)
-      : await consulta.eq('fecha_diaria', fechaDelDia());
-
-  if (error) {
+  let filas;
+  try {
+    filas =
+      tipo === 'global'
+        ? await db`
+            select nombre, club_id, puntaje, temporadas, titulos, final
+            from presidencias
+            where fecha_diaria is null
+            order by puntaje desc
+            limit ${LIMITE}
+          `
+        : await db`
+            select nombre, club_id, puntaje, temporadas, titulos, final
+            from presidencias
+            where fecha_diaria = ${fechaDelDia()}::date
+            order by puntaje desc
+            limit ${LIMITE}
+          `;
+  } catch {
     return NextResponse.json({ ok: false, error: 'No se pudo leer.', filas: [] }, { status: 500 });
   }
 
   return NextResponse.json(
-    { ok: true, tipo, filas: data ?? [] },
+    { ok: true, tipo, filas },
     {
       headers: {
         'Cache-Control': `public, s-maxage=${CACHE_SEGUNDOS}, stale-while-revalidate=120`,

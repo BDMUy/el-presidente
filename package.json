@@ -10,11 +10,14 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
-    "simulate": "tsx scripts/simulate.ts"
+    "simulate": "tsx scripts/simulate.ts",
+    "migrar": "tsx scripts/migrar.ts",
+    "cobertura": "tsx scripts/cobertura.ts",
+    "contraste": "tsx scripts/contraste.ts"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.112.3",
     "next": "16.3.1",
+    "postgres": "^3.4.9",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "server-only": "^0.0.1"

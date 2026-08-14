@@ -21,6 +21,7 @@ import { expectedPosition } from '@/lib/engine/season';
 import { CATEGORY_RULES, type Category, type Club } from '@/lib/engine/types';
 import { Membrete, Sello } from './ui';
 import { PresidenciaDelDia } from './presidencia-del-dia';
+import { Ranking } from './ranking';
 import { VitrinaPanel } from './vitrina';
 
 const PESTANAS: { id: Category; corto: string }[] = [
@@ -110,6 +111,8 @@ export function Arranque({
         </p>
 
         <PresidenciaDelDia onJugar={onEmpezarDiaria} />
+
+        <Ranking />
 
         <VitrinaPanel />
 

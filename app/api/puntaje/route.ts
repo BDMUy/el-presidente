@@ -107,23 +107,27 @@ export async function POST(request: Request) {
     fechaDiaria = hoy.fecha;
   }
 
-  const { error } = await db.from('presidencias').insert({
-    dispositivo,
-    nombre: nombre.trim().slice(0, MAX_NOMBRE),
-    seed,
-    club_id: clubId,
-    decisiones: choices,
-    puntaje,
-    temporadas: estado.season,
-    titulos: estado.titles.length,
-    final: estado.ending.id,
-    fecha_diaria: fechaDiaria,
-  });
-
-  if (error) {
+  try {
+    await db`
+      insert into presidencias
+        (dispositivo, nombre, seed, club_id, decisiones, puntaje, temporadas, titulos, final, fecha_diaria)
+      values (
+        ${dispositivo}::uuid,
+        ${nombre.trim().slice(0, MAX_NOMBRE)},
+        ${seed},
+        ${clubId},
+        ${db.array(choices as number[])}::smallint[],
+        ${puntaje},
+        ${estado.season},
+        ${estado.titles.length},
+        ${estado.ending.id},
+        ${fechaDiaria}::date
+      )
+    `;
+  } catch (e) {
     // El índice único es el que impone "una por día". Que choque no es un
     // fallo: es la regla funcionando.
-    if (error.code === '23505') {
+    if ((e as { code?: string }).code === '23505') {
       return NextResponse.json(
         { ok: false, error: 'Ya enviaste tu Presidencia del Día.', puntaje },
         { status: 409 },

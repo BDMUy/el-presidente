@@ -3,37 +3,38 @@ import 'server-only';
 /**
  * Acceso a la base, solo desde el servidor.
  *
- * Usa la clave de servicio, así que este módulo nunca puede llegar al
- * navegador: `server-only` lo hace fallar en tiempo de compilación si alguien
- * lo importa desde un componente de cliente.
+ * Se conecta con un `DATABASE_URL` de Postgres común, sin SDK de ningún
+ * proveedor. Es deliberado: el proyecto ya cambió de proveedor una vez, y con
+ * una cadena de conexión estándar cambiar de Neon a Supabase, a Railway o a un
+ * VPS es cambiar una variable de entorno, no reescribir las consultas.
  *
- * Si las variables de entorno no están configuradas, `getDb()` devuelve null y
- * las rutas responden que el ranking no está disponible. El juego entero
- * funciona sin base: los rankings son un agregado, no un requisito.
+ * `server-only` hace fallar la compilación si alguien importa esto desde un
+ * componente de cliente: la credencial nunca puede llegar al navegador.
+ *
+ * Si la variable no está configurada, `getDb()` devuelve null y las rutas
+ * responden que el ranking no está disponible. El juego entero funciona sin
+ * base: los rankings son un agregado, no un requisito.
  */
 
-import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import postgres, { type Sql } from 'postgres';
 
-let cliente: SupabaseClient | null | undefined;
+let cliente: Sql | null | undefined;
 
-export function getDb(): SupabaseClient | null {
+export function getDb(): Sql | null {
   if (cliente !== undefined) return cliente;
 
-  const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-  if (!url || !key) {
+  const url = process.env.DATABASE_URL;
+  if (!url) {
     cliente = null;
     return null;
   }
 
-  cliente = createClient(url, key, {
-    auth: { persistSession: false, autoRefreshToken: false },
+  cliente = postgres(url, {
+    // En serverless cada instancia abre su propio pool: mantenerlo chico evita
+    // agotar las conexiones del plan gratuito.
+    max: 3,
+    idle_timeout: 20,
+    connect_timeout: 10,
   });
   return cliente;
-}
-
-/** Para que las rutas puedan responder distinto sin intentar la consulta. */
-export function rankingConfigurado(): boolean {
-  return getDb() !== null;
 }

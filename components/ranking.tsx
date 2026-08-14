@@ -1,0 +1,132 @@
+'use client';
+
+/**
+ * La tabla de posiciones, en la pantalla de arranque.
+ *
+ * Se pide al montar y se esconde entera si el ranking no está configurado: sin
+ * base, este componente no existe y el arranque queda exactamente como estaba.
+ *
+ * Arranca en el ranking del día porque es el que invita a volver mañana. El
+ * global premia la mejor partida de tu vida y no cambia seguido; el diario
+ * cambia todos los días y es el que da la razón para entrar.
+ */
+
+import { useEffect, useState } from 'react';
+
+import { CLUBS } from '@/content/clubs';
+import { Membrete } from './ui';
+
+interface Fila {
+  nombre: string;
+  club_id: string;
+  puntaje: number;
+  temporadas: number;
+  titulos: number;
+  final: string;
+}
+
+type Tipo = 'diario' | 'global';
+
+const CLUBES = new Map(CLUBS.map((c) => [c.id, c]));
+
+export function Ranking() {
+  const [tipo, setTipo] = useState<Tipo>('diario');
+  const [filas, setFilas] = useState<Fila[] | null>(null);
+  const [disponible, setDisponible] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    let vivo = true;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- vuelve al estado de carga al cambiar de pestaña
+    setFilas(null);
+    fetch(`/api/ranking?tipo=${tipo}`)
+      .then(async (r) => {
+        if (!vivo) return;
+        if (r.status === 503) {
+          setDisponible(false);
+          return;
+        }
+        const datos = (await r.json()) as { filas: Fila[] };
+        setDisponible(true);
+        setFilas(datos.filas ?? []);
+      })
+      .catch(() => vivo && setDisponible(false));
+    return () => {
+      vivo = false;
+    };
+  }, [tipo]);
+
+  if (disponible === false || disponible === null) return null;
+
+  return (
+    <div className="mt-6 border border-linea">
+      <div className="flex items-center justify-between gap-2 border-b border-linea px-3 py-2.5">
+        <Membrete sobrePano>Tabla de posiciones</Membrete>
+        <div className="flex shrink-0 gap-1">
+          {(['diario', 'global'] as Tipo[]).map((t) => (
+            <button
+              key={t}
+              type="button"
+              onClick={() => setTipo(t)}
+              aria-pressed={tipo === t}
+              className={`border px-2 py-1 font-acta text-[11px] tracking-[0.04em] uppercase transition-colors ${
+                tipo === t
+                  ? 'border-bronce-claro bg-bronce-claro/15 text-papel'
+                  : 'border-linea text-papel-2 hover:text-papel'
+              }`}
+            >
+              {t === 'diario' ? 'Hoy' : 'Global'}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="px-3 py-2.5">
+        {filas === null ? (
+          <p className="font-acta text-[11px] tracking-[0.06em] text-papel-2 uppercase">
+            Buscando la tabla…
+          </p>
+        ) : filas.length === 0 ? (
+          <p className="font-body text-[14px] leading-snug text-papel-2">
+            {tipo === 'diario'
+              ? 'Nadie envió su Presidencia del Día todavía. Podés ser el primero.'
+              : 'La tabla histórica está vacía. Jugá una presidencia y entrá.'}
+          </p>
+        ) : (
+          <ol className="space-y-1.5">
+            {filas.slice(0, 10).map((fila, i) => {
+              const club = CLUBES.get(fila.club_id);
+              return (
+                <li key={`${fila.nombre}-${i}`} className="flex items-baseline gap-2.5">
+                  <span className="w-5 shrink-0 text-right font-acta text-[12px] text-papel-2 tabular-nums">
+                    {i + 1}
+                  </span>
+                  {club && (
+                    <span
+                      className="mt-0.5 flex h-4 w-1 shrink-0 flex-col overflow-hidden rounded-full"
+                      aria-hidden
+                    >
+                      <span className="flex-1" style={{ backgroundColor: club.colors[0] }} />
+                      <span className="flex-1" style={{ backgroundColor: club.colors[1] }} />
+                    </span>
+                  )}
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate font-display text-[14px] leading-tight font-bold text-papel">
+                      {fila.nombre}
+                    </span>
+                    <span className="block truncate font-acta text-[11px] text-papel-2">
+                      {club?.short ?? fila.club_id} · {fila.temporadas} temp ·{' '}
+                      {fila.titulos} {fila.titulos === 1 ? 'título' : 'títulos'}
+                    </span>
+                  </span>
+                  <span className="shrink-0 font-display text-[15px] font-black text-papel tabular-nums">
+                    {fila.puntaje.toLocaleString('es-AR')}
+                  </span>
+                </li>
+              );
+            })}
+          </ol>
+        )}
+      </div>
+    </div>
+  );
+}
