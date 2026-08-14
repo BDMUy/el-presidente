@@ -20,6 +20,7 @@ import { CLUBS } from '@/content/clubs';
 import { expectedPosition } from '@/lib/engine/season';
 import { CATEGORY_RULES, type Category, type Club } from '@/lib/engine/types';
 import { Membrete, Sello } from './ui';
+import { VitrinaPanel } from './vitrina';
 
 const PESTANAS: { id: Category; corto: string }[] = [
   { id: 'primera', corto: 'Primera' },
@@ -100,6 +101,8 @@ export function Arranque({ onEmpezar }: { onEmpezar: (clubId: string) => void })
           hinchada y la influencia.{' '}
           <span className="font-semibold">Vos armás el plantel; el plantel juega.</span>
         </p>
+
+        <VitrinaPanel />
 
         {/* En escritorio la decisión vive acá, al lado del padrón. En celular
             se muestra en la barra fija de abajo. */}
