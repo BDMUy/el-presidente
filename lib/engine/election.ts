@@ -90,6 +90,49 @@ export function finalEnding(state: GameState): EndingId {
   return 'reelecto-gris';
 }
 
+/**
+ * Cierre que habla de tu presidencia concreta, no de una presidencia genérica.
+ *
+ * El epílogo es lo que el jugador comparte, así que tiene que reconocer lo que
+ * efectivamente pasó. Se elige por hechos medibles y en orden de importancia:
+ * lo más raro primero, para que un detalle memorable le gane a una obviedad.
+ */
+function matiz(state: GameState, club: Club): string {
+  const { resources, titles, descensos, ascensos, history } = state;
+  const puntos = titles.reduce((sum, t) => sum + TITLES[t.id].points, 0);
+  const continental = titles.some((t) => t.id === 'libertadores' || t.id === 'sudamericana');
+  const empezoEn = history[0]?.category;
+
+  if (state.rare) {
+    return 'Nadie se acuerda de que recibiste el club en llamas. Vos sí.';
+  }
+  if (continental) {
+    return 'Hay una noche, en una cancha del continente, que la gente va a contarles a sus nietos.';
+  }
+  if (empezoEn === 'b' && state.category === 'primera') {
+    return `Recibiste a ${club.name} en la B y lo dejaste en Primera. Eso no se borra con ninguna auditoría.`;
+  }
+  if (ascensos > 0 && descensos > 0) {
+    return 'Subiste y bajaste con el mismo club. La gente se acuerda más del descenso, siempre.';
+  }
+  if (descensos > 0) {
+    return 'El descenso quedó pegado a tu apellido y ningún título posterior lo despegó.';
+  }
+  if (resources.caja < 0) {
+    return 'Dejaste la vitrina más llena y la caja más vacía. Alguien va a tener que ordenar eso.';
+  }
+  if (puntos === 0 && resources.caja > 25) {
+    return 'Entregaste las cuentas impecables y la vitrina intacta. Nadie hace canciones con un balance.';
+  }
+  if (resources.influencia > 70) {
+    return 'Te vas con más teléfonos útiles que cuando llegaste. En este ambiente, eso es un patrimonio.';
+  }
+  if (resources.socios > 90) {
+    return `${club.name} tiene hoy más socios que en toda su historia. Eso también es una obra.`;
+  }
+  return 'Con el tiempo, el balance de tu gestión va a depender de quién lo cuente.';
+}
+
 export function buildEnding(id: EndingId, state: GameState, club: Club): Ending {
   const años = state.season;
   const titulos = state.titles.length;
@@ -127,7 +170,8 @@ export function buildEnding(id: EndingId, state: GameState, club: Club): Ending 
     },
   };
 
-  return endings[id];
+  const base = endings[id];
+  return { ...base, text: `${base.text} ${matiz(state, club)}` };
 }
 
 /**

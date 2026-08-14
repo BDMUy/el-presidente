@@ -28,6 +28,7 @@ import {
   expectedPosition,
   plantelDecay,
   plantelForPosition,
+  desgasteDelCargo,
   resolveEconomy,
   resolveMood,
   resolvePosition,
@@ -390,7 +391,8 @@ function closeSeason(state: GameState, result: import('./types').SeasonResult): 
 
   let next = applyEffects({ ...state, rng: rand.s }, {
     caja: economy.neto,
-    hinchada: mood.hinchada,
+    // Al humor de la temporada se le suma el desgaste de seguir en el cargo.
+    hinchada: mood.hinchada + desgasteDelCargo(state.mandate),
     socios: mood.socios,
     plantel: plantelDecay(state.category),
   });

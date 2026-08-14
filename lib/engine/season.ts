@@ -325,6 +325,19 @@ export function plantelDecay(category: Category): number {
   return category === 'primera' ? -2.5 : -2;
 }
 
+/**
+ * El desgaste del cargo: la hinchada se cansa de vos con el tiempo.
+ *
+ * Existe porque sin esto la hinchada deja de ser escasa. Con suficiente
+ * contenido en el catálogo siempre hay alguna carta que la sube, y un jugador
+ * atento la acumulaba hasta el techo y no la soltaba más. Acá el simple hecho
+ * de seguir en el cargo la baja, y crece por mandato: al cuarto, la gente ya
+ * te escuchó todos los discursos.
+ */
+export function desgasteDelCargo(mandate: number): number {
+  return -(1 + mandate * 0.6);
+}
+
 /** Puntos que otorga un título, para el puntaje final. */
 export function titlePoints(id: TitleId): number {
   return TITLES[id].points;
