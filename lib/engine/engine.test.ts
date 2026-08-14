@@ -154,12 +154,34 @@ describe('resolución deportiva', () => {
 });
 
 describe('Mesa Chica', () => {
-  it('enumera exactamente las 35 formas de repartir 3 fichas en 5 frentes', () => {
+  it('enumera los repartos de hasta 3 fichas en 5 frentes', () => {
     const all = enumerateAssignments();
-    expect(all).toHaveLength(35);
+    // 1 + 5 + 15 + 35: los repartos de 0, 1, 2 y 3 fichas.
+    expect(all).toHaveLength(56);
     for (const assignment of all) {
       const total = Object.values(assignment).reduce((s, n) => s + n, 0);
-      expect(total).toBe(FICHAS_MESA_CHICA);
+      expect(total).toBeLessThanOrEqual(FICHAS_MESA_CHICA);
+      expect(total).toBeGreaterThanOrEqual(0);
+    }
+  });
+
+  it('incluye el reparto vacío: guardarse las fichas es una decisión', () => {
+    // Sin esto, "no mover un dedo" no tiene índice y la UI se rompe al elegirlo.
+    const vacio = { plantel: 0, dt: 0, hinchada: 0, prensa: 0, gestion: 0 };
+    expect(() => assignmentIndex(vacio)).not.toThrow();
+  });
+
+  it('todo reparto que la UI puede armar tiene índice', () => {
+    // La UI deja poner entre 0 y 3 fichas en cualquier combinación de frentes.
+    const ids = ['plantel', 'dt', 'hinchada', 'prensa', 'gestion'] as const;
+    for (let total = 0; total <= FICHAS_MESA_CHICA; total++) {
+      for (const a of ids) {
+        for (const b of ids) {
+          const reparto = { plantel: 0, dt: 0, hinchada: 0, prensa: 0, gestion: 0 };
+          for (let i = 0; i < total; i++) reparto[i % 2 === 0 ? a : b] += 1;
+          expect(() => assignmentIndex(reparto)).not.toThrow();
+        }
+      }
     }
   });
 

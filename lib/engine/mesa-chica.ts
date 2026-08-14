@@ -18,6 +18,10 @@ const EMPTY: MesaChicaAssignment = { plantel: 0, dt: 0, hinchada: 0, prensa: 0, 
 /**
  * Todas las formas de repartir las fichas, en orden canónico y estable.
  * El índice dentro de este array es lo que viaja en el log de la partida.
+ *
+ * Incluye los repartos de menos de tres fichas, y también el de cero: como
+ * cada ficha se paga en plata o en rosca, guardárselas es una decisión
+ * legítima y tiene que ser representable.
  */
 export function enumerateAssignments(): MesaChicaAssignment[] {
   const ids = FRENTES.map((f) => f.id);
@@ -33,14 +37,21 @@ export function enumerateAssignments(): MesaChicaAssignment[] {
     }
   };
 
-  walk(0, FICHAS_MESA_CHICA, { ...EMPTY });
+  for (let total = 0; total <= FICHAS_MESA_CHICA; total++) {
+    walk(0, total, { ...EMPTY });
+  }
   return out;
 }
 
 /** Índice canónico de un reparto. Lo usa la UI para registrar la elección. */
 export function assignmentIndex(assignment: MesaChicaAssignment): number {
-  const all = enumerateAssignments();
-  return all.findIndex((a) => FRENTES.every((f) => a[f.id] === assignment[f.id]));
+  const index = enumerateAssignments().findIndex((a) =>
+    FRENTES.every((f) => a[f.id] === assignment[f.id]),
+  );
+  if (index < 0) {
+    throw new Error(`Reparto imposible: ${JSON.stringify(assignment)}`);
+  }
+  return index;
 }
 
 /** Etiqueta corta de un reparto, para mostrarlo en el resumen. */

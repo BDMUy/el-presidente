@@ -1,26 +1,166 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/**
+ * El Presidente — sistema visual.
+ *
+ * Tesis: esto no es un estadio, es la mesa directiva. La superficie de la
+ * página es el paño verde de la comisión y todo lo que pasa llega como
+ * documento institucional: actas, fichas, balances, boletas. El jugador no
+ * patea — firma.
+ *
+ * Elemento firma: el sello de goma. Cada decisión queda estampada, y el
+ * epílogo es una hoja cubierta de los sellos de tu presidencia.
+ */
+
+@theme {
+  /* El paño de la mesa: la superficie sobre la que pasa todo. */
+  --color-pano: #14342a;
+  --color-pano-alto: #1c463a;
+  --color-pano-borde: #0d241d;
+
+  /* El papel: manila institucional, amarilleado por el archivo. */
+  --color-papel: #e8e2d4;
+  --color-papel-sombra: #d5cbb4;
+  --color-papel-linea: #c3b89c;
+
+  /* Tinta de máquina de escribir: negro cálido, nunca #000. */
+  --color-tinta: #1a1815;
+  --color-tinta-suave: #5d564a;
+
+  /* Sello de goma y placa de bronce: los dos únicos acentos. */
+  --color-sello: #b3261e;
+  --color-bronce: #a98436;
+
+  --font-display: var(--font-chivo);
+  --font-body: var(--font-archivo);
+  --font-acta: var(--font-courier);
+
+  --radius-papel: 2px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background: var(--color-pano);
+  color-scheme: dark;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100dvh;
+  background-color: var(--color-pano);
+  /* Textura de fieltro: dos tramas cruzadas muy tenues, sin imágenes. */
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      rgb(255 255 255 / 0.012) 0 2px,
+      transparent 2px 4px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      rgb(0 0 0 / 0.03) 0 2px,
+      transparent 2px 4px
+    ),
+    radial-gradient(ellipse 120% 80% at 50% 0%, var(--color-pano-alto) 0%, var(--color-pano) 60%);
+  color: var(--color-papel);
+  font-family: var(--font-body), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
+
+/* ── El papel ──────────────────────────────────────────────
+   Una hoja apoyada sobre el paño: sombra dura y corta, como
+   un objeto real sobre una mesa, no como una card flotante. */
+.papel {
+  background-color: var(--color-papel);
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgb(0 0 0 / 0.014) 0 1px,
+      transparent 1px 3px
+    );
+  color: var(--color-tinta);
+  border-radius: var(--radius-papel);
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.18),
+    0 10px 24px -8px rgb(0 0 0 / 0.55),
+    0 2px 6px rgb(0 0 0 / 0.35);
+}
+
+/* La hoja se apoya apenas torcida. Nunca dos con el mismo ángulo. */
+.papel-torcido-1 { transform: rotate(-0.5deg); }
+.papel-torcido-2 { transform: rotate(0.6deg); }
+
+/* ── El sello ──────────────────────────────────────────────
+   Tinta de goma: irregular, mordida, siempre en diagonal. */
+.sello {
+  font-family: var(--font-acta), monospace;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--color-sello);
+  border: 2px solid currentColor;
+  padding: 0.2rem 0.55rem;
+  transform: rotate(-4deg);
+  opacity: 0.82;
+  mix-blend-mode: multiply;
+  border-radius: 1px;
+}
+
+.sello-verde {
+  color: #2f6d4f;
+}
+
+.sello-bronce {
+  color: #7a5f24;
+}
+
+/* El golpe del sello al firmar: baja, muerde y se asienta. */
+@keyframes sellar {
+  0% { transform: rotate(-14deg) scale(2.4); opacity: 0; }
+  55% { transform: rotate(-3deg) scale(0.94); opacity: 1; }
+  75% { transform: rotate(-4.5deg) scale(1.04); }
+  100% { transform: rotate(-4deg) scale(1); opacity: 0.82; }
+}
+
+.sello-anim {
+  animation: sellar 340ms cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+}
+
+/* La hoja entra desde abajo, como si la deslizaran sobre la mesa. */
+@keyframes deslizar {
+  from { transform: translateY(14px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.deslizar {
+  animation: deslizar 220ms ease-out both;
+}
+
+/* ── Renglón punteado ──────────────────────────────────────
+   El puente entre la opción y su consecuencia, como en un
+   formulario donde firmás sobre la línea de puntos. */
+.renglon::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px dotted var(--color-papel-linea);
+  margin: 0 0.5rem;
+  transform: translateY(-0.2em);
+}
+
+/* ── Accesibilidad ─────────────────────────────────────────*/
+:focus-visible {
+  outline: 2px solid var(--color-bronce);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sello-anim,
+  .deslizar {
+    animation: none;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* La barra de recursos no debe scrollear con acento visible en móvil. */
+.sin-scrollbar::-webkit-scrollbar { display: none; }
+.sin-scrollbar { scrollbar-width: none; }

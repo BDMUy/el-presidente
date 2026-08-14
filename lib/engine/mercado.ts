@@ -39,10 +39,10 @@ const ARQUETIPOS_LIBRE = [
 ];
 
 const ARQUETIPOS_VENTA = [
-  { archetype: 'la joya del club', note: 'Salió de la pensión. La tribuna canta su nombre.' },
-  { archetype: 'el goleador', note: 'Mete la mitad de los goles del equipo.' },
-  { archetype: 'el capitán', note: 'Lleva la cinta desde hace cuatro años.' },
-];
+  { archetype: 'la joya del club', note: 'Salió de la pensión. La tribuna canta su nombre.', edad: [17, 21] },
+  { archetype: 'el goleador', note: 'Mete la mitad de los goles del equipo.', edad: [23, 30] },
+  { archetype: 'el capitán', note: 'Lleva la cinta desde hace cuatro años.', edad: [28, 34] },
+] as const;
 
 /** Escala de precios por categoría, en millones. */
 const PRICE_SCALE: Record<Category, number> = { primera: 1, nacional: 0.35, b: 0.15 };
@@ -101,37 +101,25 @@ export function generateOffers(
   });
 
   // La venta: entra plata, se cae el plantel y la gente te lo cobra.
+  // Una joya joven vale más que un capitán de 32: el precio sigue a la edad.
   const venta = rand.pick(ARQUETIPOS_VENTA);
   const deltaVenta = rand.int(7, 13);
+  const edad = rand.int(venta.edad[0], venta.edad[1]);
+  // La prima redistribuye el precio según la edad; no lo infla. Si la venta
+  // paga demasiado, vender al ídolo deja de ser un dilema y pasa a ser la
+  // jugada obvia todas las temporadas.
+  const primaJuventud = edad < 22 ? 1.25 : edad < 28 ? 1 : 0.75;
   offers.push({
     kind: 'venta',
     name: nombre(rand),
     archetype: venta.archetype,
-    age: rand.int(19, 24),
+    age: edad,
     plantelDelta: -deltaVenta,
-    cost: -round1(deltaVenta * rand.float(1.1, 1.9) * scale),
+    cost: -round1(deltaVenta * rand.float(1, 1.6) * primaJuventud * scale),
     hinchadaDelta: -rand.int(9, 16),
     note: venta.note,
     risk: 0,
   });
 
   return rand.shuffle(offers);
-}
-
-/** Texto de la consecuencia que se muestra en la carta antes de elegir. */
-export function offerHint(offer: PlayerOffer): string {
-  const plata =
-    offer.cost > 0
-      ? `−US$ ${offer.cost}M`
-      : offer.cost < 0
-        ? `+US$ ${Math.abs(offer.cost)}M`
-        : 'gratis';
-  const plantel = offer.plantelDelta >= 0 ? `+${offer.plantelDelta}` : `${offer.plantelDelta}`;
-  const gente =
-    offer.hinchadaDelta > 0
-      ? `, la gente lo festeja`
-      : offer.hinchadaDelta < 0
-        ? `, la gente te lo va a cobrar`
-        : '';
-  return `${plata} · plantel ${plantel}${gente}`;
 }
