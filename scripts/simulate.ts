@@ -1,0 +1,203 @@
+/**
+ * Simulador de balance.
+ *
+ * Corre N presidencias completas e imprime la distribución de resultados.
+ * Se simulan dos políticas porque una sola no dice nada:
+ *
+ *   - `random` es el piso: alguien que aprieta botones sin leer. Tiene que
+ *     terminar mal casi siempre.
+ *   - `greedy` es un jugador razonable que lee las consecuencias y elige lo
+ *     que más le conviene a corto plazo. Tiene que llegar lejos seguido,
+ *     pero no siempre.
+ *
+ * Si las dos curvas se parecen, las decisiones no importan y el juego está roto.
+ *
+ *   npx tsx scripts/simulate.ts 5000
+ *   npx tsx scripts/simulate.ts 5000 boca
+ */
+
+import { CLUBS } from '../content/clubs';
+import { computeScore } from '../lib/engine/election';
+import { applyChoice, optionCount, startRun } from '../lib/engine/engine';
+import { enumerateAssignments, winProbability } from '../lib/engine/mesa-chica';
+import { Rand } from '../lib/engine/rng';
+import type { Effects, EndingId, GameState } from '../lib/engine/types';
+
+const runs = Number(process.argv[2] ?? 2000);
+const clubFilter = process.argv[3];
+
+type Policy = 'random' | 'greedy';
+
+interface Outcome {
+  ending: EndingId;
+  score: number;
+  seasons: number;
+  titles: number;
+  hinchada: number;
+  caja: number;
+  descensos: number;
+  ascensos: number;
+}
+
+/** Cuánto vale un paquete de efectos para un jugador razonable. */
+function valueOf(effects: Effects | undefined, cajaActual: number): number {
+  if (!effects) return 0;
+  // Con la caja en rojo, la plata pesa mucho más que cualquier otra cosa.
+  const pesoCaja = cajaActual < 5 ? 3 : 1.5;
+  let value =
+    (effects.hinchada ?? 0) * 1 +
+    (effects.plantel ?? 0) * 1.2 +
+    (effects.caja ?? 0) * pesoCaja +
+    (effects.rosca ?? 0) * 0.4 +
+    (effects.socios ?? 0) * 0.8;
+
+  for (const d of effects.deferred ?? []) {
+    value += valueOf(d.effects, cajaActual) * 0.5;
+  }
+  return value;
+}
+
+function greedyChoice(state: GameState): number {
+  const { phase, resources } = state;
+
+  switch (phase.kind) {
+    case 'mercado': {
+      const scored = phase.offers.map((offer, index) => {
+        const affordable = offer.cost <= resources.caja + 5;
+        const value =
+          offer.plantelDelta * 1.2 +
+          offer.hinchadaDelta * 1 -
+          offer.cost * (resources.caja < 5 ? 3 : 1.5);
+        return { index, value: affordable ? value : -Infinity };
+      });
+      const best = scored.reduce((a, b) => (b.value > a.value ? b : a), {
+        index: phase.offers.length,
+        value: 0,
+      });
+      return best.index;
+    }
+
+    case 'evento': {
+      const scored = phase.available.map((optionIndex, displayIndex) => {
+        const option = phase.event.options[optionIndex];
+        let value: number;
+        if (option.random) {
+          const total = option.random.reduce((s, o) => s + o.weight, 0);
+          value = option.random.reduce(
+            (s, o) => s + (o.weight / total) * valueOf(o.effects, resources.caja),
+            0,
+          );
+        } else {
+          value = valueOf(option.effects, resources.caja);
+        }
+        return { displayIndex, value };
+      });
+      return scored.reduce((a, b) => (b.value > a.value ? b : a)).displayIndex;
+    }
+
+    case 'mesa-chica': {
+      // Reparto sensato: empuja el plantel y la tribuna, esquiva la gestión
+      // política salvo que el partido esté muy cuesta arriba.
+      const assignments = enumerateAssignments();
+      const desesperado = phase.match.baseWin < 0.4;
+      const scored = assignments.map((assignment, index) => {
+        const prob = winProbability(phase.match, assignment);
+        const costo =
+          assignment.plantel * 0.8 + assignment.hinchada * 0.3 + assignment.prensa * 0.5;
+        const riesgo = assignment.gestion * (desesperado ? 0.04 : 0.12);
+        return { index, value: prob - costo * 0.02 - riesgo };
+      });
+      return scored.reduce((a, b) => (b.value > a.value ? b : a)).index;
+    }
+
+    default:
+      return 0;
+  }
+}
+
+function play(seed: number, clubId: string, policy: Policy): Outcome {
+  const chooser = new Rand(seed ^ 0x5f3759df);
+  let state: GameState = startRun({ seed, clubId });
+
+  let guard = 0;
+  while (state.status === 'jugando' && guard++ < 5000) {
+    const options = optionCount(state);
+    if (options === 0) break;
+    const choice = policy === 'random' ? chooser.int(0, options - 1) : greedyChoice(state);
+    state = applyChoice(state, Math.min(choice, options - 1));
+  }
+
+  return {
+    ending: state.ending?.id ?? 'reelecto-gris',
+    score: computeScore(state),
+    seasons: state.season,
+    titles: state.titles.length,
+    hinchada: Math.round(state.resources.hinchada),
+    caja: state.resources.caja,
+    descensos: state.descensos,
+    ascensos: state.ascensos,
+  };
+}
+
+function percentile(sorted: number[], p: number): number {
+  if (sorted.length === 0) return 0;
+  return sorted[Math.min(sorted.length - 1, Math.floor(sorted.length * p))];
+}
+
+function summarize(label: string, values: number[]) {
+  const sorted = [...values].sort((a, b) => a - b);
+  const avg = values.reduce((s, v) => s + v, 0) / values.length;
+  console.log(
+    `  ${label.padEnd(12)} med ${percentile(sorted, 0.5).toFixed(1).padStart(7)}` +
+      `   avg ${avg.toFixed(1).padStart(7)}` +
+      `   p10 ${percentile(sorted, 0.1).toFixed(1).padStart(7)}` +
+      `   p90 ${percentile(sorted, 0.9).toFixed(1).padStart(7)}`,
+  );
+}
+
+function report(policy: Policy, outcomes: Outcome[]) {
+  console.log(`\n${'═'.repeat(60)}\nPOLÍTICA: ${policy.toUpperCase()}\n${'═'.repeat(60)}`);
+
+  const endings = new Map<EndingId, number>();
+  for (const o of outcomes) endings.set(o.ending, (endings.get(o.ending) ?? 0) + 1);
+
+  console.log('\nFINALES');
+  for (const [ending, count] of [...endings].sort((a, b) => b[1] - a[1])) {
+    const pct = ((count / outcomes.length) * 100).toFixed(1);
+    const bar = '█'.repeat(Math.round((count / outcomes.length) * 40));
+    console.log(`  ${ending.padEnd(20)} ${pct.padStart(5)}%  ${bar}`);
+  }
+
+  console.log('\nDISTRIBUCIONES');
+  summarize('puntaje', outcomes.map((o) => o.score));
+  summarize('temporadas', outcomes.map((o) => o.seasons));
+  summarize('títulos', outcomes.map((o) => o.titles));
+  summarize('hinchada', outcomes.map((o) => o.hinchada));
+  summarize('caja', outcomes.map((o) => o.caja));
+
+  const n = outcomes.length;
+  console.log('\nCHEQUEOS');
+  console.log(`  con al menos un título     ${((outcomes.filter((o) => o.titles > 0).length / n) * 100).toFixed(1)}%`);
+  console.log(`  completaron 16 temporadas  ${((outcomes.filter((o) => o.seasons >= 16).length / n) * 100).toFixed(1)}%`);
+  console.log(`  descensos por partida      ${(outcomes.reduce((s, o) => s + o.descensos, 0) / n).toFixed(2)}`);
+  console.log(`  ascensos por partida       ${(outcomes.reduce((s, o) => s + o.ascensos, 0) / n).toFixed(2)}`);
+}
+
+const pool = clubFilter ? CLUBS.filter((c) => c.id === clubFilter) : CLUBS;
+if (pool.length === 0) {
+  console.error(`No existe el club "${clubFilter}"`);
+  process.exit(1);
+}
+
+console.log(`\nSimulando ${runs} presidencias × 2 políticas sobre ${pool.length} ${pool.length === 1 ? 'club' : 'clubes'}...`);
+
+const started = Date.now();
+for (const policy of ['random', 'greedy'] as Policy[]) {
+  const outcomes: Outcome[] = [];
+  for (let i = 0; i < runs; i++) {
+    outcomes.push(play(i * 2654435761, pool[i % pool.length].id, policy));
+  }
+  report(policy, outcomes);
+}
+const elapsed = Date.now() - started;
+console.log(`\n${runs * 2} partidas en ${elapsed}ms\n`);
