@@ -160,7 +160,7 @@ export function Arranque({
                     role="tab"
                     aria-selected={activa}
                     onClick={() => setCategoria(p.id)}
-                    className={`flex-1 border px-2 py-2 font-acta text-[11px] tracking-[0.04em] uppercase transition-colors ${
+                    className={`flex-1 border px-2 py-2.5 font-acta text-[11px] tracking-[0.04em] uppercase transition-colors ${
                       activa
                         ? 'border-bronce-claro bg-bronce-claro/15 text-papel'
                         : 'border-linea text-papel-2 hover:border-papel-2 hover:text-papel'

@@ -174,18 +174,23 @@ export function Continuar({
  *
  * Es un botón: tocarla despliega qué significa el recurso. En un juego que se
  * juega en el celular, un tooltip de hover no existiría para la mayoría.
+ *
+ * No hay flecha de subió/bajó. La tuvo, y costó tres rondas de bugs de layout:
+ * compartiendo línea con el número le robaba los doce píxeles que hacían que
+ * "23,0M" se cortara, y fuera del flujo quedaba visualmente pegada a la
+ * etiqueta de la columna siguiente, sin poder saber a qué recurso pertenecía.
+ * Además era redundante: la pantalla de consecuencia que aparece justo antes
+ * ya lista cada cambio con su número exacto.
  */
 export function Cifra({
   label,
   valor,
-  delta,
   alerta = false,
   abierta = false,
   onToggle,
 }: {
   label: string;
   valor: string;
-  delta?: number;
   alerta?: boolean;
   abierta?: boolean;
   onToggle?: () => void;
@@ -207,23 +212,11 @@ export function Cifra({
         {label}
       </span>
       <span
-        className={`mt-1.5 flex items-baseline gap-0.5 font-display text-[17px] leading-none font-black tabular-nums ${
+        className={`mt-1.5 block truncate font-display text-[17px] leading-none font-black tabular-nums ${
           alerta ? 'text-sello-claro' : 'text-papel'
         }`}
       >
-        {/* La flecha no se encoge: si algo tiene que ceder es el número, y por
-            eso el número nunca puede quedar sin lugar. */}
-        <span className="min-w-0 truncate">{valor}</span>
-        {delta !== undefined && delta !== 0 && (
-          <span
-            className={`shrink-0 font-acta text-[10px] font-bold ${
-              delta > 0 ? 'text-emerald-300' : 'text-sello-claro'
-            }`}
-            aria-label={delta > 0 ? 'subió' : 'bajó'}
-          >
-            {delta > 0 ? '▲' : '▼'}
-          </span>
-        )}
+        {valor}
       </span>
     </button>
   );

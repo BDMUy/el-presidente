@@ -13,7 +13,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { getClub } from '@/content/clubs';
 import { presidenciaDelDia } from '@/lib/daily';
 import { applyChoice, replayRun, startRun } from '@/lib/engine/engine';
-import { EVENTS_PER_SEASON, type GameState, type Resources } from '@/lib/engine/types';
+import { EVENTS_PER_SEASON, type GameState } from '@/lib/engine/types';
 import { borrar, guardar, leer, marcarActaVista, vioActa } from '@/lib/storage';
 import { ActaAsuncion } from './acta-asuncion';
 import { Arranque } from './arranque';
@@ -24,14 +24,8 @@ import { FaseMercado } from './fase-mercado';
 import { FaseMesaChica, FaseResultadoFinal } from './fase-mesa-chica';
 import { Hud } from './hud';
 
-/**
- * Los recursos de la pantalla anterior viajan en el estado, no en un ref: se
- * leen durante el render para dibujar las flechas del carnet, y un ref leído
- * en render es una desincronización esperando a pasar.
- */
 interface Partida {
   state: GameState;
-  previas: Resources | null;
   /** Fecha de la Presidencia del Día, o null si es una partida libre. */
   diaria: string | null;
 }
@@ -52,7 +46,6 @@ export function Juego() {
         // eslint-disable-next-line react-hooks/set-state-in-effect -- la partida guardada solo se puede leer en el cliente
         setPartida({
           state: replayRun(guardada.seed, guardada.clubId, guardada.choices),
-          previas: null,
           diaria: guardada.diaria ?? null,
         });
       } catch {
@@ -64,7 +57,7 @@ export function Juego() {
 
   const empezar = useCallback((clubId: string) => {
     const seed = Math.floor(Math.random() * 0xffffffff);
-    setPartida({ state: startRun({ seed, clubId }), previas: null, diaria: null });
+    setPartida({ state: startRun({ seed, clubId }), diaria: null });
     setMostrarActa(!vioActa());
     guardar({ seed, clubId, choices: [], diaria: null });
   }, []);
@@ -73,7 +66,7 @@ export function Juego() {
   // dispositivos y en el servidor que después valida el envío.
   const empezarDiaria = useCallback(() => {
     const { seed, clubId, fecha } = presidenciaDelDia();
-    setPartida({ state: startRun({ seed, clubId }), previas: null, diaria: fecha });
+    setPartida({ state: startRun({ seed, clubId }), diaria: fecha });
     setMostrarActa(!vioActa());
     guardar({ seed, clubId, choices: [], diaria: fecha });
   }, []);
@@ -93,7 +86,7 @@ export function Juego() {
         choices: siguiente.choices,
         diaria: actual.diaria,
       });
-      return { state: siguiente, previas: actual.state.resources, diaria: actual.diaria };
+      return { state: siguiente, diaria: actual.diaria };
     });
     // Cada pantalla es una hoja nueva sobre la mesa: se lee desde arriba.
     window.scrollTo({ top: 0, behavior: 'instant' });
@@ -122,7 +115,7 @@ export function Juego() {
     );
   }
 
-  const { state, previas, diaria } = partida;
+  const { state, diaria } = partida;
   const club = getClub(state.clubId);
 
   return (
@@ -130,7 +123,6 @@ export function Juego() {
       <Hud
         club={club}
         resources={state.resources}
-        previas={previas}
         season={state.season}
         year={state.year}
         mandate={state.mandate}
@@ -150,7 +142,7 @@ export function Juego() {
         <button
           type="button"
           onClick={reiniciar}
-          className="font-acta text-[11px] tracking-[0.14em] text-papel-2 uppercase underline underline-offset-4 hover:text-papel-2"
+          className="-mx-2 px-2 py-3 font-acta text-[11px] tracking-[0.14em] text-papel-2 uppercase underline underline-offset-4 transition-colors hover:text-papel"
         >
           Renunciar y empezar otra
         </button>

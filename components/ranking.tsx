@@ -68,7 +68,7 @@ export function Ranking() {
               type="button"
               onClick={() => setTipo(t)}
               aria-pressed={tipo === t}
-              className={`border px-2 py-1 font-acta text-[11px] tracking-[0.04em] uppercase transition-colors ${
+              className={`border px-2.5 py-2 font-acta text-[11px] tracking-[0.04em] uppercase transition-colors ${
                 tipo === t
                   ? 'border-bronce-claro bg-bronce-claro/15 text-papel'
                   : 'border-linea text-papel-2 hover:text-papel'
