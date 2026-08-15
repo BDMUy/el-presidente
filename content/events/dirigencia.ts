@@ -65,7 +65,7 @@ export const DIRIGENCIA: GameEvent[] = [
     options: [
       {
         label: 'Abrir todo',
-        hint: '🎲 Si está limpio, salís fortalecido.',
+        hint: 'Si está limpio, salís fortalecido.',
         random: [
           { weight: 60, text: 'No encontraron nada. La transparencia te dio aire político.', effects: { influencia: 12, hinchada: 6 } },
           { weight: 40, text: 'Encontraron gastos que no sabías explicar. Aunque no sean tuyos, llevan tu firma.', effects: { influencia: -14, hinchada: -10 } },
@@ -189,7 +189,7 @@ export const DIRIGENCIA: GameEvent[] = [
       },
       {
         label: 'Judicializarla',
-        hint: '🎲 Podés ganar tiempo. O perderlo todo con costas.',
+        hint: 'Podés ganar tiempo. O perderlo todo con costas.',
         random: [
           { weight: 45, text: 'La justicia frenó la ejecución. Ganaste tres años.', effects: { influencia: 6 } },
           { weight: 55, text: 'Perdiste con costas. Ahora es peor que antes.', effects: { caja: -7, influencia: -8 } },

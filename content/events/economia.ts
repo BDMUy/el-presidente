@@ -45,7 +45,7 @@ export const ECONOMIA: GameEvent[] = [
     options: [
       {
         label: 'Duplicar el pedido',
-        hint: '🎲 Si el envión sigue, es plata. Si se corta, quedás con depósito lleno.',
+        hint: 'Si el envión sigue, es plata. Si se corta, quedás con depósito lleno.',
         random: [
           { weight: 60, text: 'Se vendió todo otra vez. El merchandising salvó el trimestre.', effects: { caja: 2.5, socios: 2 } },
           { weight: 40, text: 'Se cortó el envión y quedaron ocho mil camisetas en el depósito.', effects: { caja: -1.5 } },
@@ -105,7 +105,7 @@ export const ECONOMIA: GameEvent[] = [
       },
       {
         label: 'Pedirle a un socio mecenas que lo cubra',
-        hint: '🎲 Si aparece, zafás gratis. Si no, perdiste la ventana.',
+        hint: 'Si aparece, zafás gratis. Si no, perdiste la ventana.',
         random: [
           { weight: 45, text: 'Un socio empresario puso la plata sin pedir nada. Por ahora.', effects: { caja: -0.5, influencia: -6 } },
           { weight: 55, text: 'Nadie puso un peso y el plazo venció igual.', effects: { caja: -6, hinchada: -5 } },
@@ -122,7 +122,7 @@ export const ECONOMIA: GameEvent[] = [
     options: [
       {
         label: 'Salir a buscar reemplazo ya',
-        hint: '🎲 A las apuradas se consigue menos.',
+        hint: 'A las apuradas se consigue menos.',
         random: [
           { weight: 50, text: 'Apareció uno del rubro alimenticio. Paga menos, pero paga.', effects: { caja: 2 } },
           { weight: 50, text: 'No apareció nadie a tiempo. Se arranca el torneo con el frente vacío.', effects: { caja: -2, hinchada: -4 } },
@@ -293,7 +293,7 @@ export const ECONOMIA: GameEvent[] = [
       },
       {
         label: 'Salir a explicar que fue un error bancario',
-        hint: '🎲 Si te creen, no pasa nada.',
+        hint: 'Si te creen, no pasa nada.',
         random: [
           { weight: 45, text: 'Se lo comieron. Al día siguiente ya nadie hablaba del tema.', effects: { influencia: 2 } },
           { weight: 55, text: 'Nadie te creyó y la palabra "vaciamiento" apareció en un titular.', effects: { hinchada: -9, influencia: -8 } },

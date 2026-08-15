@@ -4,9 +4,13 @@
  * El acta: la carta de decisión.
  *
  * Cada evento llega como un documento que entra a la mesa. El tipo de evento
- * va sellado en diagonal —GOLPE DURO, DECISIÓN DIFÍCIL, PASAN COSAS— y las
- * opciones se firman sobre renglones punteados. Al elegir, la consecuencia
- * vuelve estampada sobre la misma hoja.
+ * va sellado en diagonal —GOLPE DURO, DECISIÓN DIFÍCIL, PASAN COSAS— y al
+ * elegir, la consecuencia vuelve estampada sobre la misma hoja.
+ *
+ * Es la pantalla más repetida del juego: cuarenta y ocho veces por presidencia,
+ * contra dieciséis del mercado. Por eso es deliberadamente calma —el sello y el
+ * título son lo único que levanta la voz— y por eso las opciones comparten la
+ * caja con el mercado: las dos pantallas de decisión hablan el mismo idioma.
  */
 
 import type { Effects, GameEvent } from '@/lib/engine/types';
@@ -17,14 +21,15 @@ import { Continuar, Membrete, Papel, Puntos, Renglon, Sello, Titulo } from './ui
 export function FaseEvento({
   event,
   available,
-  season,
-  acta,
+  enLaTemporada,
+  porTemporada,
   onElegir,
 }: {
   event: GameEvent;
   available: number[];
-  season: number;
-  acta: number;
+  /** Cuántas decisiones van en esta temporada, contando esta. */
+  enLaTemporada: number;
+  porTemporada: number;
   onElegir: (choice: number) => void;
 }) {
   const tono = event.kind === 'golpe' ? 'rojo' : event.kind === 'dilema' ? 'bronce' : 'verde';
@@ -32,8 +37,13 @@ export function FaseEvento({
   return (
     <Papel torcido={1}>
       <div className="flex items-start justify-between gap-4">
+        {/* Solo la posición en la temporada. El número de expediente y la
+            temporada estaban de más: la temporada ya está en el carnet a diez
+            píxeles, y el número de acta era sabor que no le decía nada al
+            jugador. Entre los tres hacían que el membrete partiera en dos
+            líneas contra el sello, y el único dato con función es este. */}
         <Membrete>
-          Acta n° {String(acta).padStart(4, '0')} · Temporada {season}
+          Acta {enLaTemporada} de {porTemporada}
         </Membrete>
         <Sello tono={tono} className="shrink-0">
           {EVENT_KIND_LABEL[event.kind]}
@@ -47,7 +57,7 @@ export function FaseEvento({
 
       <div className="mt-6">
         <Membrete>Resuelve la presidencia</Membrete>
-        <div className="mt-1">
+        <div className="mt-2 space-y-2">
           {available.map((optionIndex, displayIndex) => {
             const option = event.options[optionIndex];
             return (

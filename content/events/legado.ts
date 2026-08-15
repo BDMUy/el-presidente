@@ -92,7 +92,7 @@ export const LEGADO: GameEvent[] = [
     options: [
       {
         label: 'Abrirle todo',
-        hint: '🎲 Si la gestión aguanta la lupa, sale un monumento.',
+        hint: 'Si la gestión aguanta la lupa, sale un monumento.',
         random: [
           { weight: 55, text: 'El libro salió y quedó como el manual de cómo se maneja un club.', effects: { hinchada: 10, influencia: 10 } },
           { weight: 45, text: 'Encontró tres actas que no convenía leer. El libro se volvió otra cosa.', effects: { hinchada: -12, influencia: -10 } },

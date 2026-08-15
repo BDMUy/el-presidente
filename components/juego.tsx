@@ -13,7 +13,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { getClub } from '@/content/clubs';
 import { presidenciaDelDia } from '@/lib/daily';
 import { applyChoice, replayRun, startRun } from '@/lib/engine/engine';
-import type { GameState, Resources } from '@/lib/engine/types';
+import { EVENTS_PER_SEASON, type GameState, type Resources } from '@/lib/engine/types';
 import { borrar, guardar, leer, marcarActaVista, vioActa } from '@/lib/storage';
 import { ActaAsuncion } from './acta-asuncion';
 import { Arranque } from './arranque';
@@ -189,8 +189,8 @@ function Pantalla({
         <FaseEvento
           event={phase.event}
           available={phase.available}
-          season={state.season}
-          acta={state.usedEvents.length}
+          enLaTemporada={state.eventsThisSeason}
+          porTemporada={EVENTS_PER_SEASON}
           onElegir={onElegir}
         />
       );

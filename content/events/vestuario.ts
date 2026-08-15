@@ -24,7 +24,7 @@ export const VESTUARIO: GameEvent[] = [
       },
       {
         label: 'Bancarlo en público',
-        hint: '🎲 Si se recupera, sos un visionario. Si no, caés con él.',
+        hint: 'Si se recupera, sos un visionario. Si no, caés con él.',
         random: [
           { weight: 45, text: 'El equipo reaccionó. Salir a bancarlo fue lo que necesitaba.', effects: { plantel: 5, hinchada: 8, influencia: 6 } },
           { weight: 55, text: 'Siguió perdiendo. Ahora sos vos el que no tiene salida.', effects: { hinchada: -12, influencia: -8 } },
@@ -64,7 +64,7 @@ export const VESTUARIO: GameEvent[] = [
     options: [
       {
         label: 'Que debute ya',
-        hint: '🎲 Si explota, es tuyo. Si se quema, lo quemaste vos.',
+        hint: 'Si explota, es tuyo. Si se quema, lo quemaste vos.',
         random: [
           { weight: 55, text: 'Debutó y metió dos. El estadio coreó su nombre.', effects: { plantel: 6, hinchada: 12, caja: 0.5 } },
           { weight: 45, text: 'Se lo comió la presión. Volvió a reserva sin confianza.', effects: { plantel: -1, hinchada: -4 } },
@@ -102,7 +102,7 @@ export const VESTUARIO: GameEvent[] = [
       },
       {
         label: 'Adelantar plata de un sponsor',
-        hint: '🎲 Si el sponsor acepta, zafás. Si no, se filtra todo.',
+        hint: 'Si el sponsor acepta, zafás. Si no, se filtra todo.',
         random: [
           { weight: 60, text: 'El sponsor adelantó el año. Zafaste por poco.', effects: { caja: 3, influencia: -6 } },
           { weight: 40, text: 'El sponsor dijo que no y alguien filtró la charla. Papelón.', effects: { hinchada: -9, influencia: -8, plantel: -4 } },
@@ -129,7 +129,7 @@ export const VESTUARIO: GameEvent[] = [
       },
       {
         label: 'Hacer de cuenta que no pasó',
-        hint: '🎲 O se olvida, o el video sale el domingo.',
+        hint: 'O se olvida, o el video sale el domingo.',
         random: [
           { weight: 50, text: 'No salió nunca. Alguien cobró por no publicarlo.', effects: { caja: -1, influencia: -4 } },
           { weight: 50, text: 'Salió en todos lados. Quedaron como una manga de improvisados.', effects: { hinchada: -10, plantel: -3, influencia: -6 } },
@@ -178,7 +178,7 @@ export const VESTUARIO: GameEvent[] = [
       },
       {
         label: 'Tratamiento conservador',
-        hint: '🎲 Barato. Puede volver mal.',
+        hint: 'Barato. Puede volver mal.',
         random: [
           { weight: 45, text: 'Volvió bien y antes de lo previsto. Sale barato ser prudente.', effects: { plantel: -2 } },
           { weight: 55, text: 'Recayó. No volvió a ser el mismo jugador.', effects: { plantel: -8, hinchada: -5 } },

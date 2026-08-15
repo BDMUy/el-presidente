@@ -94,7 +94,12 @@ export function Titulo({ children }: { children: ReactNode }) {
 
 /**
  * Una opción firmable: la etiqueta y, debajo, la consecuencia.
- * Se lee como un renglón de formulario, no como un botón de app.
+ *
+ * Va en caja y no como renglón suelto. Es la interacción más repetida del
+ * juego —cuarenta y ocho veces por presidencia, contra dieciséis del mercado—
+ * y como líneas finas separadas por hairlines no se leía como algo que se
+ * puede tocar. Comparte la caja con el mercado a propósito: las dos pantallas
+ * de decisión tienen que hablar el mismo idioma.
  */
 export function Renglon({
   label,
@@ -114,15 +119,12 @@ export function Renglon({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="group w-full border-t border-hoja-linea py-3.5 text-left transition-colors last:border-b hover:bg-tinta/6 active:bg-tinta/12 disabled:opacity-40"
+      className="w-full border border-hoja-linea px-3 py-3 text-left transition-colors hover:border-tinta hover:bg-tinta/6 active:bg-tinta/12 disabled:opacity-40"
     >
-      {/* Sin renglón punteado: la línea de puntos promete un valor a la
-          derecha, y acá la consecuencia va abajo. Se reserva para el balance,
-          donde sí hay etiqueta a un lado y cifra al otro. */}
       <span className="flex items-baseline gap-2 font-display text-[16px] leading-tight font-bold text-tinta">
         <span className="min-w-0">{label}</span>
         {azaroso && (
-          <span className="ml-auto shrink-0 font-acta text-[11px] font-bold tracking-wider text-sello uppercase">
+          <span className="ml-auto shrink-0 border border-sello px-1.5 py-0.5 font-acta text-[10px] font-bold tracking-wider text-sello uppercase">
             al azar
           </span>
         )}

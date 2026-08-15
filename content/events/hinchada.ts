@@ -22,7 +22,7 @@ export const HINCHADA: GameEvent[] = [
       },
       {
         label: 'Negarles todo',
-        hint: '🎲 Dignidad. Y un problema que no se resuelve solo.',
+        hint: 'Dignidad. Y un problema que no se resuelve solo.',
         random: [
           { weight: 40, text: 'Se fueron puteando y no pasó nada más. A veces alcanza con plantarse.', effects: { influencia: 8, hinchada: 2 } },
           { weight: 60, text: 'Al domingo siguiente colgaron un trapo pidiendo tu renuncia. Y bajaron a la platea.', effects: { hinchada: -11, influencia: -6 } },
@@ -68,7 +68,7 @@ export const HINCHADA: GameEvent[] = [
     options: [
       {
         label: 'Salir a dar la cara en conferencia',
-        hint: '🎲 Puede calmar las aguas o ser gasolina.',
+        hint: 'Puede calmar las aguas o ser gasolina.',
         random: [
           { weight: 50, text: 'Diste la cara y la gente lo valoró. No te salvó, pero frenó la caída.', effects: { hinchada: 7, influencia: 4 } },
           { weight: 50, text: 'Te trabaste, te contradijiste y el video circuló todo el día.', effects: { hinchada: -8, influencia: -5 } },
@@ -165,7 +165,7 @@ export const HINCHADA: GameEvent[] = [
       },
       {
         label: 'Buscar un sponsor que la pague',
-        hint: '🎲 Si aparece, es gratis. Si no, perdiste un año.',
+        hint: 'Si aparece, es gratis. Si no, perdiste un año.',
         random: [
           { weight: 40, text: 'Una empresa puso el nombre y la plata. Salió gratis y salió bien.', effects: { socios: 8, hinchada: 6, influencia: -5 } },
           { weight: 60, text: 'Nadie quiso poner un peso. Perdiste una temporada entera buscando.', effects: { caja: -0.5, hinchada: -4 } },

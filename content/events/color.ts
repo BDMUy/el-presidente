@@ -55,7 +55,7 @@ export const COLOR: GameEvent[] = [
     options: [
       {
         label: 'Abrir las puertas',
-        hint: '🎲 Puede ser una campaña de marketing o un papelón filmado.',
+        hint: 'Puede ser una campaña de marketing o un papelón filmado.',
         random: [
           { weight: 50, text: 'El documental fue un éxito. El club sumó hinchas en todo el país.', effects: { socios: 6, caja: 2, hinchada: 6 } },
           { weight: 50, text: 'Quedó filmada una discusión de vestuario que dio la vuelta al mundo.', effects: { plantel: -4, hinchada: -6, caja: 2 } },
@@ -119,7 +119,7 @@ export const COLOR: GameEvent[] = [
       },
       {
         label: 'Pedir postergación con informe técnico',
-        hint: '🎲 Depende de con quién hables.',
+        hint: 'Depende de con quién hables.',
         random: [
           { weight: 45, text: 'Aceptaron postergarlo. Se jugó dos semanas después con la cancha impecable.', effects: { influencia: -4, plantel: 2 } },
           { weight: 55, text: 'No aceptaron. Se jugó igual y encima quedaste como el que quiso especular.', effects: { hinchada: -4, plantel: -2 } },

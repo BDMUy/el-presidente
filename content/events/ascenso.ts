@@ -69,7 +69,7 @@ export const ASCENSO: GameEvent[] = [
       },
       {
         label: 'Mandarle una carta documento',
-        hint: '🎲 Puede terminar rápido o en juzgado.',
+        hint: 'Puede terminar rápido o en juzgado.',
         random: [
           { weight: 50, text: 'Se asustó y no volvió a llamar.', effects: { influencia: 2 } },
           { weight: 50, text: 'Consiguió el amparo. Dos meses sin nocturnos.', effects: { caja: -1.5, hinchada: -5 } },
@@ -138,7 +138,7 @@ export const ASCENSO: GameEvent[] = [
       },
       {
         label: 'Ofrecerle lo mismo que al resto',
-        hint: '🎲 O acepta por amor, o se ríe y cuelga.',
+        hint: 'O acepta por amor, o se ríe y cuelga.',
         random: [
           { weight: 30, text: 'Aceptó igual. Dijo que quería volver a divertirse.', effects: { plantel: 7, hinchada: 10 } },
           { weight: 70, text: 'Se rió y firmó en otro lado.', effects: { hinchada: -3 } },
@@ -184,7 +184,7 @@ export const ASCENSO: GameEvent[] = [
       },
       {
         label: 'Reforzarlos y seguir',
-        hint: '🎲 Aguantan. Hasta que un domingo no aguanten.',
+        hint: 'Aguantan. Hasta que un domingo no aguanten.',
         random: [
           { weight: 65, text: 'Aguantaron toda la temporada sin un ruido.', effects: { caja: -0.4 } },
           { weight: 35, text: 'Cedió un sector con gente arriba. Doce heridos leves y una causa.', effects: { hinchada: -16, caja: -3, influencia: -10 } },

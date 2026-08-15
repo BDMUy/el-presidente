@@ -22,7 +22,7 @@ export const CRISIS: GameEvent[] = [
     options: [
       {
         label: 'Salir a hablar con ellos',
-        hint: '🎲 Se puede desarmar. O puede empeorar mucho.',
+        hint: 'Se puede desarmar. O puede empeorar mucho.',
         random: [
           { weight: 45, text: 'Saliste, los escuchaste una hora y se fueron. Alguno hasta te dio la mano.', effects: { hinchada: 9, influencia: 4 } },
           { weight: 55, text: 'Te insultaron dos horas y filmaron todo. El video tiene medio millón de reproducciones.', effects: { hinchada: -8, influencia: -6 } },
@@ -161,7 +161,7 @@ export const CRISIS: GameEvent[] = [
       },
       {
         label: 'Hablar de frente y pedir tiempo',
-        hint: '🎲 Depende de cuánto te crean todavía.',
+        hint: 'Depende de cuánto te crean todavía.',
         random: [
           { weight: 40, text: 'Te dieron un mes. El capitán salió a bancarte en la puerta.', effects: { plantel: 2, hinchada: 3 } },
           { weight: 60, text: 'No te creyeron. Dos jugadores se fueron libres esa misma semana.', effects: { plantel: -6, hinchada: -5 } },
