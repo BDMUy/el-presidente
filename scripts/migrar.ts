@@ -14,24 +14,32 @@ import { join } from 'node:path';
 import postgres from 'postgres';
 
 /**
- * Lee .env.local igual que lo hace Next.
+ * Lee los archivos de entorno igual que lo hace Next.
  *
  * Este script corre bajo tsx, que —a diferencia del servidor de Next— no carga
  * los archivos de entorno. Sin esto habría que pasar la cadena de conexión por
  * línea de comandos, y una credencial escrita en la terminal queda guardada en
  * el historial del shell.
+ *
+ * Mira los dos archivos y en el mismo orden que Next, porque la cadena puede
+ * haber quedado en cualquiera de los dos: `.env.local` la escribe quien sigue
+ * las instrucciones a mano, `.env` la escribe el init de Neon.
  */
+const ARCHIVOS_ENTORNO = ['.env.local', '.env'] as const;
+
 function cargarEntornoLocal(): void {
-  if (process.env.DATABASE_URL) return;
-  const archivo = join(process.cwd(), '.env.local');
-  if (!existsSync(archivo)) return;
-  try {
-    process.loadEnvFile(archivo);
-  } catch {
-    // Node viejo: se parsea a mano lo mínimo indispensable.
-    for (const linea of readFileSync(archivo, 'utf8').split('\n')) {
-      const m = /^\s*([A-Z_][A-Z0-9_]*)\s*=\s*(.*)\s*$/i.exec(linea);
-      if (m && !process.env[m[1]]) process.env[m[1]] = m[2].replace(/^["']|["']$/g, '');
+  for (const nombre of ARCHIVOS_ENTORNO) {
+    if (process.env.DATABASE_URL) return;
+    const archivo = join(process.cwd(), nombre);
+    if (!existsSync(archivo)) continue;
+    try {
+      process.loadEnvFile(archivo);
+    } catch {
+      // Node viejo: se parsea a mano lo mínimo indispensable.
+      for (const linea of readFileSync(archivo, 'utf8').split('\n')) {
+        const m = /^\s*([A-Z_][A-Z0-9_]*)\s*=\s*(.*)\s*$/i.exec(linea);
+        if (m && !process.env[m[1]]) process.env[m[1]] = m[2].replace(/^["']|["']$/g, '');
+      }
     }
   }
 }
@@ -41,7 +49,7 @@ cargarEntornoLocal();
 const url = process.env.DATABASE_URL;
 if (!url) {
   console.error('\nFalta DATABASE_URL.\n');
-  console.error('  Poné la cadena de conexión en .env.local y volvé a correr:\n');
+  console.error('  Poné la cadena de conexión en .env y volvé a correr:\n');
   console.error('    DATABASE_URL=postgresql://usuario:clave@host/base?sslmode=require\n');
   console.error('  O pasala directo:\n');
   console.error('    DATABASE_URL="postgresql://..." npm run migrar\n');
@@ -61,7 +69,9 @@ if (archivos.length === 0) {
 // Envuelto en una función y no con `await` de nivel superior: tsx carga estos
 // scripts como CommonJS, y el await suelto los rompe con ERR_REQUIRE_ASYNC_MODULE.
 async function migrar(): Promise<void> {
-  const sql = postgres(url!, { max: 1, connect_timeout: 20 });
+  // Sin `onnotice`, correr esto dos veces vuelca un objeto de diez líneas por
+  // cada `if not exists` que ya existía y tapa el resultado real.
+  const sql = postgres(url!, { max: 1, connect_timeout: 20, onnotice: () => {} });
 
   try {
     console.log(

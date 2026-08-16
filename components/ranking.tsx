@@ -68,7 +68,9 @@ export function Ranking() {
               type="button"
               onClick={() => setTipo(t)}
               aria-pressed={tipo === t}
-              className={`border px-2.5 py-2 font-acta text-[11px] tracking-[0.04em] uppercase transition-colors ${
+              // min-h-11 = 44px: el alto natural del texto daba 35 y quedaba
+              // por debajo del blanco táctil mínimo.
+              className={`flex min-h-11 items-center border px-3 font-acta text-[11px] tracking-[0.04em] uppercase transition-colors ${
                 tipo === t
                   ? 'border-bronce-claro bg-bronce-claro/15 text-papel'
                   : 'border-linea text-papel-2 hover:text-papel'
@@ -96,30 +98,41 @@ export function Ranking() {
             {filas.slice(0, 10).map((fila, i) => {
               const club = CLUBES.get(fila.club_id);
               return (
-                <li key={`${fila.nombre}-${i}`} className="flex items-baseline gap-2.5">
-                  <span className="w-5 shrink-0 text-right font-acta text-[12px] text-papel-2 tabular-nums">
+                <li key={`${fila.nombre}-${i}`} className="flex gap-2.5">
+                  <span className="w-5 shrink-0 pt-px text-right font-acta text-[12px] text-papel-2 tabular-nums">
                     {i + 1}
                   </span>
                   {club && (
                     <span
-                      className="mt-0.5 flex h-4 w-1 shrink-0 flex-col overflow-hidden rounded-full"
+                      className="mt-1 flex h-4 w-1 shrink-0 flex-col overflow-hidden rounded-full"
                       aria-hidden
                     >
                       <span className="flex-1" style={{ backgroundColor: club.colors[0] }} />
                       <span className="flex-1" style={{ backgroundColor: club.colors[1] }} />
                     </span>
                   )}
+                  {/* El puntaje va arriba, en la misma línea que el nombre, y la
+                      ficha técnica ocupa sola el renglón de abajo.
+
+                      No es una preferencia estética: compartiendo renglón con
+                      el puntaje, la ficha se quedaba con 213px y la mejor
+                      partida posible —"Argentino (Q) · 16 temp · 12 títulos"—
+                      se cortaba a los 24px del final. Justo el que sobrevivió
+                      las dieciséis temporadas era el único que no podía leer
+                      su propia línea. Así tiene el ancho entero. */}
                   <span className="min-w-0 flex-1">
-                    <span className="block truncate font-display text-[14px] leading-tight font-bold text-papel">
-                      {fila.nombre}
+                    <span className="flex items-baseline gap-2">
+                      <span className="min-w-0 flex-1 truncate font-display text-[14px] leading-tight font-bold text-papel">
+                        {fila.nombre}
+                      </span>
+                      <span className="shrink-0 font-display text-[15px] leading-tight font-black text-papel tabular-nums">
+                        {fila.puntaje.toLocaleString('es-AR')}
+                      </span>
                     </span>
-                    <span className="block truncate font-acta text-[11px] text-papel-2">
+                    <span className="mt-0.5 block truncate font-acta text-[11px] text-papel-2">
                       {club?.short ?? fila.club_id} · {fila.temporadas} temp ·{' '}
                       {fila.titulos} {fila.titulos === 1 ? 'título' : 'títulos'}
                     </span>
-                  </span>
-                  <span className="shrink-0 font-display text-[15px] font-black text-papel tabular-nums">
-                    {fila.puntaje.toLocaleString('es-AR')}
                   </span>
                 </li>
               );

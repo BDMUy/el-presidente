@@ -12,6 +12,7 @@
     "typecheck": "tsc --noEmit",
     "simulate": "tsx scripts/simulate.ts",
     "migrar": "tsx scripts/migrar.ts",
+    "sembrar": "tsx scripts/sembrar-ranking.ts",
     "cobertura": "tsx scripts/cobertura.ts",
     "contraste": "tsx scripts/contraste.ts"
   },
