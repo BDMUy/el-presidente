@@ -31,6 +31,7 @@ import { CampoSelect } from './campo-select';
 import { Plegable } from './plegable';
 import { PresidenciaDelDia } from './presidencia-del-dia';
 import { Ranking } from './ranking';
+import { SelectorClub } from './selector-club';
 import { VitrinaPanel } from './vitrina';
 
 const CATEGORIAS: Category[] = ['primera', 'nacional', 'b'];
@@ -155,22 +156,10 @@ export function Arranque({
               ))}
             </CampoSelect>
 
-            <CampoSelect
-              etiqueta="Club"
-              valor={elegido ?? ''}
-              onChange={(v) => setElegido(v === '' ? null : v)}
-            >
-              <option value="">Elegí tu club…</option>
-              {deLaCategoria.map((c) => (
-                // La posición esperada viaja en el texto de la opción: es el
-                // dato con el que se elige, y sacarlo de la lista obligaría a
-                // elegir a ciegas para recién después verlo.
-                <option key={c.id} value={c.id}>
-                  {c.name} · {expectedPosition(c, c.category)}° de{' '}
-                  {CATEGORY_RULES[c.category].teams}
-                </option>
-              ))}
-            </CampoSelect>
+            {/* Este no es un select nativo: lleva la banda de colores de cada
+                club, que en un `<option>` no entra —son dos colores, y encima
+                en el celular la lista la dibuja el sistema operativo—. */}
+            <SelectorClub clubes={deLaCategoria} elegido={club} onElegir={setElegido} />
           </div>
         </div>
 
