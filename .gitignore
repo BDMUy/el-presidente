@@ -33,6 +33,12 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# El ejemplo sí va al repo: no tiene ningún secreto y es el único lugar donde
+# está escrito qué variables existen. Sin esta excepción, `.env*` también lo
+# tapaba y el archivo nunca llegó a comitearse: quien clonara el proyecto no
+# tenía forma de saber que DATABASE_URL o RANKING_SALT hacían falta.
+!.env.example
+
 # vercel
 .vercel
 
