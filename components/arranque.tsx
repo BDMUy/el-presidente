@@ -112,10 +112,8 @@ export function Arranque({
           <span className="font-semibold">Vos armás el plantel; el plantel juega.</span>
         </p>
 
-        <CampoNombre />
-
-        {/* Lo primero después del nombre: si dejaste una presidencia a medias,
-            retomarla es lo que viniste a hacer. */}
+        {/* Lo primero después de la presentación: si dejaste una presidencia a
+            medias, retomarla es lo que viniste a hacer. */}
         {enCurso && onContinuar && onAbandonar && (
           <PanelEnCurso enCurso={enCurso} onContinuar={onContinuar} onAbandonar={onAbandonar} />
         )}
@@ -161,6 +159,11 @@ export function Arranque({
                 en el celular la lista la dibuja el sistema operativo—. */}
             <SelectorClub clubes={deLaCategoria} elegido={club} onElegir={setElegido} />
           </div>
+
+          {/* El nombre va acá y no arriba de todo: el orden del padrón es el
+              de un trámite —de qué categoría, qué club, quién firma— y así lo
+              último que se completa queda pegado al botón de asumir. */}
+          <CampoNombre />
         </div>
 
         <div className="mt-4">

@@ -247,13 +247,21 @@ export function SelectorClub({
                   id={`${id}-op-${i}`}
                   role="option"
                   aria-selected={esElegido}
-                  onPointerDown={(e) => {
-                    // El listener de afuera corre en pointerdown, así que la
-                    // elección tiene que resolverse en el mismo evento.
-                    e.preventDefault();
-                    confirmar(i);
+                  // Con `click` y no con `pointerdown`. Elegir al apoyar el
+                  // dedo hacía que cualquier toque seleccionara, y el
+                  // `preventDefault()` que lo acompañaba cancelaba el scroll
+                  // táctil del navegador: la lista no se podía recorrer con el
+                  // pulgar. Se había puesto así creyendo que el listener de
+                  // "tocar afuera" —que sí corre en pointerdown— se comía la
+                  // elección, pero las opciones están adentro del contenedor,
+                  // así que ese listener nunca las mira.
+                  onClick={() => confirmar(i)}
+                  // Seguir el puntero solo con mouse. En una pantalla táctil,
+                  // pointerenter dispara al apoyar el dedo y el resaltado
+                  // saltaba de opción mientras se arrastraba para scrollear.
+                  onPointerEnter={(e) => {
+                    if (e.pointerType === 'mouse') setActivo(i);
                   }}
-                  onPointerEnter={() => setActivo(i)}
                   className={`flex min-h-11 cursor-pointer items-center gap-2.5 px-3 py-2 ${
                     i === activo ? 'bg-papel/12' : ''
                   } ${esElegido ? 'border-l-2 border-bronce-claro' : 'border-l-2 border-transparent'}`}
