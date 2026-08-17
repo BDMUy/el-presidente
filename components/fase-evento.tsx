@@ -13,10 +13,12 @@
  * caja con el mercado: las dos pantallas de decisión hablan el mismo idioma.
  */
 
+import { useState } from 'react';
+
 import type { Effects, GameEvent } from '@/lib/engine/types';
 import { EVENT_KIND_LABEL } from '@/lib/engine/types';
 import { plataConSigno } from '@/lib/format';
-import { Continuar, Membrete, Papel, Puntos, Renglon, Sello, Titulo } from './ui';
+import { BarraDecision, Continuar, Membrete, Papel, Puntos, Renglon, Sello, Titulo } from './ui';
 
 export function FaseEvento({
   event,
@@ -34,45 +36,61 @@ export function FaseEvento({
 }) {
   const tono = event.kind === 'golpe' ? 'rojo' : event.kind === 'dilema' ? 'bronce' : 'verde';
 
+  // Elegida pero sin firmar. El estado arranca limpio en cada acta porque
+  // `Pantalla` lleva una key por decisión tomada.
+  const [elegida, setElegida] = useState<number | null>(null);
+  const opcion = elegida === null ? null : event.options[available[elegida]];
+
   return (
-    <Papel torcido={1}>
-      <div className="flex items-start justify-between gap-4">
-        {/* Solo la posición en la temporada. El número de expediente y la
-            temporada estaban de más: la temporada ya está en el carnet a diez
-            píxeles, y el número de acta era sabor que no le decía nada al
-            jugador. Entre los tres hacían que el membrete partiera en dos
-            líneas contra el sello, y el único dato con función es este. */}
-        <Membrete>
-          Acta {enLaTemporada} de {porTemporada}
-        </Membrete>
-        <Sello tono={tono} className="shrink-0">
-          {EVENT_KIND_LABEL[event.kind]}
-        </Sello>
-      </div>
-
-      <div className="mt-4">
-        <Titulo>{event.title}</Titulo>
-        <p className="mt-3 font-body text-[16px] leading-relaxed text-tinta">{event.text}</p>
-      </div>
-
-      <div className="mt-6">
-        <Membrete>Resuelve la presidencia</Membrete>
-        <div className="mt-2 space-y-2">
-          {available.map((optionIndex, displayIndex) => {
-            const option = event.options[optionIndex];
-            return (
-              <Renglon
-                key={optionIndex}
-                label={option.label}
-                hint={option.hint}
-                azaroso={Boolean(option.random)}
-                onClick={() => onElegir(displayIndex)}
-              />
-            );
-          })}
+    <>
+      <Papel torcido={1}>
+        <div className="flex items-start justify-between gap-4">
+          {/* Solo la posición en la temporada. El número de expediente y la
+              temporada estaban de más: la temporada ya está en el carnet a diez
+              píxeles, y el número de acta era sabor que no le decía nada al
+              jugador. Entre los tres hacían que el membrete partiera en dos
+              líneas contra el sello, y el único dato con función es este. */}
+          <Membrete>
+            Acta {enLaTemporada} de {porTemporada}
+          </Membrete>
+          <Sello tono={tono} className="shrink-0">
+            {EVENT_KIND_LABEL[event.kind]}
+          </Sello>
         </div>
-      </div>
-    </Papel>
+
+        <div className="mt-4">
+          <Titulo>{event.title}</Titulo>
+          <p className="mt-3 font-body text-[16px] leading-relaxed text-tinta">{event.text}</p>
+        </div>
+
+        <div className="mt-6">
+          <Membrete>Resuelve la presidencia</Membrete>
+          <div className="mt-2 space-y-2">
+            {available.map((optionIndex, displayIndex) => {
+              const option = event.options[optionIndex];
+              return (
+                <Renglon
+                  key={optionIndex}
+                  label={option.label}
+                  hint={option.hint}
+                  azaroso={Boolean(option.random)}
+                  seleccionado={elegida === displayIndex}
+                  onClick={() => setElegida(displayIndex)}
+                />
+              );
+            })}
+          </div>
+        </div>
+      </Papel>
+
+      <BarraDecision
+        resumen={opcion ? opcion.label : 'Elegí cómo resolverlo'}
+        detalle={opcion?.random ? 'El resultado se sortea' : undefined}
+        accion="Firmar"
+        habilitada={elegida !== null}
+        onConfirmar={() => elegida !== null && onElegir(elegida)}
+      />
+    </>
   );
 }
 

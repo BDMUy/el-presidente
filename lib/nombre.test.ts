@@ -47,15 +47,43 @@ describe('limpiarNombre', () => {
     expect(conEspacio).toBe('aaaaaaaaaaaaaaaaaaaaaaa');
   });
 
-  it('no parte un emoji al medio', () => {
-    // Cortando por unidades de UTF-16, el carácter 24 caería en la mitad del
-    // último emoji y dejaría un sustituto suelto.
-    const limpio = limpiarNombre('a'.repeat(23) + '\u{1f9c9}\u{1f9c9}');
-    expect(limpio).toBe('a'.repeat(23) + '\u{1f9c9}');
+  it('no parte por la mitad una letra de fuera del plano básico', () => {
+    // U+1D400 es una letra y ocupa dos unidades de UTF-16. Cortando por
+    // unidades, el carácter 24 caería en la mitad de la última y dejaría un
+    // sustituto suelto guardado en la tabla.
+    const limpio = limpiarNombre('a'.repeat(23) + '\u{1d400}\u{1d400}');
+    expect(limpio).toBe('a'.repeat(23) + '\u{1d400}');
     expect([...limpio!].length).toBe(24);
   });
 
-  it('deja el HTML como texto: escaparlo es tarea de quien lo muestra', () => {
-    expect(limpiarNombre('<b>hola</b>')).toBe('<b>hola</b>');
+  it('trata cualquier espacio como espacio, no como basura', () => {
+    // El espacio duro y el ideográfico no son letras ni signos permitidos:
+    // borrarlos en vez de convertirlos pegaba dos palabras que iban separadas.
+    expect(limpiarNombre('a b')).toBe('a b');
+    expect(limpiarNombre('a　b')).toBe('a b');
+    expect(limpiarNombre('a b')).toBe('a b');
+  });
+
+  it('conserva las tildes y la eñe, vengan compuestas o descompuestas', () => {
+    expect(limpiarNombre('Doña Rosa')).toBe('Doña Rosa');
+    expect(limpiarNombre('José Sanfilippo')).toBe('José Sanfilippo');
+    // La misma "é" tecleada en forma descompuesta: e + acento combinante.
+    expect(limpiarNombre('José')).toBe('José');
+    expect(limpiarNombre('Ñuñez')).toBe('Ñuñez');
+  });
+
+  it('deja los signos que aparecen en nombres de verdad', () => {
+    expect(limpiarNombre('D. Ameal')).toBe('D. Ameal');
+    expect(limpiarNombre("O'Higgins")).toBe("O'Higgins");
+    expect(limpiarNombre('Jean-Pierre')).toBe('Jean-Pierre');
+  });
+
+  it('saca lo que convertiría la tabla en otra cosa', () => {
+    // El HTML ya no se guarda como texto: se cae por la regla de caracteres,
+    // que es más estricta que la de seguridad.
+    expect(limpiarNombre('<b>hola</b>')).toBe('bholab');
+    expect(limpiarNombre('Riquelme 🏆🏆')).toBe('Riquelme');
+    expect(limpiarNombre('@@@')).toBeNull();
+    expect(limpiarNombre('¯\\_(ツ)_/¯')).toBe('ツ');
   });
 });

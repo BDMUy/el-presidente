@@ -105,12 +105,15 @@ export function Renglon({
   label,
   hint,
   azaroso = false,
+  seleccionado = false,
   onClick,
   disabled = false,
 }: {
   label: string;
   hint: string;
   azaroso?: boolean;
+  /** Elegida pero todavía sin firmar. La decisión la cierra la barra de abajo. */
+  seleccionado?: boolean;
   onClick: () => void;
   disabled?: boolean;
 }) {
@@ -119,7 +122,12 @@ export function Renglon({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="w-full border border-hoja-linea px-3 py-3 text-left transition-colors hover:border-tinta hover:bg-tinta/6 active:bg-tinta/12 disabled:opacity-40"
+      aria-pressed={seleccionado}
+      className={`w-full border px-3 py-3 text-left transition-colors disabled:opacity-40 ${
+        seleccionado
+          ? 'border-tinta bg-tinta/10'
+          : 'border-hoja-linea hover:border-tinta hover:bg-tinta/6 active:bg-tinta/12'
+      }`}
     >
       <span className="flex items-baseline gap-2 font-display text-[16px] leading-tight font-bold text-tinta">
         <span className="min-w-0">{label}</span>
@@ -131,6 +139,67 @@ export function Renglon({
       </span>
       <span className="mt-1 block font-body text-[14px] leading-snug text-tinta-2">{hint}</span>
     </button>
+  );
+}
+
+/**
+ * La barra que cierra una decisión.
+ *
+ * Existe porque tocar una opción la firmaba en el acto: un pulgar torpe en el
+ * celular perdía la temporada sin haber leído la consecuencia. Ahora elegir y
+ * firmar son dos actos, que es como funciona todo lo demás del juego —y como
+ * ya funcionaba la Mesa Chica, que fue de donde salió el patrón.
+ *
+ * Va fija abajo y fuera de la hoja: las opciones pueden ser tres párrafos y en
+ * un celular el botón caía debajo del pliegue, que es el problema que esto
+ * viene a resolver, no a mudar.
+ *
+ * Lo que no hace es deshacer una decisión ya firmada. Con el log de la partida
+ * como única prueba, una decisión que se puede desandar deja reintentar hasta
+ * ganar, y el servidor no tiene con qué distinguirlo: el log más corto se
+ * reproduce igual de válido. El ranking se volvería decoración.
+ */
+export function BarraDecision({
+  resumen,
+  detalle,
+  accion,
+  onConfirmar,
+  habilitada = true,
+}: {
+  resumen: string;
+  detalle?: string;
+  accion: string;
+  onConfirmar: () => void;
+  habilitada?: boolean;
+}) {
+  return (
+    <div className="sticky bottom-0 -mx-4 mt-5 border-t border-pano-borde bg-pano-alto/97 px-4 py-3 backdrop-blur">
+      <div className="mx-auto flex max-w-xl items-center gap-3">
+        <div className="min-w-0 flex-1">
+          <p className="truncate font-display text-[15px] leading-tight font-bold text-papel">
+            {resumen}
+          </p>
+          {detalle && (
+            <p className="mt-0.5 truncate font-acta text-[11px] tracking-[0.06em] text-papel-2 uppercase">
+              {detalle}
+            </p>
+          )}
+        </div>
+
+        <button
+          type="button"
+          onClick={onConfirmar}
+          disabled={!habilitada}
+          className={`shrink-0 px-5 py-3.5 font-display text-[13px] font-black tracking-[0.1em] uppercase transition-transform active:scale-[0.98] ${
+            habilitada
+              ? 'bg-papel text-tinta'
+              : 'cursor-not-allowed border border-linea text-papel-2'
+          }`}
+        >
+          {accion}
+        </button>
+      </div>
+    </div>
   );
 }
 

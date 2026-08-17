@@ -12,6 +12,9 @@
  * guardadas cada vez que la tocáramos.
  */
 
+import { useEffect, useState } from 'react';
+
+import { leerNombre } from '@/lib/dispositivo';
 import type { Club, Resources } from '@/lib/engine/types';
 import { entero, plataCorta, socios } from '@/lib/format';
 import { RECURSOS } from '@/lib/recursos';
@@ -26,6 +29,15 @@ export function ActaAsuncion({
   resources: Resources;
   onAsumir: () => void;
 }) {
+  // Se lee después del montaje: el nombre vive en localStorage, que no existe
+  // durante el prerender, y leerlo en el render daría un desajuste de
+  // hidratación entre el HTML del servidor y el del navegador.
+  const [nombre, setNombre] = useState('');
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- el nombre guardado solo existe en el cliente
+    setNombre(leerNombre());
+  }, []);
+
   const valor = (id: keyof Resources): string => {
     if (id === 'caja') return plataCorta(resources.caja);
     if (id === 'socios') return socios(resources.socios);
@@ -48,6 +60,17 @@ export function ActaAsuncion({
 
       <div className="mt-4">
         <Titulo>Recibís el club</Titulo>
+
+        {/* El nombre solo si lo puso. Un "Presidente:" vacío en el acta se lee
+            como un campo que quedó sin llenar, que es peor que no tenerlo. */}
+        {nombre && (
+          <p className="mt-2 flex items-baseline font-acta text-[12px] tracking-[0.06em] uppercase">
+            <span className="text-tinta-2">Presidente</span>
+            <Puntos />
+            <span className="font-bold text-tinta">{nombre}</span>
+          </p>
+        )}
+
         <p className="mt-3 font-body text-[16px] leading-relaxed text-tinta">
           Ganaste la elección. Tenés cuatro mandatos de cuatro temporadas para que no te echen, y
           esto es todo con lo que contás. Los partidos no los jugás vos: armás el plantel y el

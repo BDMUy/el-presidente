@@ -20,6 +20,8 @@ import { CLUBS } from '@/content/clubs';
 import { expectedPosition } from '@/lib/engine/season';
 import { CATEGORY_RULES, type Category, type Club } from '@/lib/engine/types';
 import { Membrete, Sello } from './ui';
+import { CampoNombre } from './campo-nombre';
+import { Plegable } from './plegable';
 import { PresidenciaDelDia } from './presidencia-del-dia';
 import { Ranking } from './ranking';
 import { VitrinaPanel } from './vitrina';
@@ -38,12 +40,27 @@ function normalizar(texto: string): string {
     .replace(/[̀-ͯ]/g, '');
 }
 
+/** La presidencia que quedó a medias, si hay alguna. */
+export interface EnCurso {
+  club: Club;
+  season: number;
+  year: number;
+  diaria: boolean;
+  terminada: boolean;
+}
+
 export function Arranque({
   onEmpezar,
   onEmpezarDiaria,
+  enCurso = null,
+  onContinuar,
+  onAbandonar,
 }: {
   onEmpezar: (clubId: string) => void;
   onEmpezarDiaria: () => void;
+  enCurso?: EnCurso | null;
+  onContinuar?: () => void;
+  onAbandonar?: () => void;
 }) {
   const [elegido, setElegido] = useState<string | null>(null);
   const [busqueda, setBusqueda] = useState('');
@@ -110,10 +127,30 @@ export function Arranque({
           <span className="font-semibold">Vos armás el plantel; el plantel juega.</span>
         </p>
 
-        <PresidenciaDelDia onJugar={onEmpezarDiaria} />
+        <CampoNombre />
 
-        <Ranking />
+        {/* Lo primero después del título: si dejaste una presidencia a medias,
+            retomarla es lo que viniste a hacer. Va antes que la del día. */}
+        {enCurso && onContinuar && onAbandonar && (
+          <PanelEnCurso enCurso={enCurso} onContinuar={onContinuar} onAbandonar={onAbandonar} />
+        )}
 
+        <Plegable
+          titulo="Presidencia del día"
+          resumen="La misma partida para todos, hasta la medianoche"
+          abiertoPorDefecto
+        >
+          <PresidenciaDelDia onJugar={onEmpezarDiaria} />
+        </Plegable>
+
+        <Plegable titulo="Tabla de posiciones" resumen="Quién llegó más lejos">
+          <Ranking />
+        </Plegable>
+
+        {/* La vitrina no va adentro de un plegable: ya es uno. Tiene su propio
+            botón, arranca cerrada y desaparece sola si todavía no jugaste
+            ninguna presidencia. Envolverla dejaba dos controles anidados para
+            abrir la misma cosa. */}
         <VitrinaPanel />
 
         {/* En escritorio la decisión vive acá, al lado del padrón. En celular
@@ -223,6 +260,90 @@ export function Arranque({
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+/**
+ * La presidencia a medias, para retomarla.
+ *
+ * Renunciar vive acá y no adentro del juego: es la única pantalla donde se ve
+ * qué se está por tirar —el club, la temporada, si era la del día— antes de
+ * tirarlo. Y pide confirmación, porque es la única acción del juego que
+ * destruye algo y no se puede deshacer.
+ */
+function PanelEnCurso({
+  enCurso,
+  onContinuar,
+  onAbandonar,
+}: {
+  enCurso: EnCurso;
+  onContinuar: () => void;
+  onAbandonar: () => void;
+}) {
+  const [confirmando, setConfirmando] = useState(false);
+  const { club, season, year, diaria, terminada } = enCurso;
+
+  return (
+    <div className="mt-6 border border-bronce-claro/40 bg-pano-alto/60">
+      <div className="flex h-1.5" aria-hidden>
+        <div className="flex-1" style={{ backgroundColor: club.colors[0] }} />
+        <div className="flex-1" style={{ backgroundColor: club.colors[1] }} />
+      </div>
+
+      <div className="px-4 py-4">
+        <Membrete sobrePano>
+          {terminada ? 'Tu última presidencia' : 'Presidencia en curso'}
+          {diaria && ' · la del día'}
+        </Membrete>
+
+        <p className="mt-2 font-display text-[20px] leading-tight font-black text-papel">
+          {club.name}
+        </p>
+        <p className="mt-0.5 font-acta text-[11px] tracking-[0.06em] text-papel-2 uppercase tabular-nums">
+          Temporada {season} · {year}
+        </p>
+
+        <button
+          type="button"
+          onClick={onContinuar}
+          className="mt-4 w-full bg-papel py-3.5 font-display text-[14px] font-black tracking-[0.1em] text-tinta uppercase transition-transform active:scale-[0.99]"
+        >
+          {terminada ? 'Ver el epílogo' : 'Continuar'}
+        </button>
+
+        {confirmando ? (
+          <div className="mt-3 border-t border-linea pt-3">
+            <p className="font-body text-[14px] leading-snug text-papel">
+              Si renunciás, esta presidencia se borra y no se puede recuperar.
+            </p>
+            <div className="mt-2.5 flex gap-2">
+              <button
+                type="button"
+                onClick={onAbandonar}
+                className="min-h-11 flex-1 border border-sello-claro px-3 font-acta text-[11px] tracking-[0.1em] text-sello-claro uppercase transition-colors hover:bg-sello-claro/10"
+              >
+                Renunciar
+              </button>
+              <button
+                type="button"
+                onClick={() => setConfirmando(false)}
+                className="min-h-11 flex-1 border border-linea px-3 font-acta text-[11px] tracking-[0.1em] text-papel-2 uppercase transition-colors hover:text-papel"
+              >
+                Seguir
+              </button>
+            </div>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setConfirmando(true)}
+            className="mt-2 min-h-11 w-full font-acta text-[11px] tracking-[0.14em] text-papel-2 uppercase underline underline-offset-4 transition-colors hover:text-papel"
+          >
+            Renunciar y empezar otra
+          </button>
+        )}
+      </div>
     </div>
   );
 }

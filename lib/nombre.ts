@@ -36,14 +36,39 @@ function esInvisible(punto: number): boolean {
 }
 
 /**
- * Tabulación, salto de línea, retorno, tabulación vertical y avance de página.
+ * Lo que sí puede tener un nombre.
  *
- * Son controles, pero separan palabras, así que se convierten en espacio en
- * vez de borrarse: borrándolos, "linea1\nlinea2" quedaba "linea1linea2" y
- * pegaba dos palabras que no iban juntas.
+ * Letras de cualquier alfabeto, las marcas que las acentúan, dígitos, y un
+ * puñado de signos que aparecen en nombres reales: el punto de "D. Ameal", el
+ * apóstrofo de "O'Higgins", el guion de los nombres compuestos.
+ *
+ * `\p{M}` es la clave del acento: en NFC "ñ" y "é" suelen venir como un solo
+ * punto de código, pero no siempre, y un teclado de celular manda cualquiera
+ * de las dos formas. Sin las marcas, "José" tecleado en la forma descompuesta
+ * se convertía en "Jose".
+ *
+ * Todo lo demás se cae. No es por seguridad —de eso ya se ocupan los rangos de
+ * arriba— sino porque una tabla de posiciones llena de emojis y signos deja de
+ * parecer el libro de socios de un club.
  */
-function esEspacioDeControl(punto: number): boolean {
-  return punto >= 0x09 && punto <= 0x0d;
+const PERMITIDO = /[\p{L}\p{M}\p{N} .'’-]/u;
+
+function esPermitido(ch: string): boolean {
+  return PERMITIDO.test(ch);
+}
+
+/**
+ * Cualquier cosa que separe palabras: el salto de línea, la tabulación, el
+ * espacio duro, el ideográfico, los de imprenta.
+ *
+ * Se pregunta **antes** que todo lo demás y se convierte en espacio en vez de
+ * borrarse. Borrándolos se pegan dos palabras que no iban juntas, y ese error
+ * ya apareció dos veces en este archivo: primero con el salto de línea, que
+ * dejaba "linea1linea2", y después con el espacio duro, que la lista de
+ * caracteres permitidos tiraba porque no es letra ni signo de los aceptados.
+ */
+function esEspacio(ch: string): boolean {
+  return /\s/.test(ch);
 }
 
 export const LARGO_MAXIMO_NOMBRE = 24;
@@ -59,9 +84,9 @@ export function limpiarNombre(crudo: unknown): string | null {
 
   const visible = [...crudo.normalize('NFC')]
     .map((ch) => {
-      const punto = ch.codePointAt(0) ?? 0;
-      if (esEspacioDeControl(punto)) return ' ';
-      return esInvisible(punto) ? '' : ch;
+      if (esEspacio(ch)) return ' ';
+      if (esInvisible(ch.codePointAt(0) ?? 0)) return '';
+      return esPermitido(ch) ? ch : '';
     })
     .join('');
 

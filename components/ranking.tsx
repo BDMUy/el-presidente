@@ -15,7 +15,6 @@ import { useEffect, useState } from 'react';
 
 import { CLUBS } from '@/content/clubs';
 import { Cargando } from './cargando';
-import { Membrete } from './ui';
 
 interface Fila {
   nombre: string;
@@ -59,9 +58,10 @@ export function Ranking() {
   if (disponible === false || disponible === null) return null;
 
   return (
-    <div className="mt-6 border border-linea">
-      <div className="flex items-center justify-between gap-2 border-b border-linea px-3 py-2.5">
-        <Membrete sobrePano>Tabla de posiciones</Membrete>
+    <div className="mt-2 border border-linea">
+      {/* Sin título propio: lo pone la sección que lo contiene. Cuando lo traía
+          además acá, "Tabla de posiciones" se leía dos veces seguidas. */}
+      <div className="flex items-center justify-end gap-2 border-b border-linea px-3 py-2.5">
         <div className="flex shrink-0 gap-1">
           {(['diario', 'global'] as Tipo[]).map((t) => (
             <button

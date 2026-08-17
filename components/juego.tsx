@@ -31,11 +31,26 @@ interface Partida {
   diaria: string | null;
 }
 
+/** Cada pantalla es una hoja nueva sobre la mesa: se lee desde arriba. */
+function alTope(): void {
+  window.scrollTo({ top: 0, behavior: 'instant' });
+}
+
 export function Juego() {
   const [partida, setPartida] = useState<Partida | null>(null);
   const [cargando, setCargando] = useState(true);
   /** El acta de asunción se muestra una sola vez en la vida del jugador. */
   const [mostrarActa, setMostrarActa] = useState(false);
+
+  /**
+   * Si se está adentro de la partida o en el inicio.
+   *
+   * Antes no existía: tener una partida guardada era estar jugándola, y la
+   * única salida era renunciar, que la borraba. O sea que para mirar la tabla
+   * de posiciones había que abandonar la presidencia en curso. Ahora el inicio
+   * es un lugar al que se puede volver, y la partida sigue esperando.
+   */
+  const [enJuego, setEnJuego] = useState(false);
 
   // Restaurar la partida en curso, si el contenido no cambió desde entonces.
   // localStorage no existe en el prerender, así que esto solo puede pasar
@@ -60,7 +75,11 @@ export function Juego() {
     const seed = Math.floor(Math.random() * 0xffffffff);
     setPartida({ state: startRun({ seed, clubId }), diaria: null });
     setMostrarActa(!vioActa());
+    setEnJuego(true);
     guardar({ seed, clubId, choices: [], diaria: null });
+    // Sin esto se entraba al club con el scroll donde había quedado el padrón,
+    // así que la primera pantalla de la presidencia aparecía por la mitad.
+    alTope();
   }, []);
 
   // La del día no se elige: la partida sale de la fecha, igual en todos los
@@ -69,7 +88,19 @@ export function Juego() {
     const { seed, clubId, fecha } = presidenciaDelDia();
     setPartida({ state: startRun({ seed, clubId }), diaria: fecha });
     setMostrarActa(!vioActa());
+    setEnJuego(true);
     guardar({ seed, clubId, choices: [], diaria: fecha });
+    alTope();
+  }, []);
+
+  const continuar = useCallback(() => {
+    setEnJuego(true);
+    alTope();
+  }, []);
+
+  const volverAlInicio = useCallback(() => {
+    setEnJuego(false);
+    alTope();
   }, []);
 
   const cerrarActa = useCallback(() => {
@@ -89,13 +120,14 @@ export function Juego() {
       });
       return { state: siguiente, diaria: actual.diaria };
     });
-    // Cada pantalla es una hoja nueva sobre la mesa: se lee desde arriba.
-    window.scrollTo({ top: 0, behavior: 'instant' });
+    alTope();
   }, []);
 
   const reiniciar = useCallback(() => {
     borrar();
     setPartida(null);
+    setEnJuego(false);
+    alTope();
   }, []);
 
   if (cargando) {
@@ -106,10 +138,30 @@ export function Juego() {
     );
   }
 
-  if (!partida) {
+  // Se arranca siempre en el inicio, aunque haya partida guardada. Entrar
+  // directo a la partida escondía el resto del juego —la del día, la tabla, la
+  // vitrina— a cualquiera que hubiera empezado una presidencia y no la hubiera
+  // terminado, que es el estado normal de alguien que vuelve al otro día.
+  if (!enJuego || !partida) {
     return (
       <main>
-        <Arranque onEmpezar={empezar} onEmpezarDiaria={empezarDiaria} />
+        <Arranque
+          onEmpezar={empezar}
+          onEmpezarDiaria={empezarDiaria}
+          enCurso={
+            partida
+              ? {
+                  club: getClub(partida.state.clubId),
+                  season: partida.state.season,
+                  year: partida.state.year,
+                  diaria: partida.diaria !== null,
+                  terminada: partida.state.status === 'terminado',
+                }
+              : null
+          }
+          onContinuar={continuar}
+          onAbandonar={reiniciar}
+        />
       </main>
     );
   }
@@ -133,17 +185,31 @@ export function Juego() {
         {mostrarActa ? (
           <ActaAsuncion club={club} resources={state.resources} onAsumir={cerrarActa} />
         ) : (
-          <Pantalla state={state} diaria={diaria} onElegir={elegir} onReiniciar={reiniciar} />
+          // La key por decisión tomada no es cosmética: las pantallas que ahora
+          // guardan una selección sin firmar viven en la misma posición del
+          // árbol una tras otra, y sin esto React reusaría la instancia y la
+          // opción elegida en un acta aparecería ya marcada en la siguiente.
+          <Pantalla
+            key={state.choices.length}
+            state={state}
+            diaria={diaria}
+            onElegir={elegir}
+            onReiniciar={reiniciar}
+          />
         )}
       </div>
 
+      {/* Volver al inicio, no renunciar: la presidencia queda como está y se
+          retoma desde el botón de continuar. Renunciar —que borra la partida—
+          vive ahora en el inicio, al lado de la que se va a borrar, que es
+          donde se puede ver qué se está tirando. */}
       <footer className="mx-auto w-full max-w-xl px-4 pb-6">
         <button
           type="button"
-          onClick={reiniciar}
+          onClick={volverAlInicio}
           className="-mx-2 px-2 py-3 font-acta text-[11px] tracking-[0.14em] text-papel-2 uppercase underline underline-offset-4 transition-colors hover:text-papel"
         >
-          Renunciar y empezar otra
+          ← Volver al inicio
         </button>
       </footer>
     </main>

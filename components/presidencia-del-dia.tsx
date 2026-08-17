@@ -69,21 +69,19 @@ export function PresidenciaDelDia({ onJugar }: { onJugar: () => void }) {
   const club = getClub(datos.clubId);
 
   return (
-    <div className="mt-6 border border-bronce-claro/50 bg-pano-alto/50">
+    <div className="mt-2 border border-bronce-claro/50 bg-pano-alto/50">
       <div className="flex h-1" aria-hidden>
         <div className="flex-1" style={{ backgroundColor: club.colors[0] }} />
         <div className="flex-1" style={{ backgroundColor: club.colors[1] }} />
       </div>
 
       <div className="px-3 py-3">
-        <div className="flex items-baseline justify-between gap-2">
-          <p className="font-acta text-[11px] tracking-[0.06em] text-bronce-claro uppercase">
-            Presidencia del día
-          </p>
-          <p className="shrink-0 font-acta text-[11px] tracking-[0.06em] text-papel-2 tabular-nums uppercase">
-            cambia en {espera}
-          </p>
-        </div>
+        {/* Sin el título "Presidencia del día": lo pone la sección que lo
+            contiene, y acá se leía dos veces seguidas. Queda el reloj, que es
+            el dato y no el rótulo. */}
+        <p className="text-right font-acta text-[11px] tracking-[0.06em] text-papel-2 tabular-nums uppercase">
+          cambia en {espera}
+        </p>
 
         <p className="mt-1.5 font-display text-[17px] leading-tight font-black text-papel">
           {club.name}
