@@ -12,12 +12,20 @@ describe('ipDe', () => {
   });
 
   it('prefiere las cabeceras de un solo valor que escribe el hosting', () => {
-    expect(
-      ipDe(pedido({ 'x-vercel-forwarded-for': '203.0.113.9', 'x-forwarded-for': '10.0.0.1' })),
-    ).toBe('203.0.113.9');
-    expect(ipDe(pedido({ 'x-real-ip': '203.0.113.9', 'x-forwarded-for': '10.0.0.1' }))).toBe(
-      '203.0.113.9',
-    );
+    for (const cabecera of ['x-nf-client-connection-ip', 'x-vercel-forwarded-for', 'x-real-ip']) {
+      expect(ipDe(pedido({ [cabecera]: '203.0.113.9', 'x-forwarded-for': '10.0.0.1' }))).toBe(
+        '203.0.113.9',
+      );
+    }
+  });
+
+  it('mete al mismo cliente en el mismo cubo llegue por IPv4 o por IPv6', () => {
+    // Netlify sirve sobre las dos pilas: el mismo visitante puede aparecer de
+    // las dos formas, y si son dos orígenes el límite se afloja a la mitad.
+    expect(ipDe(pedido({ 'x-nf-client-connection-ip': '::ffff:203.0.113.9' }))).toBe('203.0.113.9');
+    expect(ipDe(pedido({ 'x-forwarded-for': '::FFFF:203.0.113.9' }))).toBe('203.0.113.9');
+    // Una IPv6 de verdad no se toca, solo se normaliza la caja.
+    expect(ipDe(pedido({ 'x-real-ip': '2001:DB8::1' }))).toBe('2001:db8::1');
   });
 
   it('toma el último salto de la cadena, no el primero', () => {

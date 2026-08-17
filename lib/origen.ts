@@ -65,14 +65,21 @@ function proxiesDeConfianza(): number {
  * pasaba doce de doce envíos por encima del límite. Contando desde el final,
  * los doce caen en el mismo cubo.
  *
- * `x-vercel-forwarded-for` y `x-real-ip` van primero porque los escribe el
- * hosting con un único valor y el cliente no los puede plantar.
+ * Las cabeceras de un solo valor van primero porque las escribe el hosting y
+ * el cliente no las puede plantar. Una por proveedor, en orden de confianza:
+ *
+ *   x-nf-client-connection-ip   Netlify
+ *   x-vercel-forwarded-for      Vercel
+ *   x-real-ip                   nginx y la mayoría de los reverse proxy
+ *
+ * Que estén las tres no es indecisión: cada hosting escribe la suya y ninguno
+ * escribe las ajenas, así que la lista es exhaustiva sin ser ambigua.
  */
 export function ipDe(request: Request): string | null {
-  const directas = ['x-vercel-forwarded-for', 'x-real-ip'];
+  const directas = ['x-nf-client-connection-ip', 'x-vercel-forwarded-for', 'x-real-ip'];
   for (const nombre of directas) {
     const valor = request.headers.get(nombre)?.trim();
-    if (valor) return valor;
+    if (valor) return normalizar(valor);
   }
 
   const cadena = request.headers.get('x-forwarded-for');
@@ -88,7 +95,20 @@ export function ipDe(request: Request): string | null {
   // verdad. Si la cadena es más corta de lo esperado, se toma el primero que
   // hay, que es lo más lejos que se puede ir sin inventar.
   const indice = Math.max(0, saltos.length - proxiesDeConfianza());
-  return saltos[indice] ?? null;
+  const salto = saltos[indice];
+  return salto ? normalizar(salto) : null;
+}
+
+/**
+ * Deja el mismo cliente siempre en el mismo cubo.
+ *
+ * Netlify sirve sobre IPv4 y sobre IPv6 a la vez, y el mismo visitante puede
+ * llegar como `1.2.3.4` o como `::ffff:1.2.3.4`. Sin esto son dos orígenes
+ * distintos y el límite se afloja a la mitad sin que nadie lo pida.
+ */
+function normalizar(ip: string): string {
+  const mapeada = /^::ffff:(\d{1,3}(?:\.\d{1,3}){3})$/i.exec(ip);
+  return (mapeada ? mapeada[1] : ip).toLowerCase();
 }
 
 /**
