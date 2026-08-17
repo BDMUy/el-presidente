@@ -17,6 +17,7 @@ import { EVENTS_PER_SEASON, type GameState } from '@/lib/engine/types';
 import { borrar, guardar, leer, marcarActaVista, vioActa } from '@/lib/storage';
 import { ActaAsuncion } from './acta-asuncion';
 import { Arranque } from './arranque';
+import { Cargando } from './cargando';
 import { FaseEleccion, FaseTemporada } from './fase-cierre';
 import { FaseFin } from './fase-fin';
 import { FaseEvento, FaseResultadoEvento } from './fase-evento';
@@ -99,10 +100,8 @@ export function Juego() {
 
   if (cargando) {
     return (
-      <main className="flex min-h-dvh items-center justify-center">
-        <p className="font-acta text-[11px] tracking-[0.2em] text-papel-2 uppercase">
-          Abriendo el expediente…
-        </p>
+      <main>
+        <Cargando>Abriendo el expediente…</Cargando>
       </main>
     );
   }

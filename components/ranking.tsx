@@ -14,6 +14,7 @@
 import { useEffect, useState } from 'react';
 
 import { CLUBS } from '@/content/clubs';
+import { Cargando } from './cargando';
 import { Membrete } from './ui';
 
 interface Fila {
@@ -84,9 +85,7 @@ export function Ranking() {
 
       <div className="px-3 py-2.5">
         {filas === null ? (
-          <p className="font-acta text-[11px] tracking-[0.06em] text-papel-2 uppercase">
-            Buscando la tabla…
-          </p>
+          <Cargando chico>Buscando la tabla…</Cargando>
         ) : filas.length === 0 ? (
           <p className="font-body text-[14px] leading-snug text-papel-2">
             {tipo === 'diario'
