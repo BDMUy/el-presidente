@@ -18,10 +18,21 @@ import { fechaDelDia, presidenciaDelDia } from '@/lib/daily';
 import { getDb } from '@/lib/db';
 import { computeScore } from '@/lib/engine/election';
 import { replayRun } from '@/lib/engine/engine';
+import { limpiarNombre } from '@/lib/nombre';
+import { hashDeOrigen } from '@/lib/origen';
 
 /** Tope de decisiones: una presidencia larga ronda las 150. */
 const MAX_DECISIONES = 400;
-const MAX_NOMBRE = 24;
+
+/**
+ * Envíos por hora desde un mismo origen.
+ *
+ * Una presidencia lleva de seis a diez minutos, así que un jugador real no
+ * llega ni a seis por hora. El número está alto a propósito porque detrás de
+ * un mismo IP puede haber una casa entera, una escuela o un CGNAT de una
+ * operadora: es un techo contra la inundación, no una cuota por persona.
+ */
+const MAX_POR_HORA = 20;
 
 interface Envio {
   dispositivo?: unknown;
@@ -47,6 +58,15 @@ export async function POST(request: Request) {
     );
   }
 
+  // Sin esto, un `content-type: text/plain` convierte el POST en una petición
+  // simple: sin preflight de CORS, cualquier página de internet puede hacer
+  // que el navegador de un visitante mande envíos a este endpoint. Medido: con
+  // text/plain el envío entraba con 200.
+  const tipo = request.headers.get('content-type') ?? '';
+  if (!tipo.toLowerCase().includes('application/json')) {
+    return malaPeticion('Se espera application/json.');
+  }
+
   let cuerpo: Envio;
   try {
     cuerpo = (await request.json()) as Envio;
@@ -60,9 +80,11 @@ export async function POST(request: Request) {
   if (typeof dispositivo !== 'string' || !UUID.test(dispositivo)) {
     return malaPeticion('Dispositivo inválido.');
   }
-  if (typeof nombre !== 'string' || nombre.trim().length === 0) {
-    return malaPeticion('Falta el nombre.');
-  }
+
+  // Se limpia antes de mirar si quedó algo: un nombre de tres caracteres de
+  // ancho cero pasaba el `trim()` y entraba a la tabla como una fila en blanco.
+  const nombreLimpio = limpiarNombre(nombre);
+  if (nombreLimpio === null) return malaPeticion('Falta el nombre.');
   if (typeof seed !== 'number' || !Number.isInteger(seed) || seed < 0 || seed > 0xffffffff) {
     return malaPeticion('Semilla inválida.');
   }
@@ -107,13 +129,43 @@ export async function POST(request: Request) {
     fechaDiaria = hoy.fecha;
   }
 
+  // ── La ventana ───────────────────────────────────────────
+  // Se consulta después de verificar la partida y no antes: así el que intenta
+  // inundar paga el replay de cada intento, y no le sale gratis tantear.
+  //
+  // El origen es lo único que sobrevive a que el atacante rote el uuid de
+  // dispositivo. Cuando no hay origen —la aplicación no está detrás de un
+  // proxy que informe el IP— se cae al dispositivo, que es débil pero no es
+  // nada: sin este `else`, medido, pasaban doce de doce sin ningún tope.
+  const origen = hashDeOrigen(request);
+  try {
+    const [{ recientes }] = origen
+      ? await db<{ recientes: string }[]>`
+          select count(*) as recientes from presidencias
+          where origen_hash = ${origen} and creada_en > now() - interval '1 hour'
+        `
+      : await db<{ recientes: string }[]>`
+          select count(*) as recientes from presidencias
+          where dispositivo = ${dispositivo}::uuid and creada_en > now() - interval '1 hour'
+        `;
+    if (Number(recientes) >= MAX_POR_HORA) {
+      return NextResponse.json(
+        { ok: false, error: 'Demasiados envíos por ahora. Probá más tarde.', puntaje },
+        { status: 429 },
+      );
+    }
+  } catch {
+    // Si la cuenta falla, se deja pasar: quedarse sin ranking por un problema
+    // de lectura es peor que un envío de más.
+  }
+
   try {
     await db`
       insert into presidencias
-        (dispositivo, nombre, seed, club_id, decisiones, puntaje, temporadas, titulos, final, fecha_diaria)
+        (dispositivo, nombre, seed, club_id, decisiones, puntaje, temporadas, titulos, final, fecha_diaria, origen_hash)
       values (
         ${dispositivo}::uuid,
-        ${nombre.trim().slice(0, MAX_NOMBRE)},
+        ${nombreLimpio},
         ${seed},
         ${clubId},
         ${db.array(choices as number[])}::smallint[],
@@ -121,15 +173,24 @@ export async function POST(request: Request) {
         ${estado.season},
         ${estado.titles.length},
         ${estado.ending.id},
-        ${fechaDiaria}::date
+        ${fechaDiaria}::date,
+        ${origen}
       )
     `;
   } catch (e) {
-    // El índice único es el que impone "una por día". Que choque no es un
-    // fallo: es la regla funcionando.
-    if ((e as { code?: string }).code === '23505') {
+    // Los índices únicos que chocan no son fallos: son las reglas funcionando.
+    // Son dos, y dicen cosas distintas, así que el mensaje también.
+    const err = e as { code?: string; constraint_name?: string };
+    if (err.code === '23505') {
+      const yaEnviada = err.constraint_name === 'presidencias_una_por_partida';
       return NextResponse.json(
-        { ok: false, error: 'Ya enviaste tu Presidencia del Día.', puntaje },
+        {
+          ok: false,
+          error: yaEnviada
+            ? 'Esta presidencia ya está en la tabla.'
+            : 'Ya enviaste tu Presidencia del Día.',
+          puntaje,
+        },
         { status: 409 },
       );
     }

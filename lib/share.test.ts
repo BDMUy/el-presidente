@@ -7,6 +7,29 @@ import { Rand } from '@/lib/engine/rng';
 import type { GameState } from '@/lib/engine/types';
 import { decodeRun, encodeRun, shareUrl } from './share';
 
+/**
+ * El decodificador tiene que aceptar exactamente lo que el codificador puede
+ * escribir, ni un poco más: lo que acepta de más son partidas que después el
+ * endpoint del ranking rechaza, o que ni siquiera existen.
+ */
+describe('decodeRun no acepta más de lo que encodeRun produce', () => {
+  it('rechaza una semilla de más de 32 bits', () => {
+    // Seis caracteres en base 64 llegan a 68.719.476.735.
+    expect(decodeRun('______AA')).toBeNull();
+    // El máximo real sí entra.
+    expect(decodeRun(encodeRun({ seed: 0xffffffff, clubId: 'boca', choices: [0] }))?.seed).toBe(
+      0xffffffff,
+    );
+  });
+
+  it('rechaza un log más largo que el que acepta el ranking', () => {
+    const base = 'AABnkyAA';
+    expect(decodeRun(base + 'A'.repeat(400))).not.toBeNull();
+    expect(decodeRun(base + 'A'.repeat(401))).toBeNull();
+    expect(decodeRun(base + 'A'.repeat(30000))).toBeNull();
+  });
+});
+
 /** Juega una partida entera con decisiones al azar y devuelve el estado final. */
 function partidaCompleta(seed: number, clubId: string): GameState {
   const chooser = new Rand(seed ^ 0x1234567);

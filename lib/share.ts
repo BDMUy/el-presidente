@@ -68,15 +68,35 @@ export function encodeRun({ seed, clubId, choices }: RunCodificada): string {
   return out;
 }
 
+/**
+ * Tope de decisiones que se acepta de un link.
+ *
+ * Una presidencia completa ronda las 150 y el endpoint del ranking corta en
+ * 400, así que el mismo número acá. El servidor de Node ya rechaza una URL
+ * enorme con un 431 antes de que llegue el pedido, pero apoyarse en el límite
+ * de cabeceras de quien te hostea no es un límite propio.
+ */
+const MAX_DECISIONES = 400;
+
+/** El codificador nunca produce semillas de más de 32 bits. */
+const MAX_SEED = 0xffffffff;
+
 /** Decodifica un link. Devuelve null ante cualquier basura, sin excepciones. */
 export function decodeRun(code: string): RunCodificada | null {
   if (typeof code !== 'string') return null;
   const limpio = code.trim();
   if (limpio.length < LARGO_SEED + LARGO_CLUB) return null;
+  if (limpio.length > LARGO_SEED + LARGO_CLUB + MAX_DECISIONES) return null;
 
   const seed = deBase(limpio.slice(0, LARGO_SEED));
   const clubIndex = deBase(limpio.slice(LARGO_SEED, LARGO_SEED + LARGO_CLUB));
   if (seed === null || clubIndex === null) return null;
+
+  // Seis caracteres en base 64 llegan hasta 68.719.476.735, muy por encima de
+  // los 32 bits que usa el generador. Sin este corte, el decodificador acepta
+  // semillas que el codificador no puede haber escrito, y que el endpoint del
+  // ranking rechaza: dos puertas de la misma casa con distinta cerradura.
+  if (seed > MAX_SEED) return null;
 
   const club = CLUBS[clubIndex];
   if (!club) return null;

@@ -33,6 +33,27 @@ import type { GameState } from '../lib/engine/types';
 /** Marca en el nombre para poder borrar solo lo sembrado y nada más. */
 const MARCA = '[prueba] ';
 
+/**
+ * Nombres que quedaron de pruebas hechas antes de que existiera la marca:
+ * el envío manual del epílogo y la tanda de nombres hostiles con la que se
+ * encontró que el endpoint aceptaba overrides de dirección y anchos cero.
+ *
+ * Se listan uno por uno, y no se borra por fecha ni por tabla entera, porque
+ * la misma base va a tener partidas de gente real.
+ */
+const RESTOS_DE_PRUEBAS = [
+  'Prueba Final',
+  'a',
+  'A'.repeat(24),
+  "'; drop table presidenci",
+  '<img src=x onerror=alert',
+  // Ya pasados por el limpiador: así es como quedaron guardados.
+  'admin0001',
+  'jefe0001',
+  'linea1 linea2 linea3',
+  'abc',
+];
+
 const limpiar = process.argv.includes('--limpiar');
 const cantidad = Number(process.argv[2] ?? 10);
 const base = process.argv[3] ?? 'http://localhost:3000';
@@ -121,7 +142,7 @@ async function limpiarSembrado(): Promise<void> {
     const condenadas = await sql<{ id: number; nombre: string; puntaje: number }[]>`
       select id, nombre, puntaje from presidencias
       where nombre like ${MARCA + '%'}
-         or nombre in ${sql([...NOMBRES, 'Prueba Final'])}
+         or nombre in ${sql([...NOMBRES, ...RESTOS_DE_PRUEBAS])}
       order by puntaje desc
     `;
 
