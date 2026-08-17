@@ -103,7 +103,9 @@ export function PresidenciaDelDia({ onJugar }: { onJugar: () => void }) {
           <button
             type="button"
             onClick={onJugar}
-            className="mt-3 w-full bg-bronce-claro py-2.5 font-display text-[13px] font-black tracking-[0.1em] text-tinta uppercase transition-transform active:scale-[0.99]"
+            // min-h-11 = 44px: el alto natural daba 40 y quedaba por debajo del
+            // blanco táctil mínimo, en el botón que más se toca del inicio.
+            className="mt-3 min-h-11 w-full bg-bronce-claro py-2.5 font-display text-[13px] font-black tracking-[0.1em] text-tinta uppercase transition-transform active:scale-[0.99]"
           >
             Jugar la del día
           </button>

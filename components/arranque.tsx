@@ -3,42 +3,37 @@
 /**
  * Pantalla de arranque: la asamblea que te elige presidente.
  *
- * El problema que resuelve este layout: había 64 clubes en una sola columna,
- * 5,7 pantallas de scroll en el celular, y ninguna forma de encontrar el tuyo.
- * Nadie quiere recorrer 64 filas para llegar a Excursionistas. La búsqueda es
- * la afordancia principal, no un extra: el caso común es que ya sabés qué club
- * querés y solo hace falta escribir tres letras.
+ * El padrón pasó por tres formas. Primero fue una lista de 64 clubes en una
+ * columna: 5,7 pantallas de scroll en el celular y ninguna forma de encontrar
+ * el tuyo. Después fue buscador más pestañas más una grilla de 64 celdas, que
+ * arreglaba el encontrar pero seguía ocupando media pantalla de alto y dejaba
+ * todo lo demás empujado hacia abajo.
  *
- * En escritorio se abre en dos paneles —identidad y decisión a la izquierda,
- * padrón a la derecha— porque una sola columna centrada desperdiciaba el 58%
- * del ancho y dejaba el botón de asumir lejísimos de la lista.
+ * Ahora son dos campos: categoría y club. La lista la muestra el sistema
+ * operativo encima de la página en vez de estirarla, y en escritorio escribir
+ * las primeras letras salta a la opción, que era para lo que estaba el
+ * buscador. El número que iba en cada celda —la posición que se espera del
+ * club— va en el texto de cada opción, así que no se pierde nada al elegir.
+ *
+ * En escritorio se abre en dos paneles: identidad y decisiones a la izquierda,
+ * el padrón y el club elegido a la derecha, porque una sola columna centrada
+ * desperdiciaba el 58% del ancho.
  */
 
-import { useDeferredValue, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { CLUBS } from '@/content/clubs';
 import { expectedPosition } from '@/lib/engine/season';
 import { CATEGORY_RULES, type Category, type Club } from '@/lib/engine/types';
 import { Membrete, Sello } from './ui';
 import { CampoNombre } from './campo-nombre';
+import { CampoSelect } from './campo-select';
 import { Plegable } from './plegable';
 import { PresidenciaDelDia } from './presidencia-del-dia';
 import { Ranking } from './ranking';
 import { VitrinaPanel } from './vitrina';
 
-const PESTANAS: { id: Category; corto: string }[] = [
-  { id: 'primera', corto: 'Primera' },
-  { id: 'nacional', corto: 'Nacional' },
-  { id: 'b', corto: 'Primera B' },
-];
-
-/** Quita acentos y mayúsculas: buscar "velez" tiene que encontrar "Vélez". */
-function normalizar(texto: string): string {
-  return texto
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '');
-}
+const CATEGORIAS: Category[] = ['primera', 'nacional', 'b'];
 
 /** La presidencia que quedó a medias, si hay alguna. */
 export interface EnCurso {
@@ -63,51 +58,40 @@ export function Arranque({
   onAbandonar?: () => void;
 }) {
   const [elegido, setElegido] = useState<string | null>(null);
-  const [busqueda, setBusqueda] = useState('');
   const [categoria, setCategoria] = useState<Category>('primera');
 
-  // El filtrado corre sobre 64 items en cada tecla; diferirlo mantiene el
-  // input fluido aunque el dispositivo sea lento.
-  const consulta = useDeferredValue(busqueda);
-
-  /**
-   * Buscar manda sobre la pestaña: si escribís "quilmes" estando en Primera,
-   * querés encontrarlo igual. Una búsqueda que respeta el filtro activo
-   * devuelve "sin resultados" para algo que sí existe, y eso se siente roto.
-   */
-  const { visibles, buscando } = useMemo(() => {
-    const q = normalizar(consulta.trim());
-    if (q.length > 0) {
-      return {
-        buscando: true,
-        visibles: CLUBS.filter(
-          (c) => normalizar(c.name).includes(q) || normalizar(c.nickname ?? '').includes(q),
-        ),
-      };
-    }
-    return {
-      buscando: false,
-      visibles: CLUBS.filter((c) => c.category === categoria).sort((a, b) => b.size - a.size),
-    };
-  }, [consulta, categoria]);
+  // Ordenados por tamaño: el que abre la lista busca casi siempre un grande, y
+  // alfabético dejaba a Boca en la mitad y a River al fondo.
+  const deLaCategoria = useMemo(
+    () => CLUBS.filter((c) => c.category === categoria).sort((a, b) => b.size - a.size),
+    [categoria],
+  );
 
   const club = elegido ? (CLUBS.find((c) => c.id === elegido) ?? null) : null;
 
+  const cambiarCategoria = (valor: string) => {
+    const nueva = valor as Category;
+    setCategoria(nueva);
+    // Se limpia el club si era de otra categoría: dejarlo elegido mientras la
+    // lista de abajo muestra otra cosa es un campo que se contradice solo.
+    setElegido((actual) => {
+      const c = actual ? CLUBS.find((x) => x.id === actual) : null;
+      return c && c.category === nueva ? actual : null;
+    });
+  };
+
   const sortear = () => {
     const sorteado = CLUBS[Math.floor(Math.random() * CLUBS.length)];
-    setElegido(sorteado.id);
-    setBusqueda('');
     setCategoria(sorteado.category);
+    setElegido(sorteado.id);
   };
 
   return (
-    <div className="mx-auto w-full max-w-[1280px] px-4 pb-28 lg:grid lg:grid-cols-[minmax(340px,420px)_1fr] lg:gap-10 lg:px-8 lg:pb-8">
-      {/* ── Identidad y decisión ─────────────────────────────── */}
+    <div className="mx-auto w-full max-w-[1280px] px-4 pb-10 lg:grid lg:grid-cols-[minmax(340px,420px)_1fr] lg:gap-10 lg:px-8">
+      {/* ── Identidad y decisiones ───────────────────────────── */}
       {/* Alineado arriba, no centrado: con los dos paneles empezando en la
-          misma línea se leen como una sola composición. Centrado vertical,
-          el título flotaba a media altura contra una grilla que arrancaba
-          arriba y parecían dos páginas distintas. */}
-      <div className="pt-8 lg:sticky lg:top-0 lg:h-dvh lg:overflow-y-auto lg:pt-10">
+          misma línea se leen como una sola composición. */}
+      <div className="pt-8 lg:sticky lg:top-0 lg:h-dvh lg:overflow-y-auto lg:pt-10 lg:pb-10">
         <Membrete sobrePano>Asamblea ordinaria de socios</Membrete>
 
         {/* El techo de 3rem no es estético: "PRESIDENTE" a 4,5rem se desbordaba
@@ -129,137 +113,87 @@ export function Arranque({
 
         <CampoNombre />
 
-        {/* Lo primero después del título: si dejaste una presidencia a medias,
-            retomarla es lo que viniste a hacer. Va antes que la del día. */}
+        {/* Lo primero después del nombre: si dejaste una presidencia a medias,
+            retomarla es lo que viniste a hacer. */}
         {enCurso && onContinuar && onAbandonar && (
           <PanelEnCurso enCurso={enCurso} onContinuar={onContinuar} onAbandonar={onAbandonar} />
         )}
 
-        <Plegable
-          titulo="Presidencia del día"
-          resumen="La misma partida para todos, hasta la medianoche"
-          abiertoPorDefecto
-        >
+        {/* La del día no se pliega. Es lo que hace volver al otro día y tiene un
+            reloj corriendo: escondida detrás de un "+" deja de existir. */}
+        <div className="mt-6">
+          <p className="font-acta text-[12px] font-bold tracking-[0.1em] text-papel-2 uppercase">
+            Presidencia del día
+          </p>
           <PresidenciaDelDia onJugar={onEmpezarDiaria} />
-        </Plegable>
+        </div>
+      </div>
 
+      {/* ── El padrón ────────────────────────────────────────── */}
+      <div className="mt-8 lg:mt-0 lg:pt-10 lg:pb-10">
+        {/* Centrado y no por línea de base: el botón necesita 44px de alto para
+            ser tocable, y alineado por la base del texto ese alto lo empujaba
+            fuera de eje contra el membrete. */}
+        <div className="flex items-center justify-between gap-3">
+          <Membrete sobrePano>El padrón</Membrete>
+          <button
+            type="button"
+            onClick={sortear}
+            className="flex min-h-11 shrink-0 items-center border border-linea px-4 font-acta text-[11px] tracking-[0.06em] text-bronce-claro uppercase transition-colors hover:border-bronce-claro hover:text-papel"
+          >
+            Al azar
+          </button>
+        </div>
+
+        <div className="mt-3 border border-linea p-3 sm:p-4">
+          <div className="grid gap-3 sm:grid-cols-2">
+            <CampoSelect etiqueta="Categoría" valor={categoria} onChange={cambiarCategoria}>
+              {CATEGORIAS.map((id) => (
+                <option key={id} value={id}>
+                  {CATEGORY_RULES[id].label}
+                </option>
+              ))}
+            </CampoSelect>
+
+            <CampoSelect
+              etiqueta="Club"
+              valor={elegido ?? ''}
+              onChange={(v) => setElegido(v === '' ? null : v)}
+            >
+              <option value="">Elegí tu club…</option>
+              {deLaCategoria.map((c) => (
+                // La posición esperada viaja en el texto de la opción: es el
+                // dato con el que se elige, y sacarlo de la lista obligaría a
+                // elegir a ciegas para recién después verlo.
+                <option key={c.id} value={c.id}>
+                  {c.name} · {expectedPosition(c, c.category)}° de{' '}
+                  {CATEGORY_RULES[c.category].teams}
+                </option>
+              ))}
+            </CampoSelect>
+          </div>
+        </div>
+
+        <div className="mt-4">
+          {club ? <PanelElegido club={club} onEmpezar={() => onEmpezar(club.id)} /> : <PanelVacio />}
+        </div>
+
+        {/* La tabla y la vitrina viven en esta columna y no en la de la
+            izquierda por dos razones que apuntan al mismo lado. En escritorio,
+            el padrón dejó de ser una grilla de 64 celdas y pasó a ser dos
+            campos, así que la columna quedaba con 433px muertos abajo: más de
+            la mitad vacía. Y en celular, quedan después del padrón, que es a
+            lo que uno vino: primero elegís club, después mirás quién anduvo
+            bien. */}
         <Plegable titulo="Tabla de posiciones" resumen="Quién llegó más lejos">
           <Ranking />
         </Plegable>
 
         {/* La vitrina no va adentro de un plegable: ya es uno. Tiene su propio
             botón, arranca cerrada y desaparece sola si todavía no jugaste
-            ninguna presidencia. Envolverla dejaba dos controles anidados para
-            abrir la misma cosa. */}
+            ninguna presidencia. */}
         <VitrinaPanel />
-
-        {/* En escritorio la decisión vive acá, al lado del padrón. En celular
-            se muestra en la barra fija de abajo. */}
-        <div className="mt-6 hidden pb-10 lg:block">
-          {club ? <PanelElegido club={club} onEmpezar={() => onEmpezar(club.id)} /> : <PanelVacio />}
-        </div>
       </div>
-
-      {/* ── El padrón ────────────────────────────────────────── */}
-      <div className="mt-8 lg:mt-0 lg:pt-10 lg:pb-10">
-        <div className="sticky top-0 z-20 -mx-4 bg-pano/95 px-4 pt-3 pb-3 backdrop-blur lg:-mx-2 lg:px-2">
-          <div className="flex items-center gap-2">
-            <label className="relative flex-1">
-              <span className="sr-only">Buscar club por nombre o apodo</span>
-              <input
-                type="search"
-                value={busqueda}
-                onChange={(e) => setBusqueda(e.target.value)}
-                placeholder="Buscá tu club"
-                autoComplete="off"
-                className="w-full border border-linea bg-pano-alto px-3 py-2.5 font-body text-[15px] text-papel placeholder:text-papel-2 focus:border-bronce-claro focus:outline-none"
-              />
-            </label>
-            <button
-              type="button"
-              onClick={sortear}
-              className="shrink-0 border border-linea px-3 py-2.5 font-acta text-[12px] tracking-[0.06em] text-bronce-claro uppercase transition-colors hover:border-bronce-claro hover:text-papel"
-            >
-              Al azar
-            </button>
-          </div>
-
-          {/* Las pestañas se ocultan mientras buscás: la búsqueda ya barre
-              todas las categorías y dos filtros a la vez confunden. */}
-          {!buscando && (
-            <div className="mt-2.5 flex gap-1.5" role="tablist" aria-label="Categoría">
-              {PESTANAS.map((p) => {
-                const activa = p.id === categoria;
-                return (
-                  <button
-                    key={p.id}
-                    type="button"
-                    role="tab"
-                    aria-selected={activa}
-                    onClick={() => setCategoria(p.id)}
-                    className={`flex-1 border px-2 py-2.5 font-acta text-[11px] tracking-[0.04em] uppercase transition-colors ${
-                      activa
-                        ? 'border-bronce-claro bg-bronce-claro/15 text-papel'
-                        : 'border-linea text-papel-2 hover:border-papel-2 hover:text-papel'
-                    }`}
-                  >
-                    {p.corto}
-                  </button>
-                );
-              })}
-            </div>
-          )}
-        </div>
-
-        <p className="mt-3 font-acta text-[11px] tracking-[0.06em] text-papel-2 uppercase">
-          {buscando
-            ? `${visibles.length} ${visibles.length === 1 ? 'club' : 'clubes'}`
-            : CATEGORY_RULES[categoria].label}
-        </p>
-
-        {visibles.length === 0 ? (
-          <p className="mt-8 font-body text-[15px] text-papel-2">
-            No hay ningún club con ese nombre. Probá con el apodo, o tocá{' '}
-            <span className="text-papel">Al azar</span>.
-          </p>
-        ) : (
-          <ul className="mt-2 grid grid-cols-2 gap-1.5 sm:grid-cols-3 xl:grid-cols-4">
-            {visibles.map((c) => (
-              <CeldaClub
-                key={c.id}
-                club={c}
-                elegido={c.id === elegido}
-                onElegir={() => setElegido(c.id)}
-              />
-            ))}
-          </ul>
-        )}
-      </div>
-
-      {/* ── Barra fija, solo en celular ──────────────────────── */}
-      {club && (
-        <div className="fixed inset-x-0 bottom-0 z-30 border-t border-pano-borde bg-pano-alto/97 px-4 py-3 backdrop-blur lg:hidden">
-          <div className="mx-auto flex max-w-xl items-center gap-3">
-            <BandaClub club={club} className="h-9 w-1.5" />
-            <div className="min-w-0 flex-1">
-              <p className="truncate font-display text-[15px] leading-tight font-black text-papel">
-                {club.name}
-              </p>
-              <p className="font-acta text-[11px] tracking-[0.06em] text-papel-2 uppercase">
-                Te esperan {expectedPosition(club, club.category)}° de{' '}
-                {CATEGORY_RULES[club.category].teams}
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={() => onEmpezar(club.id)}
-              className="shrink-0 bg-papel px-5 py-3 font-display text-[14px] font-black tracking-[0.1em] text-tinta uppercase transition-transform active:scale-[0.98]"
-            >
-              Asumir
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
@@ -286,10 +220,7 @@ function PanelEnCurso({
 
   return (
     <div className="mt-6 border border-bronce-claro/40 bg-pano-alto/60">
-      <div className="flex h-1.5" aria-hidden>
-        <div className="flex-1" style={{ backgroundColor: club.colors[0] }} />
-        <div className="flex-1" style={{ backgroundColor: club.colors[1] }} />
-      </div>
+      <BandaSuperior club={club} />
 
       <div className="px-4 py-4">
         <Membrete sobrePano>
@@ -349,64 +280,23 @@ function PanelEnCurso({
 }
 
 /** La banda con los colores del club: lo único suyo que no es su nombre. */
-function BandaClub({ club, className = '' }: { club: Club; className?: string }) {
+function BandaSuperior({ club }: { club: Club }) {
   return (
-    <span className={`flex shrink-0 flex-col overflow-hidden rounded-full ${className}`} aria-hidden>
-      <span className="flex-1" style={{ backgroundColor: club.colors[0] }} />
-      <span className="flex-1" style={{ backgroundColor: club.colors[1] }} />
-    </span>
+    <div className="flex h-1.5" aria-hidden>
+      <div className="flex-1" style={{ backgroundColor: club.colors[0] }} />
+      <div className="flex-1" style={{ backgroundColor: club.colors[1] }} />
+    </div>
   );
 }
 
-function CeldaClub({
-  club,
-  elegido,
-  onElegir,
-}: {
-  club: Club;
-  elegido: boolean;
-  onElegir: () => void;
-}) {
-  const esperada = expectedPosition(club, club.category);
-  const { teams } = CATEGORY_RULES[club.category];
-
-  return (
-    <li>
-      <button
-        type="button"
-        onClick={onElegir}
-        aria-pressed={elegido}
-        className={`flex h-full w-full items-center gap-2.5 border px-2.5 py-2.5 text-left transition-colors ${
-          elegido
-            ? 'border-bronce-claro bg-bronce-claro/15'
-            : 'border-linea hover:border-papel-2 hover:bg-papel/5'
-        }`}
-      >
-        <BandaClub club={club} className="h-8 w-1.5" />
-        <span className="min-w-0 flex-1">
-          {/* En la grilla va el nombre corto: "Estudiantes de La Plata" no
-              entra en media pantalla de celular y truncado se lee peor que
-              abreviado. El nombre completo aparece al elegirlo. */}
-          <span className="block truncate font-display text-[14px] leading-tight font-bold tracking-tight text-papel">
-            {club.short}
-          </span>
-          <span className="mt-0.5 block font-acta text-[11px] tracking-[0.04em] text-papel-2 tabular-nums">
-            {esperada}° de {teams}
-          </span>
-        </span>
-      </button>
-    </li>
-  );
-}
-
-/** El estado del panel de escritorio antes de elegir: enseña qué significa el número. */
+/** El estado antes de elegir: enseña qué significa el número de la lista. */
 function PanelVacio() {
   return (
     <div className="border border-linea px-4 py-5">
-      <p className="font-body text-[14px] leading-relaxed text-papel-2">
-        Elegí un club del padrón. El número que ves al lado de cada uno es la posición que su
-        gente espera: <span className="text-papel">contra eso te van a medir</span> durante
-        dieciséis temporadas.
+      <p className="font-body text-[15px] leading-relaxed text-papel-2">
+        Elegí un club del padrón. El número que ves al lado de cada uno es la posición que su gente
+        espera: <span className="text-papel">contra eso te van a medir</span> durante dieciséis
+        temporadas.
       </p>
     </div>
   );
@@ -415,19 +305,16 @@ function PanelVacio() {
 function PanelElegido({ club, onEmpezar }: { club: Club; onEmpezar: () => void }) {
   return (
     <div className="border border-bronce-claro/40 bg-pano-alto/60">
-      <div className="flex h-1.5" aria-hidden>
-        <div className="flex-1" style={{ backgroundColor: club.colors[0] }} />
-        <div className="flex-1" style={{ backgroundColor: club.colors[1] }} />
-      </div>
+      <BandaSuperior club={club} />
 
-      <div className="px-4 py-4">
+      <div className="px-4 py-4 sm:px-5 sm:py-5">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <h2 className="font-display text-[20px] leading-tight font-black text-papel">
+            <h2 className="font-display text-[22px] leading-tight font-black text-papel sm:text-[26px]">
               {club.name}
             </h2>
             {club.nickname && (
-              <p className="mt-0.5 font-body text-[13px] text-papel-2">{club.nickname}</p>
+              <p className="mt-0.5 font-body text-[14px] text-papel-2">{club.nickname}</p>
             )}
           </div>
           <Sello tono="bronce" sobrePano className="shrink-0">
@@ -435,12 +322,12 @@ function PanelElegido({ club, onEmpezar }: { club: Club; onEmpezar: () => void }
           </Sello>
         </div>
 
-        <dl className="mt-4 flex gap-6 border-t border-linea pt-3">
+        <dl className="mt-5 flex gap-8 border-t border-linea pt-4">
           <div>
             <dt className="font-acta text-[11px] tracking-[0.06em] text-papel-2 uppercase">
               Te esperan
             </dt>
-            <dd className="font-display text-[22px] leading-none font-black tabular-nums text-papel">
+            <dd className="font-display text-[26px] leading-none font-black text-papel tabular-nums">
               {expectedPosition(club, club.category)}°
               <span className="ml-1 font-acta text-[12px] font-normal text-papel-2">
                 de {CATEGORY_RULES[club.category].teams}
@@ -451,7 +338,7 @@ function PanelElegido({ club, onEmpezar }: { club: Club; onEmpezar: () => void }
             <dt className="font-acta text-[11px] tracking-[0.06em] text-papel-2 uppercase">
               Categoría
             </dt>
-            <dd className="truncate font-display text-[15px] leading-tight font-bold text-papel">
+            <dd className="truncate font-display text-[17px] leading-tight font-bold text-papel">
               {CATEGORY_RULES[club.category].label}
             </dd>
           </div>
@@ -460,7 +347,7 @@ function PanelElegido({ club, onEmpezar }: { club: Club; onEmpezar: () => void }
         <button
           type="button"
           onClick={onEmpezar}
-          className="mt-4 w-full bg-papel py-3.5 font-display text-[14px] font-black tracking-[0.1em] text-tinta uppercase transition-transform active:scale-[0.99]"
+          className="mt-5 w-full bg-papel py-4 font-display text-[15px] font-black tracking-[0.1em] text-tinta uppercase transition-transform active:scale-[0.99]"
         >
           Asumir el cargo
         </button>
