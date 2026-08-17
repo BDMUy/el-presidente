@@ -16,7 +16,7 @@
  * los índices de decisión. Una partida vieja replayeada contra contenido nuevo
  * no falla: da otro juego, que es peor que fallar.
  */
-export const CONTENT_VERSION = 3;
+export const CONTENT_VERSION = 4;
 
 const KEY = 'el-presidente:partida';
 

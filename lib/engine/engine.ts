@@ -202,7 +202,13 @@ function openMercado(state: GameState): GameState {
   const rand = new Rand(state.rng);
   const inhibido = estaInhibido(state.resources);
 
-  const all = generateOffers(state.category, state.resources.plantel, rand);
+  const all = generateOffers(
+    state.category,
+    state.resources.plantel,
+    rand,
+    state.season,
+    state.seed,
+  );
   // Inhibido por deuda: solo podés vender. Es el castigo real de endeudarse.
   const offers = inhibido ? all.filter((o) => o.kind === 'venta') : all;
 

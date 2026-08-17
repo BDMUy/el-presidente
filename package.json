@@ -14,6 +14,7 @@
     "migrar": "tsx scripts/migrar.ts",
     "sembrar": "tsx scripts/sembrar-ranking.ts",
     "cobertura": "tsx scripts/cobertura.ts",
+    "cracks": "tsx scripts/cracks.ts",
     "contraste": "tsx scripts/contraste.ts"
   },
   "dependencies": {

@@ -6,8 +6,18 @@
  * enteramente bajo control.
  */
 
+import { CRACKS } from '@/content/parodias';
 import { Rand } from './rng';
 import type { Category, PlayerOffer } from './types';
+
+/**
+ * Cada cuánto una ventana trae un crack de guiño.
+ *
+ * Una de cada tres ventanas, o sea cinco o seis en una presidencia completa.
+ * Más seguido que eso y el mercado deja de ser de desconocidos con apellido de
+ * barrio, que es lo que hace que aparecer un nombre conocido se sienta algo.
+ */
+const CHANCE_CRACK = 0.35;
 
 const NOMBRES = [
   'Matías', 'Lucas', 'Nahuel', 'Julián', 'Facundo', 'Tomás', 'Agustín', 'Franco',
@@ -74,17 +84,39 @@ export function generateOffers(
   category: Category,
   plantel: number,
   rand: Rand,
+  /** Temporada en curso: define cuál de los cracks toca, sin repetir. */
+  season = 1,
+  /** Semilla de la partida: fija de dónde arranca a recorrer el catálogo. */
+  seed = 0,
 ): PlayerOffer[] {
   const scale = PRICE_SCALE[category];
   const offers: PlayerOffer[] = [];
   const apellidosUsados = new Set<string>();
+
+  // ¿Esta ventana trae un crack, y en cuál de las tres operaciones?
+  //
+  // Cuál toca sale de la semilla de la partida más la temporada, y ninguna de
+  // las dos cosas es azar de esta ventana. Esa es toda la gracia: la semilla
+  // es la misma las dieciséis temporadas, así que sumarle la temporada
+  // recorre el catálogo de a uno y dos ventanas no pueden caer en el mismo
+  // nombre. Con treinta y cinco nombres y dieciséis temporadas, no se da la
+  // vuelta nunca.
+  //
+  // El primer intento sorteaba el arranque acá adentro, o sea uno distinto por
+  // ventana, y entonces la suma no recorría nada: trece de cada cuatrocientas
+  // presidencias ofrecían dos veces al mismo. Lo encontró scripts/cracks.ts.
+  const hayCrack = rand.chance(CHANCE_CRACK);
+  const slotCrack = rand.int(0, 2);
+  const crack = CRACKS[(seed + season) % CRACKS.length];
+  const nombreDe = (indice: number, usados: Set<string>): string =>
+    hayCrack && indice === slotCrack ? crack : nombre(rand, usados);
 
   // Una compra fuerte: cara, pero mueve la aguja.
   const fuerte = rand.pick(ARQUETIPOS_COMPRA);
   const deltaFuerte = rand.int(6, 11);
   offers.push({
     kind: 'compra',
-    name: nombre(rand, apellidosUsados),
+    name: nombreDe(0, apellidosUsados),
     archetype: fuerte.archetype,
     age: rand.int(23, 29),
     plantelDelta: deltaFuerte,
@@ -99,7 +131,7 @@ export function generateOffers(
   const deltaBarato = rand.int(2, 5);
   offers.push({
     kind: 'libre',
-    name: nombre(rand, apellidosUsados),
+    name: nombreDe(1, apellidosUsados),
     archetype: barato.archetype,
     age: rand.int(30, 36),
     plantelDelta: deltaBarato,
@@ -120,7 +152,7 @@ export function generateOffers(
   const primaJuventud = edad < 22 ? 1.25 : edad < 28 ? 1 : 0.75;
   offers.push({
     kind: 'venta',
-    name: nombre(rand, apellidosUsados),
+    name: nombreDe(2, apellidosUsados),
     archetype: venta.archetype,
     age: edad,
     plantelDelta: -deltaVenta,

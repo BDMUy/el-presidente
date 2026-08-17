@@ -17,16 +17,21 @@
 
 import { useEffect, useState } from 'react';
 
-import { guardarNombre, leerNombre } from '@/lib/dispositivo';
+import { guardarNombre, leerNombre, nombreAsignado } from '@/lib/dispositivo';
 import { LARGO_MAXIMO_NOMBRE, limpiarNombre } from '@/lib/nombre';
 
 export function CampoNombre() {
   const [nombre, setNombre] = useState('');
+  const [asignado, setAsignado] = useState('');
   const [guardado, setGuardado] = useState(false);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- el nombre guardado solo existe en el cliente
     setNombre(leerNombre());
+    // El sorteo del nombre de dirigente se resuelve y se persiste acá, no en
+    // el render: toca localStorage y Math.random, que no existen ni dan lo
+    // mismo durante el prerender del servidor.
+    setAsignado(nombreAsignado());
   }, []);
 
   const cambiar = (crudo: string) => {
@@ -66,7 +71,10 @@ export function CampoNombre() {
           onChange={(e) => cambiar(e.target.value)}
           onBlur={confirmar}
           maxLength={LARGO_MAXIMO_NOMBRE}
-          placeholder="¿Quién firma las actas?"
+          // El placeholder es el nombre que le va a tocar si lo deja vacío, no
+          // una pregunta retórica: así se entiende que dejarlo en blanco no es
+          // quedarse sin nombre, y encima el chiste ya está a la vista.
+          placeholder={asignado}
           autoComplete="name"
           // Sin corrección automática: el teclado del celular le cambia el
           // apodo a cualquiera que no esté en su diccionario.
@@ -78,7 +86,9 @@ export function CampoNombre() {
       <p className="mt-1.5 font-body text-[13px] leading-snug text-papel-2">
         {guardado
           ? 'Con ese nombre vas a figurar en la tabla de posiciones.'
-          : 'Va en el acta de asunción y en la tabla de posiciones. Podés cambiarlo cuando quieras.'}
+          : nombre.trim().length > 0
+            ? 'Va en el acta de asunción y en la tabla de posiciones. Podés cambiarlo cuando quieras.'
+            : `Si lo dejás vacío firmás como ${asignado}.`}
       </p>
     </div>
   );

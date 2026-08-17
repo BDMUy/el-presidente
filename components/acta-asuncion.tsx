@@ -14,7 +14,7 @@
 
 import { useEffect, useState } from 'react';
 
-import { leerNombre } from '@/lib/dispositivo';
+import { nombreDelPresidente } from '@/lib/dispositivo';
 import type { Club, Resources } from '@/lib/engine/types';
 import { entero, plataCorta, socios } from '@/lib/format';
 import { RECURSOS } from '@/lib/recursos';
@@ -35,7 +35,7 @@ export function ActaAsuncion({
   const [nombre, setNombre] = useState('');
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- el nombre guardado solo existe en el cliente
-    setNombre(leerNombre());
+    setNombre(nombreDelPresidente());
   }, []);
 
   const valor = (id: keyof Resources): string => {
