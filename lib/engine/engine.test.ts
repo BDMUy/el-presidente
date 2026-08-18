@@ -11,7 +11,7 @@ import { Rand, seedFromString } from './rng';
 import { expectedPosition, plantelForPosition, resolvePosition } from './season';
 import { RECURSOS_POR_ID } from '@/lib/recursos';
 import type { GameState } from './types';
-import { FICHAS_MESA_CHICA, HINCHADA_ASAMBLEA, TOTAL_SEASONS } from './types';
+import { FICHAS_MESA_CHICA, HINCHADA_ASAMBLEA, TEMPORADAS_POR_MODO } from './types';
 
 /** Juega una partida entera con una política fija y devuelve el estado final. */
 function playThrough(seed: number, clubId: string, pick: (state: GameState) => number): GameState {
@@ -287,7 +287,7 @@ describe('recorrido completo', () => {
       expect(state.status).toBe('terminado');
       expect(state.ending).not.toBeNull();
       expect(state.ending!.text.length).toBeGreaterThan(20);
-      expect(state.season).toBeLessThanOrEqual(TOTAL_SEASONS);
+      expect(state.season).toBeLessThanOrEqual(TEMPORADAS_POR_MODO[state.modo]);
     }
   });
 

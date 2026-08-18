@@ -21,10 +21,28 @@ import { computeScore } from '../lib/engine/election';
 import { applyChoice, optionCount, startRun } from '../lib/engine/engine';
 import { enumerateAssignments, winProbability } from '../lib/engine/mesa-chica';
 import { Rand } from '../lib/engine/rng';
-import type { Effects, EndingId, GameState } from '../lib/engine/types';
+import type { Effects, EndingId, GameState, Modo } from '../lib/engine/types';
+import { MODOS, TEMPORADAS_POR_MODO } from '../lib/engine/types';
 
-const runs = Number(process.argv[2] ?? 2000);
-const clubFilter = process.argv[3];
+// Los que no empiezan con "--" son posicionales; así el filtro de club no se
+// come un flag y `simulate 2000 --modo=larga` hace lo que parece que hace.
+const posicionales = process.argv.slice(2).filter((a) => !a.startsWith('--'));
+const runs = Number(posicionales[0] ?? 2000);
+const clubFilter = posicionales[1];
+
+/**
+ * Qué modo se simula. `--modo=larga`, o `--modo=todos` para los tres seguidos,
+ * que es la forma de ver si una curva de dificultad sirve para las tres
+ * duraciones o solo para la que se estaba mirando.
+ */
+const argModo = process.argv.find((a) => a.startsWith('--modo='))?.slice(7) ?? 'normal';
+const modos: Modo[] = argModo === 'todos' ? [...MODOS] : [argModo as Modo];
+for (const m of modos) {
+  if (!MODOS.includes(m)) {
+    console.error(`Modo desconocido: "${m}". Son ${MODOS.join(', ')} o "todos".`);
+    process.exit(1);
+  }
+}
 
 type Policy = 'random' | 'greedy';
 
@@ -115,9 +133,9 @@ function greedyChoice(state: GameState): number {
   }
 }
 
-function play(seed: number, clubId: string, policy: Policy): Outcome {
+function play(seed: number, clubId: string, policy: Policy, modo: Modo): Outcome {
   const chooser = new Rand(seed ^ 0x5f3759df);
-  let state: GameState = startRun({ seed, clubId });
+  let state: GameState = startRun({ seed, clubId, modo });
 
   let guard = 0;
   while (state.status === 'jugando' && guard++ < 5000) {
@@ -155,8 +173,11 @@ function summarize(label: string, values: number[]) {
   );
 }
 
-function report(policy: Policy, outcomes: Outcome[]) {
-  console.log(`\n${'═'.repeat(60)}\nPOLÍTICA: ${policy.toUpperCase()}\n${'═'.repeat(60)}`);
+function report(policy: Policy, outcomes: Outcome[], modo: Modo) {
+  const total = TEMPORADAS_POR_MODO[modo];
+  console.log(
+    `\n${'═'.repeat(60)}\n${modo.toUpperCase()} (${total} temporadas) · POLÍTICA: ${policy.toUpperCase()}\n${'═'.repeat(60)}`,
+  );
 
   const endings = new Map<EndingId, number>();
   for (const o of outcomes) endings.set(o.ending, (endings.get(o.ending) ?? 0) + 1);
@@ -176,9 +197,10 @@ function report(policy: Policy, outcomes: Outcome[]) {
   summarize('caja', outcomes.map((o) => o.caja));
 
   const n = outcomes.length;
+  const completas = outcomes.filter((o) => o.seasons >= total).length;
   console.log('\nCHEQUEOS');
   console.log(`  con al menos un título     ${((outcomes.filter((o) => o.titles > 0).length / n) * 100).toFixed(1)}%`);
-  console.log(`  completaron 16 temporadas  ${((outcomes.filter((o) => o.seasons >= 16).length / n) * 100).toFixed(1)}%`);
+  console.log(`  completaron las ${String(total).padStart(2)}         ${((completas / n) * 100).toFixed(1)}%`);
   console.log(`  descensos por partida      ${(outcomes.reduce((s, o) => s + o.descensos, 0) / n).toFixed(2)}`);
   console.log(`  ascensos por partida       ${(outcomes.reduce((s, o) => s + o.ascensos, 0) / n).toFixed(2)}`);
 }
@@ -189,15 +211,20 @@ if (pool.length === 0) {
   process.exit(1);
 }
 
-console.log(`\nSimulando ${runs} presidencias × 2 políticas sobre ${pool.length} ${pool.length === 1 ? 'club' : 'clubes'}...`);
+console.log(
+  `\nSimulando ${runs} presidencias × 2 políticas × ${modos.length} ` +
+    `${modos.length === 1 ? 'modo' : 'modos'} sobre ${pool.length} ${pool.length === 1 ? 'club' : 'clubes'}...`,
+);
 
 const started = Date.now();
-for (const policy of ['random', 'greedy'] as Policy[]) {
-  const outcomes: Outcome[] = [];
-  for (let i = 0; i < runs; i++) {
-    outcomes.push(play(i * 2654435761, pool[i % pool.length].id, policy));
+for (const modo of modos) {
+  for (const policy of ['random', 'greedy'] as Policy[]) {
+    const outcomes: Outcome[] = [];
+    for (let i = 0; i < runs; i++) {
+      outcomes.push(play(i * 2654435761, pool[i % pool.length].id, policy, modo));
+    }
+    report(policy, outcomes, modo);
   }
-  report(policy, outcomes);
 }
 const elapsed = Date.now() - started;
-console.log(`\n${runs * 2} partidas en ${elapsed}ms\n`);
+console.log(`\n${runs * 2 * modos.length} partidas en ${elapsed}ms\n`);

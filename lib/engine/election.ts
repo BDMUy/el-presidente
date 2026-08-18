@@ -7,8 +7,13 @@
  */
 
 import { Rand } from './rng';
-import type { Club, ElectionResult, Ending, EndingId, GameState } from './types';
-import { HINCHADA_ASAMBLEA, TITLES, TOTAL_SEASONS } from './types';
+import type { Club, ElectionResult, Ending, EndingId, GameState, Modo } from './types';
+import {
+  HINCHADA_ASAMBLEA,
+  SEASONS_PER_MANDATE,
+  TEMPORADAS_POR_MODO,
+  TITLES,
+} from './types';
 
 const OPOSITORES = [
   'la Lista Celeste',
@@ -59,9 +64,14 @@ export function resolveElection(state: GameState, rand: Rand): ElectionResult {
   };
 }
 
-/** ¿Corresponde votar al terminar esta temporada? */
-export function isElectionSeason(season: number): boolean {
-  return season % 4 === 0 && season < TOTAL_SEASONS;
+/**
+ * ¿Corresponde votar al terminar esta temporada?
+ *
+ * Cada cuatro temporadas en los tres modos, y nunca en la última: ahí no hay
+ * elección que valga porque la presidencia se termina igual.
+ */
+export function isElectionSeason(season: number, modo: Modo = 'normal'): boolean {
+  return season % SEASONS_PER_MANDATE === 0 && season < TEMPORADAS_POR_MODO[modo];
 }
 
 /**
@@ -78,7 +88,39 @@ export function checkEarlyExit(state: GameState): EndingId | null {
 }
 
 /**
- * Final de una presidencia que llegó hasta el final de las 16 temporadas.
+ * Puntos de título que pide la estatua, según cuánto dura la presidencia.
+ *
+ * **La corta no lleva descuento, aunque dure la mitad.** No es un olvido: es
+ * lo que salió de medirlo.
+ *
+ * El primer intento escaló derecho —100 en corta, 400 en larga— y la estatua
+ * terminó saliendo en el 22,2% de las cortas contra el 12,1% de las normales,
+ * casi el doble de fácil. La razón es que la estatua pide tres cosas y solo
+ * una escala con el tiempo: juntar puntos de título depende de cuántas
+ * temporadas jugaste, pero "cero descensos" y "hinchada arriba de 75 al final"
+ * se vuelven *más* fáciles cuanto más corta es la partida, porque hay menos
+ * temporadas para que algo salga mal. Con el descuento, cualquiera farmeaba
+ * cortas para sacar el logro.
+ *
+ * Barriendo valores para la corta: 100 daba 22,2%, 150 daba 17,8%, 180 daba
+ * 14,1% y a partir de 200 se planchaba en 12,3% —el mismo número que la
+ * normal—. Ahí quedó.
+ *
+ * La larga sí escala, porque ahí el tiempo de más sí es tiempo de más para
+ * ganar cosas: con 400 sale en el 9,9%, apenas más difícil que la normal.
+ */
+const PUNTOS_ESTATUA: Record<Modo, number> = {
+  corta: 200,
+  normal: 200,
+  larga: 400,
+};
+
+export function puntosParaEstatua(modo: Modo): number {
+  return PUNTOS_ESTATUA[modo];
+}
+
+/**
+ * Final de una presidencia que llegó hasta el final de su calendario.
  * El corte entre estatua y presidencia gris es deliberadamente exigente:
  * la estatua tiene que costar.
  */
@@ -86,7 +128,13 @@ export function finalEnding(state: GameState): EndingId {
   const { resources, titles, descensos } = state;
   const puntosTitulos = titles.reduce((sum, t) => sum + TITLES[t.id].points, 0);
 
-  if (resources.hinchada >= 75 && puntosTitulos >= 200 && descensos === 0) return 'estatua';
+  if (
+    resources.hinchada >= 75 &&
+    puntosTitulos >= puntosParaEstatua(state.modo) &&
+    descensos === 0
+  ) {
+    return 'estatua';
+  }
   return 'reelecto-gris';
 }
 

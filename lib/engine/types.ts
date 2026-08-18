@@ -388,10 +388,12 @@ export interface GameState {
   rng: number;
   clubId: string;
   category: Category;
-  /** 1 a TOTAL_SEASONS. */
+  /** Cuánto dura esta presidencia. Fija el final y escala los umbrales. */
+  modo: Modo;
+  /** 1 a `TEMPORADAS_POR_MODO[modo]`. */
   season: number;
   year: number;
-  /** 1 a 4. */
+  /** 1 a la cuarta parte de las temporadas del modo: 2, 4 u 8. */
   mandate: number;
   resources: Resources;
   titles: WonTitle[];
@@ -423,7 +425,30 @@ export interface GameState {
   rare: boolean;
 }
 
-export const TOTAL_SEASONS = 16;
+/**
+ * Cuánto dura una presidencia.
+ *
+ * Los tres son múltiplos de cuatro porque las elecciones caen cada cuatro
+ * temporadas: así el calendario electoral no hay que tocarlo para ninguno.
+ *
+ * El 32 de la larga no es un número redondo cualquiera. Los presidentes más
+ * longevos del fútbol duraron 21 (Armando en Boca), 22 (Núñez en Barcelona),
+ * 23 (Florentino), 27 (Leoz en la Conmebol), 31 (Berlusconi en Milan) y 35
+ * (Bernabéu, y también Grondona en la AFA). Con el techo en 32 se pasan los
+ * cinco primeros y el último queda a tres temporadas de distancia, para
+ * siempre. Ese "te faltaron tres" es el modo largo.
+ */
+export type Modo = 'corta' | 'normal' | 'larga';
+
+export const TEMPORADAS_POR_MODO: Record<Modo, number> = {
+  corta: 8,
+  normal: 16,
+  larga: 32,
+};
+
+/** Los tres modos, en el orden en que se ofrecen. */
+export const MODOS: readonly Modo[] = ['corta', 'normal', 'larga'];
+
 export const SEASONS_PER_MANDATE = 4;
 export const EVENTS_PER_SEASON = 3;
 export const START_YEAR = 2026;

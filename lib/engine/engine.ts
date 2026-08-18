@@ -39,13 +39,14 @@ import type {
   Effects,
   GameEvent,
   GameState,
+  Modo,
   PlayerOffer,
   Resources,
 } from './types';
 import {
   EVENTS_PER_SEASON,
   START_YEAR,
-  TOTAL_SEASONS,
+  TEMPORADAS_POR_MODO,
 } from './types';
 
 /** Probabilidad de la rareza: el club en llamas. */
@@ -77,11 +78,13 @@ export function initialResources(club: Club): Resources {
 export interface StartOptions {
   seed: number;
   clubId: string;
+  /** Cuánto dura. Por defecto la normal, que es la de siempre. */
+  modo?: Modo;
   /** Fuerza la rareza, para tests. Si no se pasa, se sortea. */
   forceRare?: boolean;
 }
 
-export function startRun({ seed, clubId, forceRare }: StartOptions): GameState {
+export function startRun({ seed, clubId, modo = 'normal', forceRare }: StartOptions): GameState {
   const club = getClub(clubId);
   const rand = new Rand(seed);
 
@@ -98,6 +101,7 @@ export function startRun({ seed, clubId, forceRare }: StartOptions): GameState {
     rng: rand.s,
     clubId,
     category: club.category,
+    modo,
     season: 1,
     year: START_YEAR,
     mandate: 1,
@@ -442,13 +446,13 @@ function closeSeason(state: GameState, result: import('./types').SeasonResult): 
   const early = checkEarlyExit(next);
   if (early) return finish(next, early, club);
 
-  // ¿Se terminaron las dieciséis temporadas?
-  if (next.season >= TOTAL_SEASONS) {
+  // ¿Se cumplió el mandato completo del modo elegido?
+  if (next.season >= TEMPORADAS_POR_MODO[next.modo]) {
     return finish(next, finalEnding(next), club);
   }
 
   // ¿Toca votar?
-  if (isElectionSeason(next.season)) {
+  if (isElectionSeason(next.season, next.modo)) {
     const election = resolveElection(next, rand);
     return {
       ...next,
