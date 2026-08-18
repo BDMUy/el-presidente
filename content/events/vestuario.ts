@@ -210,4 +210,75 @@ export const VESTUARIO: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'vest-companero-de-mas',
+    kind: 'dilema',
+    title: 'SOBRA UN JUGADOR',
+    text: 'El DT te pide que saques del plantel a un jugador que tiene contrato dos años más. No rinde, cobra bien y en el vestuario lo quieren todos.',
+    requires: { minSeason: 2 },
+    options: [
+      {
+        label: 'Rescindirle el contrato',
+        hint: 'Se va contento y caro. El vestuario toma nota.',
+        effects: { caja: -2.2, plantel: -1, hinchada: -3 },
+      },
+      {
+        label: 'Dejarlo entrenar aparte',
+        hint: 'No cuesta un peso hoy. Cuesta después.',
+        effects: { plantel: -4, hinchada: -2, influencia: -3 },
+      },
+      {
+        label: 'Bancarlo y decirle al DT que lo use',
+        hint: 'El plantel te lo agradece. El técnico, no.',
+        effects: { plantel: -2, hinchada: 4, influencia: -4 },
+      },
+    ],
+  },
+  {
+    id: 'vest-doble-turno',
+    kind: 'dilema',
+    title: 'EL DOBLE TURNO',
+    text: 'El preparador físico quiere doble turno toda la pretemporada. Dice que en noviembre se nota. El plantel avisa por lo bajo que en noviembre están todos rotos.',
+    options: [
+      {
+        label: 'Doble turno',
+        hint: 'Llegan mejor. Alguno se rompe en el camino.',
+        random: [
+          { weight: 55, text: 'Llegaron enteros y se notó: el equipo corre más que nadie.', effects: { plantel: 7, hinchada: 3 } },
+          { weight: 45, text: 'Tres desgarros en cinco fechas. Medio plantel mirando desde afuera.', effects: { plantel: -6, hinchada: -4 } },
+        ],
+      },
+      {
+        label: 'Carga normal',
+        hint: 'Nadie se rompe. Nadie mejora tampoco.',
+        effects: { plantel: 1 },
+      },
+    ],
+  },
+  {
+    id: 'vest-arquero-suplente',
+    kind: 'color',
+    title: 'EL ARQUERO SUPLENTE HABLÓ',
+    text: 'Lleva cuatro años sin atajar y dijo en una radio que en este club los puestos se ganan afuera de la cancha. Nadie le dio bola hasta que lo levantaron todos los portales.',
+    options: [
+      {
+        label: 'Multarlo y sentarlo en la tribuna',
+        hint: 'Disciplina. Y un vestuario que se calla por miedo.',
+        effects: { plantel: -2, influencia: 4, hinchada: -2 },
+      },
+      {
+        label: 'Ponerlo de titular el domingo',
+        hint: 'Nadie lo vio venir. Puede salir cualquier cosa.',
+        random: [
+          { weight: 40, text: 'Atajó todo. La cancha coreó su nombre y el titular no dijo una palabra.', effects: { plantel: 3, hinchada: 8 } },
+          { weight: 60, text: 'Le hicieron tres. Volvió al banco y esta vez no habló más.', effects: { plantel: -2, hinchada: -5 } },
+        ],
+      },
+      {
+        label: 'Hacer como que no pasó nada',
+        hint: 'En dos días se olvida. O no.',
+        effects: { hinchada: -1, influencia: -2 },
+      },
+    ],
+  },
 ];

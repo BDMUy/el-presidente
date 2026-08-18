@@ -192,4 +192,67 @@ export const HINCHADA: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'hin-popular-clausurada',
+    kind: 'golpe',
+    title: 'CLAUSURAN LA POPULAR',
+    text: 'Bengalas en el último partido. La clausuran tres fechas. Sin la popular, la cancha se convierte en un cine.',
+    requires: { minSeason: 2 },
+    options: [
+      {
+        label: 'Aceptar la sanción',
+        hint: 'Tres fechas sin recaudación y sin aliento.',
+        effects: { caja: -1.6, hinchada: -6 },
+      },
+      {
+        label: 'Apelar hasta el final',
+        hint: 'Se puede dar vuelta. Y se puede empeorar.',
+        random: [
+          { weight: 40, text: 'Se levantó la clausura. La popular volvió y no se calló en noventa minutos.', effects: { hinchada: 9, influencia: -4 } },
+          { weight: 60, text: 'Ratificaron la sanción y le sumaron dos fechas más por insistir.', effects: { caja: -2.4, hinchada: -9, influencia: -3 } },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'hin-viaje-de-todos',
+    kind: 'color',
+    title: 'QUIEREN VIAJAR TODOS',
+    text: 'Se juega a mil kilómetros y hay tres mil hinchas que quieren ir. Los micros cuestan una fortuna y la policía pide un operativo que sale más caro todavía.',
+    options: [
+      {
+        label: 'Poner los micros el club',
+        hint: 'Un gasto que no está en ningún presupuesto.',
+        effects: { caja: -1.3, hinchada: 11 },
+      },
+      {
+        label: 'Que se arregle cada uno',
+        hint: 'Es lo lógico. También es lo frío.',
+        effects: { hinchada: -4 },
+      },
+      {
+        label: 'Subsidiar la mitad',
+        hint: 'Media alegría, medio gasto.',
+        effects: { caja: -0.7, hinchada: 5 },
+      },
+    ],
+  },
+  {
+    id: 'hin-socio-de-toda-la-vida',
+    kind: 'color',
+    title: 'SE FUE UN SOCIO DE TODA LA VIDA',
+    text: 'Murió un socio de noventa y un años. Tenía el carnet número catorce y no se perdió un partido de local en sesenta temporadas. La familia pide despedirlo en la cancha.',
+    options: [
+      {
+        label: 'Abrir la cancha para el velatorio',
+        hint: 'No sale nada y no se olvida nunca.',
+        effects: { hinchada: 8, socios: 1.5 },
+      },
+      {
+        label: 'Un minuto de silencio y una placa',
+        hint: 'Correcto. Suficiente. Poco.',
+        effects: { hinchada: 2 },
+      },
+    ],
+  },
 ];

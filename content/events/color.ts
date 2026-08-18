@@ -165,4 +165,66 @@ export const COLOR: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'col-mascota',
+    kind: 'color',
+    title: 'LA MASCOTA DEL CLUB',
+    text: 'Marketing quiere una mascota para las redes. Trajeron el boceto: un animal con la camiseta puesta y los ojos muy abiertos. Nadie en la reunión se anima a decir lo que todos piensan.',
+    options: [
+      {
+        label: 'Aprobarla',
+        hint: 'A los pibes les encanta. A la popular no.',
+        effects: { socios: 2, hinchada: -3, caja: -0.3 },
+      },
+      {
+        label: 'Cajonearla',
+        hint: 'Te ahorrás el papelón y el ingreso.',
+        effects: { influencia: 1 },
+      },
+    ],
+  },
+  {
+    id: 'col-famoso-del-club',
+    kind: 'color',
+    title: 'UN FAMOSO ES DEL CLUB',
+    text: 'Un cantante que llena estadios contó en la tele que es hincha desde chico. Nadie lo sabía. Ahora quiere venir a la cancha y cantar antes del clásico.',
+    options: [
+      {
+        label: 'Que cante',
+        hint: 'Media hora de show antes del partido más tenso del año.',
+        random: [
+          { weight: 55, text: 'Cantó, se emocionó y la cancha lo aplaudió de pie. Se habló toda la semana.', effects: { hinchada: 7, socios: 3 } },
+          { weight: 45, text: 'Se le fue la mano, cantó de más y el equipo salió frío. La popular lo silbó.', effects: { hinchada: -5 } },
+        ],
+      },
+      {
+        label: 'Invitarlo al palco y nada más',
+        hint: 'Una foto, un café, cero riesgo.',
+        effects: { socios: 1, hinchada: 1 },
+      },
+    ],
+  },
+  {
+    id: 'col-camiseta-del-primer-titulo',
+    kind: 'color',
+    title: 'APARECIÓ UNA CAMISETA',
+    text: 'Un coleccionista tiene la camiseta del primer campeonato del club. Auténtica, con el barro de aquella tarde todavía pegado. La vende, y no barata.',
+    options: [
+      {
+        label: 'Comprarla para el museo',
+        hint: 'Plata que no vuelve, en una vitrina que emociona.',
+        effects: { caja: -0.9, hinchada: 6, socios: 1 },
+      },
+      {
+        label: 'Pedirle que la preste',
+        hint: 'Sale gratis. Se la lleva cuando quiera.',
+        effects: { hinchada: 2 },
+      },
+      {
+        label: 'Dejarla pasar',
+        hint: 'Es una camiseta vieja. Eso decís vos.',
+        effects: { hinchada: -2 },
+      },
+    ],
+  },
 ];

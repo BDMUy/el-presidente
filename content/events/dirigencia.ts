@@ -202,4 +202,75 @@ export const DIRIGENCIA: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'dir-vice-ambicioso',
+    kind: 'dilema',
+    title: 'EL VICE SE PERFILA',
+    text: 'Tu vicepresidente empezó a dar notas solo. Habla de una etapa nueva y nunca te nombra. La comisión se hace la desentendida.',
+    requires: { minSeason: 3 },
+    options: [
+      {
+        label: 'Sacarlo del cargo',
+        hint: 'Cortás la interna. Se lleva a su gente con él.',
+        effects: { influencia: -10, hinchada: -3 },
+      },
+      {
+        label: 'Darle una parcela de poder',
+        hint: 'Lo callás dándole lo que quiere. Por ahora.',
+        effects: { influencia: -5, caja: -0.8 },
+      },
+      {
+        label: 'Dejarlo hablar',
+        hint: 'Si se quema solo, mejor. Si no, ya sabés.',
+        random: [
+          { weight: 45, text: 'Habló de más y la gente lo mandó a callar. Se replegó solo.', effects: { influencia: 8 } },
+          { weight: 55, text: 'Le fue creciendo la lista. Ahora tiene estructura propia.', effects: { influencia: -12, hinchada: -4 } },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'dir-asamblea-cuentas',
+    kind: 'golpe',
+    title: 'ASAMBLEA POR LAS CUENTAS',
+    text: 'La oposición juntó firmas para una asamblea extraordinaria. Quieren que expliques el balance renglón por renglón, en el salón, con micrófono abierto.',
+    requires: { minSeason: 2 },
+    options: [
+      {
+        label: 'Ir y dar la cara',
+        hint: 'Cuatro horas de pie. Se respeta, aunque duela.',
+        effects: { hinchada: 6, influencia: -4 },
+      },
+      {
+        label: 'Mandar al tesorero',
+        hint: 'No te exponés. Tampoco quedás bien.',
+        effects: { hinchada: -6, influencia: 2 },
+      },
+      {
+        label: 'Suspenderla por un vicio de forma',
+        hint: 'Cuesta muchos teléfonos y una fama.',
+        requires: { minInfluencia: 30 },
+        effects: { influencia: -16, hinchada: -8 },
+      },
+    ],
+  },
+  {
+    id: 'dir-elecciones-anticipadas',
+    kind: 'dilema',
+    title: 'TE PIDEN ADELANTAR',
+    text: 'Un grupo de socios históricos te propone adelantar las elecciones. Dicen que si las ganás ahora te quedás tranquilo cuatro años más.',
+    requires: { minSeason: 3, minHinchada: 55 },
+    options: [
+      {
+        label: 'Adelantarlas',
+        hint: 'Ganás legitimidad. Gastás todo lo que tenías guardado.',
+        effects: { influencia: -14, hinchada: 10 },
+      },
+      {
+        label: 'Cumplir el mandato como estaba',
+        hint: 'Institucional y aburrido. Nadie te lo va a agradecer.',
+        effects: { influencia: 3 },
+      },
+    ],
+  },
 ];

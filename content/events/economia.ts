@@ -301,4 +301,96 @@ export const ECONOMIA: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'eco-luz-impaga',
+    kind: 'golpe',
+    title: 'LA FACTURA DE LA LUZ',
+    text: 'Tres meses sin pagar la luz del predio y del estadio. Mandaron el aviso de corte. El partido del domingo es a las nueve de la noche.',
+    requires: { minSeason: 2 },
+    options: [
+      {
+        label: 'Pagar todo de una',
+        hint: 'Duele en la caja y se termina el problema.',
+        effects: { caja: -1.9 },
+      },
+      {
+        label: 'Pedir un plan de pagos',
+        hint: 'Menos ahora, más después y con interés.',
+        effects: {
+          caja: -0.6,
+          deferred: [
+            {
+              inSeasons: 2,
+              text: 'Vencieron las cuotas del plan de la luz, con intereses.',
+              effects: { caja: -1.8 },
+            },
+          ],
+        },
+      },
+      {
+        label: 'Mover el partido a la tarde',
+        hint: 'Menos gente, menos recaudación, menos vergüenza.',
+        effects: { caja: -0.4, hinchada: -4 },
+      },
+    ],
+  },
+  {
+    id: 'eco-la-marca-manda',
+    kind: 'dilema',
+    title: 'LA MARCA QUIERE MANDAR',
+    text: 'La marca de indumentaria renueva, pero pide elegir el diseño de la camiseta sin consultar. Dicen que saben lo que se vende.',
+    options: [
+      {
+        label: 'Firmar igual',
+        hint: 'Entra plata. Sale una camiseta que no elegiste.',
+        effects: { caja: 3.4, hinchada: -6 },
+      },
+      {
+        label: 'Exigir tener la última palabra',
+        hint: 'Menos plata, la camiseta de siempre.',
+        effects: { caja: 1.6, hinchada: 4 },
+      },
+      {
+        label: 'Buscar otra marca',
+        hint: 'Una temporada sin sponsor de indumentaria mientras negociás.',
+        random: [
+          { weight: 45, text: 'Apareció una marca chica que te dejó hacer todo a tu manera, y la camiseta fue un éxito.', effects: { caja: 2.2, hinchada: 8, socios: 2 } },
+          { weight: 55, text: 'No apareció nadie mejor. Volviste a la misma marca con menos plata que antes.', effects: { caja: 0.8, hinchada: -3 } },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'eco-juicio-viejo',
+    kind: 'golpe',
+    title: 'UN JUICIO DE HACE VEINTE AÑOS',
+    text: 'Un jugador que pasó tres meses por el club en los noventa ganó un juicio laboral. Con intereses, la cifra es una locura para lo que fue.',
+    requires: { minSeason: 3 },
+    options: [
+      {
+        label: 'Pagar y cerrar el tema',
+        hint: 'Un agujero grande, de una sola vez.',
+        effects: { caja: -3.6 },
+      },
+      {
+        label: 'Apelar',
+        hint: 'Ganás tiempo. Los intereses no paran.',
+        effects: {
+          deferred: [
+            {
+              inSeasons: 2,
+              text: 'Se cayó la apelación del juicio viejo. Con dos años más de intereses.',
+              effects: { caja: -5.2, hinchada: -3 },
+            },
+          ],
+        },
+      },
+      {
+        label: 'Negociar una quita',
+        hint: 'Cuesta influencia y algo de orgullo.',
+        requires: { minInfluencia: 20 },
+        effects: { caja: -2.1, influencia: -8 },
+      },
+    ],
+  },
 ];
