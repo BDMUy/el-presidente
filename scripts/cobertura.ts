@@ -16,18 +16,50 @@ import { CLUBS } from '../content/clubs';
 import { ALL_EVENTS } from '../content/events';
 import { applyChoice, optionCount, startRun } from '../lib/engine/engine';
 import { Rand } from '../lib/engine/rng';
-import type { GameState } from '../lib/engine/types';
+import type { GameState, Modo } from '../lib/engine/types';
+import { MODOS, TEMPORADAS_POR_MODO } from '../lib/engine/types';
 
-const runs = Number(process.argv[2] ?? 3000);
+const posicionales = process.argv.slice(2).filter((a) => !a.startsWith('--'));
+const runs = Number(posicionales[0] ?? 3000);
+
+const argModo = process.argv.find((a) => a.startsWith('--modo='))?.slice(7) ?? 'normal';
+if (!(MODOS as readonly string[]).includes(argModo)) {
+  console.error(`Modo desconocido: "${argModo}". Son ${MODOS.join(', ')}.`);
+  process.exit(1);
+}
+const modo = argModo as Modo;
+const TOPE = TEMPORADAS_POR_MODO[modo];
 
 /**
- * Política sesgada a sobrevivir: elige la opción que menos daña la hinchada.
+ * Política sesgada a sobrevivir: cuida la hinchada en los eventos y el plantel
+ * en el mercado.
  *
  * Con decisiones al azar la partida muere en la temporada cinco y solo ve un
  * quinto del catálogo, que no es la pregunta. La pregunta es qué ve alguien
- * que llega a las dieciséis.
+ * que llega hasta el final.
+ *
+ * El mercado no puede ir al azar, y eso se descubrió midiendo: sorteando la
+ * ventana de pases se vende al ídolo cada tanto, el plantel se desploma y la
+ * partida termina descendida. En modo largo eso dejaba **una** presidencia
+ * completa cada mil quinientas, así que las cifras de repetición de cartas
+ * salían de una sola partida y no medían nada.
  */
 function elegir(state: GameState, chooser: Rand): number {
+  if (state.phase.kind === 'mercado') {
+    const { offers } = state.phase;
+    const noMover = offers.length;
+    let mejor = noMover;
+    let mejorDelta = 0;
+    offers.forEach((offer, i) => {
+      // Nunca vender, y comprar solo lo que se paga con la caja que hay.
+      if (offer.plantelDelta <= mejorDelta) return;
+      if (offer.cost > state.resources.caja) return;
+      mejor = i;
+      mejorDelta = offer.plantelDelta;
+    });
+    return mejor;
+  }
+
   if (state.phase.kind !== 'evento') return chooser.int(0, optionCount(state) - 1);
 
   const { event, available } = state.phase;
@@ -51,7 +83,7 @@ function elegir(state: GameState, chooser: Rand): number {
 
 function jugar(seed: number, clubId: string): GameState {
   const chooser = new Rand(seed ^ 0x9e3779b9);
-  let state = startRun({ seed, clubId });
+  let state = startRun({ seed, clubId, modo });
   let guard = 0;
   while (state.status === 'jugando' && guard++ < 5000) {
     const opciones = optionCount(state);
@@ -69,6 +101,10 @@ let repetidasTotal = 0;
 let partidasConRepetidas = 0;
 let partidasLargas = 0;
 let cartasEnLargas = 0;
+/** En qué carta de la partida apareció la primera repetición. */
+const primeraRepeticion: number[] = [];
+let sorteosEnLargas = 0;
+let repetidasEnLargas = 0;
 
 for (let i = 0; i < runs; i++) {
   const club = CLUBS[i % CLUBS.length];
@@ -81,9 +117,23 @@ for (let i = 0; i < runs; i++) {
   repetidasTotal += repetidas;
   if (repetidas > 0) partidasConRepetidas++;
 
-  if (state.season >= 14) {
+  // "Completa" es relativo al modo: en corta son 8 temporadas, no 14.
+  if (state.season >= TOPE) {
     partidasLargas++;
     cartasEnLargas += distintas.size;
+    sorteosEnLargas += state.usedEvents.length;
+    repetidasEnLargas += repetidas;
+    // Cuándo aparece la primera repetición: es el momento en que la partida
+    // empieza a mostrarte algo que ya viste. En una larga es el dato que dice
+    // si la segunda mitad es un refrito.
+    const yaVistas = new Set<string>();
+    for (let k = 0; k < state.usedEvents.length; k++) {
+      if (yaVistas.has(state.usedEvents[k])) {
+        primeraRepeticion.push(k);
+        break;
+      }
+      yaVistas.add(state.usedEvents[k]);
+    }
   }
 
   for (const id of distintas) {
@@ -97,7 +147,7 @@ const raras = ALL_EVENTS.filter((e) => {
   return n > 0 && n / runs < 0.01;
 });
 
-console.log(`\nCOBERTURA DE CONTENIDO · ${runs} presidencias\n`);
+console.log(`\nCOBERTURA DE CONTENIDO · ${runs} presidencias · modo ${modo} (${TOPE} temporadas)\n`);
 console.log(`  cartas en el catálogo      ${ALL_EVENTS.length}`);
 console.log(`  cartas vistas alguna vez   ${vistas.size}`);
 console.log(`  cartas por partida (prom)  ${(cartasPorPartida / runs).toFixed(1)}`);
@@ -110,6 +160,30 @@ console.log(
   `  con cartas repetidas       ${((partidasConRepetidas / runs) * 100).toFixed(1)}% ` +
     `(${(repetidasTotal / runs).toFixed(2)} repeticiones por partida)`,
 );
+
+// Lo que importa de la repetición es qué le pasa a quien llega hasta el final,
+// no el promedio de todas las partidas: las que mueren temprano nunca llegan a
+// agotar el mazo y le bajan el promedio a un problema que sí existe.
+if (partidasLargas > 0) {
+  const sorteos = sorteosEnLargas / partidasLargas;
+  const repes = repetidasEnLargas / partidasLargas;
+  console.log(`\n  EN LAS ${partidasLargas} PRESIDENCIAS COMPLETAS:`);
+  console.log(`    cartas que salen         ${sorteos.toFixed(0)}`);
+  console.log(
+    `    de ellas, repetidas      ${repes.toFixed(0)} (${((repes / sorteos) * 100).toFixed(0)}%)`,
+  );
+
+  if (primeraRepeticion.length > 0) {
+    const ordenadas = [...primeraRepeticion].sort((a, b) => a - b);
+    const mediana = ordenadas[Math.floor(ordenadas.length / 2)];
+    console.log(
+      `    1ª repetición (mediana)  en la carta ${mediana} de ${sorteos.toFixed(0)} ` +
+        `(al ${((mediana / sorteos) * 100).toFixed(0)}% de la partida)`,
+    );
+  } else {
+    console.log('    1ª repetición            nunca: ninguna repitió una carta');
+  }
+}
 
 if (nunca.length > 0) {
   console.log(`\n  NUNCA APARECEN (${nunca.length}) — condiciones inalcanzables:`);
