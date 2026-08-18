@@ -93,8 +93,17 @@ export interface Effects {
   socios?: number;
   plantel?: number;
   influencia?: number;
-  /** Marcas que otros eventos pueden consultar con `requires`. */
+  /** Marcas que otros eventos pueden consultar con `requires`. Pisan el valor. */
   flags?: Record<string, number | boolean>;
+  /**
+   * Marcas numéricas que se **suman** al valor que ya había, en vez de pisarlo.
+   *
+   * `flags` sirve para "esto pasó" y no para "esto pasó otra vez": escribiendo
+   * `flags: { prontuario: 1 }` dos veces el valor sigue siendo uno. Un contador
+   * que se acumula a lo largo de la presidencia necesita sumar, y de eso vive
+   * todo lo que escala.
+   */
+  flagsSuma?: Record<string, number>;
   /** Efectos que recién se aplican N temporadas después. */
   deferred?: DeferredEffect[];
 }
@@ -143,6 +152,15 @@ export interface Condition {
   flag?: string;
   /** Requiere que esta flag NO esté seteada. */
   notFlag?: string;
+  /**
+   * Requiere que cada flag numérica llegue al menos a ese valor.
+   *
+   * `flag` y `notFlag` solo saben preguntar si algo pasó o no. Esto es lo que
+   * permite que una carta aparezca recién a la tercera vez, que es como se
+   * cuenta una escalada: el prontuario de corrupción no es "hiciste algo
+   * sucio" sino "ya van tres".
+   */
+  minFlag?: Record<string, number>;
 }
 
 /** Una rama azarosa de una opción: el 🎲 de las cartas. */

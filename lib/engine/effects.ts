@@ -64,9 +64,34 @@ export function applyEffects(state: GameState, effects: Effects): GameState {
   return {
     ...state,
     resources: applyResources(state.resources, effects),
-    flags: effects.flags ? { ...state.flags, ...effects.flags } : state.flags,
+    flags: aplicarFlags(state.flags, effects),
     pending,
   };
+}
+
+/**
+ * Combina las dos formas de tocar una flag: pisarla y sumarle.
+ *
+ * `flags` primero y `flagsSuma` después, para que una carta que hace las dos
+ * cosas sume sobre el valor que acaba de poner y no sobre el anterior.
+ *
+ * Sumar sobre una flag que no existe arranca de cero. Sumar sobre una que era
+ * booleana la trata como cero: mezclar los dos usos en la misma marca es un
+ * error de contenido, y devolver NaN lo escondería hasta que aparezca en una
+ * condición que nunca se cumple.
+ */
+function aplicarFlags(
+  actuales: GameState['flags'],
+  effects: Effects,
+): GameState['flags'] {
+  if (!effects.flags && !effects.flagsSuma) return actuales;
+
+  const next = { ...actuales, ...effects.flags };
+  for (const [nombre, delta] of Object.entries(effects.flagsSuma ?? {})) {
+    const previo = next[nombre];
+    next[nombre] = (typeof previo === 'number' ? previo : 0) + delta;
+  }
+  return next;
 }
 
 /**
@@ -121,6 +146,11 @@ export function meetsCondition(
 
   if (condition.flag && !flags[condition.flag]) return false;
   if (condition.notFlag && flags[condition.notFlag]) return false;
+
+  for (const [nombre, minimo] of Object.entries(condition.minFlag ?? {})) {
+    const valor = flags[nombre];
+    if (typeof valor !== 'number' || valor < minimo) return false;
+  }
 
   return true;
 }
