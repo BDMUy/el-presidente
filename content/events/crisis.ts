@@ -231,4 +231,74 @@ export const CRISIS: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'cri-luz-cortada',
+    kind: 'golpe',
+    title: 'CORTARON LA LUZ EN EL PREDIO',
+    text: 'Sin aviso y a la mañana. Los del plantel se enteraron cuando abrieron el vestuario y no había agua caliente. Afuera hay tres camionetas de canales.',
+    requires: { maxCaja: -6, minSeason: 2 },
+    options: [
+      {
+        label: 'Pagar con lo que sea',
+        hint: 'Se saca de donde no hay.',
+        effects: { caja: -1.4, hinchada: 2 },
+      },
+      {
+        label: 'Entrenar en un club amigo',
+        hint: 'Un favor grande, que se devuelve algún día.',
+        effects: { influencia: -9, plantel: -2 },
+      },
+      {
+        label: 'Que entrenen igual',
+        hint: 'Con lo que hay. Se ve desde la calle.',
+        effects: { plantel: -4, hinchada: -7 },
+      },
+    ],
+  },
+  {
+    id: 'cri-utileria-vacia',
+    kind: 'golpe',
+    title: 'NO HAY PELOTAS',
+    text: 'El proveedor cortó el crédito. Quedan once pelotas para todo el club, contando inferiores. El utilero las junta después de cada práctica como si fueran de él.',
+    requires: { maxCaja: -3, minSeason: 2 },
+    options: [
+      {
+        label: 'Comprar al contado lo mínimo',
+        hint: 'Alcanza para el mes. Nada más.',
+        effects: { caja: -0.5 },
+      },
+      {
+        label: 'Pedirle a la gente que done',
+        hint: 'La hinchada responde. Y se entera de todo.',
+        effects: { hinchada: -3, socios: 1, plantel: 1 },
+      },
+      {
+        label: 'Que las inferiores presten las suyas',
+        hint: 'La primera entrena. Los pibes miran.',
+        effects: { plantel: 1, hinchada: -4 },
+      },
+    ],
+  },
+  {
+    id: 'cri-nadie-atiende',
+    kind: 'golpe',
+    title: 'YA NO TE ATIENDE NADIE',
+    text: 'Llamaste a cuatro dirigentes que hace dos años te devolvían el llamado en el acto. Ninguno atendió. El quinto te hizo decir que estaba en una reunión.',
+    requires: { maxInfluencia: 15, minSeason: 3 },
+    options: [
+      {
+        label: 'Insistir hasta que alguno ceda',
+        hint: 'Humillante y a veces sirve.',
+        random: [
+          { weight: 40, text: 'Uno te atendió y te dio una mano. Dijo que no lo contaras.', effects: { influencia: 9, caja: 0.6 } },
+          { weight: 60, text: 'Ninguno atendió. La versión de que estás terminado ya circula sola.', effects: { influencia: -5, hinchada: -6 } },
+        ],
+      },
+      {
+        label: 'Dejar de llamar',
+        hint: 'Se arregla sin ellos. Todo cuesta el doble.',
+        effects: { caja: -0.8, hinchada: 3 },
+      },
+    ],
+  },
 ];

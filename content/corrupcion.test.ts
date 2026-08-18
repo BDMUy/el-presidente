@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { CORRUPCION } from './events/corrupcion';
 import { ALL_EVENTS } from './events';
 import { applyEffects, meetsCondition } from '@/lib/engine/effects';
+import { finalEnding } from '@/lib/engine/election';
 import { startRun } from '@/lib/engine/engine';
 import type { GameEvent, GameState } from '@/lib/engine/types';
 
@@ -96,5 +97,34 @@ describe('el hilo de corrupción', () => {
   it('el sponsor de apuestas NO suma: impopular no es lo mismo que sucio', () => {
     const e = ALL_EVENTS.find((x) => x.id === 'sponsor-dudoso')!;
     expect(e.options.every((o) => !o.effects?.flagsSuma)).toBe(true);
+  });
+
+  it('no le ponen tu nombre a la tribuna si tenés prontuario', () => {
+    // Una presidencia impecable en todo lo demás: campeona, querida y sin
+    // descensos. Lo único que cambia entre las dos es cuánto se robó.
+    const impecable = {
+      ...estado(0, 16),
+      resources: { caja: 40, hinchada: 90, socios: 120, plantel: 85, influencia: 60 },
+      titles: Array.from({ length: 6 }, (_, i) => ({ id: 'liga-primera' as const, season: i + 2, year: 2027 + i })),
+      descensos: 0,
+    };
+
+    expect(finalEnding(impecable)).toBe('estatua');
+    expect(finalEnding({ ...impecable, flags: { prontuario: 9 } })).toBe('reelecto-gris');
+  });
+
+  it('el prontuario tolerado escala con la duración', () => {
+    // Treinta y dos temporadas tienen el doble de oportunidades de cortar
+    // esquinas que dieciséis: un número fijo mediría el tiempo y no la
+    // conducta. Con el mismo prontuario, la larga todavía llega y la corta no.
+    const base = {
+      resources: { caja: 40, hinchada: 90, socios: 120, plantel: 85, influencia: 60 },
+      titles: Array.from({ length: 8 }, (_, i) => ({ id: 'liga-primera' as const, season: i + 2, year: 2027 + i })),
+      descensos: 0,
+      flags: { prontuario: 3 },
+    };
+
+    expect(finalEnding({ ...estado(0, 8), ...base, modo: 'corta' })).toBe('reelecto-gris');
+    expect(finalEnding({ ...estado(0, 32), ...base, modo: 'larga' })).toBe('estatua');
   });
 });

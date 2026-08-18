@@ -124,14 +124,34 @@ export function puntosParaEstatua(modo: Modo): number {
  * El corte entre estatua y presidencia gris es deliberadamente exigente:
  * la estatua tiene que costar.
  */
+/**
+ * Cuánto prontuario tolera la estatua, según lo que dure la presidencia.
+ *
+ * Cortar una esquina no te saca el nombre de la tribuna; tener un prontuario
+ * sí. La regla es una decisión sucia cada cuatro temporadas: dos en la corta,
+ * cuatro en la normal, ocho en la larga.
+ *
+ * **Escala con la duración y eso no es un descuento**: una presidencia de
+ * treinta y dos temporadas tiene el doble de oportunidades de cortar esquinas
+ * que una de dieciséis, así que un número fijo no mediría la conducta sino el
+ * tiempo. Medido con el umbral fijo en 3, la estatua caía al 0,4% en normal y
+ * a cero en larga: no porque los jugadores fueran peores, sino porque la larga
+ * dura más.
+ */
+function prontuarioTolerado(modo: Modo): number {
+  return TEMPORADAS_POR_MODO[modo] / 4;
+}
+
 export function finalEnding(state: GameState): EndingId {
-  const { resources, titles, descensos } = state;
+  const { resources, titles, descensos, flags } = state;
   const puntosTitulos = titles.reduce((sum, t) => sum + TITLES[t.id].points, 0);
+  const prontuario = typeof flags.prontuario === 'number' ? flags.prontuario : 0;
 
   if (
     resources.hinchada >= 75 &&
     puntosTitulos >= puntosParaEstatua(state.modo) &&
-    descensos === 0
+    descensos === 0 &&
+    prontuario < prontuarioTolerado(state.modo)
   ) {
     return 'estatua';
   }

@@ -7,8 +7,16 @@
  * Los archivos están agrupados por frente, no por dificultad. Varios son
  * condicionales —copas solo si clasificaste, ascenso solo en la B o la
  * Nacional, crisis solo con algún recurso en el piso, legado a partir de la
- * temporada nueve— para que la partida suene distinta según dónde estés
- * parado, en vez de tirar cartas al azar sobre cualquier situación.
+ * temporada nueve, la escalada de corrupción según el prontuario— para que la
+ * partida suene distinta según dónde estés parado, en vez de tirar cartas al
+ * azar sobre cualquier situación.
+ *
+ * Esa división importa al sumar contenido. Solo las cartas SIN condición de
+ * contexto entran en el mazo de una presidencia sana, que es donde una partida
+ * exitosa pasa casi todo el tiempo; las condicionales le dan textura a la B, a
+ * la crisis o a la copa, pero no alcanzan para que una larga no se repita.
+ * Cuando el modo largo repetía el 41% de sus cartas, lo que faltaba eran
+ * generales y no condicionales.
  */
 
 import type { GameEvent } from '@/lib/engine/types';

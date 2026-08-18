@@ -236,4 +236,86 @@ export const ASCENSO: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'asc-la-tribuna-de-pie',
+    kind: 'color',
+    title: 'NO HAY TRIBUNA VISITANTE',
+    text: 'La cancha no tiene sector visitante habilitado y el rival de la fecha trae ochocientos. O se acomodan en la platea local, o no entran.',
+    requires: { category: [...SOLO_ASCENSO.category] },
+    options: [
+      {
+        label: 'Que entren a la platea',
+        hint: 'Se recauda. Puede terminar mal.',
+        random: [
+          { weight: 60, text: 'No pasó nada. Dos hinchadas en la misma platea y hasta se saludaron al final.', effects: { caja: 0.4, hinchada: 3 } },
+          { weight: 40, text: 'Se agarraron en el entretiempo. Tres fechas de sanción y la foto en todos lados.', effects: { caja: -0.5, hinchada: -8, influencia: -4 } },
+        ],
+      },
+      {
+        label: 'Jugar sin visitantes',
+        hint: 'Prolijo, tranquilo y sin la mitad de la recaudación.',
+        effects: { caja: -0.3 },
+      },
+    ],
+  },
+  {
+    id: 'asc-el-micro-del-plantel',
+    kind: 'dilema',
+    title: 'EL MICRO ES DE 1988',
+    text: 'Se rompió tres veces esta temporada, siempre volviendo de visitante y siempre de madrugada. El chofer dice que ya no se consiguen los repuestos.',
+    requires: { category: [...SOLO_ASCENSO.category], minSeason: 2 },
+    options: [
+      {
+        label: 'Comprar uno usado',
+        hint: 'Una fortuna para el club. Un alivio para el plantel.',
+        effects: { caja: -1.1, plantel: 3, hinchada: 2 },
+      },
+      {
+        label: 'Alquilar cuando haga falta',
+        hint: 'Más barato por viaje, más caro al final.',
+        effects: { caja: -0.5, plantel: 1 },
+      },
+      {
+        label: 'Arreglar el de siempre otra vez',
+        hint: 'Aguanta. Hasta que no aguante.',
+        effects: {
+          caja: -0.2,
+          deferred: [
+            {
+              inSeasons: 2,
+              text: 'El micro del 88 se rompió definitivamente, y en el peor momento del año.',
+              effects: { caja: -1.3, plantel: -3, hinchada: -4 },
+            },
+          ],
+        },
+      },
+    ],
+  },
+  {
+    id: 'asc-oferta-de-primera',
+    kind: 'dilema',
+    title: 'UN GRANDE QUIERE A TU DELANTERO',
+    text: 'Hizo dieciocho goles y lo vino a ver un club de Primera. Ofrecen una cifra que en la B no se ve nunca, y el equipo está peleando el ascenso.',
+    requires: { category: [...SOLO_ASCENSO.category], minSeason: 2 },
+    options: [
+      {
+        label: 'Venderlo ya',
+        hint: 'El club se salva. La campaña, no.',
+        effects: { caja: 3.2, plantel: -9, hinchada: -12 },
+      },
+      {
+        label: 'Aguantarlo hasta fin de temporada',
+        hint: 'Si ascendés, valió. Si no, se va gratis en junio.',
+        random: [
+          { weight: 45, text: 'Se quedó, metió los goles del ascenso y después se fue por más plata todavía.', effects: { caja: 3.8, plantel: -6, hinchada: 10 } },
+          { weight: 55, text: 'No se ascendió y el club de Primera bajó la oferta a la mitad. Se fue igual.', effects: { caja: 1.2, plantel: -9, hinchada: -6 } },
+        ],
+      },
+      {
+        label: 'Rechazar y renovarle',
+        hint: 'Un sueldo que el club no puede pagar.',
+        effects: { caja: -0.9, plantel: 2, hinchada: 8 },
+      },
+    ],
+  },
 ];

@@ -183,4 +183,48 @@ export const COPAS: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'copa-la-altura',
+    kind: 'dilema',
+    title: 'SE JUEGA A TRES MIL METROS',
+    text: 'Toca de visitante en la altura. El cuerpo médico pide viajar cinco días antes para aclimatar. Son cinco días de hotel para cuarenta personas.',
+    requires: { flag: 'continental', minSeason: 2 },
+    options: [
+      {
+        label: 'Viajar cinco días antes',
+        hint: 'Carísimo, y es lo que dice la ciencia.',
+        effects: { caja: -1.4, plantel: 3 },
+      },
+      {
+        label: 'Llegar el día anterior',
+        hint: 'Barato. Se juega con lo puesto y sin aire.',
+        effects: { plantel: -4, hinchada: -2 },
+      },
+      {
+        label: 'Pedir cambio de horario a la Conmebol',
+        hint: 'Hay que gastar teléfonos para eso.',
+        requires: { minInfluencia: 25 },
+        effects: { influencia: -12, plantel: 2 },
+      },
+    ],
+  },
+  {
+    id: 'copa-el-hincha-que-viajo-solo',
+    kind: 'color',
+    title: 'FUE UNO SOLO',
+    text: 'A la revancha en Ecuador viajó un hincha. Uno. Se sacó una foto con la bandera del club en una tribuna vacía y la foto dio la vuelta al continente.',
+    requires: { flag: 'continental' },
+    options: [
+      {
+        label: 'Pagarle el vuelo de vuelta y traerlo al vestuario',
+        hint: 'Sale poco y no se olvida nunca.',
+        effects: { caja: -0.2, hinchada: 9, socios: 2 },
+      },
+      {
+        label: 'Hacerle un posteo desde la cuenta del club',
+        hint: 'Gratis y correcto. Se nota que es gratis.',
+        effects: { hinchada: 3, socios: 1 },
+      },
+    ],
+  },
 ];

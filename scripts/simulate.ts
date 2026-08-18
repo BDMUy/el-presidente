@@ -72,6 +72,16 @@ function valueOf(effects: Effects | undefined, cajaActual: number): number {
   for (const d of effects.deferred ?? []) {
     value += valueOf(d.effects, cajaActual) * 0.5;
   }
+
+  // El prontuario pesa como un costo, aunque no sea un recurso.
+  //
+  // Esta política representa a alguien que lee las consecuencias antes de
+  // elegir, y el juego avisa: las opciones sucias arrastran una escalada y
+  // pueden costarte el nombre en la tribuna. Sin esto, el "jugador razonable"
+  // era en realidad el más corrupto posible —tomaba todas las coimas— y la
+  // simulación medía eso en vez de medir el juego.
+  value -= (effects.flagsSuma?.prontuario ?? 0) * 4;
+
   return value;
 }
 
