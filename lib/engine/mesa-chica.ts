@@ -119,6 +119,16 @@ export function resolveMesaChica(
     effects.influencia = -4;
   }
 
+  // Cada ficha de gestión política suma al prontuario, **salga a la luz o no**.
+  //
+  // Antes solo había un 22% de que explotara una o dos temporadas después, y
+  // si zafabas, zafabas: podías arreglar todas las finales de la presidencia
+  // sin que quedara rastro. Con el contador, zafar deja de ser gratis. Es lo
+  // que convierte "me salvé" en "me salvé por ahora".
+  if (assignment.gestion > 0) {
+    effects.flagsSuma = { prontuario: assignment.gestion };
+  }
+
   const deferred: NonNullable<Effects['deferred']> = [];
   for (let i = 0; i < assignment.gestion; i++) {
     if (rand.chance(0.22)) {

@@ -18,7 +18,13 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Darles lo que piden',
         hint: 'Paz social comprada. Vuelven en seis meses por más.',
-        effects: { caja: -1.5, influencia: -5, hinchada: 3, flags: { barra_arreglada: true } },
+        effects: {
+          caja: -1.5,
+          influencia: -5,
+          hinchada: 3,
+          flags: { barra_arreglada: true },
+          flagsSuma: { prontuario: 1 },
+        },
       },
       {
         label: 'Negarles todo',
@@ -31,7 +37,7 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Meterlos en el club como "seguridad"',
         hint: 'Los controlás. Ahora son parte de la estructura.',
-        effects: { caja: -0.8, influencia: -10, hinchada: 5, flags: { barra_adentro: true }, deferred: [{ inSeasons: 3, text: 'La barra que metiste adentro ya maneja la puerta del estadio. Y no te consulta.', effects: { influencia: -12, hinchada: -8 } }] },
+        effects: { caja: -0.8, influencia: -10, hinchada: 5, flags: { barra_adentro: true }, flagsSuma: { prontuario: 2 }, deferred: [{ inSeasons: 3, text: 'La barra que metiste adentro ya maneja la puerta del estadio. Y no te consulta.', effects: { influencia: -12, hinchada: -8 } }] },
       },
     ],
   },

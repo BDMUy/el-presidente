@@ -18,7 +18,12 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Votar con ellos',
         hint: 'Te ganás padrinos. Y una deuda de favor.',
-        effects: { influencia: 14, caja: 1.5, flags: { debe_favor: true } },
+        effects: {
+          influencia: 14,
+          caja: 1.5,
+          flags: { debe_favor: true },
+          flagsSuma: { prontuario: 1 },
+        },
       },
       {
         label: 'Votar en contra',

@@ -20,6 +20,8 @@ export default defineConfig({
   },
   test: {
     environment: 'node',
-    include: ['lib/**/*.test.ts', 'app/**/*.test.ts'],
+    // `content/` también: el contenido tiene reglas propias —qué carta se ve
+    // cuándo, qué opción suma al prontuario— y esas se prueban donde viven.
+    include: ['lib/**/*.test.ts', 'app/**/*.test.ts', 'content/**/*.test.ts'],
   },
 });

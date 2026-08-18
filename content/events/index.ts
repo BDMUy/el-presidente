@@ -15,6 +15,7 @@ import type { GameEvent } from '@/lib/engine/types';
 import { ASCENSO } from './ascenso';
 import { COLOR } from './color';
 import { COPAS } from './copas';
+import { CORRUPCION } from './corrupcion';
 import { CRISIS } from './crisis';
 import { DIRIGENCIA } from './dirigencia';
 import { ECONOMIA } from './economia';
@@ -32,6 +33,7 @@ export const ALL_EVENTS: GameEvent[] = [
   ...ECONOMIA,
   ...INFERIORES,
   ...FEMENINO,
+  ...CORRUPCION,
   ...ASCENSO,
   ...COPAS,
   ...CRISIS,
@@ -53,6 +55,7 @@ export {
   ASCENSO,
   COLOR,
   COPAS,
+  CORRUPCION,
   CRISIS,
   DIRIGENCIA,
   ECONOMIA,
