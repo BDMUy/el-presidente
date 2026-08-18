@@ -14,6 +14,7 @@
 import { useEffect, useState } from 'react';
 
 import { CLUBS } from '@/content/clubs';
+import { MODOS, type Modo } from '@/lib/engine/types';
 import { Cargando } from './cargando';
 
 interface Fila {
@@ -29,8 +30,12 @@ type Tipo = 'diario' | 'global';
 
 const CLUBES = new Map(CLUBS.map((c) => [c.id, c]));
 
+/** Etiqueta corta para las pestañas de duración. */
+const CORTO: Record<Modo, string> = { corta: '8', normal: '16', larga: '32' };
+
 export function Ranking() {
   const [tipo, setTipo] = useState<Tipo>('diario');
+  const [modo, setModo] = useState<Modo>('normal');
   const [filas, setFilas] = useState<Fila[] | null>(null);
   const [disponible, setDisponible] = useState<boolean | null>(null);
 
@@ -38,7 +43,7 @@ export function Ranking() {
     let vivo = true;
     // eslint-disable-next-line react-hooks/set-state-in-effect -- vuelve al estado de carga al cambiar de pestaña
     setFilas(null);
-    fetch(`/api/ranking?tipo=${tipo}`)
+    fetch(`/api/ranking?tipo=${tipo}&modo=${modo}`)
       .then(async (r) => {
         if (!vivo) return;
         if (r.status === 503) {
@@ -53,7 +58,7 @@ export function Ranking() {
     return () => {
       vivo = false;
     };
-  }, [tipo]);
+  }, [tipo, modo]);
 
   if (disponible === false || disponible === null) return null;
 
@@ -83,6 +88,39 @@ export function Ranking() {
         </div>
       </div>
 
+      {/* La duración solo aplica al global. La del día se juega siempre en
+          normal, así que ahí no hay nada que elegir: una sola tabla para
+          todos es justamente lo que la hace social. */}
+      {tipo === 'global' && (
+        <div
+          className="flex items-center gap-2 border-b border-linea px-3 py-2"
+          role="tablist"
+          aria-label="Duración"
+        >
+          <span className="shrink-0 font-acta text-[11px] tracking-[0.06em] text-papel-2 uppercase">
+            Temporadas
+          </span>
+          <div className="flex gap-1">
+            {MODOS.map((m) => (
+              <button
+                key={m}
+                type="button"
+                role="tab"
+                aria-selected={modo === m}
+                onClick={() => setModo(m)}
+                className={`flex min-h-11 min-w-11 items-center justify-center border px-2.5 font-acta text-[11px] tabular-nums transition-colors ${
+                  modo === m
+                    ? 'border-bronce-claro bg-bronce-claro/15 text-papel'
+                    : 'border-linea text-papel-2 hover:text-papel'
+                }`}
+              >
+                {CORTO[m]}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="px-3 py-2.5">
         {filas === null ? (
           <Cargando chico>Buscando la tabla…</Cargando>
@@ -90,7 +128,7 @@ export function Ranking() {
           <p className="font-body text-[14px] leading-snug text-papel-2">
             {tipo === 'diario'
               ? 'Nadie envió su Presidencia del Día todavía. Podés ser el primero.'
-              : 'La tabla histórica está vacía. Jugá una presidencia y entrá.'}
+              : `Todavía nadie terminó una presidencia de ${CORTO[modo]} temporadas. Podés ser el primero.`}
           </p>
         ) : (
           <ol className="space-y-1.5">

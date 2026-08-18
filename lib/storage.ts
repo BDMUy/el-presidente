@@ -16,7 +16,10 @@
  * los índices de decisión. Una partida vieja replayeada contra contenido nuevo
  * no falla: da otro juego, que es peor que fallar.
  */
-export const CONTENT_VERSION = 4;
+import type { Modo } from '@/lib/engine/types';
+import { MODOS } from '@/lib/engine/types';
+
+export const CONTENT_VERSION = 5;
 
 const KEY = 'el-presidente:partida';
 
@@ -24,6 +27,8 @@ export interface PartidaGuardada {
   version: number;
   seed: number;
   clubId: string;
+  /** Duración elegida. Sin esto, una corta guardada se retomaba como normal. */
+  modo: Modo;
   choices: number[];
   /** Fecha de la Presidencia del Día si esta partida es la del día. */
   diaria?: string | null;
@@ -57,7 +62,13 @@ export function leer(): PartidaGuardada | null {
       return null;
     }
 
-    return { ...(parsed as PartidaGuardada), diaria: parsed.diaria ?? null };
+    return {
+      ...(parsed as PartidaGuardada),
+      // Una duración que no reconocemos se lee como normal en vez de tirar la
+      // partida: peor sería perderla por un valor raro en el almacenamiento.
+      modo: MODOS.includes(parsed.modo as Modo) ? (parsed.modo as Modo) : 'normal',
+      diaria: parsed.diaria ?? null,
+    };
   } catch {
     return null;
   }

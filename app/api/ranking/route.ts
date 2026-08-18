@@ -14,6 +14,8 @@ import { NextResponse } from 'next/server';
 
 import { fechaDelDia } from '@/lib/daily';
 import { getDb } from '@/lib/db';
+import type { Modo } from '@/lib/engine/types';
+import { MODOS } from '@/lib/engine/types';
 
 const LIMITE = 50;
 const CACHE_SEGUNDOS = 30;
@@ -27,7 +29,17 @@ export async function GET(request: Request) {
     );
   }
 
-  const tipo = new URL(request.url).searchParams.get('tipo') === 'global' ? 'global' : 'diario';
+  const params = new URL(request.url).searchParams;
+  const tipo = params.get('tipo') === 'global' ? 'global' : 'diario';
+
+  // El global se lee por duración: el puntaje incluye las temporadas jugadas,
+  // así que una larga siempre le gana a una corta y mezclarlas sería comparar
+  // tres juegos distintos. El diario no lo necesita —la del día es siempre
+  // normal— y por eso sigue siendo una sola tabla para todos.
+  const pedido = params.get('modo');
+  const modo: Modo = (MODOS as readonly string[]).includes(pedido ?? '')
+    ? (pedido as Modo)
+    : 'normal';
 
   let filas;
   try {
@@ -36,7 +48,7 @@ export async function GET(request: Request) {
         ? await db`
             select nombre, club_id, puntaje, temporadas, titulos, final
             from presidencias
-            where fecha_diaria is null
+            where fecha_diaria is null and modo = ${modo}
             order by puntaje desc
             limit ${LIMITE}
           `
@@ -52,7 +64,7 @@ export async function GET(request: Request) {
   }
 
   return NextResponse.json(
-    { ok: true, tipo, filas },
+    { ok: true, tipo, modo: tipo === 'global' ? modo : null, filas },
     {
       headers: {
         'Cache-Control': `public, s-maxage=${CACHE_SEGUNDOS}, stale-while-revalidate=120`,

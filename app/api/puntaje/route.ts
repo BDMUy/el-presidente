@@ -18,6 +18,8 @@ import { fechaDelDia, presidenciaDelDia } from '@/lib/daily';
 import { getDb } from '@/lib/db';
 import { computeScore } from '@/lib/engine/election';
 import { replayRun } from '@/lib/engine/engine';
+import type { Modo } from '@/lib/engine/types';
+import { MODOS } from '@/lib/engine/types';
 import { limpiarNombre } from '@/lib/nombre';
 import { hashDeOrigen } from '@/lib/origen';
 
@@ -39,8 +41,13 @@ interface Envio {
   nombre?: unknown;
   seed?: unknown;
   clubId?: unknown;
+  modo?: unknown;
   choices?: unknown;
   diaria?: unknown;
+}
+
+function esModo(valor: unknown): valor is Modo {
+  return typeof valor === 'string' && (MODOS as readonly string[]).includes(valor);
 }
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -77,6 +84,11 @@ export async function POST(request: Request) {
   // ── Forma ────────────────────────────────────────────────
   const { dispositivo, nombre, seed, clubId, choices, diaria } = cuerpo;
 
+  // Sin modo se asume normal: es lo que eran todas las partidas antes de que
+  // los modos existieran, igual que en los links compartidos.
+  const modo: Modo = cuerpo.modo === undefined ? 'normal' : (cuerpo.modo as Modo);
+  if (!esModo(modo)) return malaPeticion('Duración inválida.');
+
   if (typeof dispositivo !== 'string' || !UUID.test(dispositivo)) {
     return malaPeticion('Dispositivo inválido.');
   }
@@ -108,7 +120,7 @@ export async function POST(request: Request) {
   // replay falla y el envío se rechaza.
   let estado;
   try {
-    estado = replayRun(seed, clubId, choices as number[]);
+    estado = replayRun(seed, clubId, choices as number[], modo);
   } catch {
     return malaPeticion('La partida no se puede reproducir.');
   }
@@ -125,6 +137,12 @@ export async function POST(request: Request) {
     const hoy = presidenciaDelDia(fechaDelDia());
     if (seed !== hoy.seed || clubId !== hoy.clubId) {
       return malaPeticion('Esa no es la Presidencia del Día.');
+    }
+    // La del día es siempre normal, y hay que exigirlo acá. Sin esto, alguien
+    // juega la semilla del día en modo corto y entra en la tabla diaria
+    // —la única que no se separa por modo— con otra vara.
+    if (modo !== 'normal') {
+      return malaPeticion('La Presidencia del Día se juega en duración normal.');
     }
     fechaDiaria = hoy.fecha;
   }
@@ -162,12 +180,13 @@ export async function POST(request: Request) {
   try {
     await db`
       insert into presidencias
-        (dispositivo, nombre, seed, club_id, decisiones, puntaje, temporadas, titulos, final, fecha_diaria, origen_hash)
+        (dispositivo, nombre, seed, club_id, modo, decisiones, puntaje, temporadas, titulos, final, fecha_diaria, origen_hash)
       values (
         ${dispositivo}::uuid,
         ${nombreLimpio},
         ${seed},
         ${clubId},
+        ${modo},
         ${db.array(choices as number[])}::smallint[],
         ${puntaje},
         ${estado.season},

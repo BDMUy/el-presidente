@@ -13,7 +13,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { getClub } from '@/content/clubs';
 import { presidenciaDelDia } from '@/lib/daily';
 import { applyChoice, replayRun, startRun } from '@/lib/engine/engine';
-import { EVENTS_PER_SEASON, type GameState } from '@/lib/engine/types';
+import { EVENTS_PER_SEASON, type GameState, type Modo } from '@/lib/engine/types';
 import { borrar, guardar, leer, marcarActaVista, vioActa } from '@/lib/storage';
 import { ActaAsuncion } from './acta-asuncion';
 import { Arranque } from './arranque';
@@ -61,7 +61,12 @@ export function Juego() {
       try {
         // eslint-disable-next-line react-hooks/set-state-in-effect -- la partida guardada solo se puede leer en el cliente
         setPartida({
-          state: replayRun(guardada.seed, guardada.clubId, guardada.choices),
+          state: replayRun(
+            guardada.seed,
+            guardada.clubId,
+            guardada.choices,
+            guardada.modo ?? 'normal',
+          ),
           diaria: guardada.diaria ?? null,
         });
       } catch {
@@ -71,12 +76,12 @@ export function Juego() {
     setCargando(false);
   }, []);
 
-  const empezar = useCallback((clubId: string) => {
+  const empezar = useCallback((clubId: string, modo: Modo) => {
     const seed = Math.floor(Math.random() * 0xffffffff);
-    setPartida({ state: startRun({ seed, clubId }), diaria: null });
+    setPartida({ state: startRun({ seed, clubId, modo }), diaria: null });
     setMostrarActa(!vioActa());
     setEnJuego(true);
-    guardar({ seed, clubId, choices: [], diaria: null });
+    guardar({ seed, clubId, modo, choices: [], diaria: null });
     // Sin esto se entraba al club con el scroll donde había quedado el padrón,
     // así que la primera pantalla de la presidencia aparecía por la mitad.
     alTope();
@@ -86,10 +91,12 @@ export function Juego() {
   // dispositivos y en el servidor que después valida el envío.
   const empezarDiaria = useCallback(() => {
     const { seed, clubId, fecha } = presidenciaDelDia();
-    setPartida({ state: startRun({ seed, clubId }), diaria: fecha });
+    // La del día es siempre normal: es la única tabla que no se separa por
+    // duración, así que todos tienen que jugar el mismo calendario.
+    setPartida({ state: startRun({ seed, clubId, modo: 'normal' }), diaria: fecha });
     setMostrarActa(!vioActa());
     setEnJuego(true);
-    guardar({ seed, clubId, choices: [], diaria: fecha });
+    guardar({ seed, clubId, modo: 'normal', choices: [], diaria: fecha });
     alTope();
   }, []);
 
@@ -115,6 +122,7 @@ export function Juego() {
       guardar({
         seed: siguiente.seed,
         clubId: siguiente.clubId,
+        modo: siguiente.modo,
         choices: siguiente.choices,
         diaria: actual.diaria,
       });
@@ -183,7 +191,12 @@ export function Juego() {
 
       <div className="mx-auto w-full max-w-xl flex-1 px-4 py-6">
         {mostrarActa ? (
-          <ActaAsuncion club={club} resources={state.resources} onAsumir={cerrarActa} />
+          <ActaAsuncion
+            club={club}
+            resources={state.resources}
+            modo={state.modo}
+            onAsumir={cerrarActa}
+          />
         ) : (
           // La key por decisión tomada no es cosmética: las pantallas que ahora
           // guardan una selección sin firmar viven en la misma posición del

@@ -23,8 +23,16 @@
 import { useMemo, useState } from 'react';
 
 import { CLUBS } from '@/content/clubs';
+import { mandatosDe } from '@/lib/engine/election';
 import { expectedPosition } from '@/lib/engine/season';
-import { CATEGORY_RULES, type Category, type Club } from '@/lib/engine/types';
+import {
+  CATEGORY_RULES,
+  MODOS,
+  TEMPORADAS_POR_MODO,
+  type Category,
+  type Club,
+  type Modo,
+} from '@/lib/engine/types';
 import { Membrete, Sello } from './ui';
 import { CampoNombre } from './campo-nombre';
 import { CampoSelect } from './campo-select';
@@ -35,6 +43,19 @@ import { SelectorClub } from './selector-club';
 import { VitrinaPanel } from './vitrina';
 
 const CATEGORIAS: Category[] = ['primera', 'nacional', 'b'];
+
+/**
+ * Cada duración con su costo real al lado.
+ *
+ * El dato con el que se elige no es "corta" sino cuántas temporadas y cuánto
+ * tiempo: nadie sabe qué significa una presidencia corta hasta que le decís
+ * que son ocho temporadas y unos cinco minutos.
+ */
+const DURACIONES: Record<Modo, string> = {
+  corta: 'Corta · 8 temporadas, unos 5 minutos',
+  normal: 'Normal · 16 temporadas, unos 10 minutos',
+  larga: 'Larga · 32 temporadas, unos 20 minutos',
+};
 
 /** La presidencia que quedó a medias, si hay alguna. */
 export interface EnCurso {
@@ -52,7 +73,7 @@ export function Arranque({
   onContinuar,
   onAbandonar,
 }: {
-  onEmpezar: (clubId: string) => void;
+  onEmpezar: (clubId: string, modo: Modo) => void;
   onEmpezarDiaria: () => void;
   enCurso?: EnCurso | null;
   onContinuar?: () => void;
@@ -60,6 +81,7 @@ export function Arranque({
 }) {
   const [elegido, setElegido] = useState<string | null>(null);
   const [categoria, setCategoria] = useState<Category>('primera');
+  const [modo, setModo] = useState<Modo>('normal');
 
   // Ordenados por tamaño: el que abre la lista busca casi siempre un grande, y
   // alfabético dejaba a Boca en la mitad y a River al fondo.
@@ -145,7 +167,22 @@ export function Arranque({
         </div>
 
         <div className="mt-3 border border-linea p-3 sm:p-4">
-          <div className="grid gap-3 sm:grid-cols-2">
+          {/* La duración va arriba y sola: es lo primero que se decide, y de
+              todas las opciones del padrón es la única que cambia cuánto
+              tiempo te va a llevar lo que estás por empezar. */}
+          <CampoSelect
+            etiqueta="Duración"
+            valor={modo}
+            onChange={(v) => setModo(v as Modo)}
+          >
+            {MODOS.map((m) => (
+              <option key={m} value={m}>
+                {DURACIONES[m]}
+              </option>
+            ))}
+          </CampoSelect>
+
+          <div className="mt-3 grid gap-3 sm:grid-cols-2">
             <CampoSelect etiqueta="Categoría" valor={categoria} onChange={cambiarCategoria}>
               {CATEGORIAS.map((id) => (
                 <option key={id} value={id}>
@@ -167,7 +204,11 @@ export function Arranque({
         </div>
 
         <div className="mt-4">
-          {club ? <PanelElegido club={club} onEmpezar={() => onEmpezar(club.id)} /> : <PanelVacio />}
+          {club ? (
+            <PanelElegido club={club} modo={modo} onEmpezar={() => onEmpezar(club.id, modo)} />
+          ) : (
+            <PanelVacio />
+          )}
         </div>
 
         {/* La tabla y la vitrina viven en esta columna y no en la de la
@@ -294,7 +335,15 @@ function PanelVacio() {
   );
 }
 
-function PanelElegido({ club, onEmpezar }: { club: Club; onEmpezar: () => void }) {
+function PanelElegido({
+  club,
+  modo,
+  onEmpezar,
+}: {
+  club: Club;
+  modo: Modo;
+  onEmpezar: () => void;
+}) {
   return (
     <div className="border border-bronce-claro/40 bg-pano-alto/60">
       <BandaSuperior club={club} />
@@ -332,6 +381,20 @@ function PanelElegido({ club, onEmpezar }: { club: Club; onEmpezar: () => void }
             </dt>
             <dd className="truncate font-display text-[17px] leading-tight font-bold text-papel">
               {CATEGORY_RULES[club.category].label}
+            </dd>
+          </div>
+          {/* La duración se repite acá, pegada al botón: es el campo de más
+              arriba del padrón y lo elegís antes que el club, así que para
+              cuando llegás a asumir ya no lo tenés a la vista. */}
+          <div className="min-w-0">
+            <dt className="font-acta text-[11px] tracking-[0.06em] text-papel-2 uppercase">
+              Mandatos
+            </dt>
+            <dd className="font-display text-[17px] leading-tight font-bold text-papel tabular-nums">
+              {mandatosDe(modo)}
+              <span className="ml-1 font-acta text-[12px] font-normal text-papel-2">
+                de {TEMPORADAS_POR_MODO[modo]} temp.
+              </span>
             </dd>
           </div>
         </dl>

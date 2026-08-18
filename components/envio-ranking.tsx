@@ -69,6 +69,7 @@ export function EnvioAlRanking({ state, diaria }: { state: GameState; diaria: st
           nombre: limpio,
           seed: state.seed,
           clubId: state.clubId,
+          modo: state.modo,
           choices: state.choices,
           diaria: diaria !== null,
         }),

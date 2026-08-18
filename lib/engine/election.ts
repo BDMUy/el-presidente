@@ -208,10 +208,18 @@ const EN_LETRAS: Record<number, string> = {
   32: 'treinta y dos',
 };
 
-/** El número en letras si está a mano, y en dígitos si no. Nunca vacío. */
-function letras(n: number): string {
+/**
+ * El número en letras si está a mano, y en dígitos si no. Nunca vacío.
+ *
+ * Se exporta porque la prosa del juego escribe los números con palabras, y el
+ * acta de asunción quedaba diciendo "Tenés 2 mandatos de cuatro temporadas":
+ * un dígito y una palabra en la misma frase.
+ */
+export function enLetras(n: number): string {
   return EN_LETRAS[n] ?? String(n);
 }
+
+const letras = enLetras;
 
 export function buildEnding(id: EndingId, state: GameState, club: Club): Ending {
   const años = state.season;

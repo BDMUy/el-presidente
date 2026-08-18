@@ -15,7 +15,8 @@
 import { useEffect, useState } from 'react';
 
 import { nombreDelPresidente } from '@/lib/dispositivo';
-import type { Club, Resources } from '@/lib/engine/types';
+import { enLetras, mandatosDe } from '@/lib/engine/election';
+import type { Club, Modo, Resources } from '@/lib/engine/types';
 import { entero, plataCorta, socios } from '@/lib/format';
 import { RECURSOS } from '@/lib/recursos';
 import { Continuar, Membrete, Papel, Puntos, Sello, Titulo } from './ui';
@@ -23,12 +24,16 @@ import { Continuar, Membrete, Papel, Puntos, Sello, Titulo } from './ui';
 export function ActaAsuncion({
   club,
   resources,
+  modo,
   onAsumir,
 }: {
   club: Club;
   resources: Resources;
+  modo: Modo;
   onAsumir: () => void;
 }) {
+  const mandatos = mandatosDe(modo);
+
   // Se lee después del montaje: el nombre vive en localStorage, que no existe
   // durante el prerender, y leerlo en el render daría un desajuste de
   // hidratación entre el HTML del servidor y el del navegador.
@@ -71,8 +76,11 @@ export function ActaAsuncion({
           </p>
         )}
 
+        {/* Los mandatos salen del modo: prometer cuatro en una presidencia
+            corta de dos era mentirle al jugador en su primera pantalla. */}
         <p className="mt-3 font-body text-[16px] leading-relaxed text-tinta">
-          Ganaste la elección. Tenés cuatro mandatos de cuatro temporadas para que no te echen, y
+          Ganaste la elección. Tenés {enLetras(mandatos)}{' '}
+          {mandatos === 1 ? 'mandato' : 'mandatos'} de cuatro temporadas para que no te echen, y
           esto es todo con lo que contás. Los partidos no los jugás vos: armás el plantel y el
           plantel responde.
         </p>
