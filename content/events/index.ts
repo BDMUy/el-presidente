@@ -18,7 +18,9 @@ import { COPAS } from './copas';
 import { CRISIS } from './crisis';
 import { DIRIGENCIA } from './dirigencia';
 import { ECONOMIA } from './economia';
+import { FEMENINO } from './femenino';
 import { HINCHADA } from './hinchada';
+import { INFERIORES } from './inferiores';
 import { LEGADO } from './legado';
 import { VESTUARIO } from './vestuario';
 
@@ -28,6 +30,8 @@ export const ALL_EVENTS: GameEvent[] = [
   ...DIRIGENCIA,
   ...COLOR,
   ...ECONOMIA,
+  ...INFERIORES,
+  ...FEMENINO,
   ...ASCENSO,
   ...COPAS,
   ...CRISIS,
@@ -45,4 +49,16 @@ export function findDuplicateIds(): string[] {
   return dupes;
 }
 
-export { ASCENSO, COLOR, COPAS, CRISIS, DIRIGENCIA, ECONOMIA, HINCHADA, LEGADO, VESTUARIO };
+export {
+  ASCENSO,
+  COLOR,
+  COPAS,
+  CRISIS,
+  DIRIGENCIA,
+  ECONOMIA,
+  FEMENINO,
+  HINCHADA,
+  INFERIORES,
+  LEGADO,
+  VESTUARIO,
+};
