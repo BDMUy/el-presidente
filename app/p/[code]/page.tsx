@@ -27,7 +27,7 @@ function reconstruir(code: string): GameState | null {
   const datos = decodeRun(decodeURIComponent(code));
   if (!datos) return null;
   try {
-    const state = replayRun(datos.seed, datos.clubId, datos.choices);
+    const state = replayRun(datos.seed, datos.clubId, datos.choices, datos.modo);
     return state.status === 'terminado' && state.ending ? state : null;
   } catch {
     return null;

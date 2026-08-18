@@ -49,7 +49,12 @@ export function FaseFin({
 
   const compartir = useCallback(async () => {
     const url = shareUrl(
-      encodeRun({ seed: state.seed, clubId: state.clubId, choices: state.choices }),
+      encodeRun({
+        seed: state.seed,
+        clubId: state.clubId,
+        modo: state.modo,
+        choices: state.choices,
+      }),
       window.location.origin,
     );
     const texto = `${ending.title} · ${club.name}`;

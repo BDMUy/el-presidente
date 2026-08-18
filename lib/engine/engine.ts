@@ -168,8 +168,13 @@ export function applyChoice(state: GameState, choice: number): GameState {
  * puntajes, y el servidor corre exactamente esta función para saber si el
  * puntaje declarado es real.
  */
-export function replayRun(seed: number, clubId: string, choices: number[]): GameState {
-  let state = startRun({ seed, clubId });
+export function replayRun(
+  seed: number,
+  clubId: string,
+  choices: number[],
+  modo: Modo = 'normal',
+): GameState {
+  let state = startRun({ seed, clubId, modo });
   for (const choice of choices) {
     if (state.status === 'terminado') break;
     const max = optionCount(state);

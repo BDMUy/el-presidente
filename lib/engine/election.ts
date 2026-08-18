@@ -154,6 +154,16 @@ function matiz(state: GameState, club: Club): string {
   if (state.rare) {
     return 'Nadie se acuerda de que recibiste el club en llamas. Vos sí.';
   }
+  // El remate del modo largo, y la razón por la que su techo son treinta y dos
+  // y no otro número: los deja a tres temporadas del récord, para siempre.
+  if (state.modo === 'larga' && state.season >= TEMPORADAS_POR_MODO.larga) {
+    return (
+      'Treinta y dos años en el sillón y te faltaron tres. Bantiago Sernabéu llegó a los ' +
+      'treinta y cinco y por eso la cancha lleva su nombre; Julio Rondona duró lo mismo, ' +
+      'pero detrás de un escritorio en Viamonte. Tres temporadas separan una presidencia ' +
+      'larga de una leyenda.'
+    );
+  }
   if (continental) {
     return 'Hay una noche, en una cancha del continente, que la gente va a contarles a sus nietos.';
   }
@@ -181,20 +191,47 @@ function matiz(state: GameState, club: Club): string {
   return 'Con el tiempo, el balance de tu gestión va a depender de quién lo cuente.';
 }
 
+/** Cuántos mandatos completos entran en una presidencia de este modo. */
+export function mandatosDe(modo: Modo): number {
+  return TEMPORADAS_POR_MODO[modo] / SEASONS_PER_MANDATE;
+}
+
+const EN_LETRAS: Record<number, string> = {
+  2: 'dos',
+  3: 'tres',
+  4: 'cuatro',
+  5: 'cinco',
+  6: 'seis',
+  7: 'siete',
+  8: 'ocho',
+  16: 'dieciséis',
+  32: 'treinta y dos',
+};
+
+/** El número en letras si está a mano, y en dígitos si no. Nunca vacío. */
+function letras(n: number): string {
+  return EN_LETRAS[n] ?? String(n);
+}
+
 export function buildEnding(id: EndingId, state: GameState, club: Club): Ending {
   const años = state.season;
   const titulos = state.titles.length;
+  // La duración salía escrita a mano —"Dieciséis años", "los cuatro
+  // mandatos"— de cuando había una sola. Con tres modos, esos textos mentían
+  // en dos de cada tres partidas.
+  const temporadas = TEMPORADAS_POR_MODO[state.modo];
+  const mandatos = mandatosDe(state.modo);
 
   const endings: Record<EndingId, Ending> = {
     estatua: {
       id: 'estatua',
       title: 'TU NOMBRE EN LA TRIBUNA',
-      text: `Dieciséis años, ${titulos} ${plural(titulos, 'título', 'títulos')} y un club que no se parece en nada al que recibiste. La asamblea votó por unanimidad ponerle tu nombre a la tribuna sur. Fuiste a la inauguración y no pudiste hablar.`,
+      text: `${capitalize(letras(temporadas))} años, ${titulos} ${plural(titulos, 'título', 'títulos')} y un club que no se parece en nada al que recibiste. La asamblea votó por unanimidad ponerle tu nombre a la tribuna sur. Fuiste a la inauguración y no pudiste hablar.`,
     },
     'reelecto-gris': {
       id: 'reelecto-gris',
       title: 'CUMPLISTE',
-      text: `Terminaste los cuatro mandatos. ${titulos > 0 ? `${titulos} ${plural(titulos, 'título', 'títulos')} en la vitrina` : 'Sin títulos, pero sin catástrofes'}, las cuentas más o menos en orden y ${club.name} de pie. No te van a hacer una estatua. Tampoco te van a putear en el barrio.`,
+      text: `Terminaste los ${letras(mandatos)} mandatos. ${titulos > 0 ? `${titulos} ${plural(titulos, 'título', 'títulos')} en la vitrina` : 'Sin títulos, pero sin catástrofes'}, las cuentas más o menos en orden y ${club.name} de pie. No te van a hacer una estatua. Tampoco te van a putear en el barrio.`,
     },
     'derrota-electoral': {
       id: 'derrota-electoral',
@@ -211,10 +248,15 @@ export function buildEnding(id: EndingId, state: GameState, club: Club): Ending 
       title: 'EL CLUB FUNDIDO',
       text: `La deuda se comió todo. Embargos, sueldos impagos, jugadores que se fueron libres y una causa penal con tu nombre en la carátula. ${club.name} va a tardar una década en recuperarse de tu gestión.`,
     },
+    // El título y el texto decían "dos" desde que la condición eran dos.
+    // Después se subió a tres —está comentado en `checkEarlyExit`— y esto
+    // quedó viejo, contando una historia que el juego ya no jugaba. Ahora sale
+    // del número real de descensos, que además puede ser más de tres en una
+    // presidencia larga.
     'descenso-fatal': {
       id: 'descenso-fatal',
-      title: 'DOS DESCENSOS',
-      text: `Dos descensos en una misma presidencia. No hay influencia que aguante eso. Te fuiste antes de que te echaran, y ni así te ahorraste el escrache en la puerta de tu casa.`,
+      title: `${capitalize(letras(state.descensos))} descensos`.toUpperCase(),
+      text: `${capitalize(letras(state.descensos))} descensos en una misma presidencia. No hay influencia que aguante eso. Te fuiste antes de que te echaran, y ni así te ahorraste el escrache en la puerta de tu casa.`,
     },
   };
 

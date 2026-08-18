@@ -113,6 +113,53 @@ export const LOGROS: readonly LogroDef[] = [
     oculto: true,
     cumple: (s) => s.ending?.id === 'quiebra',
   },
+
+  // ── La escalera de los eternos ─────────────────────────────
+  //
+  // Los cuatro se desbloquean pasando la marca de un dirigente que existió, y
+  // los cuatro son alcanzables **solo en modo largo**, porque la normal se
+  // termina en la temporada 16. Eso es a propósito: el modo largo tiene algo
+  // propio que ganar y no es nada más "lo mismo pero más".
+  //
+  // Están repartidos entre cuatro hinchadas —Boca, Barcelona y Madrid, la
+  // Conmebol, Milan— para que el chiste no le hable a una sola tribuna. Y
+  // arranca en casa: la primera vara que pasás es la de Armando, no una de
+  // Europa.
+  //
+  // Los nombres siguen la regla de content/parodias.ts: juego fonético y nada
+  // más. Ninguno dice nada de nadie.
+  {
+    id: 'el-mas-largo-del-barrio',
+    label: 'El más largo del barrio',
+    pista:
+      'Veintiuna temporadas. Alberto J. Armendo estuvo lo mismo en Boca y terminaron poniéndole su nombre a la cancha. A vos todavía no, pero ya estás en esa conversación.',
+    oculto: true,
+    cumple: (s) => s.season >= 21,
+  },
+  {
+    id: 'mas-que-los-de-alla',
+    label: 'Más que los de allá',
+    pista:
+      'Veintitrés temporadas. Josep Lluís Múñez duró veintidós en Barcelona y Perentino Flórez lleva veintitrés en Madrid. Los pasaste a los dos sin salir del país.',
+    oculto: true,
+    cumple: (s) => s.season >= 23,
+  },
+  {
+    id: 'dueno-del-continente',
+    label: 'Dueño del continente',
+    pista:
+      'Veintisiete temporadas. Nicolás León manejó el fútbol de toda Sudamérica ese tiempo y nunca tuvo que ganar un partido. Vos sí.',
+    oculto: true,
+    cumple: (s) => s.season >= 27,
+  },
+  {
+    id: 'una-era',
+    label: 'Una era',
+    pista:
+      'Treinta y una temporadas. Bilvio Serlusconi estuvo eso en Milán y ganó todo lo que había para ganar. Vos, lo que hayas ganado, lo ganaste acá.',
+    oculto: true,
+    cumple: (s) => s.season >= 31,
+  },
 ];
 
 export const LOGROS_POR_ID: Record<string, LogroDef> = Object.fromEntries(

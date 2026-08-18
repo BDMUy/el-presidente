@@ -5,6 +5,7 @@ import { logrosDeLaPartida, LOGROS } from '@/content/logros';
 import { applyChoice, optionCount, replayRun, startRun } from '@/lib/engine/engine';
 import { Rand } from '@/lib/engine/rng';
 import type { GameState } from '@/lib/engine/types';
+import { MODOS } from '@/lib/engine/types';
 import { decodeRun, encodeRun, shareUrl } from './share';
 
 /**
@@ -45,15 +46,48 @@ function partidaCompleta(seed: number, clubId: string): GameState {
 
 describe('codificación de partidas', () => {
   it('ida y vuelta exacta', () => {
-    const original = { seed: 3141592653, clubId: 'boca', choices: [0, 3, 55, 1, 0, 12] };
+    const original = {
+      seed: 3141592653,
+      clubId: 'boca',
+      modo: 'normal' as const,
+      choices: [0, 3, 55, 1, 0, 12],
+    };
     expect(decodeRun(encodeRun(original))).toEqual(original);
   });
 
   it('sirve para cualquier club del catálogo', () => {
     for (const club of CLUBS) {
-      const run = { seed: 12345, clubId: club.id, choices: [1, 2, 3] };
+      const run = { seed: 12345, clubId: club.id, modo: 'normal' as const, choices: [1, 2, 3] };
       expect(decodeRun(encodeRun(run)), club.id).toEqual(run);
     }
+  });
+
+  it('el modo va y vuelve, en cualquier club', () => {
+    // El primero, el último y uno del medio: el modo se empaqueta con el índice
+    // del club, así que los bordes del catálogo son donde se rompería.
+    const bordes = [CLUBS[0], CLUBS[Math.floor(CLUBS.length / 2)], CLUBS[CLUBS.length - 1]];
+    for (const modo of MODOS) {
+      for (const club of bordes) {
+        const run = { seed: 999, clubId: club.id, modo, choices: [1] };
+        expect(decodeRun(encodeRun(run)), `${modo}/${club.id}`).toEqual(run);
+      }
+    }
+  });
+
+  it('un link escrito antes de que existieran los modos sigue siendo normal', () => {
+    // Ésta es la garantía que hace que empaquetar el modo adentro del campo del
+    // club valga la pena. El link de abajo se generó con la versión anterior,
+    // que no sabía nada de modos: son seis caracteres de semilla y dos de club,
+    // sin nada más. Tiene que decodificar igual que entonces.
+    const viejo = 'AABnkyAABCACACAAAAAAABAAAAABAAAADAAAAAAA';
+    const datos = decodeRun(viejo);
+
+    expect(datos).not.toBeNull();
+    expect(datos!.modo).toBe('normal');
+    expect(datos!.seed).toBe(424242);
+    expect(datos!.clubId).toBe('boca');
+    // Y el codificador de hoy, pidiéndole una normal, escribe exactamente eso.
+    expect(encodeRun({ ...datos!, modo: 'normal' })).toBe(viejo);
   });
 
   it('soporta semillas en todo el rango de 32 bits', () => {
@@ -87,7 +121,7 @@ describe('codificación de partidas', () => {
         choices: original.choices,
       });
       const datos = decodeRun(code)!;
-      const reconstruida = replayRun(datos.seed, datos.clubId, datos.choices);
+      const reconstruida = replayRun(datos.seed, datos.clubId, datos.choices, datos.modo);
       expect(reconstruida).toEqual(original);
     }
   });
