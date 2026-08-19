@@ -1,0 +1,23 @@
+# Despliegue en Netlify.
+#
+# Netlify detecta solo que esto es un proyecto Next y le instala su runtime,
+# que es el que convierte las rutas dinámicas —/api/puntaje, /api/ranking, la
+# página del link compartido y su imagen— en funciones. No hace falta declarar
+# el plugin acá; lo que sí hace falta es que nada de esto quede librado al
+# autodetect, porque el día que cambie el default de la plataforma el build
+# empieza a comportarse distinto sin que nadie haya tocado el repo.
+
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  # Next 16 pide Node 20.9 o más. Se fija la LTS en vez de dejar el default de
+  # la plataforma para que el build de Netlify y el de la máquina de desarrollo
+  # sean el mismo build.
+  NODE_VERSION = "22"
+
+# Las cabeceras de seguridad NO se configuran acá: salen de next.config.ts, que
+# es también donde están explicadas y donde alcanzan igual a las páginas y a los
+# archivos estáticos. Definirlas en dos lugares es garantizar que un día digan
+# cosas distintas.

@@ -4,9 +4,9 @@ import { CLUBS } from '@/content/clubs';
 import { logrosDeLaPartida, LOGROS } from '@/content/logros';
 import { applyChoice, optionCount, replayRun, startRun } from '@/lib/engine/engine';
 import { Rand } from '@/lib/engine/rng';
-import type { GameState } from '@/lib/engine/types';
+import type { GameState, Modo } from '@/lib/engine/types';
 import { MODOS } from '@/lib/engine/types';
-import { decodeRun, encodeRun, shareUrl } from './share';
+import { decodeRun, encodeRun, reconstruirPresidencia, shareUrl } from './share';
 
 /**
  * El decodificador tiene que aceptar exactamente lo que el codificador puede
@@ -185,5 +185,57 @@ describe('logros', () => {
     // Con decisiones al azar no se consiguen todos; los básicos sí.
     expect(conseguidos.has('primera-vuelta')).toBe(true);
     expect(conseguidos.size).toBeGreaterThanOrEqual(4);
+  });
+});
+
+/**
+ * Todo lo que lee un link tiene que leerlo por el mismo lugar.
+ *
+ * `replayRun` toma el modo como `normal` cuando no se lo pasan, así que una
+ * reconstrucción a la que se le olvida el modo no falla: devuelve otra partida,
+ * completamente válida, con otro final y otro puntaje. Eso ya pasó una vez —la
+ * imagen de vista previa lo omitía y la página no— y la única forma de que no
+ * vuelva a pasar es que exista un solo camino.
+ */
+describe('reconstruirPresidencia', () => {
+  function jugarEnModo(seed: number, clubId: string, modo: Modo): GameState {
+    const chooser = new Rand(seed ^ 0x1234567);
+    let state = startRun({ seed, clubId, modo });
+    let guard = 0;
+    while (state.status === 'jugando' && guard++ < 4000) {
+      const opciones = optionCount(state);
+      if (opciones === 0) break;
+      state = applyChoice(state, chooser.int(0, opciones - 1));
+    }
+    return state;
+  }
+
+  it('devuelve la partida exacta en los tres modos', () => {
+    for (const modo of MODOS) {
+      const original = jugarEnModo(987654321, 'talleres', modo);
+      const code = encodeRun({
+        seed: original.seed,
+        clubId: original.clubId,
+        modo: original.modo,
+        choices: original.choices,
+      });
+      const reconstruida = reconstruirPresidencia(code);
+      expect(reconstruida, `modo ${modo}`).toEqual(original);
+      expect(reconstruida?.modo, `modo ${modo}`).toBe(modo);
+    }
+  });
+
+  it('descarta lo que no es una presidencia terminada', () => {
+    // Un link a medio jugar existe —el juego los arma mientras se juega— pero
+    // la página compartida y su imagen solo muestran presidencias cerradas.
+    const aMedias = encodeRun({ seed: 4242, clubId: 'boca', choices: [0, 0, 0] });
+    expect(reconstruirPresidencia(aMedias)).toBeNull();
+  });
+
+  it('no lanza con un link inventado', () => {
+    for (const basura of ['', 'x', '../../etc/passwd', 'A'.repeat(500), '%%%%']) {
+      expect(() => reconstruirPresidencia(basura)).not.toThrow();
+      expect(reconstruirPresidencia(basura)).toBeNull();
+    }
   });
 });

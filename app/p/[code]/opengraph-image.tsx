@@ -12,9 +12,8 @@ import { ImageResponse } from 'next/og';
 
 import { getClub } from '@/content/clubs';
 import { computeScore } from '@/lib/engine/election';
-import { replayRun } from '@/lib/engine/engine';
 import { TITLES } from '@/lib/engine/types';
-import { decodeRun } from '@/lib/share';
+import { reconstruirPresidencia } from '@/lib/share';
 
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
@@ -29,16 +28,7 @@ const BRONCE = '#7a5f24';
 export default async function Image({ params }: { params: Promise<{ code: string }> }) {
   const { code } = await params;
 
-  const datos = decodeRun(decodeURIComponent(code));
-  let state = null;
-  if (datos) {
-    try {
-      const s = replayRun(datos.seed, datos.clubId, datos.choices);
-      if (s.status === 'terminado' && s.ending) state = s;
-    } catch {
-      state = null;
-    }
-  }
+  const state = reconstruirPresidencia(code);
 
   // Sin partida válida la imagen no puede mentir: muestra la portada del juego.
   if (!state?.ending) {

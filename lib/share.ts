@@ -13,7 +13,8 @@
  */
 
 import { CLUBS } from '@/content/clubs';
-import type { Modo } from '@/lib/engine/types';
+import { replayRun } from '@/lib/engine/engine';
+import type { GameState, Modo } from '@/lib/engine/types';
 
 const ALFABETO = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
 const BASE = ALFABETO.length; // 64
@@ -167,4 +168,35 @@ export function decodeRun(code: string): RunCodificada | null {
 /** La URL completa para compartir. */
 export function shareUrl(code: string, origin: string): string {
   return `${origin.replace(/\/$/, '')}/p/${code}`;
+}
+
+/**
+ * Decodifica un link y reconstruye la presidencia que lleva adentro.
+ *
+ * Vive acá y no en cada página porque la reconstrucción tiene una parte
+ * silenciosa: además del seed y el club, el link lleva el **modo**, y
+ * `replayRun` lo toma por defecto como `normal` si no se lo pasan. Una partida
+ * corta reconstruida sin su modo no falla —devuelve un estado perfectamente
+ * válido— pero es *otra* partida.
+ *
+ * Eso ya pasó: la página del link pasaba el modo y la imagen de vista previa
+ * no, así que al pegar el link de una presidencia corta o larga la miniatura
+ * mostraba un resultado distinto al de la página que abría abajo. Con un solo
+ * lugar donde se reconstruye, el error no se puede repetir en el próximo lugar
+ * que necesite leer un link.
+ *
+ * Devuelve null ante cualquier problema: un link viejo, truncado o inventado
+ * no debe tirar abajo la página ni la imagen. El `decodeURIComponent` va
+ * adentro del try a propósito: ante un porcentaje suelto —/p/%%%— lanza
+ * `URIError`, y afuera del try eso era un 500 donde correspondía un 404.
+ */
+export function reconstruirPresidencia(code: string): GameState | null {
+  try {
+    const datos = decodeRun(decodeURIComponent(code));
+    if (!datos) return null;
+    const state = replayRun(datos.seed, datos.clubId, datos.choices, datos.modo);
+    return state.status === 'terminado' && state.ending ? state : null;
+  } catch {
+    return null;
+  }
 }

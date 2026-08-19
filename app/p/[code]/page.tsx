@@ -13,26 +13,9 @@ import type { Metadata } from 'next';
 
 import { getClub } from '@/content/clubs';
 import { computeScore } from '@/lib/engine/election';
-import { replayRun } from '@/lib/engine/engine';
-import type { GameState } from '@/lib/engine/types';
-import { decodeRun } from '@/lib/share';
+import { reconstruirPresidencia } from '@/lib/share';
 import { ResumenPresidencia } from '@/components/resumen-presidencia';
 import { Membrete, Papel } from '@/components/ui';
-
-/**
- * Reconstruye la partida del link. Devuelve null ante cualquier problema:
- * un link viejo, truncado o inventado no debe tirar abajo la página.
- */
-function reconstruir(code: string): GameState | null {
-  const datos = decodeRun(decodeURIComponent(code));
-  if (!datos) return null;
-  try {
-    const state = replayRun(datos.seed, datos.clubId, datos.choices, datos.modo);
-    return state.status === 'terminado' && state.ending ? state : null;
-  } catch {
-    return null;
-  }
-}
 
 export async function generateMetadata({
   params,
@@ -40,7 +23,7 @@ export async function generateMetadata({
   params: Promise<{ code: string }>;
 }): Promise<Metadata> {
   const { code } = await params;
-  const state = reconstruir(code);
+  const state = reconstruirPresidencia(code);
   if (!state?.ending) return { title: 'Presidencia no encontrada · El Presidente' };
 
   const club = getClub(state.clubId);
@@ -64,7 +47,7 @@ export default async function PresidenciaCompartida({
   params: Promise<{ code: string }>;
 }) {
   const { code } = await params;
-  const state = reconstruir(code);
+  const state = reconstruirPresidencia(code);
   if (!state?.ending) notFound();
 
   const club = getClub(state.clubId);
