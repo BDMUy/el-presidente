@@ -176,7 +176,16 @@ export function BarraDecision({
     <div className="sticky bottom-0 -mx-4 mt-5 border-t border-pano-borde bg-pano-alto/97 px-4 py-3 backdrop-blur">
       <div className="mx-auto flex max-w-xl items-center gap-3">
         <div className="min-w-0 flex-1">
-          <p className="truncate font-display text-[15px] leading-tight font-bold text-papel">
+          {/* Dos líneas y no una.
+              Con `truncate`, 80 de las 345 opciones del juego —el 23%— llegaban
+              cortadas a la barra: la más larga mide 382px contra los 230 que
+              hay disponibles en un teléfono de 375. Ninguna quedaba ambigua
+              —dentro de una misma carta, lo que se alcanzaba a leer siempre
+              alcanzaba para distinguirlas— pero la barra es donde se confirma
+              lo que se está por firmar, y ahí no puede faltar la mitad de la
+              frase. Con dos líneas entran las 345, y la barra crece diez
+              píxeles solo cuando hace falta. */}
+          <p className="line-clamp-2 font-display text-[15px] leading-tight font-bold text-papel">
             {resumen}
           </p>
           {detalle && (

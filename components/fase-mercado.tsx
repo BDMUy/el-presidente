@@ -108,7 +108,13 @@ export function FaseMercado({
             ? 'Elegí una operación'
             : oferta
               ? oferta.name
-              : 'La ventana se cierra sin mover nada'
+              : // La etiqueta de la opción elegida, igual que en las actas.
+                // Antes decía "La ventana se cierra sin mover nada", que con el
+                // botón en "Cerrar la ventana" —y unos 133px libres en un
+                // teléfono de 375, la mitad que en los otros casos— pedía tres
+                // líneas y llegaba cortado. Además repetía al botón: el botón
+                // nombra la acción, el resumen nombra lo elegido.
+                'No mover nada'
         }
         detalle={
           oferta
