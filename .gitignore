@@ -42,6 +42,23 @@ yarn-error.log*
 # vercel
 .vercel
 
+# netlify
+#
+# La CLI de Netlify crea esta carpeta al vincular el sitio y adentro guarda el
+# id del sitio y estado de builds. No es un secreto, pero es de esta máquina y
+# no del proyecto: si dos personas la comitean, se pisan el vínculo.
+.netlify
+
+# Herramientas del entorno de desarrollo, no del juego
+#
+# Son skills instaladas localmente por el asistente. `.claude/launch.json` sí
+# se comitea, y no es una inconsistencia: eso dice cómo se levanta el servidor
+# de este proyecto y le sirve a cualquiera que lo clone. Esto otro es qué
+# tenía instalado quien lo escribió.
+.agents/
+skills-lock.json
+.neon
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
