@@ -2,7 +2,7 @@
   "name": "el-presidente",
   "version": "0.1.0",
   "description": "Un roguelike de navegador donde dirigís un club de fútbol argentino.",
-  "license": "PolyForm-Noncommercial-1.0.0",
+  "license": "AGPL-3.0-only",
   "private": true,
   "scripts": {
     "dev": "next dev",

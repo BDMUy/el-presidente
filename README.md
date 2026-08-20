@@ -136,9 +136,17 @@ club de la partida, que es de ficción.
 
 ## Licencia
 
-[PolyForm Noncommercial 1.0.0](LICENSE). Podés jugar, leer, estudiar,
-modificar y compartir esto para cualquier fin **no comercial**. El uso
-comercial queda reservado al titular del copyright; para eso, escribime.
+Copyright © 2026 Bruno Martínez.
 
-Los nombres de los clubes son de sus clubes y la licencia no dice nada sobre
-ellos: cubre el código y los textos escritos para el juego.
+[GNU Affero General Public License v3.0](LICENSE). Podés usar, estudiar,
+modificar y compartir esto libremente. La condición es una sola y es la que
+distingue a la AGPL de la GPL común: **si publicás una versión modificada en un
+servidor, tenés que ofrecerle el código a quien la use.** No alcanza con no
+distribuir binarios; que la gente lo juegue por internet ya cuenta.
+
+O sea: cualquiera puede levantar su propia versión, y ninguna puede ser una
+caja cerrada. Quien quiera hacer un producto cerrado con esto tiene que pedir
+otra licencia.
+
+Los nombres de los clubes son de sus clubes: la licencia cubre el código y los
+textos escritos para el juego, no las marcas ajenas que el juego menciona.

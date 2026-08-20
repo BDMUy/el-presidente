@@ -252,8 +252,48 @@ export function Arranque({
             botón, arranca cerrada y desaparece sola si todavía no jugaste
             ninguna presidencia. */}
         <VitrinaPanel />
+
+        <PieDeLicencia />
       </div>
     </div>
+  );
+}
+
+/**
+ * Dónde está el código, al pie del inicio.
+ *
+ * No es un crédito ni una cortesía: el juego se publica bajo la AGPL, y su
+ * artículo 13 dice que si alguien corre una versión modificada en un servidor
+ * tiene que ofrecerle el código a quien la use. Un link visible desde la
+ * aplicación es la forma más simple de cumplirlo, y la que además sirve para
+ * algo: quien tenga curiosidad por cómo funciona el sorteo de cartas puede ir
+ * a mirarlo.
+ *
+ * Si la variable no está configurada no se dibuja nada, en vez de dejar un
+ * link roto apuntando a un repositorio que todavía no existe. Se configura en
+ * `NEXT_PUBLIC_SOURCE_URL`, y este es el único caso del proyecto donde
+ * `NEXT_PUBLIC_` es correcto: es una dirección pública que tiene que llegar al
+ * navegador, no una credencial.
+ */
+function PieDeLicencia() {
+  const fuente = process.env.NEXT_PUBLIC_SOURCE_URL;
+  if (!fuente) return null;
+
+  return (
+    <p className="mt-4 font-acta text-[11px] leading-relaxed tracking-[0.06em] text-papel-2 uppercase">
+      Software libre bajo AGPL v3 ·{' '}
+      {/* El padding no es estético: como texto suelto, el link medía 13px de
+          alto y en un teléfono eso no se toca. Mismo tratamiento que el
+          "Volver al inicio" del pie del juego. */}
+      <a
+        href={fuente}
+        target="_blank"
+        rel="noreferrer"
+        className="-mx-2 -my-1 inline-block px-2 py-3 underline underline-offset-4 transition-colors hover:text-papel"
+      >
+        Código fuente
+      </a>
+    </p>
   );
 }
 
