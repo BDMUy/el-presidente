@@ -113,6 +113,11 @@ const PUNTOS_ESTATUA: Record<Modo, number> = {
   corta: 200,
   normal: 200,
   larga: 400,
+  // En llamas dura lo mismo que la normal y pide lo mismo. La dificultad ya
+  // está en el arranque; descontarle también la vara sería premiar dos veces
+  // lo mismo, y el número que interesa —cuántas terminan con estatua— se mide
+  // igual que en los otros modos.
+  llamas: 200,
 };
 
 export function puntosParaEstatua(modo: Modo): number {
@@ -171,8 +176,12 @@ function matiz(state: GameState, club: Club): string {
   const continental = titles.some((t) => t.id === 'libertadores' || t.id === 'sudamericana');
   const empezoEn = history[0]?.category;
 
-  if (state.rare) {
-    return 'Nadie se acuerda de que recibiste el club en llamas. Vos sí.';
+  if (state.modo === 'llamas' && state.season >= TEMPORADAS_POR_MODO.llamas) {
+    return (
+      'Recibiste el club con veintidós millones de deuda, la gente en contra y un plantel ' +
+      'que no podías pagar, y llegaste hasta el final. Nadie se acuerda de cómo lo recibiste. ' +
+      'Vos sí.'
+    );
   }
   // El remate del modo largo, y la razón por la que su techo son treinta y dos
   // y no otro número: los deja a tres temporadas del récord, para siempre.

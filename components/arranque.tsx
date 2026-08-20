@@ -45,16 +45,28 @@ import { VitrinaPanel } from './vitrina';
 const CATEGORIAS: Category[] = ['primera', 'nacional', 'b'];
 
 /**
- * Cada duración con su costo real al lado.
+ * Cada tipo de partida con su costo real al lado.
  *
  * El dato con el que se elige no es "corta" sino cuántas temporadas y cuánto
  * tiempo: nadie sabe qué significa una presidencia corta hasta que le decís
  * que son ocho temporadas y unos cinco minutos.
+ *
+ * En llamas dura lo mismo que la normal, así que lo que hay que decir al lado
+ * no es el tiempo sino a qué se está entrando. Se dice sin vueltas: quien lo
+ * elige tiene que saber que arranca perdiendo.
+ *
+ * Los cuatro textos están cortos por una razón medida: en un teléfono de 375
+ * el select tiene 267px de ancho útil —el resto se lo llevan el padding y la
+ * flecha— y las tres duraciones, con el "unos" adelante, medían 271, 301 y
+ * 290. O sea que **las tres venían truncándose desde siempre** y nadie lo
+ * había visto, porque lo que se corta es la cola: "unos 5 minu…". Sin el
+ * "unos" quedan en 232, 262 y 252, y la cuarta en 243.
  */
-const DURACIONES: Record<Modo, string> = {
-  corta: 'Corta · 8 temporadas, unos 5 minutos',
-  normal: 'Normal · 16 temporadas, unos 10 minutos',
-  larga: 'Larga · 32 temporadas, unos 20 minutos',
+const PARTIDAS: Record<Modo, string> = {
+  corta: 'Corta · 8 temporadas, 5 minutos',
+  normal: 'Normal · 16 temporadas, 10 minutos',
+  larga: 'Larga · 32 temporadas, 20 minutos',
+  llamas: 'En llamas · 16 temporadas, brutal',
 };
 
 /** La presidencia que quedó a medias, si hay alguna. */
@@ -167,20 +179,34 @@ export function Arranque({
         </div>
 
         <div className="mt-3 border border-linea p-3 sm:p-4">
-          {/* La duración va arriba y sola: es lo primero que se decide, y de
-              todas las opciones del padrón es la única que cambia cuánto
-              tiempo te va a llevar lo que estás por empezar. */}
+          {/* El tipo de partida va arriba y solo: es lo primero que se
+              decide, y de todas las opciones del padrón es la única que cambia
+              cuánto tiempo te va a llevar lo que estás por empezar —y, en el
+              caso de la partida en llamas, con qué club te sentás. */}
           <CampoSelect
-            etiqueta="Duración"
+            etiqueta="Partida"
             valor={modo}
             onChange={(v) => setModo(v as Modo)}
           >
             {MODOS.map((m) => (
               <option key={m} value={m}>
-                {DURACIONES[m]}
+                {PARTIDAS[m]}
               </option>
             ))}
           </CampoSelect>
+
+          {modo === 'llamas' && (
+            // Lo que estas cuatro líneas evitan: que alguien lo elija por
+            // curiosidad, pierda en la temporada tres sin entender por qué, y
+            // crea que el juego está roto. La dificultad avisada es un desafío;
+            // la misma dificultad sin avisar es un error.
+            <p className="mt-2 border-l-2 border-sello pl-3 font-body text-[14px] leading-snug text-papel-2">
+              Recibís el club con 22 millones de deuda —inhibido, no podés
+              comprar a nadie—, la hinchada en 40 cuando con menos de 45 perdés
+              la elección, y un plantel demasiado bueno para lo que el club
+              puede pagar. Venderlo es la única caja que hay.
+            </p>
+          )}
 
           <div className="mt-3 grid gap-3 sm:grid-cols-2">
             <CampoSelect etiqueta="Categoría" valor={categoria} onChange={cambiarCategoria}>

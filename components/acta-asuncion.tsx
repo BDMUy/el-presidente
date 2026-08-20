@@ -77,13 +77,28 @@ export function ActaAsuncion({
         )}
 
         {/* Los mandatos salen del modo: prometer cuatro en una presidencia
-            corta de dos era mentirle al jugador en su primera pantalla. */}
+            corta de dos era mentirle al jugador en su primera pantalla.
+
+            Y en llamas cambia también cómo llegaste: nadie gana una elección
+            para hacerse cargo de un club fundido. Es la misma pantalla, y con
+            una frase distinta explica por qué estás sentado ahí. */}
         <p className="mt-3 font-body text-[16px] leading-relaxed text-tinta">
-          Ganaste la elección. Tenés {enLetras(mandatos)}{' '}
-          {mandatos === 1 ? 'mandato' : 'mandatos'} de cuatro temporadas para que no te echen, y
-          esto es todo con lo que contás. Los partidos no los jugás vos: armás el plantel y el
-          plantel responde.
+          {modo === 'llamas'
+            ? 'Ganaste la elección porque no se presentó nadie más.'
+            : 'Ganaste la elección.'}{' '}
+          Tenés {enLetras(mandatos)} {mandatos === 1 ? 'mandato' : 'mandatos'} de cuatro
+          temporadas para que no te echen, y esto es todo con lo que contás. Los partidos no los
+          jugás vos: armás el plantel y el plantel responde.
         </p>
+
+        {modo === 'llamas' && (
+          // El inventario de abajo ya muestra los números. Esto dice lo que los
+          // números no dicen: cuál es la salida, y que la salida duele.
+          <p className="mt-3 border-l-2 border-sello pl-3 font-body text-[16px] leading-relaxed text-tinta">
+            La gestión anterior dejó la deuda y se fue. Lo único que el club tiene para vender es
+            el plantel, que es lo único que el club tiene para ganar.
+          </p>
+        )}
       </div>
 
       <div className="mt-6">

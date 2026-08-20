@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { CLUBS, getClub } from '@/content/clubs';
 import { ALL_EVENTS, findDuplicateIds } from '@/content/events';
-import { applyEffects, applyResources, meetsCondition } from './effects';
+import { applyEffects, applyResources, estaInhibido, meetsCondition } from './effects';
 import { checkEarlyExit, computeScore, DEUDA_QUIEBRA, resolveElection } from './election';
 import { applyChoice, initialResources, optionCount, replayRun, startRun } from './engine';
 import { assignmentIndex, enumerateAssignments, winProbability } from './mesa-chica';
@@ -231,11 +231,32 @@ describe('arranque', () => {
     }
   });
 
-  it('la rareza se puede forzar y cambia el arranque', () => {
+  it('el club en llamas arranca fundido, inhibido y perdiendo la elección', () => {
     const normal = startRun({ seed: 5, clubId: 'boca' });
-    const raro = startRun({ seed: 5, clubId: 'boca', forceRare: true });
-    expect(raro.rare).toBe(true);
-    expect(raro.resources.caja).toBeLessThan(normal.resources.caja);
+    const llamas = startRun({ seed: 5, clubId: 'boca', modo: 'llamas' });
+
+    // Las tres cosas que definen el modo, cada una con su consecuencia.
+    expect(llamas.resources.caja).toBe(-22);
+    expect(estaInhibido(llamas.resources)).toBe(true); // el mercado arranca cerrado
+    expect(llamas.resources.plantel).toBe(normal.resources.plantel + 12);
+    expect(llamas.resources.hinchada).toBe(40);
+    expect(llamas.resources.hinchada).toBeLessThan(45); // por debajo del corte electoral
+
+    // Y nada de esto le pasa a los otros modos: dejó de ser un sorteo.
+    for (const modo of ['corta', 'normal', 'larga'] as const) {
+      expect(startRun({ seed: 5, clubId: 'boca', modo }).resources.hinchada).toBe(55);
+    }
+  });
+
+  it('en llamas quiere decir lo mismo con cualquier club', () => {
+    // La rareza restaba 22 a la caja de cada club, y los diez más grandes
+    // quedaban por encima de la línea de inhibición: el modo difícil, jugado
+    // en fácil justo con los clubes que más se eligen.
+    for (const clubId of ['river', 'boca', 'lanus', 'acassuso']) {
+      const st = startRun({ seed: 7, clubId, modo: 'llamas' });
+      expect(st.resources.caja, clubId).toBe(-22);
+      expect(estaInhibido(st.resources), clubId).toBe(true);
+    }
   });
 
   it('un club desconocido falla fuerte y claro', () => {

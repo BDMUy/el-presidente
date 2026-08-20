@@ -439,15 +439,14 @@ export interface GameState {
   choices: number[];
   descensos: number;
   ascensos: number;
-  /** Rareza 1/500. */
-  rare: boolean;
 }
 
 /**
- * Cuánto dura una presidencia.
+ * Cómo es la partida.
  *
- * Los tres son múltiplos de cuatro porque las elecciones caen cada cuatro
- * temporadas: así el calendario electoral no hay que tocarlo para ninguno.
+ * Tres son duraciones y el cuarto es una dificultad. Todos duran un múltiplo
+ * de cuatro temporadas porque las elecciones caen cada cuatro: así el
+ * calendario electoral no hay que tocarlo para ninguno.
  *
  * El 32 de la larga no es un número redondo cualquiera. Los presidentes más
  * longevos del fútbol duraron 21 (Armando en Boca), 22 (Núñez en Barcelona),
@@ -455,17 +454,26 @@ export interface GameState {
  * (Bernabéu, y también Grondona en la AFA). Con el techo en 32 se pasan los
  * cinco primeros y el último queda a tres temporadas de distancia, para
  * siempre. Ese "te faltaron tres" es el modo largo.
+ *
+ * `llamas` dura lo mismo que la normal —dieciséis— justamente para que lo
+ * único distinto sea la dificultad. Antes era una rareza que el motor sorteaba
+ * con probabilidad 1/500 y que nadie pedía: la misma medición que existe para
+ * eso (`scripts/llamas.ts`) mostró que costaba un 24,5% del puntaje, y esas
+ * partidas competían en la tabla normal contra partidas que arrancaban enteras.
+ * Un castigo secreto que además ensuciaba el ranking. Elegirlo es lo que lo
+ * arregla: quien lo elige sabe a qué juega y tiene su propia tabla.
  */
-export type Modo = 'corta' | 'normal' | 'larga';
+export type Modo = 'corta' | 'normal' | 'larga' | 'llamas';
 
 export const TEMPORADAS_POR_MODO: Record<Modo, number> = {
   corta: 8,
   normal: 16,
   larga: 32,
+  llamas: 16,
 };
 
-/** Los tres modos, en el orden en que se ofrecen. */
-export const MODOS: readonly Modo[] = ['corta', 'normal', 'larga'];
+/** Los cuatro modos, en el orden en que se ofrecen. */
+export const MODOS: readonly Modo[] = ['corta', 'normal', 'larga', 'llamas'];
 
 export const SEASONS_PER_MANDATE = 4;
 export const EVENTS_PER_SEASON = 3;

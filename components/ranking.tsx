@@ -30,8 +30,22 @@ type Tipo = 'diario' | 'global';
 
 const CLUBES = new Map(CLUBS.map((c) => [c.id, c]));
 
-/** Etiqueta corta para las pestañas de duración. */
-const CORTO: Record<Modo, string> = { corta: '8', normal: '16', larga: '32' };
+/**
+ * Etiqueta corta para las pestañas.
+ *
+ * Las tres duraciones se nombran con sus temporadas, que es lo que las
+ * distingue. En llamas dura lo mismo que la normal, así que el número solo no
+ * alcanza: lleva la llama al lado.
+ */
+const CORTO: Record<Modo, string> = { corta: '8', normal: '16', larga: '32', llamas: '16🔥' };
+
+/** Cómo se nombra cada modo cuando la tabla está vacía y hay que decirlo. */
+const VACIO: Record<Modo, string> = {
+  corta: 'una presidencia de 8 temporadas',
+  normal: 'una presidencia de 16 temporadas',
+  larga: 'una presidencia de 32 temporadas',
+  llamas: 'una presidencia en llamas',
+};
 
 export function Ranking() {
   const [tipo, setTipo] = useState<Tipo>('diario');
@@ -128,7 +142,7 @@ export function Ranking() {
           <p className="font-body text-[14px] leading-snug text-papel-2">
             {tipo === 'diario'
               ? 'Nadie envió su Presidencia del Día todavía. Podés ser el primero.'
-              : `Todavía nadie terminó una presidencia de ${CORTO[modo]} temporadas. Podés ser el primero.`}
+              : `Todavía nadie terminó ${VACIO[modo]}. Podés ser el primero.`}
           </p>
         ) : (
           <ol className="space-y-1.5">

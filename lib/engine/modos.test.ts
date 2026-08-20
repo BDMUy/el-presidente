@@ -142,12 +142,33 @@ describe('los textos de los finales dicen la duración real', () => {
     expect(buildEnding('reelecto-gris', estado('larga'), club).text).toContain('los ocho mandatos');
   });
 
+  it('el club en llamas solo cuenta si lo terminaste', () => {
+    // Antes el logro se cumplía con que te tocara la rareza, ganaras o
+    // perdieras. Ahora el modo se elige, así que jugarlo no puede ser el logro.
+    const completa = estado('llamas', { season: 16 });
+    const aMedias = estado('llamas', { season: 9 });
+    const normalCompleta = estado('normal', { season: 16 });
+
+    expect(logrosDeLaPartida(completa)).toContain('club-en-llamas');
+    expect(logrosDeLaPartida(aMedias)).not.toContain('club-en-llamas');
+    expect(logrosDeLaPartida(normalCompleta)).not.toContain('club-en-llamas');
+  });
+
+  it('el epílogo en llamas solo aparece al llegar al final', () => {
+    expect(buildEnding('reelecto-gris', estado('llamas', { season: 16 }), club).text).toContain(
+      'veintidós millones de deuda',
+    );
+    expect(
+      buildEnding('derrota-electoral', estado('llamas', { season: 12 }), club).text,
+    ).not.toContain('veintidós millones de deuda');
+  });
+
   it('completar la larga remata con los tres años que faltaron', () => {
-    const completa = estado('larga', { season: 32, rare: false });
+    const completa = estado('larga', { season: 32 });
     expect(buildEnding('reelecto-gris', completa, club).text).toContain('te faltaron tres');
 
     // Y no aparece si la larga terminó antes de tiempo.
-    const aMedias = estado('larga', { season: 28, rare: false });
+    const aMedias = estado('larga', { season: 28 });
     expect(buildEnding('derrota-electoral', aMedias, club).text).not.toContain('te faltaron tres');
   });
 

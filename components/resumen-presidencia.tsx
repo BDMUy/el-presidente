@@ -74,9 +74,9 @@ export function ResumenPresidencia({
         </p>
       )}
 
-      {state.rare && (
+      {state.modo === 'llamas' && (
         <p className="mt-5 border-l-2 border-sello pl-3 font-acta text-[12px] leading-relaxed tracking-wide text-sello uppercase">
-          Club en llamas · una de cada quinientas presidencias arranca así
+          Club en llamas · veintidós millones de deuda y la gente en contra
         </p>
       )}
 

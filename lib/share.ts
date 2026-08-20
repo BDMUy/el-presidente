@@ -50,8 +50,16 @@ const BLOQUE_MODO = 1024;
  * significan los links que ya circulan.
  *
  * **Agregar un modo va al final de este array. Nunca en el medio.**
+ *
+ * Con cuatro modos el campo quedó lleno: dos caracteres en base 64 son 4096
+ * valores y cuatro bloques de 1024 los usan todos. Un quinto modo no entra sin
+ * tocar el formato, y `encodeRun` tira error antes que escribir un link que se
+ * decodifique como otra cosa. Si algún día hace falta, la salida es agrandar
+ * `LARGO_CLUB` a tres caracteres —que agranda todos los links en uno— o bajar
+ * el bloque a 128, que deja lugar para treinta y dos modos y sesenta y cuatro
+ * clubes más de los que hay.
  */
-const MODOS_EN_LINK: readonly Modo[] = ['normal', 'corta', 'larga'];
+const MODOS_EN_LINK: readonly Modo[] = ['normal', 'corta', 'larga', 'llamas'];
 
 export interface RunCodificada {
   seed: number;

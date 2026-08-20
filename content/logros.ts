@@ -11,7 +11,7 @@
  */
 
 import type { GameState } from '@/lib/engine/types';
-import { TITLES } from '@/lib/engine/types';
+import { TEMPORADAS_POR_MODO, TITLES } from '@/lib/engine/types';
 
 export interface LogroDef {
   id: string;
@@ -100,11 +100,14 @@ export const LOGROS: readonly LogroDef[] = [
     cumple: (s) => puntosDeTitulos(s) >= 200,
   },
   {
+    // Antes se cumplía con solo haberle tocado la rareza, ganara o perdiera.
+    // Ahora que el club en llamas se elige, "jugarlo" no puede ser el logro:
+    // el logro es terminarlo, que es lo que casi nadie hace.
     id: 'club-en-llamas',
     label: 'Club en llamas',
-    pista: 'Terminá una presidencia de las que arrancan al borde del abismo.',
+    pista: 'Terminá las dieciséis temporadas de una partida en llamas.',
     oculto: true,
-    cumple: (s) => s.rare,
+    cumple: (s) => s.modo === 'llamas' && s.season >= TEMPORADAS_POR_MODO.llamas,
   },
   {
     id: 'el-fundido',
