@@ -34,11 +34,11 @@ directives, or commented-out code. Express intent through names, structure, and
 tests; put rationale in commit messages or PR descriptions. Interpreter
 shebangs are executable directives, not comments.
 
-Two notes on applying the second rule here. Code written before this standard
-still carries comments; stripping them is its own deliberate change, not
-something to do incidentally while touching a file for another reason. And
-because published commit messages are capped at one line, rationale goes in the
-git note attached to the commit — see **Commits** below.
+Applied retroactively: the codebase carries zero comments, not just new code.
+Because published commit messages are capped at one line, rationale goes in the
+git note attached to the commit — see **Commits** below. A rule this specific
+lint or type checkers can enforce belongs in tool config, not an inline
+suppression comment: see `eslint.config.mjs`.
 
 ## Architecture
 

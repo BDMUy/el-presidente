@@ -1,18 +1,5 @@
 'use client';
 
-/**
- * El carnet: la barra fija de arriba.
- *
- * Está armada como un carnet de socio —banda con los colores del club, número
- * de temporada, y las cinco cifras como renglones de balance— en vez de como
- * un marcador deportivo. El jugador es dirigente, no futbolista, y lo primero
- * que ve tiene que decirlo.
- *
- * Cada cifra se puede tocar para desplegar qué significa. Es la alternativa
- * correcta al tooltip: el juego se juega en el celular, y en touch el hover no
- * existe.
- */
-
 import { useState } from 'react';
 
 import { CATEGORY_RULES, type Club, type Resources } from '@/lib/engine/types';
@@ -49,7 +36,6 @@ export function Hud({
   return (
     <header className="sticky top-0 z-20 border-b border-pano-borde bg-pano-alto/97 backdrop-blur">
       <div className="mx-auto max-w-xl">
-        {/* Banda de color del club: lo único del club que no es su nombre. */}
         <div className="flex h-1.5" aria-hidden>
           <div className="flex-1" style={{ backgroundColor: club.colors[0] }} />
           <div className="flex-1" style={{ backgroundColor: club.colors[1] }} />
@@ -69,24 +55,10 @@ export function Hud({
           {inhibido && <span className="ml-2 text-sello-claro">· inhibido</span>}
         </p>
 
-        {/* Columnas proporcionales al contenido, no iguales entre sí.
-            "Caja" lleva un mínimo fijo porque es la única cifra realmente
-            variable —de "0,7M" a "−39,5M", más la flecha— y con fracciones
-            solas se pasaba por un píxel y se cortaba en silencio. El resto
-            son de uno a cuatro caracteres y se reparten lo que queda.
-
-            Va como estilo inline y no como clase: la coma de `minmax()` rompe
-            el parser de valores arbitrarios de Tailwind, que no genera la
-            regla y deja las cinco cifras apiladas en una sola columna, sin
-            avisar por consola ni fallar el build. */}
         <div
           className="grid gap-1 px-2 py-2 sm:gap-2 sm:px-3"
           style={{ gridTemplateColumns: 'minmax(76px, 1fr) 1fr 0.85fr 0.9fr 1.15fr' }}
         >
-          {/* Sin "US$" en la etiqueta: entre las cinco, las etiquetas se comían
-              302 de los 335 píxeles disponibles y las cifras vivían de las
-              sobras. La unidad la explican el acta de asunción y el panel que
-              se abre al tocar, y el resto de las pantallas la muestran entera. */}
           <Cifra
             label="Caja"
             valor={plataCorta(resources.caja)}

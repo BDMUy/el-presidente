@@ -1,21 +1,5 @@
 'use client';
 
-/**
- * La planilla de pases.
- *
- * Tres operaciones sobre la mesa y la opción de no firmar ninguna.
- *
- * Comprar, vender y agarrar un libre son decisiones de signo opuesto —una te
- * saca plata y te mejora, otra te trae plata y te rompe el equipo, la tercera
- * es una apuesta barata— así que no pueden verse iguales. Cada tipo tiene su
- * propia marca y la venta, que es la que puede arruinarte la temporada, se
- * distingue de lejos.
- *
- * Las consecuencias van en columnas alineadas en vez de una cadena corrida:
- * son tres datos distintos —plata, plantel, hinchada— y leerlos comparados
- * entre ofertas es exactamente lo que el jugador necesita hacer.
- */
-
 import { useState } from 'react';
 
 import type { PlayerOffer } from '@/lib/engine/types';
@@ -38,12 +22,9 @@ export function FaseMercado({
   offers: PlayerOffer[];
   inhibido: boolean;
   season: number;
-  /** Caja actual, para mostrar en cuánto queda después de cada operación. */
   caja: number;
   onElegir: (choice: number) => void;
 }) {
-  // `offers.length` es el índice de "no mover nada": la misma convención que
-  // usa el motor, así que lo seleccionado se manda tal cual.
   const [elegida, setElegida] = useState<number | null>(null);
   const oferta = elegida !== null && elegida < offers.length ? offers[elegida] : null;
 
@@ -108,12 +89,7 @@ export function FaseMercado({
             ? 'Elegí una operación'
             : oferta
               ? oferta.name
-              : // La etiqueta de la opción elegida, igual que en las actas.
-                // Antes decía "La ventana se cierra sin mover nada", que con el
-                // botón en "Cerrar la ventana" —y unos 133px libres en un
-                // teléfono de 375, la mitad que en los otros casos— pedía tres
-                // líneas y llegaba cortado. Además repetía al botón: el botón
-                // nombra la acción, el resumen nombra lo elegido.
+              :
                 'No mover nada'
         }
         detalle={
@@ -121,9 +97,6 @@ export function FaseMercado({
             ? `${ETIQUETA[oferta.kind]} · te deja en ${plata(Math.round((caja - oferta.cost) * 10) / 10)}`
             : undefined
         }
-        // Tres etiquetas y no dos: sin nada elegido decía "cerrar la ventana",
-        // porque distinguía por si había oferta y no por si había elección, y
-        // anunciaba una acción que el jugador todavía no pidió.
         accion={elegida === null ? 'Firmar' : oferta ? 'Firmar' : 'Cerrar la ventana'}
         habilitada={elegida !== null}
         onConfirmar={() => elegida !== null && onElegir(elegida)}
@@ -144,12 +117,9 @@ function FilaOferta({
   onClick: () => void;
 }) {
   const esVenta = offer.kind === 'venta';
-  // `cost` positivo es plata que sale; negativo es plata que entra.
   const cajaDespues = Math.round((caja - offer.cost) * 10) / 10;
   const quedaEnRojo = cajaDespues < 0;
 
-  // Seleccionada gana sobre el rojo de la venta: hace falta poder ver cuál
-  // elegiste, y una venta seleccionada tiene que distinguirse de una que no.
   const marco = seleccionada
     ? 'border-tinta bg-tinta/10'
     : esVenta
@@ -180,8 +150,6 @@ function FilaOferta({
         {offer.archetype}, {offer.age} años. {offer.note}
       </span>
 
-      {/* Los tres datos de la decisión, alineados para poder compararlos entre
-          ofertas de un vistazo. Antes iban en una sola cadena en mayúsculas. */}
       <span className="mt-2.5 grid grid-cols-3 gap-2 border-t border-hoja-linea pt-2">
         <Dato
           etiqueta={offer.cost >= 0 ? 'Cuesta' : 'Entra'}
@@ -202,7 +170,6 @@ function FilaOferta({
         />
       </span>
 
-      {/* El dato que decide de verdad una compra: si te la podés bancar. */}
       <span className="mt-1.5 flex items-baseline font-acta text-[11px] tracking-[0.04em] uppercase">
         <span className="text-tinta-2">Te deja en</span>
         <Puntos />
@@ -219,7 +186,6 @@ function Dato({
 }: {
   etiqueta: string;
   valor: string;
-  /** `neutro` para cuando no hay cambio: un guion en verde sugiere una mejora. */
   tono: 'gasto' | 'ingreso' | 'neutro';
 }) {
   const color =

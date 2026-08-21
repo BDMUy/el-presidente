@@ -1,15 +1,3 @@
-/**
- * Comprueba cómo caen los cracks de guiño en el mercado.
- *
- * Hay dos cosas que decidir mirando números y no a ojo. Una es la frecuencia:
- * si aparecen todas las ventanas el guiño deja de ser un guiño, y si aparecen
- * una vez cada veinte presidencias nadie los ve nunca. La otra es la
- * repetición: que a la misma presidencia le ofrezcan dos veces al mismo se lee
- * como un error del juego, no como un chiste.
- *
- *   npx tsx scripts/cracks.ts 400
- */
-
 import { CLUBS } from '../content/clubs';
 import { CRACKS } from '../content/parodias';
 import { applyChoice, optionCount, startRun } from '../lib/engine/engine';

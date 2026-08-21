@@ -1,35 +1,14 @@
 'use client';
 
-/**
- * El campo para elegir club, con los colores de cada uno.
- *
- * Está hecho a mano y no con un `<select>`, que era lo que había. La razón es
- * concreta: la banda bicolor no se puede expresar en un `<option>`. No es solo
- * que el color de fondo se vea mal —es que son dos colores, y un `option`
- * tiene uno—; encima, en el celular la lista abierta la dibuja el sistema
- * operativo, así que cualquier estilo se pierde justo donde más importa.
- *
- * Lo que se pierde al dejar el select nativo se repone a mano:
- *
- *   - La lista tiene alto máximo y scroll propio. Sin eso volveríamos a la
- *     grilla de 64 celdas que estiraba la página, que es de lo que veníamos.
- *   - Teclado completo: flechas, inicio y fin, enter, escape.
- *   - Escribir salta al club, como en un select. Era la única razón por la que
- *     se había podido sacar el buscador, así que tenía que quedarse.
- */
-
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 
 import { expectedPosition } from '@/lib/engine/season';
 import { CATEGORY_RULES, type Club } from '@/lib/engine/types';
 
-/** Cuánto dura la memoria de lo que se viene tecleando, en milisegundos. */
 const MEMORIA_TECLEO = 700;
 
-/** Alto mínimo que hace que valga la pena abrir para un lado: tres opciones. */
 const ALTO_MINIMO = 160;
 
-/** Aire entre la lista y el borde de la pantalla. */
 const MARGEN = 12;
 
 interface Sitio {
@@ -37,14 +16,6 @@ interface Sitio {
   alto: number;
 }
 
-/**
- * Para qué lado abrir la lista y con cuánto alto.
- *
- * Sin esto la lista abría siempre hacia abajo, y como el padrón cae a media
- * página, en un celular de 812px la lista arrancaba en y=758: se abría casi
- * entera debajo del pliegue y no se veía nada. Se mide el hueco real de cada
- * lado y se abre para donde entre.
- */
 function calcularSitio(elemento: HTMLElement | null): Sitio {
   if (!elemento) return { haciaArriba: false, alto: 352 };
 
@@ -52,8 +23,6 @@ function calcularSitio(elemento: HTMLElement | null): Sitio {
   const abajo = window.innerHeight - caja.bottom - MARGEN;
   const arriba = caja.top - MARGEN;
 
-  // Se prefiere abajo, que es lo esperable, salvo que no entre y arriba haya
-  // francamente más lugar.
   const haciaArriba = abajo < ALTO_MINIMO && arriba > abajo;
   const disponible = haciaArriba ? arriba : abajo;
 
@@ -84,8 +53,6 @@ export function SelectorClub({
   );
 
   const abrir = useCallback(() => {
-    // Se abre parado sobre el elegido, no sobre el primero: si ya elegiste
-    // Platense, reabrir la lista arriba de todo te hace buscarlo de nuevo.
     setActivo(indiceElegido >= 0 ? indiceElegido : 0);
     setSitio(calcularSitio(contenedor.current));
     setAbierto(true);
@@ -102,8 +69,6 @@ export function SelectorClub({
     [clubes, onElegir, cerrar],
   );
 
-  // Cerrar al tocar afuera. `pointerdown` y no `click`: en un celular el click
-  // llega después del scroll y la lista se quedaba abierta al arrastrar.
   useEffect(() => {
     if (!abierto) return;
     const afuera = (e: PointerEvent) => {
@@ -113,13 +78,11 @@ export function SelectorClub({
     return () => document.removeEventListener('pointerdown', afuera);
   }, [abierto, cerrar]);
 
-  // Mantener a la vista la opción activa mientras se navega con el teclado.
   useEffect(() => {
     if (!abierto) return;
     lista.current?.children[activo]?.scrollIntoView({ block: 'nearest' });
   }, [abierto, activo]);
 
-  /** Salta al primer club que empieza con lo que se viene tecleando. */
   const saltarA = useCallback(
     (letra: string) => {
       const ahora = Date.now();
@@ -138,7 +101,6 @@ export function SelectorClub({
   );
 
   const enTecla = (e: React.KeyboardEvent) => {
-    // Una letra sola: type-ahead. Con modificadores no, que serían atajos.
     if (e.key.length === 1 && !e.metaKey && !e.ctrlKey && !e.altKey && /\S/.test(e.key)) {
       e.preventDefault();
       if (!abierto) abrir();
@@ -226,9 +188,6 @@ export function SelectorClub({
         </button>
 
         {abierto && (
-          // Absoluta: la lista flota sobre la página en vez de estirarla. Es
-          // lo que permite tener los clubes a mano sin volver a las cinco
-          // pantallas de scroll del padrón viejo.
           <ul
             ref={lista}
             id={`${id}-lista`}
@@ -247,18 +206,7 @@ export function SelectorClub({
                   id={`${id}-op-${i}`}
                   role="option"
                   aria-selected={esElegido}
-                  // Con `click` y no con `pointerdown`. Elegir al apoyar el
-                  // dedo hacía que cualquier toque seleccionara, y el
-                  // `preventDefault()` que lo acompañaba cancelaba el scroll
-                  // táctil del navegador: la lista no se podía recorrer con el
-                  // pulgar. Se había puesto así creyendo que el listener de
-                  // "tocar afuera" —que sí corre en pointerdown— se comía la
-                  // elección, pero las opciones están adentro del contenedor,
-                  // así que ese listener nunca las mira.
                   onClick={() => confirmar(i)}
-                  // Seguir el puntero solo con mouse. En una pantalla táctil,
-                  // pointerenter dispara al apoyar el dedo y el resaltado
-                  // saltaba de opción mientras se arrastraba para scrollear.
                   onPointerEnter={(e) => {
                     if (e.pointerType === 'mouse') setActivo(i);
                   }}
@@ -290,7 +238,6 @@ export function SelectorClub({
   );
 }
 
-/** La banda con los colores del club: lo único suyo que no es su nombre. */
 function Banda({ club }: { club: Club }) {
   return (
     <span
@@ -303,7 +250,6 @@ function Banda({ club }: { club: Club }) {
   );
 }
 
-/** Quita acentos y mayúsculas: teclear "velez" tiene que llevar a "Vélez". */
 function normalizar(texto: string): string {
   return texto
     .toLowerCase()

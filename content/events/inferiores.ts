@@ -1,16 +1,3 @@
-/**
- * Eventos de inferiores: la pensión, los juveniles, los representantes.
- *
- * Es el frente que más le faltaba al juego. Dirigir un club argentino es en
- * buena medida decidir qué hacer con chicos de quince años: si se quedan, si
- * se venden, si comen bien, si el representante que los ronda es un problema
- * o la única forma de que el club cobre algo.
- *
- * Regla de escritura, la misma de siempre: ninguna opción es gratis y ninguna
- * es obviamente correcta. Acá además hay una tentación permanente —vender al
- * pibe hoy resuelve el mes— que tiene que doler aunque sea la salida fácil.
- */
-
 import type { GameEvent } from '@/lib/engine/types';
 
 export const INFERIORES: GameEvent[] = [

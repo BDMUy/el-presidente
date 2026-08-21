@@ -1,16 +1,5 @@
 'use client';
 
-/**
- * La tabla de posiciones, en la pantalla de arranque.
- *
- * Se pide al montar y se esconde entera si el ranking no está configurado: sin
- * base, este componente no existe y el arranque queda exactamente como estaba.
- *
- * Arranca en el ranking del día porque es el que invita a volver mañana. El
- * global premia la mejor partida de tu vida y no cambia seguido; el diario
- * cambia todos los días y es el que da la razón para entrar.
- */
-
 import { useEffect, useState } from 'react';
 
 import { CLUBS } from '@/content/clubs';
@@ -30,16 +19,8 @@ type Tipo = 'diario' | 'global';
 
 const CLUBES = new Map(CLUBS.map((c) => [c.id, c]));
 
-/**
- * Etiqueta corta para las pestañas.
- *
- * Las tres duraciones se nombran con sus temporadas, que es lo que las
- * distingue. En llamas dura lo mismo que la normal, así que el número solo no
- * alcanza: lleva la llama al lado.
- */
 const CORTO: Record<Modo, string> = { corta: '8', normal: '16', larga: '32', llamas: '16🔥' };
 
-/** Cómo se nombra cada modo cuando la tabla está vacía y hay que decirlo. */
 const VACIO: Record<Modo, string> = {
   corta: 'una presidencia de 8 temporadas',
   normal: 'una presidencia de 16 temporadas',
@@ -55,7 +36,6 @@ export function Ranking() {
 
   useEffect(() => {
     let vivo = true;
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- vuelve al estado de carga al cambiar de pestaña
     setFilas(null);
     fetch(`/api/ranking?tipo=${tipo}&modo=${modo}`)
       .then(async (r) => {
@@ -78,8 +58,6 @@ export function Ranking() {
 
   return (
     <div className="mt-2 border border-linea">
-      {/* Sin título propio: lo pone la sección que lo contiene. Cuando lo traía
-          además acá, "Tabla de posiciones" se leía dos veces seguidas. */}
       <div className="flex items-center justify-end gap-2 border-b border-linea px-3 py-2.5">
         <div className="flex shrink-0 gap-1">
           {(['diario', 'global'] as Tipo[]).map((t) => (
@@ -88,8 +66,6 @@ export function Ranking() {
               type="button"
               onClick={() => setTipo(t)}
               aria-pressed={tipo === t}
-              // min-h-11 = 44px: el alto natural del texto daba 35 y quedaba
-              // por debajo del blanco táctil mínimo.
               className={`flex min-h-11 items-center border px-3 font-acta text-[11px] tracking-[0.04em] uppercase transition-colors ${
                 tipo === t
                   ? 'border-bronce-claro bg-bronce-claro/15 text-papel'
@@ -102,9 +78,6 @@ export function Ranking() {
         </div>
       </div>
 
-      {/* La duración solo aplica al global. La del día se juega siempre en
-          normal, así que ahí no hay nada que elegir: una sola tabla para
-          todos es justamente lo que la hace social. */}
       {tipo === 'global' && (
         <div
           className="flex items-center gap-2 border-b border-linea px-3 py-2"
@@ -162,15 +135,6 @@ export function Ranking() {
                       <span className="flex-1" style={{ backgroundColor: club.colors[1] }} />
                     </span>
                   )}
-                  {/* El puntaje va arriba, en la misma línea que el nombre, y la
-                      ficha técnica ocupa sola el renglón de abajo.
-
-                      No es una preferencia estética: compartiendo renglón con
-                      el puntaje, la ficha se quedaba con 213px y la mejor
-                      partida posible —"Argentino (Q) · 16 temp · 12 títulos"—
-                      se cortaba a los 24px del final. Justo el que sobrevivió
-                      las dieciséis temporadas era el único que no podía leer
-                      su propia línea. Así tiene el ancho entero. */}
                   <span className="min-w-0 flex-1">
                     <span className="flex items-baseline gap-2">
                       <span className="min-w-0 flex-1 truncate font-display text-[14px] leading-tight font-bold text-papel">

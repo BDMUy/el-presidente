@@ -1,14 +1,3 @@
-/**
- * Cuando las cosas van mal.
- *
- * Todas estas cartas piden un recurso en el piso. Existen para que la caída
- * tenga textura propia y no sea solo un número bajando: cuando la hinchada te
- * odia o la caja está en rojo, el juego tiene que sonar distinto.
- *
- * Casi ninguna ofrece una salida limpia. En una crisis las opciones buenas ya
- * se gastaron.
- */
-
 import type { GameEvent } from '@/lib/engine/types';
 
 export const CRISIS: GameEvent[] = [

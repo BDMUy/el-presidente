@@ -1,12 +1,3 @@
-/**
- * Plata: sponsors, televisión, entradas, deuda, merchandising.
- *
- * Es el frente donde casi siempre existe la opción de resolver hoy pagando
- * mañana. Varias de estas cartas usan efectos diferidos justamente para eso:
- * la decisión se toma en la temporada 3 y la factura llega en la 6, cuando ya
- * te olvidaste de que la firmaste.
- */
-
 import type { GameEvent } from '@/lib/engine/types';
 
 export const ECONOMIA: GameEvent[] = [

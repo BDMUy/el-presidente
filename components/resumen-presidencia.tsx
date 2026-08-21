@@ -1,11 +1,3 @@
-/**
- * El resumen de una presidencia terminada.
- *
- * Sin `use client` a propósito: lo renderiza el epílogo del juego y también la
- * página pública de un link compartido, que es un componente de servidor. Es
- * puramente presentacional, así que sirve para las dos sin duplicar nada.
- */
-
 import { computeScore } from '@/lib/engine/election';
 import { TITLES, type Club, type Ending, type GameState, type TitleId } from '@/lib/engine/types';
 import { plataCorta, plural } from '@/lib/format';
@@ -48,8 +40,6 @@ export function ResumenPresidencia({
         <Dato label="Títulos" valor={String(state.titles.length)} />
         <Dato label="Hinchada" valor={String(Math.round(state.resources.hinchada))} />
         <Dato label="Socios" valor={`${Math.round(state.resources.socios)}k`} />
-        {/* Formato corto: en tres columnas, "−US$ 2,9M" parte en dos líneas y
-            rompe la alineación de toda la fila. */}
         <Dato label="Caja US$" valor={plataCorta(state.resources.caja)} />
         <Dato label="Asc./Desc." valor={`${state.ascensos}/${state.descensos}`} />
       </dl>

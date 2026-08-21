@@ -1,16 +1,5 @@
 'use client';
 
-/**
- * La vitrina en la pantalla de arranque.
- *
- * Es lo único que sobrevive a una presidencia, así que tiene que estar donde
- * empezás la siguiente. Arranca colapsada a una línea: si ocupara media
- * pantalla volveríamos al problema de scroll que este arranque resolvió.
- *
- * No se muestra nada hasta terminar la primera partida. Una vitrina vacía con
- * catorce logros bloqueados es una lista de deberes, no una invitación.
- */
-
 import { useEffect, useState } from 'react';
 
 import { LOGROS } from '@/content/logros';
@@ -25,7 +14,6 @@ export function VitrinaPanel() {
 
   useEffect(() => {
     const leida = leerVitrina();
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- la vitrina solo existe en el cliente
     if (leida.partidas > 0) setVitrina(leida);
   }, []);
 
@@ -82,8 +70,6 @@ export function VitrinaPanel() {
           <ul className="mt-2 space-y-1.5">
             {LOGROS.map((logro) => {
               const hecho = conseguidos.has(logro.id);
-              // Los ocultos no se revelan hasta conseguirlos: spoilear "llevá
-              // un club a la quiebra" arruina la sorpresa de que exista.
               if (logro.oculto && !hecho) {
                 return (
                   <li key={logro.id} className="font-body text-[13px] text-papel-2 italic">

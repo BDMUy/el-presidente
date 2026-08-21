@@ -1,36 +1,8 @@
-/**
- * El prontuario: la corrupción que se acumula y vuelve.
- *
- * El juego ya tenía decisiones sucias sueltas —el sobre del sponsor, la plata
- * a la barra, el voto en la AFA, la ficha de gestión política de la Mesa
- * Chica— pero cada una se pagaba sola y nada se sumaba. Podías robar toda la
- * presidencia sin que el club se enterara.
- *
- * Acá se cierra ese hueco con un contador escondido, `prontuario`, que sube
- * con cada decisión sucia. Las cartas de este archivo son de dos clases:
- *
- *   - **Tentaciones**, sin condiciones. Aparecen siempre y suben el contador
- *     si elegís la salida fácil. Son el motor del hilo.
- *   - **Escalada**, con `minFlag: { prontuario: N }`. No existen hasta que ya
- *     hiciste lo suficiente, y crecen: una nota suelta, un periodista que
- *     insiste, una auditoría, una causa.
- *
- * El contador no está en el carnet a propósito. Un medidor convertiría un
- * rasgo en una barra que se administra, y la gracia es la contraria: no sabés
- * exactamente cuánto debés, sabés que algo debés. La señal es la que el juego
- * ya usa para lo diferido: "Queda asentado en el libro de actas. Esto vuelve".
- *
- * Regla de escritura, además de la general: la carta describe la decisión, no
- * juzga al que la toma. El costo lo pone el juego, no el narrador.
- */
-
 import type { GameEvent } from '@/lib/engine/types';
 
-/** Cuánto suma al prontuario una decisión sucia de las comunes. */
 const SUCIO = { flagsSuma: { prontuario: 1 } };
 
 export const CORRUPCION: GameEvent[] = [
-  // ── Tentaciones: sin condiciones, aparecen siempre ─────────
   {
     id: 'cor-sobre-del-arbitro',
     kind: 'dilema',
@@ -177,7 +149,6 @@ export const CORRUPCION: GameEvent[] = [
     ],
   },
 
-  // ── Escalada: solo existen si el prontuario ya creció ───────
   {
     id: 'cor-primera-nota',
     kind: 'golpe',

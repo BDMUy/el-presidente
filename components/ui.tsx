@@ -1,15 +1,3 @@
-/**
- * Primitivas visuales compartidas.
- *
- * Todo en el juego es un objeto sobre la mesa: una hoja, un sello, una ficha.
- * Estos componentes son esos objetos; las pantallas solo los acomodan.
- *
- * Escala tipográfica: la prosa de las cartas va a 16px porque el juego se lee
- * en un celular y por debajo de eso se abandona. Las mayúsculas se reservan
- * para sellos y membretes, que son etiquetas cortas; las opciones van en caja
- * baja porque son frases y en mayúsculas se leen mucho más lento.
- */
-
 import type { ReactNode } from 'react';
 
 export function Papel({
@@ -29,10 +17,6 @@ export function Papel({
   );
 }
 
-/**
- * El sello de goma. `sobrePano` cambia al tono claro: el rojo que da 5:1 sobre
- * papel da 1,6:1 sobre el paño verde, así que el mismo color no sirve.
- */
 export function Sello({
   children,
   tono = 'rojo',
@@ -58,13 +42,6 @@ export function Sello({
   );
 }
 
-/**
- * Metadatos del documento: número de acta, temporada, fecha.
- *
- * `sobrePano` no es un detalle estético: la tinta del papel sobre el paño
- * verde da 1,5:1 y desaparece. Todo elemento que puede vivir en las dos
- * superficies tiene que saber en cuál está.
- */
 export function Membrete({
   children,
   sobrePano = false,
@@ -83,7 +60,6 @@ export function Membrete({
   );
 }
 
-/** Título del documento. */
 export function Titulo({ children }: { children: ReactNode }) {
   return (
     <h1 className="font-display text-[26px] leading-[1] font-black tracking-tight text-tinta uppercase sm:text-[32px]">
@@ -92,15 +68,6 @@ export function Titulo({ children }: { children: ReactNode }) {
   );
 }
 
-/**
- * Una opción firmable: la etiqueta y, debajo, la consecuencia.
- *
- * Va en caja y no como renglón suelto. Es la interacción más repetida del
- * juego —cuarenta y ocho veces por presidencia, contra dieciséis del mercado—
- * y como líneas finas separadas por hairlines no se leía como algo que se
- * puede tocar. Comparte la caja con el mercado a propósito: las dos pantallas
- * de decisión tienen que hablar el mismo idioma.
- */
 export function Renglon({
   label,
   hint,
@@ -112,7 +79,6 @@ export function Renglon({
   label: string;
   hint: string;
   azaroso?: boolean;
-  /** Elegida pero todavía sin firmar. La decisión la cierra la barra de abajo. */
   seleccionado?: boolean;
   onClick: () => void;
   disabled?: boolean;
@@ -142,23 +108,6 @@ export function Renglon({
   );
 }
 
-/**
- * La barra que cierra una decisión.
- *
- * Existe porque tocar una opción la firmaba en el acto: un pulgar torpe en el
- * celular perdía la temporada sin haber leído la consecuencia. Ahora elegir y
- * firmar son dos actos, que es como funciona todo lo demás del juego —y como
- * ya funcionaba la Mesa Chica, que fue de donde salió el patrón.
- *
- * Va fija abajo y fuera de la hoja: las opciones pueden ser tres párrafos y en
- * un celular el botón caía debajo del pliegue, que es el problema que esto
- * viene a resolver, no a mudar.
- *
- * Lo que no hace es deshacer una decisión ya firmada. Con el log de la partida
- * como única prueba, una decisión que se puede desandar deja reintentar hasta
- * ganar, y el servidor no tiene con qué distinguirlo: el log más corto se
- * reproduce igual de válido. El ranking se volvería decoración.
- */
 export function BarraDecision({
   resumen,
   detalle,
@@ -176,15 +125,6 @@ export function BarraDecision({
     <div className="sticky bottom-0 -mx-4 mt-5 border-t border-pano-borde bg-pano-alto/97 px-4 py-3 backdrop-blur">
       <div className="mx-auto flex max-w-xl items-center gap-3">
         <div className="min-w-0 flex-1">
-          {/* Dos líneas y no una.
-              Con `truncate`, 80 de las 345 opciones del juego —el 23%— llegaban
-              cortadas a la barra: la más larga mide 382px contra los 230 que
-              hay disponibles en un teléfono de 375. Ninguna quedaba ambigua
-              —dentro de una misma carta, lo que se alcanzaba a leer siempre
-              alcanzaba para distinguirlas— pero la barra es donde se confirma
-              lo que se está por firmar, y ahí no puede faltar la mitad de la
-              frase. Con dos líneas entran las 345, y la barra crece diez
-              píxeles solo cuando hace falta. */}
           <p className="line-clamp-2 font-display text-[15px] leading-tight font-bold text-papel">
             {resumen}
           </p>
@@ -212,13 +152,6 @@ export function BarraDecision({
   );
 }
 
-/**
- * El puente punteado entre una etiqueta y su cifra, como en un formulario.
- *
- * Va como elemento propio y no como `::after`: un pseudo-elemento se agrega
- * al final del flex, así que los puntos terminaban a la derecha del valor en
- * vez de entre los dos.
- */
 export function Puntos() {
   return (
     <span
@@ -228,7 +161,6 @@ export function Puntos() {
   );
 }
 
-/** El botón que cierra una pantalla y pasa a la siguiente. */
 export function Continuar({
   children = 'Continuar',
   onClick,
@@ -247,19 +179,6 @@ export function Continuar({
   );
 }
 
-/**
- * Cifra con su etiqueta, como una línea de balance.
- *
- * Es un botón: tocarla despliega qué significa el recurso. En un juego que se
- * juega en el celular, un tooltip de hover no existiría para la mayoría.
- *
- * No hay flecha de subió/bajó. La tuvo, y costó tres rondas de bugs de layout:
- * compartiendo línea con el número le robaba los doce píxeles que hacían que
- * "23,0M" se cortara, y fuera del flujo quedaba visualmente pegada a la
- * etiqueta de la columna siguiente, sin poder saber a qué recurso pertenecía.
- * Además era redundante: la pantalla de consecuencia que aparece justo antes
- * ya lista cada cambio con su número exacto.
- */
 export function Cifra({
   label,
   valor,
@@ -278,14 +197,10 @@ export function Cifra({
       type="button"
       onClick={onToggle}
       aria-expanded={abierta}
-      // El borde inferior en bronce ata visualmente la celda con el panel que
-      // se abre debajo: sin eso, la explicación parece venir de la nada.
       className={`min-w-0 rounded-sm border-b-2 px-1 pt-0.5 pb-1 text-left transition-colors ${
         abierta ? 'border-bronce-claro bg-papel/12' : 'border-transparent hover:bg-papel/6'
       }`}
     >
-      {/* Sin letter-spacing: Courier ya es monoespaciada y separa de sobra. El
-          espaciado extra empujaba "INFLUENCIA" fuera de su columna. */}
       <span className="block truncate font-acta text-[11px] leading-none font-bold text-papel-2 uppercase">
         {label}
       </span>

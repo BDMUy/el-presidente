@@ -1,17 +1,5 @@
 'use client';
 
-/**
- * La Presidencia del Día, en la pantalla de arranque.
- *
- * Todos reciben la misma partida: mismo club, misma suerte, mismos eventos. Es
- * lo que hace comparable el ranking diario, y por eso el club se muestra de
- * entrada en vez de dejarlo elegir.
- *
- * La cuenta regresiva se calcula en el cliente a partir de la fecha argentina,
- * la misma función que usa el servidor para validar el envío. No hay reloj que
- * coordinar entre los dos.
- */
-
 import { useEffect, useState } from 'react';
 
 import { getClub } from '@/content/clubs';
@@ -21,7 +9,6 @@ import { expectedPosition } from '@/lib/engine/season';
 
 const KEY_JUGADA = 'el-presidente:diaria-jugada';
 
-/** Qué fecha de Presidencia del Día ya jugó este dispositivo. */
 export function diariaJugada(): string | null {
   if (typeof window === 'undefined') return null;
   try {
@@ -36,14 +23,10 @@ export function marcarDiariaJugada(fecha: string): void {
   try {
     window.localStorage.setItem(KEY_JUGADA, fecha);
   } catch {
-    // Sin almacenamiento el tope real lo impone el servidor igual.
   }
 }
 
 export function PresidenciaDelDia({ onJugar }: { onJugar: () => void }) {
-  // El render inicial no puede depender del reloj ni de localStorage o la
-  // hidratación no coincide con el HTML del servidor. Todo se resuelve
-  // después del montaje.
   const [datos, setDatos] = useState<{
     clubId: string;
     fecha: string;
@@ -53,7 +36,6 @@ export function PresidenciaDelDia({ onJugar }: { onJugar: () => void }) {
 
   useEffect(() => {
     const hoy = presidenciaDelDia();
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- depende del reloj y de localStorage
     setDatos({ clubId: hoy.clubId, fecha: hoy.fecha, yaJugada: diariaJugada() === hoy.fecha });
 
     const tick = () => setEspera(formatearEspera(faltaParaLaProxima()));
@@ -76,9 +58,6 @@ export function PresidenciaDelDia({ onJugar }: { onJugar: () => void }) {
       </div>
 
       <div className="px-3 py-3">
-        {/* Sin el título "Presidencia del día": lo pone la sección que lo
-            contiene, y acá se leía dos veces seguidas. Queda el reloj, que es
-            el dato y no el rótulo. */}
         <p className="text-right font-acta text-[11px] tracking-[0.06em] text-papel-2 tabular-nums uppercase">
           cambia en {espera}
         </p>
@@ -103,8 +82,6 @@ export function PresidenciaDelDia({ onJugar }: { onJugar: () => void }) {
           <button
             type="button"
             onClick={onJugar}
-            // min-h-11 = 44px: el alto natural daba 40 y quedaba por debajo del
-            // blanco táctil mínimo, en el botón que más se toca del inicio.
             className="mt-3 min-h-11 w-full bg-bronce-claro py-2.5 font-display text-[13px] font-black tracking-[0.1em] text-tinta uppercase transition-transform active:scale-[0.99]"
           >
             Jugar la del día

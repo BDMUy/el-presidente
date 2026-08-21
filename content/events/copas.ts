@@ -1,11 +1,3 @@
-/**
- * Copas continentales: la semana en que el club sale del país.
- *
- * Estas cartas piden `flag: continental`, que el motor enciende cuando el
- * equipo clasifica. Existen para que clasificar se sienta distinto y no sea
- * solo un número más en la tabla.
- */
-
 import type { GameEvent } from '@/lib/engine/types';
 
 export const COPAS: GameEvent[] = [

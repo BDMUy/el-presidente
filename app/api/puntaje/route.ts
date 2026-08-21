@@ -1,16 +1,3 @@
-/**
- * Envío de un puntaje al ranking.
- *
- * Acá está la razón de ser del motor determinista: el cliente manda
- * `{seed, clubId, decisiones}` y el servidor reproduce la partida entera para
- * calcular el puntaje. **El puntaje que manda el cliente no se usa nunca.**
- * Sin esto el ranking sería una lista de números inventados.
- *
- * Para la Presidencia del Día se verifica además que la semilla y el club sean
- * exactamente los que corresponden a hoy, derivados de la fecha: no alcanza
- * con jugar bien, hay que haber jugado la partida del día.
- */
-
 import { NextResponse } from 'next/server';
 
 import { getClub } from '@/content/clubs';
@@ -23,17 +10,8 @@ import { MODOS } from '@/lib/engine/types';
 import { limpiarNombre } from '@/lib/nombre';
 import { hashDeOrigen } from '@/lib/origen';
 
-/** Tope de decisiones: una presidencia larga ronda las 150. */
 const MAX_DECISIONES = 400;
 
-/**
- * Envíos por hora desde un mismo origen.
- *
- * Una presidencia lleva de seis a diez minutos, así que un jugador real no
- * llega ni a seis por hora. El número está alto a propósito porque detrás de
- * un mismo IP puede haber una casa entera, una escuela o un CGNAT de una
- * operadora: es un techo contra la inundación, no una cuota por persona.
- */
 const MAX_POR_HORA = 20;
 
 interface Envio {
@@ -65,10 +43,6 @@ export async function POST(request: Request) {
     );
   }
 
-  // Sin esto, un `content-type: text/plain` convierte el POST en una petición
-  // simple: sin preflight de CORS, cualquier página de internet puede hacer
-  // que el navegador de un visitante mande envíos a este endpoint. Medido: con
-  // text/plain el envío entraba con 200.
   const tipo = request.headers.get('content-type') ?? '';
   if (!tipo.toLowerCase().includes('application/json')) {
     return malaPeticion('Se espera application/json.');
@@ -81,11 +55,8 @@ export async function POST(request: Request) {
     return malaPeticion('Cuerpo ilegible.');
   }
 
-  // ── Forma ────────────────────────────────────────────────
   const { dispositivo, nombre, seed, clubId, choices, diaria } = cuerpo;
 
-  // Sin modo se asume normal: es lo que eran todas las partidas antes de que
-  // los modos existieran, igual que en los links compartidos.
   const modo: Modo = cuerpo.modo === undefined ? 'normal' : (cuerpo.modo as Modo);
   if (!esModo(modo)) return malaPeticion('Duración inválida.');
 
@@ -93,8 +64,6 @@ export async function POST(request: Request) {
     return malaPeticion('Dispositivo inválido.');
   }
 
-  // Se limpia antes de mirar si quedó algo: un nombre de tres caracteres de
-  // ancho cero pasaba el `trim()` y entraba a la tabla como una fila en blanco.
   const nombreLimpio = limpiarNombre(nombre);
   if (nombreLimpio === null) return malaPeticion('Falta el nombre.');
   if (typeof seed !== 'number' || !Number.isInteger(seed) || seed < 0 || seed > 0xffffffff) {
@@ -114,10 +83,6 @@ export async function POST(request: Request) {
     return malaPeticion('Club desconocido.');
   }
 
-  // ── La verificación ──────────────────────────────────────
-  // Se reproduce la partida con el mismo motor que corrió en el navegador.
-  // Si no termina, o si alguna decisión no era válida en su momento, el
-  // replay falla y el envío se rechaza.
   let estado;
   try {
     estado = replayRun(seed, clubId, choices as number[], modo);
@@ -131,30 +96,18 @@ export async function POST(request: Request) {
 
   const puntaje = computeScore(estado);
 
-  // ── ¿Es la del día? ──────────────────────────────────────
   let fechaDiaria: string | null = null;
   if (diaria === true) {
     const hoy = presidenciaDelDia(fechaDelDia());
     if (seed !== hoy.seed || clubId !== hoy.clubId) {
       return malaPeticion('Esa no es la Presidencia del Día.');
     }
-    // La del día es siempre normal, y hay que exigirlo acá. Sin esto, alguien
-    // juega la semilla del día en modo corto y entra en la tabla diaria
-    // —la única que no se separa por modo— con otra vara.
     if (modo !== 'normal') {
       return malaPeticion('La Presidencia del Día se juega en duración normal.');
     }
     fechaDiaria = hoy.fecha;
   }
 
-  // ── La ventana ───────────────────────────────────────────
-  // Se consulta después de verificar la partida y no antes: así el que intenta
-  // inundar paga el replay de cada intento, y no le sale gratis tantear.
-  //
-  // El origen es lo único que sobrevive a que el atacante rote el uuid de
-  // dispositivo. Cuando no hay origen —la aplicación no está detrás de un
-  // proxy que informe el IP— se cae al dispositivo, que es débil pero no es
-  // nada: sin este `else`, medido, pasaban doce de doce sin ningún tope.
   const origen = hashDeOrigen(request);
   try {
     const [{ recientes }] = origen
@@ -173,8 +126,6 @@ export async function POST(request: Request) {
       );
     }
   } catch {
-    // Si la cuenta falla, se deja pasar: quedarse sin ranking por un problema
-    // de lectura es peor que un envío de más.
   }
 
   try {
@@ -197,8 +148,6 @@ export async function POST(request: Request) {
       )
     `;
   } catch (e) {
-    // Los índices únicos que chocan no son fallos: son las reglas funcionando.
-    // Son dos, y dicen cosas distintas, así que el mensaje también.
     const err = e as { code?: string; constraint_name?: string };
     if (err.code === '23505') {
       const yaEnviada = err.constraint_name === 'presidencias_una_por_partida';

@@ -1,24 +1,10 @@
-/**
- * Logros: lo que se acumula entre presidencias.
- *
- * Cada uno es una condición pura sobre una partida terminada, así que se
- * evalúan igual en el cliente y en el servidor y no hace falta rastrear nada
- * mientras jugás.
- *
- * Regla de escritura: un logro tiene que nombrar algo que hiciste, no un
- * número que alcanzaste. "Cien mil socios" es un número; "La casa llena" es
- * una escena. La segunda se cuenta; la primera se olvida.
- */
-
 import type { GameState } from '@/lib/engine/types';
 import { TEMPORADAS_POR_MODO, TITLES } from '@/lib/engine/types';
 
 export interface LogroDef {
   id: string;
   label: string;
-  /** Qué hay que hacer. Se muestra siempre, esté conseguido o no. */
   pista: string;
-  /** Si es true, no se revela hasta conseguirlo. */
   oculto?: boolean;
   cumple: (state: GameState) => boolean;
 }
@@ -100,9 +86,6 @@ export const LOGROS: readonly LogroDef[] = [
     cumple: (s) => puntosDeTitulos(s) >= 200,
   },
   {
-    // Antes se cumplía con solo haberle tocado la rareza, ganara o perdiera.
-    // Ahora que el club en llamas se elige, "jugarlo" no puede ser el logro:
-    // el logro es terminarlo, que es lo que casi nadie hace.
     id: 'club-en-llamas',
     label: 'Club en llamas',
     pista: 'Terminá las dieciséis temporadas de una partida en llamas.',
@@ -117,20 +100,6 @@ export const LOGROS: readonly LogroDef[] = [
     cumple: (s) => s.ending?.id === 'quiebra',
   },
 
-  // ── La escalera de los eternos ─────────────────────────────
-  //
-  // Los cuatro se desbloquean pasando la marca de un dirigente que existió, y
-  // los cuatro son alcanzables **solo en modo largo**, porque la normal se
-  // termina en la temporada 16. Eso es a propósito: el modo largo tiene algo
-  // propio que ganar y no es nada más "lo mismo pero más".
-  //
-  // Están repartidos entre cuatro hinchadas —Boca, Barcelona y Madrid, la
-  // Conmebol, Milan— para que el chiste no le hable a una sola tribuna. Y
-  // arranca en casa: la primera vara que pasás es la de Armando, no una de
-  // Europa.
-  //
-  // Los nombres siguen la regla de content/parodias.ts: juego fonético y nada
-  // más. Ninguno dice nada de nadie.
   {
     id: 'el-mas-largo-del-barrio',
     label: 'El más largo del barrio',
@@ -169,7 +138,6 @@ export const LOGROS_POR_ID: Record<string, LogroDef> = Object.fromEntries(
   LOGROS.map((l) => [l.id, l]),
 );
 
-/** Qué logros desbloquea esta partida terminada. */
 export function logrosDeLaPartida(state: GameState): string[] {
   return LOGROS.filter((l) => l.cumple(state)).map((l) => l.id);
 }

@@ -1,12 +1,3 @@
-/**
- * La página pública de una presidencia compartida.
- *
- * No hay base de datos detrás: el link lleva la partida entera y el servidor
- * la reconstruye con `replayRun`. Es el mismo motor determinista que corre en
- * el navegador, así que quien abre el link ve exactamente la partida que jugó
- * el que lo mandó.
- */
-
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';

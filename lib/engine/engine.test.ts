@@ -13,7 +13,6 @@ import { RECURSOS_POR_ID } from '@/lib/recursos';
 import type { GameState } from './types';
 import { FICHAS_MESA_CHICA, HINCHADA_ASAMBLEA, TEMPORADAS_POR_MODO } from './types';
 
-/** Juega una partida entera con una política fija y devuelve el estado final. */
 function playThrough(seed: number, clubId: string, pick: (state: GameState) => number): GameState {
   let state = startRun({ seed, clubId });
   let guard = 0;
@@ -134,9 +133,6 @@ describe('resolución deportiva', () => {
   });
 
   it('plantelForPosition es la inversa de resolvePosition sin ruido', () => {
-    // Con el plantel derivado de una posición, esa posición debe ser la
-    // mediana de los resultados. Es lo que hace que cada club arranque
-    // exactamente en la expectativa de su gente.
     const plantel = plantelForPosition(10, 'primera');
     const rand = new Rand(555);
     const results: number[] = [];
@@ -158,7 +154,6 @@ describe('resolución deportiva', () => {
 describe('Mesa Chica', () => {
   it('enumera los repartos de hasta 3 fichas en 5 frentes', () => {
     const all = enumerateAssignments();
-    // 1 + 5 + 15 + 35: los repartos de 0, 1, 2 y 3 fichas.
     expect(all).toHaveLength(56);
     for (const assignment of all) {
       const total = Object.values(assignment).reduce((s, n) => s + n, 0);
@@ -168,13 +163,11 @@ describe('Mesa Chica', () => {
   });
 
   it('incluye el reparto vacío: guardarse las fichas es una decisión', () => {
-    // Sin esto, "no mover un dedo" no tiene índice y la UI se rompe al elegirlo.
     const vacio = { plantel: 0, dt: 0, hinchada: 0, prensa: 0, gestion: 0 };
     expect(() => assignmentIndex(vacio)).not.toThrow();
   });
 
   it('todo reparto que la UI puede armar tiene índice', () => {
-    // La UI deja poner entre 0 y 3 fichas en cualquier combinación de frentes.
     const ids = ['plantel', 'dt', 'hinchada', 'prensa', 'gestion'] as const;
     for (let total = 0; total <= FICHAS_MESA_CHICA; total++) {
       for (const a of ids) {
@@ -235,23 +228,18 @@ describe('arranque', () => {
     const normal = startRun({ seed: 5, clubId: 'boca' });
     const llamas = startRun({ seed: 5, clubId: 'boca', modo: 'llamas' });
 
-    // Las tres cosas que definen el modo, cada una con su consecuencia.
     expect(llamas.resources.caja).toBe(-22);
-    expect(estaInhibido(llamas.resources)).toBe(true); // el mercado arranca cerrado
+    expect(estaInhibido(llamas.resources)).toBe(true);
     expect(llamas.resources.plantel).toBe(normal.resources.plantel + 12);
     expect(llamas.resources.hinchada).toBe(40);
-    expect(llamas.resources.hinchada).toBeLessThan(45); // por debajo del corte electoral
+    expect(llamas.resources.hinchada).toBeLessThan(45);
 
-    // Y nada de esto le pasa a los otros modos: dejó de ser un sorteo.
     for (const modo of ['corta', 'normal', 'larga'] as const) {
       expect(startRun({ seed: 5, clubId: 'boca', modo }).resources.hinchada).toBe(55);
     }
   });
 
   it('en llamas quiere decir lo mismo con cualquier club', () => {
-    // La rareza restaba 22 a la caja de cada club, y los diez más grandes
-    // quedaban por encima de la línea de inhibición: el modo difícil, jugado
-    // en fácil justo con los clubes que más se eligen.
     for (const clubId of ['river', 'boca', 'lanus', 'acassuso']) {
       const st = startRun({ seed: 7, clubId, modo: 'llamas' });
       expect(st.resources.caja, clubId).toBe(-22);
@@ -272,8 +260,6 @@ describe('determinismo', () => {
   });
 
   it('replayRun reconstruye exactamente una partida a partir del log', () => {
-    // Es la garantía que sostiene el ranking: el cliente manda decisiones y el
-    // servidor recalcula el puntaje. Si esto se rompe, el ranking es mentira.
     const chooser = new Rand(31337);
     let original = startRun({ seed: 9001, clubId: 'racing' });
     let guard = 0;
@@ -392,7 +378,6 @@ describe('puntaje', () => {
 
 describe('mercado', () => {
   it('no repite apellidos dentro de la misma ventana', () => {
-    // Dos Ledesma en la misma planilla se leen como un error del juego.
     const rand = new Rand(2024);
     for (let i = 0; i < 300; i++) {
       const offers = generateOffers('primera', 60, rand);
@@ -412,8 +397,6 @@ describe('mercado', () => {
 
 describe('recursos', () => {
   it('cada recurso tiene su explicación', () => {
-    // El acta de asunción y las celdas del carnet leen de acá: si falta uno,
-    // el jugador se queda sin saber qué mira.
     for (const campo of ['caja', 'hinchada', 'socios', 'plantel', 'influencia'] as const) {
       const def = RECURSOS_POR_ID[campo];
       expect(def, campo).toBeDefined();
@@ -436,7 +419,6 @@ describe('contenido', () => {
       for (const option of event.options) {
         expect(option.label.length, event.id).toBeGreaterThanOrEqual(2);
         expect(option.hint.length, event.id).toBeGreaterThan(5);
-        // Una opción sin efectos ni azar no hace nada: es una carta muerta.
         expect(Boolean(option.effects || option.random), `${event.id}: ${option.label}`).toBe(true);
       }
     }
@@ -454,8 +436,6 @@ describe('contenido', () => {
   });
 
   it('ningún evento queda inalcanzable por pedir opciones imposibles', () => {
-    // Si todas las opciones de una carta tienen `requires`, puede quedar sin
-    // opciones disponibles y trabar la partida.
     for (const event of ALL_EVENTS) {
       const sinRequisitos = event.options.filter((o) => !o.requires);
       expect(sinRequisitos.length, event.id).toBeGreaterThanOrEqual(2);

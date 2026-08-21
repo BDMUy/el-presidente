@@ -1,15 +1,3 @@
-/**
- * La página que aparece cuando un link no lleva a ningún lado.
- *
- * No es una pantalla rara: es lo que ve alguien cuando le comparten una
- * presidencia y el link llegó cortado, o cuando abre uno viejo. Es decir, es
- * una de las primeras cosas que alguien puede ver del juego, y dejarla en el
- * 404 negro y en inglés de Next era perder a esa persona en la puerta.
- *
- * Por eso no se disculpa ni explica el error: dice qué pasó en una línea y
- * ofrece lo único que importa, que es jugar.
- */
-
 import Link from 'next/link';
 
 import { Membrete, Papel, Sello, Titulo } from '@/components/ui';

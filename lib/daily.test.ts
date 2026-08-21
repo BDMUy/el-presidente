@@ -8,8 +8,6 @@ import { fechaDelDia, faltaParaLaProxima, formatearEspera, presidenciaDelDia } f
 
 describe('Presidencia del Día', () => {
   it('la misma fecha da siempre la misma partida', () => {
-    // Es toda la promesa del modo: el desafío tiene que ser idéntico para
-    // todos. Si esto se rompe, el ranking diario compara cosas distintas.
     const a = presidenciaDelDia('2026-08-14');
     const b = presidenciaDelDia('2026-08-14');
     expect(a).toEqual(b);
@@ -30,8 +28,6 @@ describe('Presidencia del Día', () => {
   });
 
   it('reparte clubes de las tres categorías a lo largo del año', () => {
-    // Si el sorteo quedara sesgado a una categoría, el modo diario se volvería
-    // repetitivo sin que nadie lo notara enseguida.
     const categorias = new Set<string>();
     for (let i = 0; i < 365; i++) {
       const fecha = new Date(Date.UTC(2026, 0, 1 + i)).toISOString().slice(0, 10);
@@ -42,8 +38,6 @@ describe('Presidencia del Día', () => {
   });
 
   it('la fecha se calcula con el reloj argentino, no con UTC', () => {
-    // A las 2 UTC del día 15 en Argentina todavía son las 23 del 14. Con UTC
-    // el día del juego cambiaría a las nueve de la noche.
     expect(fechaDelDia(new Date('2026-08-15T02:00:00Z'))).toBe('2026-08-14');
     expect(fechaDelDia(new Date('2026-08-15T03:30:00Z'))).toBe('2026-08-15');
   });
@@ -76,10 +70,6 @@ describe('Presidencia del Día', () => {
 });
 
 describe('verificación de puntajes', () => {
-  /**
-   * Es el contrato del ranking: el servidor recalcula el puntaje reproduciendo
-   * la partida, así que un cliente no puede declarar el número que quiera.
-   */
   it('el puntaje reproducido coincide con el original', () => {
     for (const seed of [1, 5000, 987654]) {
       const chooser = new Rand(seed ^ 0xabcdef);
@@ -96,7 +86,6 @@ describe('verificación de puntajes', () => {
   });
 
   it('una decisión inventada hace fallar la reproducción', () => {
-    // Alguien que arma un log a mano para inflar el puntaje choca acá.
     expect(() => replayRun(123, 'boca', [0, 0, 63])).toThrow(/Decisión inválida/);
   });
 

@@ -1,23 +1,5 @@
 'use client';
 
-/**
- * La Mesa Chica: el clímax de la temporada.
- *
- * Es la única pantalla sin papel. Acá no hay acta que firmar: estás sentado a
- * la mesa con tres fichas y cinco frentes, y lo único que podés hacer es
- * repartirlas. Después mirás.
- *
- * Tres decisiones sostienen el diseño:
- *
- * 1. Cada frente muestra sus tres casilleros vacíos y la ficha se ve caer
- *    adentro. La primera versión tenía las fichas flotando arriba, sin relación
- *    visual con su destino, y el gesto de repartir no existía en ningún lado.
- * 2. La barra separa lo que traías de lo que compraste. Ver crecer el tramo de
- *    bronce es la recompensa de gastar; un número solo no la da.
- * 3. Los frentes se ordenan de más a menos potente, para que el dilema quede a
- *    la vista: el que más suma es el que puede volver como escándalo.
- */
-
 import { useMemo, useState } from 'react';
 
 import { assignmentCost, assignmentIndex, costoPorFicha, winProbability } from '@/lib/engine/mesa-chica';
@@ -34,19 +16,8 @@ import { Continuar, Membrete, Papel, Sello, Titulo } from './ui';
 
 const VACIO: MesaChicaAssignment = { plantel: 0, dt: 0, hinchada: 0, prensa: 0, gestion: 0 };
 
-/**
- * Orden de presentación, de más a menos potente.
- *
- * Es una copia ordenada a propósito: el orden de FRENTES define los índices que
- * viajan en el log de la partida y en los links compartidos, así que ese array
- * no se toca nunca.
- */
 const EN_PANTALLA: readonly FrenteDef[] = [...FRENTES].sort((a, b) => b.winPerFicha - a.winPerFicha);
 
-/**
- * Qué cuesta una ficha en este frente, derivado del motor y no escrito a mano,
- * para que no pueda contradecir lo que el juego cobra de verdad.
- */
 function etiquetaDeCosto(frente: Frente): string {
   const { caja, influencia, hinchada } = costoPorFicha(frente);
   const partes: string[] = [];
@@ -84,7 +55,6 @@ export function FaseMesaChica({
 
   return (
     <div>
-      {/* ── El partido ───────────────────────────────────────── */}
       <div className="text-center">
         <Membrete sobrePano>La mesa chica</Membrete>
         <h1 className="mt-2 text-balance font-display text-[clamp(1.5rem,7vw,2rem)] leading-[1.05] font-black tracking-tight text-papel uppercase">
@@ -93,7 +63,6 @@ export function FaseMesaChica({
         <p className="mt-1.5 font-body text-[15px] text-papel-2">contra {match.rival}</p>
       </div>
 
-      {/* ── La apuesta ───────────────────────────────────────── */}
       <div className="mt-6">
         <div className="flex items-end justify-center gap-2">
           <p className="font-display text-[3.75rem] leading-[0.85] font-black tabular-nums text-papel">
@@ -107,7 +76,6 @@ export function FaseMesaChica({
           )}
         </div>
 
-        {/* La barra separa lo que traías de lo que compraste con las fichas. */}
         <div className="mt-3 flex h-2.5 w-full overflow-hidden border border-linea" aria-hidden>
           <div
             className="bg-papel-2 transition-[width] duration-300 ease-out"
@@ -125,7 +93,6 @@ export function FaseMesaChica({
         </p>
       </div>
 
-      {/* ── Las fichas en la mano ────────────────────────────── */}
       <div className="mt-6 flex items-center justify-center gap-2.5" aria-live="polite">
         {Array.from({ length: FICHAS_MESA_CHICA }, (_, i) => (
           <span
@@ -145,7 +112,6 @@ export function FaseMesaChica({
         </span>
       </div>
 
-      {/* ── Los frentes ──────────────────────────────────────── */}
       <ul className="mt-5 space-y-2">
         {EN_PANTALLA.map((frente) => (
           <FilaFrente
@@ -159,12 +125,6 @@ export function FaseMesaChica({
         ))}
       </ul>
 
-      {/* ── Definir ──────────────────────────────────────────────
-          Fija abajo: con cinco frentes el botón caía 175px debajo del
-          pliegue, y en el momento más tenso de la temporada había que
-          scrollear para poder decidir. La barra lleva además la
-          probabilidad, para que el número siga a la vista mientras
-          repartís las fichas más abajo. */}
       <div className="sticky bottom-0 -mx-4 mt-5 border-t border-pano-borde bg-pano-alto/97 px-4 py-3 backdrop-blur">
         <div className="mx-auto flex max-w-xl items-center gap-3">
           <div className="min-w-0 flex-1">
@@ -176,9 +136,6 @@ export function FaseMesaChica({
                 </span>
               )}
             </p>
-            {/* Sin `truncate`: en la barra el costo es justo lo que hace falta
-                saber antes de confirmar, y cortarlo con puntos suspensivos
-                esconde el dato en el momento de decidir. Si no entra, envuelve. */}
             <p className="mt-1 font-acta text-[11px] leading-tight tracking-[0.02em] text-papel-2 uppercase">
               {usadas === 0
                 ? `${FICHAS_MESA_CHICA} fichas sin usar`
@@ -206,12 +163,6 @@ export function FaseMesaChica({
   );
 }
 
-/**
- * Un frente con sus tres casilleros.
- *
- * La fila entera agrega una ficha; cada ficha puesta se toca para sacarla. No
- * hay botón de quitar aparte: la ficha es el control.
- */
 function FilaFrente({
   frente,
   puestas,
@@ -241,7 +192,6 @@ function FilaFrente({
         aria-label={`Poner una ficha en ${frente.label}`}
       >
         <span className="flex items-baseline gap-2">
-          {/* En caja baja: son frases, y en mayúsculas se leen más lento. */}
           <span className="font-display text-[15px] leading-tight font-bold tracking-tight text-papel">
             {frente.label}
           </span>
@@ -260,7 +210,6 @@ function FilaFrente({
         </span>
       </button>
 
-      {/* Los tres casilleros: se ve dónde fue cada ficha sin leer nada. */}
       <div className="flex shrink-0 gap-1">
         {Array.from({ length: FICHAS_MESA_CHICA }, (_, i) =>
           i < puestas ? (
@@ -284,7 +233,6 @@ function FilaFrente({
   );
 }
 
-/** El resultado del partido, ya sobre papel: pasó a ser historia. */
 export function FaseResultadoFinal({
   won,
   text,

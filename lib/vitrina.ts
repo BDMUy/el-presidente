@@ -1,14 +1,3 @@
-/**
- * La vitrina: lo que sobrevive a una presidencia.
- *
- * Es el único estado que cruza partidas. Los títulos ganados, los logros
- * desbloqueados y el mejor puntaje se acumulan en el dispositivo, sin cuenta.
- *
- * A diferencia de la partida en curso, esto NO lleva versión de contenido: si
- * mañana agrego cartas nuevas, nadie debería perder la Libertadores que ganó.
- * Los IDs de título y de logro son el contrato estable.
- */
-
 import { logrosDeLaPartida } from '@/content/logros';
 import { computeScore } from '@/lib/engine/election';
 import type { GameState, TitleId } from '@/lib/engine/types';
@@ -16,20 +5,11 @@ import type { GameState, TitleId } from '@/lib/engine/types';
 const KEY = 'el-presidente:vitrina';
 
 export interface Vitrina {
-  /** Títulos ganados alguna vez, en cualquier partida. */
   titulos: TitleId[];
   logros: string[];
   partidas: number;
   mejorPuntaje: number;
-  /** Club de la mejor presidencia, para mostrarla al lado del puntaje. */
   mejorClub: string | null;
-  /**
-   * Huella de la última presidencia registrada.
-   *
-   * La partida terminada se sigue restaurando al recargar, para no perder el
-   * epílogo. Sin esta marca, cada recarga en una sesión nueva volvía a sumar
-   * la misma presidencia y el contador crecía solo.
-   */
   ultimaHuella: string | null;
 }
 
@@ -42,7 +22,6 @@ const VACIA: Vitrina = {
   ultimaHuella: null,
 };
 
-/** Identifica una presidencia concreta: semilla más recorrido. */
 function huella(state: GameState): string {
   return `${state.seed}:${state.choices.length}:${state.season}`;
 }
@@ -68,25 +47,15 @@ export function leerVitrina(): Vitrina {
 
 export interface Novedades {
   vitrina: Vitrina;
-  /** Títulos que entran a la vitrina por primera vez. */
   titulosNuevos: TitleId[];
   logrosNuevos: string[];
   esRecord: boolean;
 }
 
-/**
- * Suma una presidencia terminada a la vitrina y devuelve qué hay de nuevo.
- *
- * Devolver las novedades y no solo el total es lo que permite celebrarlas en
- * el epílogo: sin esto, ganar tu primera Libertadores se vería igual que
- * ganar la cuarta.
- */
 export function registrarPartida(state: GameState): Novedades {
   const actual = leerVitrina();
   const marca = huella(state);
 
-  // Ya estaba registrada: se devuelve la vitrina como está, sin novedades.
-  // Volver a mostrar el epílogo no puede volver a sumar la presidencia.
   if (actual.ultimaHuella === marca) {
     return { vitrina: actual, titulosNuevos: [], logrosNuevos: [], esRecord: false };
   }
@@ -117,7 +86,6 @@ function guardarVitrina(vitrina: Vitrina): void {
   try {
     window.localStorage.setItem(KEY, JSON.stringify(vitrina));
   } catch {
-    // Sin almacenamiento la vitrina no persiste. El juego sigue andando.
   }
 }
 
@@ -126,6 +94,5 @@ export function borrarVitrina(): void {
   try {
     window.localStorage.removeItem(KEY);
   } catch {
-    // Nada que hacer.
   }
 }

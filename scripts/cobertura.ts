@@ -1,17 +1,3 @@
-/**
- * Cobertura de contenido.
- *
- * Simula miles de presidencias y reporta qué cartas aparecen y cuáles no. Es
- * la contracara del simulador de balance: ahí se mide si el juego es justo,
- * acá si el contenido existe de verdad.
- *
- * La métrica que importa es la lista de cartas nunca vistas. Una carta con
- * condiciones que no se cumplen nunca es trabajo de escritura tirado, y no hay
- * forma de darse cuenta jugando.
- *
- *   npx tsx scripts/cobertura.ts 3000
- */
-
 import { CLUBS } from '../content/clubs';
 import { ALL_EVENTS } from '../content/events';
 import { applyChoice, optionCount, startRun } from '../lib/engine/engine';
@@ -30,20 +16,6 @@ if (!(MODOS as readonly string[]).includes(argModo)) {
 const modo = argModo as Modo;
 const TOPE = TEMPORADAS_POR_MODO[modo];
 
-/**
- * Política sesgada a sobrevivir: cuida la hinchada en los eventos y el plantel
- * en el mercado.
- *
- * Con decisiones al azar la partida muere en la temporada cinco y solo ve un
- * quinto del catálogo, que no es la pregunta. La pregunta es qué ve alguien
- * que llega hasta el final.
- *
- * El mercado no puede ir al azar, y eso se descubrió midiendo: sorteando la
- * ventana de pases se vende al ídolo cada tanto, el plantel se desploma y la
- * partida termina descendida. En modo largo eso dejaba **una** presidencia
- * completa cada mil quinientas, así que las cifras de repetición de cartas
- * salían de una sola partida y no medían nada.
- */
 function elegir(state: GameState, chooser: Rand): number {
   if (state.phase.kind === 'mercado') {
     const { offers } = state.phase;
@@ -51,7 +23,6 @@ function elegir(state: GameState, chooser: Rand): number {
     let mejor = noMover;
     let mejorDelta = 0;
     offers.forEach((offer, i) => {
-      // Nunca vender, y comprar solo lo que se paga con la caja que hay.
       if (offer.plantelDelta <= mejorDelta) return;
       if (offer.cost > state.resources.caja) return;
       mejor = i;
@@ -96,12 +67,10 @@ function jugar(seed: number, clubId: string): GameState {
 const vistas = new Map<string, number>();
 let cartasPorPartida = 0;
 let temporadas = 0;
-/** Cartas repetidas dentro de una misma partida: el mazo se agotó. */
 let repetidasTotal = 0;
 let partidasConRepetidas = 0;
 let partidasLargas = 0;
 let cartasEnLargas = 0;
-/** En qué carta de la partida apareció la primera repetición. */
 const primeraRepeticion: number[] = [];
 let sorteosEnLargas = 0;
 let repetidasEnLargas = 0;
@@ -117,15 +86,11 @@ for (let i = 0; i < runs; i++) {
   repetidasTotal += repetidas;
   if (repetidas > 0) partidasConRepetidas++;
 
-  // "Completa" es relativo al modo: en corta son 8 temporadas, no 14.
   if (state.season >= TOPE) {
     partidasLargas++;
     cartasEnLargas += distintas.size;
     sorteosEnLargas += state.usedEvents.length;
     repetidasEnLargas += repetidas;
-    // Cuándo aparece la primera repetición: es el momento en que la partida
-    // empieza a mostrarte algo que ya viste. En una larga es el dato que dice
-    // si la segunda mitad es un refrito.
     const yaVistas = new Set<string>();
     for (let k = 0; k < state.usedEvents.length; k++) {
       if (yaVistas.has(state.usedEvents[k])) {
@@ -161,9 +126,6 @@ console.log(
     `(${(repetidasTotal / runs).toFixed(2)} repeticiones por partida)`,
 );
 
-// Lo que importa de la repetición es qué le pasa a quien llega hasta el final,
-// no el promedio de todas las partidas: las que mueren temprano nunca llegan a
-// agotar el mazo y le bajan el promedio a un problema que sí existe.
 if (partidasLargas > 0) {
   const sorteos = sorteosEnLargas / partidasLargas;
   const repes = repetidasEnLargas / partidasLargas;
@@ -199,7 +161,6 @@ if (raras.length > 0) {
   }
 }
 
-// Las diez más frecuentes: si una carta domina, se repite demasiado.
 const top = [...vistas].sort((a, b) => b[1] - a[1]).slice(0, 8);
 console.log('\n  MÁS FRECUENTES:');
 for (const [id, n] of top) {

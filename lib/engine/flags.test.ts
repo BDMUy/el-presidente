@@ -26,15 +26,11 @@ describe('flagsSuma: marcas que se acumulan', () => {
   });
 
   it('en la misma carta, primero pisa y después suma', () => {
-    // Poner el piso y subirlo de una: si el orden fuera al revés, la suma se
-    // perdería porque el pisado la sobreescribe.
     const s = applyEffects(base(), { flags: { prontuario: 10 }, flagsSuma: { prontuario: 1 } });
     expect(s.flags.prontuario).toBe(11);
   });
 
   it('sumar sobre una marca booleana la trata como cero, sin devolver NaN', () => {
-    // Mezclar los dos usos en la misma marca es un error de contenido. Que dé
-    // un número igual hace que se note en una condición en vez de esconderse.
     let s = applyEffects(base(), { flags: { mezcla: true } });
     s = applyEffects(s, { flagsSuma: { mezcla: 2 } });
     expect(s.flags.mezcla).toBe(2);

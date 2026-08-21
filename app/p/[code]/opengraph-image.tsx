@@ -1,13 +1,3 @@
-/**
- * La imagen que aparece al pegar el link de una presidencia.
- *
- * Se genera desde la misma partida reconstruida que la página, así que nunca
- * puede contradecirla. Reproduce la identidad del juego —paño verde, hoja de
- * papel, banda con los colores del club— con los medios que da Satori: no hay
- * tipografías propias acá, así que el peso visual lo cargan el color y la
- * jerarquía de tamaños.
- */
-
 import { ImageResponse } from 'next/og';
 
 import { getClub } from '@/content/clubs';
@@ -30,7 +20,6 @@ export default async function Image({ params }: { params: Promise<{ code: string
 
   const state = reconstruirPresidencia(code);
 
-  // Sin partida válida la imagen no puede mentir: muestra la portada del juego.
   if (!state?.ending) {
     return new ImageResponse(
       (
@@ -87,16 +76,12 @@ export default async function Image({ params }: { params: Promise<{ code: string
             padding: 0,
           }}
         >
-          {/* La banda del club: lo único suyo que no es su nombre. */}
           <div style={{ display: 'flex', height: 14 }}>
             <div style={{ flex: 1, backgroundColor: club.colors[0] }} />
             <div style={{ flex: 1, backgroundColor: club.colors[1] }} />
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', padding: '40px 56px', flex: 1 }}>
-            {/* Una sola cadena, no interpolaciones sueltas: Satori cuenta cada
-                expresión como un hijo y exige display:flex explícito en
-                cualquier div con más de uno. */}
             <div style={{ fontSize: 24, color: TINTA_2, letterSpacing: 3 }}>
               {`${club.name.toUpperCase()} · ${state.history[0]?.year ?? state.year}–${state.year}`}
             </div>

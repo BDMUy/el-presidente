@@ -1,10 +1,3 @@
-/**
- * Eventos de la gente: la barra, la tribuna, los socios.
- *
- * Es el frente donde las decisiones económicamente correctas suelen ser
- * políticamente suicidas. Ahí está el jugo.
- */
-
 import type { GameEvent } from '@/lib/engine/types';
 
 export const HINCHADA: GameEvent[] = [

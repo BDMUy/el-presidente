@@ -1,17 +1,5 @@
 'use client';
 
-/**
- * El acta de asunción: lo primero que ve un jugador nuevo.
- *
- * Enseña los cinco recursos sin ser un tutorial, porque es diegética: es el
- * papel que te entregan cuando asumís, con el inventario de lo que recibís.
- *
- * Deliberadamente vive fuera del motor. No es una decisión, no cambia el
- * estado y no entra en el log de la partida: si fuera una fase del juego,
- * agregaría una elección al log y rompería la compatibilidad de las partidas
- * guardadas cada vez que la tocáramos.
- */
-
 import { useEffect, useState } from 'react';
 
 import { nombreDelPresidente } from '@/lib/dispositivo';
@@ -34,12 +22,8 @@ export function ActaAsuncion({
 }) {
   const mandatos = mandatosDe(modo);
 
-  // Se lee después del montaje: el nombre vive en localStorage, que no existe
-  // durante el prerender, y leerlo en el render daría un desajuste de
-  // hidratación entre el HTML del servidor y el del navegador.
   const [nombre, setNombre] = useState('');
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- el nombre guardado solo existe en el cliente
     setNombre(nombreDelPresidente());
   }, []);
 
@@ -66,8 +50,6 @@ export function ActaAsuncion({
       <div className="mt-4">
         <Titulo>Recibís el club</Titulo>
 
-        {/* El nombre solo si lo puso. Un "Presidente:" vacío en el acta se lee
-            como un campo que quedó sin llenar, que es peor que no tenerlo. */}
         {nombre && (
           <p className="mt-2 flex items-baseline font-acta text-[12px] tracking-[0.06em] uppercase">
             <span className="text-tinta-2">Presidente</span>
@@ -76,12 +58,6 @@ export function ActaAsuncion({
           </p>
         )}
 
-        {/* Los mandatos salen del modo: prometer cuatro en una presidencia
-            corta de dos era mentirle al jugador en su primera pantalla.
-
-            Y en llamas cambia también cómo llegaste: nadie gana una elección
-            para hacerse cargo de un club fundido. Es la misma pantalla, y con
-            una frase distinta explica por qué estás sentado ahí. */}
         <p className="mt-3 font-body text-[16px] leading-relaxed text-tinta">
           {modo === 'llamas'
             ? 'Ganaste la elección porque no se presentó nadie más.'
@@ -92,8 +68,6 @@ export function ActaAsuncion({
         </p>
 
         {modo === 'llamas' && (
-          // El inventario de abajo ya muestra los números. Esto dice lo que los
-          // números no dicen: cuál es la salida, y que la salida duele.
           <p className="mt-3 border-l-2 border-sello pl-3 font-body text-[16px] leading-relaxed text-tinta">
             La gestión anterior dejó la deuda y se fue. Lo único que el club tiene para vender es
             el plantel, que es lo único que el club tiene para ganar.

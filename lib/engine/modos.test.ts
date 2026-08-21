@@ -8,7 +8,6 @@ import { Rand } from './rng';
 import type { GameState, Modo } from './types';
 import { MODOS, TEMPORADAS_POR_MODO } from './types';
 
-/** Juega hasta el final eligiendo siempre la primera opción. */
 function jugar(seed: number, clubId: string, modo: Modo): GameState {
   let state = startRun({ seed, clubId, modo });
   let guarda = 0;
@@ -66,7 +65,6 @@ describe('isElectionSeason', () => {
   });
 
   it('sí vota en la temporada que para otro modo sería la última', () => {
-    // La 8 termina la corta, pero en normal y larga es una elección más.
     expect(isElectionSeason(8, 'normal')).toBe(true);
     expect(isElectionSeason(16, 'larga')).toBe(true);
   });
@@ -74,9 +72,6 @@ describe('isElectionSeason', () => {
 
 describe('umbral de la estatua', () => {
   it('la corta no lleva descuento aunque dure la mitad', () => {
-    // Medido: con el umbral escalado en proporción, la estatua salía casi el
-    // doble de fácil en corta, porque "cero descensos" y "hinchada alta al
-    // final" se vuelven más fáciles cuanto menos dura la partida.
     expect(puntosParaEstatua('corta')).toBe(puntosParaEstatua('normal'));
   });
 
@@ -94,8 +89,6 @@ describe('la escalera de los eternos', () => {
   ] as const;
 
   it('ninguno se puede desbloquear en corta ni en normal', () => {
-    // No es una limitación accidental: la normal se termina en la 16, así que
-    // la escalera es lo que hace que el modo largo tenga algo propio.
     for (const modo of ['corta', 'normal'] as Modo[]) {
       const tope = TEMPORADAS_POR_MODO[modo];
       for (const [, temporada] of ESCALERA) {
@@ -143,8 +136,6 @@ describe('los textos de los finales dicen la duración real', () => {
   });
 
   it('el club en llamas solo cuenta si lo terminaste', () => {
-    // Antes el logro se cumplía con que te tocara la rareza, ganaras o
-    // perdieras. Ahora el modo se elige, así que jugarlo no puede ser el logro.
     const completa = estado('llamas', { season: 16 });
     const aMedias = estado('llamas', { season: 9 });
     const normalCompleta = estado('normal', { season: 16 });
@@ -167,19 +158,15 @@ describe('los textos de los finales dicen la duración real', () => {
     const completa = estado('larga', { season: 32 });
     expect(buildEnding('reelecto-gris', completa, club).text).toContain('te faltaron tres');
 
-    // Y no aparece si la larga terminó antes de tiempo.
     const aMedias = estado('larga', { season: 28 });
     expect(buildEnding('derrota-electoral', aMedias, club).text).not.toContain('te faltaron tres');
   });
 
   it('el descenso fatal cuenta los descensos que hubo, no los que había antes', () => {
-    // Se titulaba "DOS DESCENSOS" desde que la condición eran dos; después se
-    // subió a tres y el texto quedó contando otra historia.
     const tres = buildEnding('descenso-fatal', estado('normal', { descensos: 3 }), club);
     expect(tres.title).toBe('TRES DESCENSOS');
     expect(tres.text).toContain('Tres descensos');
 
-    // En una larga se puede llegar a más de tres antes de que se resuelva.
     const cuatro = buildEnding('descenso-fatal', estado('larga', { descensos: 4 }), club);
     expect(cuatro.title).toBe('CUATRO DESCENSOS');
   });

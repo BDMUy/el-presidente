@@ -1,24 +1,3 @@
-/**
- * Llena el ranking de desarrollo con presidencias jugadas de verdad.
- *
- * Existe por una razón concreta: la tabla de posiciones vacía y la tabla con
- * filas son dos diseños distintos, y el segundo no se puede mirar hasta que
- * haya datos. Antes de esto la tabla llena solo existía en la cabeza de quien
- * la escribió.
- *
- * No inserta en la base directamente: manda las partidas por el endpoint, así
- * que de paso ejercita la verificación server-side completa. Si el servidor
- * rechaza algo, se ve acá.
- *
- *   npx tsx scripts/sembrar-ranking.ts 12
- *   npx tsx scripts/sembrar-ranking.ts 12 http://localhost:3001
- *
- * Y la contracara, porque estas partidas se escriben en la misma base que va a
- * servir el ranking de verdad y no pueden quedar ahí:
- *
- *   npx tsx scripts/sembrar-ranking.ts --limpiar
- */
-
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -30,24 +9,14 @@ import { applyChoice, optionCount, startRun } from '../lib/engine/engine';
 import { Rand } from '../lib/engine/rng';
 import type { GameState } from '../lib/engine/types';
 
-/** Marca en el nombre para poder borrar solo lo sembrado y nada más. */
 const MARCA = '[prueba] ';
 
-/**
- * Nombres que quedaron de pruebas hechas antes de que existiera la marca:
- * el envío manual del epílogo y la tanda de nombres hostiles con la que se
- * encontró que el endpoint aceptaba overrides de dirección y anchos cero.
- *
- * Se listan uno por uno, y no se borra por fecha ni por tabla entera, porque
- * la misma base va a tener partidas de gente real.
- */
 const RESTOS_DE_PRUEBAS = [
   'Prueba Final',
   'a',
   'A'.repeat(24),
   "'; drop table presidenci",
   '<img src=x onerror=alert',
-  // Ya pasados por el limpiador: así es como quedaron guardados.
   'admin0001',
   'jefe0001',
   'linea1 linea2 linea3',
@@ -77,13 +46,6 @@ const NOMBRES = [
   'Nacho',
 ];
 
-/**
- * Juega una presidencia entera y devuelve el log.
- *
- * Elige al azar a propósito: la idea no es un ranking creíble sino un abanico
- * de puntajes, nombres largos y cortos, y clubes de las tres categorías, que
- * es lo que estresa el layout de la tabla.
- */
 function jugar(seed: number, clubId: string): number[] {
   const dado = new Rand(seed ^ 0x9e3779b9);
   let state: GameState = startRun({ seed, clubId });
@@ -93,8 +55,6 @@ function jugar(seed: number, clubId: string): number[] {
   while (state.status === 'jugando' && guarda++ < 5000) {
     const opciones = optionCount(state);
     if (opciones === 0) break;
-    // Sesgo hacia las primeras opciones: el azar puro termina casi siempre en
-    // asamblea y todos los puntajes salen iguales de bajos.
     const choice = dado.chance(0.55) ? 0 : dado.int(0, opciones - 1);
     choices.push(choice);
     state = applyChoice(state, choice);
@@ -120,14 +80,6 @@ function cargarEntorno(): void {
   }
 }
 
-/**
- * Borra lo sembrado y solo lo sembrado.
- *
- * Imprime cada fila antes de tocarla: un script que borra en silencio de una
- * base que también va a tener partidas de gente real no es un script, es una
- * trampa. El filtro es el prefijo de marca, más la lista de nombres con la que
- * se sembró antes de que la marca existiera.
- */
 async function limpiarSembrado(): Promise<void> {
   cargarEntorno();
   const url = process.env.DATABASE_URL;
@@ -154,10 +106,6 @@ async function limpiarSembrado(): Promise<void> {
     console.log(`\nBorrando ${condenadas.length} presidencias de prueba:\n`);
     for (const f of condenadas) console.log(`  − ${f.nombre} · ${f.puntaje}`);
 
-    // `in ${sql(array)}` y no `any(sql.array(...))`: lo segundo serializa el
-    // array a una sola cadena separada por comas y Postgres lo rechaza como
-    // literal malformado. Este expande a `in ($1, $2, …)`, que es lo que hay
-    // que mandar.
     await sql`delete from presidencias where id in ${sql(condenadas.map((f) => f.id))}`;
     const [{ count }] = await sql<{ count: string }[]>`select count(*) from presidencias`;
     console.log(`\nListo. Quedan ${count} presidencias.\n`);

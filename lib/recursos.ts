@@ -1,22 +1,9 @@
-/**
- * Qué es cada recurso, en la voz del juego.
- *
- * Fuente única: la usan el acta de asunción (que enseña una vez) y las celdas
- * del carnet (que responden cuando te olvidaste en la temporada nueve). Si la
- * explicación viviera en dos lados, tarde o temprano dirían cosas distintas.
- *
- * Cada texto tiene que responder dos preguntas: qué es, y qué lo mueve. Sin la
- * segunda, el jugador no puede planificar.
- */
-
 import type { Resources } from '@/lib/engine/types';
 
 export interface RecursoDef {
   id: keyof Resources;
   label: string;
-  /** Qué es y qué lo mueve. Dos o tres frases, no más. */
   texto: string;
-  /** La consecuencia dura, si la tiene. Se destaca aparte. */
   limite?: string;
 }
 

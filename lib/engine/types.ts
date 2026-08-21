@@ -1,40 +1,19 @@
-/**
- * Tipos del motor. No importa nada de React ni del DOM: este archivo y sus
- * hermanos en lib/engine/ corren igual en el navegador, en Node y en el
- * servidor que verifica los puntajes.
- */
-
-// ─────────────────────────────────────────────────────────────
-// Clubes y categorías
-// ─────────────────────────────────────────────────────────────
-
 export type Category = 'primera' | 'nacional' | 'b';
 
 export interface Club {
   id: string;
-  /** Nombre real del club. Solo el nombre: sin escudo, sin fotos. */
   name: string;
-  /** Versión corta para el HUD. */
   short: string;
-  /** Dos colores para la identidad visual, en hex. */
   colors: [string, string];
   category: Category;
-  /**
-   * Peso institucional, 1 a 10. Un 10 es un grande histórico. Afecta
-   * presupuesto, socios, presión de la hinchada y calidad del plantel inicial.
-   */
   size: number;
-  /** Apodo, para los textos narrativos. */
   nickname?: string;
 }
 
 export interface CategoryRules {
   teams: number;
-  /** Cuántos ascienden directo. */
   promote: number;
-  /** Cuántos descienden. */
   relegate: number;
-  /** Si da acceso a copas continentales. */
   continental: boolean;
   label: string;
 }
@@ -45,24 +24,11 @@ export const CATEGORY_RULES: Record<Category, CategoryRules> = {
   b: { teams: 20, promote: 1, relegate: 2, continental: false, label: 'Primera B' },
 };
 
-// ─────────────────────────────────────────────────────────────
-// Recursos
-// ─────────────────────────────────────────────────────────────
-
-/**
- * Los cinco recursos son todo el balance del juego. Caja puede ir a negativo
- * (eso es deuda); el resto está acotado.
- */
 export interface Resources {
-  /** Millones de dólares. Negativo = deuda. */
   caja: number;
-  /** 0-100. Es tu vida: define si te reeligen. */
   hinchada: number;
-  /** Miles de socios. Ingreso recurrente. */
   socios: number;
-  /** 0-100. Define los resultados deportivos. */
   plantel: number;
-  /** 0-100. Capital político: blindaje, asambleas, gestiones turbias. */
   influencia: number;
 }
 
@@ -73,57 +39,32 @@ export const RESOURCE_BOUNDS = {
   socios: [0, 200],
 } as const;
 
-/** Pasada esta deuda, el club queda inhibido y no puede fichar. */
 export const DEUDA_INHIBICION = -18;
 
-/** Con la hinchada en este piso, cae la asamblea y se termina la presidencia. */
 export const HINCHADA_ASAMBLEA = 8;
 
-/** Hinchada mínima para ganar una reelección. */
 export const HINCHADA_ELECCION = 45;
 
-// ─────────────────────────────────────────────────────────────
-// Efectos (el lenguaje que habla el contenido)
-// ─────────────────────────────────────────────────────────────
-
-/** Cambios sobre los recursos. Todos los campos son deltas, no valores. */
 export interface Effects {
   caja?: number;
   hinchada?: number;
   socios?: number;
   plantel?: number;
   influencia?: number;
-  /** Marcas que otros eventos pueden consultar con `requires`. Pisan el valor. */
   flags?: Record<string, number | boolean>;
-  /**
-   * Marcas numéricas que se **suman** al valor que ya había, en vez de pisarlo.
-   *
-   * `flags` sirve para "esto pasó" y no para "esto pasó otra vez": escribiendo
-   * `flags: { prontuario: 1 }` dos veces el valor sigue siendo uno. Un contador
-   * que se acumula a lo largo de la presidencia necesita sumar, y de eso vive
-   * todo lo que escala.
-   */
   flagsSuma?: Record<string, number>;
-  /** Efectos que recién se aplican N temporadas después. */
   deferred?: DeferredEffect[];
 }
 
 export interface DeferredEffect {
-  /** En cuántas temporadas madura. */
   inSeasons: number;
-  /** Texto que se muestra cuando finalmente ocurre. */
   text: string;
   effects: Effects;
 }
 
-/** Efecto diferido ya agendado, con la temporada exacta en la que cae. */
 export interface PendingEffect extends DeferredEffect {
   dueSeason: number;
 }
-
-// ─────────────────────────────────────────────────────────────
-// Contenido: eventos
-// ─────────────────────────────────────────────────────────────
 
 export type EventKind = 'golpe' | 'dilema' | 'color';
 
@@ -133,7 +74,6 @@ export const EVENT_KIND_LABEL: Record<EventKind, string> = {
   color: 'PASAN COSAS',
 };
 
-/** Condiciones de aparición. Todos los campos son opcionales y se suman con AND. */
 export interface Condition {
   minSeason?: number;
   maxSeason?: number;
@@ -148,22 +88,11 @@ export interface Condition {
   maxPlantel?: number;
   minSize?: number;
   maxSize?: number;
-  /** Requiere que esta flag esté seteada y sea verdadera. */
   flag?: string;
-  /** Requiere que esta flag NO esté seteada. */
   notFlag?: string;
-  /**
-   * Requiere que cada flag numérica llegue al menos a ese valor.
-   *
-   * `flag` y `notFlag` solo saben preguntar si algo pasó o no. Esto es lo que
-   * permite que una carta aparezca recién a la tercera vez, que es como se
-   * cuenta una escalada: el prontuario de corrupción no es "hiciste algo
-   * sucio" sino "ya van tres".
-   */
   minFlag?: Record<string, number>;
 }
 
-/** Una rama azarosa de una opción: el 🎲 de las cartas. */
 export interface RandomOutcome {
   weight: number;
   text: string;
@@ -172,12 +101,9 @@ export interface RandomOutcome {
 
 export interface EventOption {
   label: string;
-  /** La consecuencia que el jugador ve antes de elegir. */
   hint: string;
   effects?: Effects;
-  /** Si está, la opción es un 🎲 y se resuelve por sorteo ponderado. */
   random?: RandomOutcome[];
-  /** Si no se cumple, la opción no se ofrece. */
   requires?: Condition;
 }
 
@@ -187,40 +113,24 @@ export interface GameEvent {
   title: string;
   text: string;
   options: EventOption[];
-  /** Peso relativo en el sorteo. Por defecto 1. */
   weight?: number;
   requires?: Condition;
-  /** Si es true, no puede repetirse en la misma partida. */
   once?: boolean;
 }
-
-// ─────────────────────────────────────────────────────────────
-// Mercado de pases
-// ─────────────────────────────────────────────────────────────
 
 export type OfferKind = 'compra' | 'venta' | 'libre';
 
 export interface PlayerOffer {
   kind: OfferKind;
   name: string;
-  /** Arquetipo narrativo: "9 de área", "pibe del club", "veterano de retorno". */
   archetype: string;
   age: number;
-  /** Cuánto suma (compra) o resta (venta) al plantel. */
   plantelDelta: number;
-  /** Costo en millones. Negativo en una venta (entra plata). */
   cost: number;
-  /** Impacto en la hinchada. Vender un ídolo duele. */
   hinchadaDelta: number;
-  /** Texto corto de sabor. */
   note: string;
-  /** Riesgo de que salga mal (lesión, no adaptación). 0-1. */
   risk: number;
 }
-
-// ─────────────────────────────────────────────────────────────
-// La Mesa Chica
-// ─────────────────────────────────────────────────────────────
 
 export type Frente = 'plantel' | 'dt' | 'hinchada' | 'prensa' | 'gestion';
 
@@ -228,30 +138,10 @@ export interface FrenteDef {
   id: Frente;
   label: string;
   desc: string;
-  /** Cuánta probabilidad de ganar suma cada ficha. */
   winPerFicha: number;
-  /**
-   * Advertencia visible cuando el frente arrastra una consecuencia diferida.
-   *
-   * El riesgo se muestra a propósito: un dilema es más fuerte cuando sabés lo
-   * que estás arriesgando y lo hacés igual. Escondido sería una trampa, y el
-   * jugador se enteraría recién dos temporadas después, sin poder atarlo a
-   * esta decisión.
-   */
   riesgo?: string;
 }
 
-/**
- * Los cinco frentes donde podés repartir las tres fichas de influencia.
- *
- * `gestion` es deliberadamente el más eficaz: la opción más sucia tiene que
- * ser también la más tentadora, o el dilema no existe.
- *
- * ATENCIÓN: el orden de este array define los índices de reparto que viajan en
- * el log de la partida y en los links compartidos. Reordenarlo rompe todas las
- * partidas guardadas y todos los links que ya circulan. Para cambiar el orden
- * en pantalla existe un orden de presentación aparte en la UI.
- */
 export const FRENTES: readonly FrenteDef[] = [
   { id: 'plantel', label: 'Prima al plantel', desc: 'Plata sobre la mesa. Motiva, y se sabe.', winPerFicha: 0.08 },
   { id: 'dt', label: 'Respaldo al DT', desc: 'Salís a bancarlo en público.', winPerFicha: 0.06 },
@@ -272,21 +162,13 @@ export type Competition = 'liga' | 'copa' | 'continental' | 'playoff';
 
 export interface BigMatch {
   competition: Competition;
-  /** Nombre completo del partido: "Final de la Copa Argentina". */
   label: string;
   rival: string;
-  /** Probabilidad base de ganar, antes de las fichas. */
   baseWin: number;
-  /** Qué título otorga si se gana. */
   title: TitleId;
 }
 
-/** Reparto de fichas elegido por el jugador. */
 export type MesaChicaAssignment = Record<Frente, number>;
-
-// ─────────────────────────────────────────────────────────────
-// Títulos y resultados
-// ─────────────────────────────────────────────────────────────
 
 export type TitleId =
   | 'liga-primera'
@@ -301,7 +183,6 @@ export type TitleId =
 export interface TitleDef {
   id: TitleId;
   label: string;
-  /** Peso en el puntaje final. */
   points: number;
 }
 
@@ -329,10 +210,8 @@ export interface SeasonResult {
   champion: boolean;
   promoted: boolean;
   relegated: boolean;
-  /** Clasificó a copa continental para la temporada siguiente. */
   qualifiedContinental: boolean;
   titles: TitleId[];
-  /** Resumen narrativo de la temporada. */
   summary: string;
 }
 
@@ -347,13 +226,8 @@ export interface SeasonRecord {
   caja: number;
 }
 
-// ─────────────────────────────────────────────────────────────
-// Elecciones y finales
-// ─────────────────────────────────────────────────────────────
-
 export interface ElectionResult {
   won: boolean;
-  /** Porcentaje de votos obtenido. */
   votes: number;
   rival: string;
   summary: string;
@@ -373,15 +247,6 @@ export interface Ending {
   text: string;
 }
 
-// ─────────────────────────────────────────────────────────────
-// Fases y estado
-// ─────────────────────────────────────────────────────────────
-
-/**
- * Cada fase expone las opciones que el jugador puede elegir. El log de la
- * partida es simplemente la lista de índices elegidos, lo que hace que
- * reproducir una partida en el servidor sea trivial.
- */
 export type Phase =
   | { kind: 'mercado'; offers: PlayerOffer[]; inhibido: boolean }
   | { kind: 'evento'; event: GameEvent; available: number[] }
@@ -400,69 +265,33 @@ export interface LogEntry {
 }
 
 export interface GameState {
-  /** Semilla de la partida. Con esto y el log se reproduce todo. */
   seed: number;
-  /** Cursor del PRNG. */
   rng: number;
   clubId: string;
   category: Category;
-  /** Cuánto dura esta presidencia. Fija el final y escala los umbrales. */
   modo: Modo;
-  /** 1 a `TEMPORADAS_POR_MODO[modo]`. */
   season: number;
   year: number;
-  /** 1 a la cuarta parte de las temporadas del modo: 2, 4 u 8. */
   mandate: number;
   resources: Resources;
   titles: WonTitle[];
   history: SeasonRecord[];
   flags: Record<string, number | boolean>;
   pending: PendingEffect[];
-  /** IDs de eventos `once` ya usados. */
   usedEvents: string[];
-  /** Cuántos eventos van en la temporada actual. */
   eventsThisSeason: number;
-  /** Partido grande pendiente de esta temporada, si lo hay. */
   bigMatch: BigMatch | null;
-  /**
-   * Posición en la tabla ya calculada pero todavía no revelada: se resuelve
-   * antes de la Mesa Chica para saber si hay playoff, y se muestra después.
-   */
   pendingPosition: number | null;
-  /** Título ganado en el partido grande, pendiente de sumar al resultado. */
   pendingTitle: TitleId | null;
   phase: Phase;
   status: RunStatus;
   ending: Ending | null;
   log: LogEntry[];
-  /** Decisiones tomadas, en orden. Es lo que se manda al servidor. */
   choices: number[];
   descensos: number;
   ascensos: number;
 }
 
-/**
- * Cómo es la partida.
- *
- * Tres son duraciones y el cuarto es una dificultad. Todos duran un múltiplo
- * de cuatro temporadas porque las elecciones caen cada cuatro: así el
- * calendario electoral no hay que tocarlo para ninguno.
- *
- * El 32 de la larga no es un número redondo cualquiera. Los presidentes más
- * longevos del fútbol duraron 21 (Armando en Boca), 22 (Núñez en Barcelona),
- * 23 (Florentino), 27 (Leoz en la Conmebol), 31 (Berlusconi en Milan) y 35
- * (Bernabéu, y también Grondona en la AFA). Con el techo en 32 se pasan los
- * cinco primeros y el último queda a tres temporadas de distancia, para
- * siempre. Ese "te faltaron tres" es el modo largo.
- *
- * `llamas` dura lo mismo que la normal —dieciséis— justamente para que lo
- * único distinto sea la dificultad. Antes era una rareza que el motor sorteaba
- * con probabilidad 1/500 y que nadie pedía: la misma medición que existe para
- * eso (`scripts/llamas.ts`) mostró que costaba un 24,5% del puntaje, y esas
- * partidas competían en la tabla normal contra partidas que arrancaban enteras.
- * Un castigo secreto que además ensuciaba el ranking. Elegirlo es lo que lo
- * arregla: quien lo elige sabe a qué juega y tiene su propia tabla.
- */
 export type Modo = 'corta' | 'normal' | 'larga' | 'llamas';
 
 export const TEMPORADAS_POR_MODO: Record<Modo, number> = {
@@ -472,7 +301,6 @@ export const TEMPORADAS_POR_MODO: Record<Modo, number> = {
   llamas: 16,
 };
 
-/** Los cuatro modos, en el orden en que se ofrecen. */
 export const MODOS: readonly Modo[] = ['corta', 'normal', 'larga', 'llamas'];
 
 export const SEASONS_PER_MANDATE = 4;

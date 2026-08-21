@@ -1,11 +1,3 @@
-/**
- * La vida en el ascenso: la B y la Nacional.
- *
- * Todo acá es más chico y más físico. No hay derechos de televisión que te
- * salven, la cancha es de tablones y el micro se rompe. La escala de los
- * efectos es deliberadamente menor: en la B, medio millón es una fortuna.
- */
-
 import type { GameEvent } from '@/lib/engine/types';
 
 const SOLO_ASCENSO = { category: ['nacional', 'b'] as const };

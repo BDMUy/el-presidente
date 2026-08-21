@@ -1,15 +1,3 @@
-/**
- * Lectura de los rankings.
- *
- * Dos consultas y nada más: el top del día y el histórico. Se sirve desde el
- * servidor y no por consulta directa del navegador, para no exponer la tabla
- * y para poder cachear: con miles de jugadores abriendo la misma tabla, un
- * segundo de caché es la diferencia entre un plan gratuito y una factura.
- *
- * El log de decisiones no se devuelve: publicarlo al lado del ranking invita
- * a copiar la partida del primero en vez de jugarla.
- */
-
 import { NextResponse } from 'next/server';
 
 import { fechaDelDia } from '@/lib/daily';
@@ -32,10 +20,6 @@ export async function GET(request: Request) {
   const params = new URL(request.url).searchParams;
   const tipo = params.get('tipo') === 'global' ? 'global' : 'diario';
 
-  // El global se lee por duración: el puntaje incluye las temporadas jugadas,
-  // así que una larga siempre le gana a una corta y mezclarlas sería comparar
-  // tres juegos distintos. El diario no lo necesita —la del día es siempre
-  // normal— y por eso sigue siendo una sola tabla para todos.
   const pedido = params.get('modo');
   const modo: Modo = (MODOS as readonly string[]).includes(pedido ?? '')
     ? (pedido as Modo)

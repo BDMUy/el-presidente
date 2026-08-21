@@ -1,17 +1,3 @@
-/**
- * Eventos del fútbol femenino del club.
- *
- * No es una sección aparte del juego: son cartas del mismo mazo, con los
- * mismos recursos y los mismos dilemas. Un plantel que entrena a las siete de
- * la mañana porque a esa hora la cancha está libre, un micro que no llega, una
- * tribuna que se llena por primera vez.
- *
- * Regla de escritura, además de la general: la carta plantea el dilema
- * dirigencial y no da el discurso. El presidente decide con qué plata y con
- * qué costo político, como con todo lo demás. Si una opción es obviamente la
- * correcta, la carta está mal escrita.
- */
-
 import type { GameEvent } from '@/lib/engine/types';
 
 export const FEMENINO: GameEvent[] = [

@@ -1,11 +1,3 @@
-/**
- * Aplicación de efectos y evaluación de condiciones.
- *
- * Es la capa que traduce el contenido (datos) a cambios de estado. Todo el
- * contenido del juego habla este lenguaje, así que sumar eventos nuevos nunca
- * requiere tocar el motor.
- */
-
 import type {
   Category,
   Condition,
@@ -20,15 +12,10 @@ function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
 }
 
-/** Redondea a un decimal, para que la caja no muestre basura de punto flotante. */
 function round1(value: number): number {
   return Math.round(value * 10) / 10;
 }
 
-/**
- * Aplica deltas a los recursos y los deja dentro de sus límites.
- * `caja` no se acota: la deuda es una mecánica, no un error.
- */
 export function applyResources(resources: Resources, effects: Effects): Resources {
   const next: Resources = { ...resources };
 
@@ -49,10 +36,6 @@ export function applyResources(resources: Resources, effects: Effects): Resource
   return next;
 }
 
-/**
- * Aplica un efecto completo al estado: recursos, flags y efectos diferidos.
- * Devuelve un estado nuevo; no muta el que recibe.
- */
 export function applyEffects(state: GameState, effects: Effects): GameState {
   const pending: PendingEffect[] = effects.deferred
     ? [
@@ -69,17 +52,6 @@ export function applyEffects(state: GameState, effects: Effects): GameState {
   };
 }
 
-/**
- * Combina las dos formas de tocar una flag: pisarla y sumarle.
- *
- * `flags` primero y `flagsSuma` después, para que una carta que hace las dos
- * cosas sume sobre el valor que acaba de poner y no sobre el anterior.
- *
- * Sumar sobre una flag que no existe arranca de cero. Sumar sobre una que era
- * booleana la trata como cero: mezclar los dos usos en la misma marca es un
- * error de contenido, y devolver NaN lo escondería hasta que aparezca en una
- * condición que nunca se cumple.
- */
 function aplicarFlags(
   actuales: GameState['flags'],
   effects: Effects,
@@ -94,10 +66,6 @@ function aplicarFlags(
   return next;
 }
 
-/**
- * Madura los efectos diferidos que vencen en la temporada actual.
- * Devuelve el estado actualizado y los textos a mostrar.
- */
 export function maturePending(state: GameState): { state: GameState; texts: string[] } {
   const due = state.pending.filter((p) => p.dueSeason <= state.season);
   if (due.length === 0) return { state, texts: [] };
@@ -110,15 +78,10 @@ export function maturePending(state: GameState): { state: GameState; texts: stri
   return { state: next, texts: due.map((d) => d.text) };
 }
 
-/** ¿El club está inhibido por deuda y no puede fichar? */
 export function estaInhibido(resources: Resources): boolean {
   return resources.caja <= DEUDA_INHIBICION;
 }
 
-/**
- * Evalúa si una condición se cumple contra el estado actual.
- * Los campos ausentes no restringen nada; los presentes se combinan con AND.
- */
 export function meetsCondition(
   condition: Condition | undefined,
   state: GameState,
@@ -155,7 +118,6 @@ export function meetsCondition(
   return true;
 }
 
-/** Etiqueta legible de una categoría, para los textos. */
 export function categoryLabel(category: Category): string {
   return { primera: 'Primera', nacional: 'la Nacional', b: 'la B' }[category];
 }

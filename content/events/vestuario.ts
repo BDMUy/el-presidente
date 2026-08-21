@@ -1,11 +1,3 @@
-/**
- * Eventos de vestuario: el DT, el plantel, las internas.
- *
- * Regla de escritura: ninguna opción es gratis y ninguna es obviamente
- * correcta. Si al leer las dos opciones ya sabés cuál conviene, la carta está
- * mal escrita.
- */
-
 import type { GameEvent } from '@/lib/engine/types';
 
 export const VESTUARIO: GameEvent[] = [

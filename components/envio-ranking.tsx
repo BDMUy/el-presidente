@@ -1,16 +1,5 @@
 'use client';
 
-/**
- * Envío de la presidencia al ranking.
- *
- * Manda `{seed, clubId, choices}`: las decisiones, nunca el puntaje. El
- * servidor reproduce la partida y calcula el número él mismo. Por eso este
- * componente no tiene forma de mentir aunque alguien lo modifique.
- *
- * Si el ranking todavía no está configurado, el servidor responde 503 y acá no
- * se muestra nada. El juego funciona igual: el ranking es un agregado.
- */
-
 import { useCallback, useEffect, useState } from 'react';
 
 import { marcarDiariaJugada } from '@/components/presidencia-del-dia';
@@ -30,14 +19,8 @@ export function EnvioAlRanking({ state, diaria }: { state: GameState; diaria: st
   const [estado, setEstado] = useState<Estado>({ fase: 'cargando' });
   const [nombre, setNombre] = useState('');
 
-  // Se pregunta primero si el ranking existe, para no ofrecer un formulario
-  // que después no va a poder enviar nada.
   useEffect(() => {
     let vivo = true;
-    // Ya viene resuelto: el que puso el jugador, o el de dirigente que le
-    // tocó. El campo nunca arranca vacío, así que nadie llega hasta acá para
-    // que recién el botón le diga que le falta un nombre.
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- el nombre guardado solo existe en el cliente
     setNombre(nombreDelPresidente());
     fetch('/api/ranking?tipo=global')
       .then((r) => {

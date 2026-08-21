@@ -1,25 +1,3 @@
-/**
- * ¿Cuánto más difícil es el club en llamas, y dónde se muere?
- *
- * Se juegan los mismos pares semilla/club dos veces, una en normal y otra en
- * llamas, con la misma política. Las dos duran dieciséis temporadas, así que
- * lo único que cambia entre las dos corridas es el arranque: veintidós
- * millones de deuda, el plantel doce puntos por encima de lo que el club puede
- * pagar, y la hinchada en cuarenta.
- *
- * Antes esto medía otra cosa: el club en llamas era una rareza que el motor
- * sorteaba 1 en 500 y que competía en la tabla normal contra partidas que
- * arrancaban enteras. La medición decía −24,5% de puntaje, o sea un castigo
- * secreto que además ensuciaba el ranking. Por eso pasó a ser un modo que se
- * elige y tiene su propia tabla.
- *
- * Lo que hay que mirar acá no es solo cuántas terminan, sino **dónde se
- * mueren**: si casi todas caen en la primera elección, la dificultad está
- * puesta en la hinchada y el resto del modo no se llega a jugar nunca.
- *
- *   npx tsx scripts/llamas.ts 3000
- */
-
 import { CLUBS } from '../content/clubs';
 import { computeScore } from '../lib/engine/election';
 import { applyChoice, optionCount, startRun } from '../lib/engine/engine';
@@ -44,9 +22,6 @@ function jugar(seed: number, clubId: string, modo: Modo): Salida {
   while (st.status === 'jugando' && g++ < 5000) {
     const n = optionCount(st);
     if (n === 0) break;
-    // Misma política en las dos corridas: sesgada a la primera opción, que es
-    // un jugador que lee y elige razonable sin ser óptimo. Para el número
-    // calibrado de "jugador que optimiza" está `simulate --modo=llamas`.
     st = applyChoice(st, dado.chance(0.6) ? 0 : dado.int(0, n - 1));
   }
   return {
@@ -92,8 +67,6 @@ fila('títulos', normales, llamas, (s) => s.titulos);
 console.log('');
 console.log(`  completan 16   ${pct(normales, (s) => s.completa)} → ${pct(llamas, (s) => s.completa)}`);
 
-// Dónde se mueren. Si una sola causa se lleva casi todo, la dificultad está
-// concentrada en un solo lugar y el resto del modo es decorado.
 console.log('\n  CÓMO TERMINAN (en llamas)');
 const finales = new Map<EndingId, number>();
 for (const s of llamas) finales.set(s.final, (finales.get(s.final) ?? 0) + 1);
@@ -102,7 +75,6 @@ for (const [final, n] of [...finales].sort((a, b) => b[1] - a[1])) {
   console.log(`  ${final.padEnd(20)} ${p.toFixed(1).padStart(5)}%  ${'█'.repeat(Math.round(p / 2.5))}`);
 }
 
-// En qué temporada caen. La primera elección es la 4.
 console.log('\n  EN QUÉ TEMPORADA SE CAEN (en llamas, las que no terminan)');
 const cortes = new Map<number, number>();
 for (const s of llamas.filter((x) => !x.completa)) {

@@ -1,14 +1,5 @@
 'use client';
 
-/**
- * Los cierres: balance anual, escrutinio y epílogo.
- *
- * El balance se muestra como el papel que le entregás a la asamblea, con las
- * columnas de ingresos y egresos abiertas. No se resume en un número porque
- * el jugador tiene que ver de dónde salió y adónde se fue la plata: es la
- * única forma de que la próxima decisión económica signifique algo.
- */
-
 import { CATEGORY_RULES, TITLES, type ElectionResult, type GameState, type SeasonResult } from '@/lib/engine/types';
 import { resolveEconomy } from '@/lib/engine/season';
 import { ordinal, plataConSigno } from '@/lib/format';
@@ -23,8 +14,6 @@ export function FaseTemporada({
   result: SeasonResult;
   onContinuar: () => void;
 }) {
-  // Se recalcula con los recursos previos al cierre, así que muestra
-  // exactamente lo que el motor está por aplicar.
   const economia = resolveEconomy(state.resources, state.category, result);
 
   const sello = result.champion
@@ -118,7 +107,6 @@ export function FaseTemporada({
   );
 }
 
-/** El escrutinio: el momento en que la gente decide si seguís. */
 export function FaseEleccion({
   result,
   season,

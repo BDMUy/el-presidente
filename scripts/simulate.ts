@@ -1,21 +1,3 @@
-/**
- * Simulador de balance.
- *
- * Corre N presidencias completas e imprime la distribución de resultados.
- * Se simulan dos políticas porque una sola no dice nada:
- *
- *   - `random` es el piso: alguien que aprieta botones sin leer. Tiene que
- *     terminar mal casi siempre.
- *   - `greedy` es un jugador razonable que lee las consecuencias y elige lo
- *     que más le conviene a corto plazo. Tiene que llegar lejos seguido,
- *     pero no siempre.
- *
- * Si las dos curvas se parecen, las decisiones no importan y el juego está roto.
- *
- *   npx tsx scripts/simulate.ts 5000
- *   npx tsx scripts/simulate.ts 5000 boca
- */
-
 import { CLUBS } from '../content/clubs';
 import { computeScore } from '../lib/engine/election';
 import { applyChoice, optionCount, startRun } from '../lib/engine/engine';
@@ -24,17 +6,10 @@ import { Rand } from '../lib/engine/rng';
 import type { Effects, EndingId, GameState, Modo } from '../lib/engine/types';
 import { MODOS, TEMPORADAS_POR_MODO } from '../lib/engine/types';
 
-// Los que no empiezan con "--" son posicionales; así el filtro de club no se
-// come un flag y `simulate 2000 --modo=larga` hace lo que parece que hace.
 const posicionales = process.argv.slice(2).filter((a) => !a.startsWith('--'));
 const runs = Number(posicionales[0] ?? 2000);
 const clubFilter = posicionales[1];
 
-/**
- * Qué modo se simula. `--modo=larga`, o `--modo=todos` para los tres seguidos,
- * que es la forma de ver si una curva de dificultad sirve para las tres
- * duraciones o solo para la que se estaba mirando.
- */
 const argModo = process.argv.find((a) => a.startsWith('--modo='))?.slice(7) ?? 'normal';
 const modos: Modo[] = argModo === 'todos' ? [...MODOS] : [argModo as Modo];
 for (const m of modos) {
@@ -57,10 +32,8 @@ interface Outcome {
   ascensos: number;
 }
 
-/** Cuánto vale un paquete de efectos para un jugador razonable. */
 function valueOf(effects: Effects | undefined, cajaActual: number): number {
   if (!effects) return 0;
-  // Con la caja en rojo, la plata pesa mucho más que cualquier otra cosa.
   const pesoCaja = cajaActual < 5 ? 3 : 1.5;
   let value =
     (effects.hinchada ?? 0) * 1 +
@@ -73,13 +46,6 @@ function valueOf(effects: Effects | undefined, cajaActual: number): number {
     value += valueOf(d.effects, cajaActual) * 0.5;
   }
 
-  // El prontuario pesa como un costo, aunque no sea un recurso.
-  //
-  // Esta política representa a alguien que lee las consecuencias antes de
-  // elegir, y el juego avisa: las opciones sucias arrastran una escalada y
-  // pueden costarte el nombre en la tribuna. Sin esto, el "jugador razonable"
-  // era en realidad el más corrupto posible —tomaba todas las coimas— y la
-  // simulación medía eso en vez de medir el juego.
   value -= (effects.flagsSuma?.prontuario ?? 0) * 4;
 
   return value;
@@ -124,8 +90,6 @@ function greedyChoice(state: GameState): number {
     }
 
     case 'mesa-chica': {
-      // Reparto sensato: empuja el plantel y la tribuna, esquiva la gestión
-      // política salvo que el partido esté muy cuesta arriba.
       const assignments = enumerateAssignments();
       const desesperado = phase.match.baseWin < 0.4;
       const scored = assignments.map((assignment, index) => {

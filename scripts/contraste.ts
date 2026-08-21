@@ -1,15 +1,3 @@
-/**
- * Auditoría y solucionador de contraste WCAG.
- *
- * Dos modos:
- *   npx tsx scripts/contraste.ts          audita los pares que usa la interfaz
- *   npx tsx scripts/contraste.ts resolver calcula los tokens que hacen falta
- *
- * Existe porque la jerarquía por opacidad sobre fondo oscuro colapsa el
- * contraste sin avisar: `text-papel/40` parece un gris suave y en realidad es
- * un 2,97:1 ilegible. Los tonos se derivan acá y se congelan como hex.
- */
-
 type RGB = [number, number, number];
 
 function hex(color: string): RGB {
@@ -39,10 +27,6 @@ function ratio(a: RGB, b: RGB): number {
   return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
 }
 
-/**
- * Busca la mezcla mínima entre `desde` y `hacia` que alcanza el contraste
- * objetivo contra `fondo`. Búsqueda binaria sobre la proporción de mezcla.
- */
 function resolver(desde: RGB, hacia: RGB, fondo: RGB, objetivo: number): { color: RGB; r: number } {
   let lo = 0;
   let hi = 1;
@@ -56,7 +40,6 @@ function resolver(desde: RGB, hacia: RGB, fondo: RGB, objetivo: number): { color
   return { color, r: ratio(color, fondo) };
 }
 
-/** Debe reflejar el bloque @theme de app/globals.css. */
 const T = {
   pano: '#14342a',
   panoAlto: '#1c463a',
@@ -71,7 +54,6 @@ const T = {
   selloClaro: '#e89f98',
   bronce: '#7a5f24',
   bronceClaro: '#c1a66e',
-  // Verde de Tailwind usado para los deltas positivos sobre papel.
   verde800: '#065f46',
   blanco: '#ffffff',
 };
@@ -117,14 +99,11 @@ interface Caso {
   frente: string;
   fondo: string;
   alfa?: number;
-  /** Texto grande (>=18.66px bold o >=24px): umbral 3:1 en vez de 4.5:1. */
   grande?: boolean;
-  /** Umbral propio, para bordes y elementos no textuales. */
   minimo?: number;
 }
 
 const CASOS: Caso[] = [
-  // ── Sobre el papel ──
   { donde: 'Prosa del acta', frente: T.tinta, fondo: T.hoja },
   { donde: 'Título del acta', frente: T.tinta, fondo: T.hoja, grande: true },
   { donde: 'Membrete, hint y balance', frente: T.tinta2, fondo: T.hoja },
@@ -134,7 +113,6 @@ const CASOS: Caso[] = [
   { donde: 'Renglón punteado (decorativo)', frente: T.hojaLinea, fondo: T.hoja, minimo: 2 },
   { donde: 'Botón Continuar (hoja sobre tinta)', frente: T.hoja, fondo: T.tinta },
 
-  // ── Sobre el paño ──
   { donde: 'Texto primario sobre paño', frente: T.papel, fondo: T.pano },
   { donde: 'Secundario sobre paño', frente: T.papel2, fondo: T.pano },
   { donde: 'Secundario sobre paño alto (carnet)', frente: T.papel2, fondo: T.panoAlto },

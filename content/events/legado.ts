@@ -1,12 +1,3 @@
-/**
- * Legado: la presidencia larga.
- *
- * Todo acá pide temporada 9 o más. Son las cartas que solo puede ver alguien
- * que sobrevivió dos mandatos, y por eso hablan de otra cosa: de lo que dejás,
- * no de cómo zafás. Varias premian la coherencia acumulada en vez del cálculo
- * de la temporada.
- */
-
 import type { GameEvent } from '@/lib/engine/types';
 
 export const LEGADO: GameEvent[] = [

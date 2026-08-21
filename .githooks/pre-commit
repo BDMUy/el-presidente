@@ -1,23 +1,4 @@
 #!/bin/sh
-#
-# Freno de mano antes de cada commit.
-#
-# `.gitignore` es una lista de nombres, y una lista de nombres nunca está
-# completa: siempre va a existir el archivo que a nadie se le ocurrió, o el
-# `git add -f` apurado, o la credencial pegada adentro de un archivo que sí
-# corresponde subir. Este hook mira otra cosa: **el contenido de lo que está
-# por entrar al commit**.
-#
-# No reemplaza a .gitignore, lo respalda. Uno filtra por nombre antes de
-# llegar acá; este lee lo que hay adentro.
-#
-# Se activa una sola vez por clon:
-#
-#     git config core.hooksPath .githooks
-#
-# Y si alguna vez marca algo que en realidad está bien —un ejemplo en la
-# documentación, un fixture de test— la salida es `git commit --no-verify`,
-# a conciencia y mirando lo que se saltea.
 
 set -e
 
@@ -29,15 +10,9 @@ archivos=$(git diff --cached --name-only --diff-filter=ACM)
 
 problemas=0
 
-# ── 1. Nombres que nunca deberían entrar ──────────────────────────────
-#
-# Duplica parte de .gitignore a propósito: esto también dispara con `git add
-# -f`, que es justo el caso en el que .gitignore no protege nada.
 NOMBRES='(^|/)\.env($|\.)|(^|/)\.npmrc$|(^|/)\.netrc$|(^|/)id_(rsa|ed25519)$|\.(pem|key|p12|pfx)$|(^|/)(secrets|credentials|service-account)[^/]*\.json$|\.(dump|sqlite3?)$'
 
 for f in $archivos; do
-  # .env.example es la excepción: no tiene valores, y es el único lugar donde
-  # está escrito qué variables necesita el proyecto.
   case "$f" in .env.example) continue ;; esac
 
   if printf '%s' "$f" | grep -qE "$NOMBRES"; then
@@ -47,12 +22,6 @@ for f in $archivos; do
   fi
 done
 
-# ── 2. Credenciales adentro del contenido ─────────────────────────────
-#
-# Cada patrón es una forma conocida de secreto. La cadena de conexión pide
-# ocho caracteres o más de contraseña a propósito: así los ejemplos con
-# `usuario:clave@host` —que sí queremos poder escribir en la documentación—
-# no disparan, y una contraseña de verdad sí.
 PATRONES='-----BEGIN [A-Z ]*PRIVATE KEY-----
 npg_[A-Za-z0-9]{16,}
 AKIA[0-9A-Z]{16}
@@ -63,15 +32,10 @@ postgres(ql)?://[^:/@[:space:]]+:[^@[:space:]]{8,}@
 (SECRET|TOKEN|PASSWORD|PASSWD|API_?KEY|PRIVATE_?KEY|SALT|DATABASE_URL)[A-Z_]*[[:space:]]*[:=][[:space:]]*.?[A-Za-z0-9/+_-]{16,}'
 
 for f in $archivos; do
-  # Solo archivos de texto: un PNG con bytes que parecen una clave no es una
-  # clave, y recorrerlo no dice nada.
   git show ":$f" 2>/dev/null | head -c 1024 | grep -qI . || continue
 
   printf '%s\n' "$PATRONES" | while IFS= read -r patron; do
     [ -z "$patron" ] && continue
-    # El `--` no es adorno: el patrón de la clave privada empieza con guiones
-    # y sin esto grep lo lee como si fueran opciones suyas, falla, y el chequeo
-    # pasa en silencio. Un guarda que no guarda nada es peor que no tenerlo.
     hallazgo=$(git show ":$f" 2>/dev/null | grep -nE -- "$patron" | head -2 || true)
     if [ -n "$hallazgo" ]; then
       rojo "  ✗ $f"
@@ -83,19 +47,12 @@ for f in $archivos; do
   done
 done
 
-# El bucle de arriba corre en un subshell por el pipe, así que el contador no
-# sobrevive: se cuenta por archivo temporal y se limpia siempre.
 marcador="$(git rev-parse --git-dir)/HOOK_HALLAZGOS"
 if [ -f "$marcador" ]; then
   problemas=$((problemas + $(wc -l < "$marcador")))
   rm -f "$marcador"
 fi
 
-# ── 3. Archivos grandes ───────────────────────────────────────────────
-#
-# No es una cuestión de seguridad sino de que un repositorio no se arregla
-# después: un archivo pesado que entró una vez queda en la historia para
-# siempre, aunque lo borres en el commit siguiente.
 LIMITE=$((5 * 1024 * 1024))
 
 for f in $archivos; do

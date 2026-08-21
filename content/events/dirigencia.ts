@@ -1,10 +1,3 @@
-/**
- * Eventos de dirigencia: AFA, negocios, política interna, prensa.
- *
- * Es el frente donde se gana y se pierde influencia, el recurso que te permite
- * sobrevivir un mandato deportivamente mediocre.
- */
-
 import type { GameEvent } from '@/lib/engine/types';
 
 export const DIRIGENCIA: GameEvent[] = [

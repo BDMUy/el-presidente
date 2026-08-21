@@ -10,7 +10,6 @@ import type { GameEvent, GameState } from '@/lib/engine/types';
 const tentaciones = CORRUPCION.filter((e) => !e.requires?.minFlag);
 const escalada = CORRUPCION.filter((e) => e.requires?.minFlag);
 
-/** El estado en el que una carta se evalúa: todo holgado menos el prontuario. */
 function estado(prontuario: number, season = 8): GameState {
   const base = startRun({ seed: 1, clubId: 'boca', modo: 'larga' });
   return {
@@ -30,8 +29,6 @@ describe('el hilo de corrupción', () => {
   });
 
   it('una presidencia limpia no ve NUNCA una carta de escalada', () => {
-    // Es la mitad del trato: si el hilo apareciera igual, dejaría de ser una
-    // consecuencia y sería una desgracia que le pasa a cualquiera.
     const limpio = estado(0, 16);
     for (const e of escalada) {
       expect(visible(e, limpio), e.id).toBe(false);
@@ -70,11 +67,6 @@ describe('el hilo de corrupción', () => {
   });
 
   it('el fondo del pozo no se toca solo con las tentaciones', () => {
-    // Son siete y suman de a uno; los dos últimos peldaños piden ocho y nueve.
-    // O sea que para llegar al final hay que haber usado además la ficha de
-    // gestión de la Mesa Chica, o haber elegido sucio dentro de la propia
-    // escalada. Que el fondo cueste más que juntar las cartas fáciles es el
-    // punto: es un prontuario, no una colección.
     let s = estado(0, 16);
     for (const e of tentaciones) {
       const sucia = e.options.find((o) => o.effects?.flagsSuma?.prontuario);
@@ -100,8 +92,6 @@ describe('el hilo de corrupción', () => {
   });
 
   it('no le ponen tu nombre a la tribuna si tenés prontuario', () => {
-    // Una presidencia impecable en todo lo demás: campeona, querida y sin
-    // descensos. Lo único que cambia entre las dos es cuánto se robó.
     const impecable = {
       ...estado(0, 16),
       resources: { caja: 40, hinchada: 90, socios: 120, plantel: 85, influencia: 60 },
@@ -114,9 +104,6 @@ describe('el hilo de corrupción', () => {
   });
 
   it('el prontuario tolerado escala con la duración', () => {
-    // Treinta y dos temporadas tienen el doble de oportunidades de cortar
-    // esquinas que dieciséis: un número fijo mediría el tiempo y no la
-    // conducta. Con el mismo prontuario, la larga todavía llega y la corta no.
     const base = {
       resources: { caja: 40, hinchada: 90, socios: 120, plantel: 85, influencia: 60 },
       titles: Array.from({ length: 8 }, (_, i) => ({ id: 'liga-primera' as const, season: i + 2, year: 2027 + i })),

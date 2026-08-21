@@ -1,30 +1,8 @@
-/**
- * Aplica las migraciones de db/migrations en orden.
- *
- * Deliberadamente mínimo: son unos pocos archivos y todos son idempotentes
- * (`create table if not exists`, `create index if not exists`), así que correr
- * esto dos veces no rompe nada y no hace falta una tabla de control.
- *
- *   DATABASE_URL="postgres://..." npx tsx scripts/migrar.ts
- */
-
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import postgres from 'postgres';
 
-/**
- * Lee los archivos de entorno igual que lo hace Next.
- *
- * Este script corre bajo tsx, que —a diferencia del servidor de Next— no carga
- * los archivos de entorno. Sin esto habría que pasar la cadena de conexión por
- * línea de comandos, y una credencial escrita en la terminal queda guardada en
- * el historial del shell.
- *
- * Mira los dos archivos y en el mismo orden que Next, porque la cadena puede
- * haber quedado en cualquiera de los dos: `.env.local` la escribe quien sigue
- * las instrucciones a mano, `.env` la escribe el init de Neon.
- */
 const ARCHIVOS_ENTORNO = ['.env.local', '.env'] as const;
 
 function cargarEntornoLocal(): void {
@@ -35,7 +13,6 @@ function cargarEntornoLocal(): void {
     try {
       process.loadEnvFile(archivo);
     } catch {
-      // Node viejo: se parsea a mano lo mínimo indispensable.
       for (const linea of readFileSync(archivo, 'utf8').split('\n')) {
         const m = /^\s*([A-Z_][A-Z0-9_]*)\s*=\s*(.*)\s*$/i.exec(linea);
         if (m && !process.env[m[1]]) process.env[m[1]] = m[2].replace(/^["']|["']$/g, '');
@@ -66,11 +43,7 @@ if (archivos.length === 0) {
   process.exit(1);
 }
 
-// Envuelto en una función y no con `await` de nivel superior: tsx carga estos
-// scripts como CommonJS, y el await suelto los rompe con ERR_REQUIRE_ASYNC_MODULE.
 async function migrar(): Promise<void> {
-  // Sin `onnotice`, correr esto dos veces vuelca un objeto de diez líneas por
-  // cada `if not exists` que ya existía y tapa el resultado real.
   const sql = postgres(url!, { max: 1, connect_timeout: 20, onnotice: () => {} });
 
   try {
@@ -87,9 +60,6 @@ async function migrar(): Promise<void> {
       `\nListo. La tabla presidencias tiene ${count} ${count === '1' ? 'fila' : 'filas'}.\n`,
     );
   } catch (error) {
-    // Los errores de conexión de postgres.js llegan con `message` vacío y toda
-    // la información en `code`, así que reportar solo el message deja al que
-    // corre esto sin ninguna pista de qué pasó.
     const e = error as { message?: string; code?: string };
     const detalle = [e.message, e.code].filter(Boolean).join(' · ') || String(error);
     console.error(`\nFalló la migración: ${detalle}\n`);

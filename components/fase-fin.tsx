@@ -1,17 +1,5 @@
 'use client';
 
-/**
- * El epílogo: la hoja que te llevás.
- *
- * Hace tres cosas además de mostrar el resumen: suma la presidencia a la
- * vitrina, celebra lo que se desbloqueó por primera vez, y arma el link para
- * compartirla.
- *
- * Las novedades se muestran aparte del total a propósito. Ganar tu primera
- * Libertadores tiene que verse distinto de ganar la cuarta, y eso solo se
- * puede saber comparando contra lo que ya había en la vitrina.
- */
-
 import { useCallback, useEffect, useState } from 'react';
 
 import { LOGROS_POR_ID } from '@/content/logros';
@@ -32,18 +20,13 @@ export function FaseFin({
   state: GameState;
   club: Club;
   ending: Ending;
-  /** Fecha de la Presidencia del Día, o null si fue una partida libre. */
   diaria: string | null;
   onReiniciar: () => void;
 }) {
   const [novedades, setNovedades] = useState<Novedades | null>(null);
   const [copiado, setCopiado] = useState(false);
 
-  // La vitrina vive en localStorage, así que solo se puede tocar en el cliente.
-  // `registrarPartida` es idempotente por presidencia, así que volver a montar
-  // este componente —o recargar la página sobre el epílogo— no vuelve a sumarla.
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- la vitrina solo existe en el cliente
     setNovedades(registrarPartida(state));
   }, [state]);
 
@@ -59,14 +42,11 @@ export function FaseFin({
     );
     const texto = `${ending.title} · ${club.name}`;
 
-    // En el celular el menú nativo es lo que la gente espera; en escritorio
-    // no existe y copiar al portapapeles es el equivalente honesto.
     if (navigator.share) {
       try {
         await navigator.share({ title: 'El Presidente', text: texto, url });
         return;
       } catch {
-        // Canceló el menú de compartir: no es un error, no se avisa nada.
         return;
       }
     }
@@ -101,7 +81,6 @@ export function FaseFin({
   );
 }
 
-/** Lo que esta presidencia sumó a la vitrina, si sumó algo. */
 function Novedad({ novedades }: { novedades: Novedades }) {
   const { titulosNuevos, logrosNuevos, esRecord, vitrina } = novedades;
   if (titulosNuevos.length === 0 && logrosNuevos.length === 0 && !esRecord) return null;

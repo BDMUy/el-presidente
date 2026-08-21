@@ -1,49 +1,23 @@
 @import "tailwindcss";
 
-/**
- * El Presidente — sistema visual.
- *
- * Tesis: esto no es un estadio, es la mesa directiva. La superficie de la
- * página es el paño verde de la comisión y todo lo que pasa llega como
- * documento institucional. El jugador no patea: firma.
- *
- * Regla dura del sistema de color: la jerarquía NO se hace con opacidad.
- * Sobre fondo oscuro, `text-papel/40` parece un gris suave y en realidad es un
- * 2,97:1 ilegible. Cada tono de acá está resuelto contra su fondo real con
- * `scripts/contraste.ts` y congelado como hex. Antes de agregar un color
- * nuevo, pasalo por ese script.
- */
-
 @theme {
-  /* ── El paño: la superficie sobre la que pasa todo ────────── */
   --color-pano: #14342a;
   --color-pano-alto: #1c463a;
   --color-pano-borde: #0d241d;
-  /* Borde visible sobre el paño sin gritar. 1,9:1 medido. */
   --color-linea: #465d52;
 
-  /* ── Texto sobre el paño ──────────────────────────────────── */
-  /* Primario, 10,46:1 */
   --color-papel: #e8e2d4;
-  /* Secundario, 4,50:1 sobre paño-alto (el fondo más exigente de los dos) */
   --color-papel-2: #a8b2a5;
 
-  /* ── El papel: manila institucional, amarilleado por el archivo ── */
   --color-hoja: #e8e2d4;
-  /* Renglón punteado: 2,20:1, visible sin competir con el texto */
   --color-hoja-linea: #a29982;
-  /* Tinta de máquina de escribir: negro cálido, nunca #000. 13,72:1 */
   --color-tinta: #1a1815;
-  /* Secundario sobre papel, 7,00:1 (AAA) */
   --color-tinta-2: #4e483e;
 
-  /* ── Acentos ──────────────────────────────────────────────────
-     Cada acento tiene dos versiones porque un rojo que funciona sobre
-     papel da 1,62:1 sobre el paño: el mismo hex no sirve para los dos. */
-  --color-sello: #b3261e;        /* sobre papel: 5,06:1 */
-  --color-sello-claro: #e89f98;  /* sobre paño */
-  --color-bronce: #7a5f24;       /* sobre papel */
-  --color-bronce-claro: #c1a66e; /* sobre paño: 4,50:1 */
+  --color-sello: #b3261e;
+  --color-sello-claro: #e89f98;
+  --color-bronce: #7a5f24;
+  --color-bronce-claro: #c1a66e;
 
   --font-display: var(--font-chivo);
   --font-body: var(--font-archivo);
@@ -60,7 +34,6 @@ html {
 body {
   min-height: 100dvh;
   background-color: var(--color-pano);
-  /* Textura de fieltro: dos tramas cruzadas muy tenues, sin imágenes. */
   background-image:
     repeating-linear-gradient(45deg, rgb(255 255 255 / 0.012) 0 2px, transparent 2px 4px),
     repeating-linear-gradient(-45deg, rgb(0 0 0 / 0.03) 0 2px, transparent 2px 4px),
@@ -71,16 +44,10 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* Courier Prime es una tipografía de guion, pensada para 12pt impresos: su
-   trazo es finísimo. Acá se usa solo en etiquetas chicas —membretes, sellos,
-   cifras— así que va siempre en 700, o se desvanece contra el paño. */
 .font-acta {
   font-weight: 700;
 }
 
-/* ── El papel ──────────────────────────────────────────────────
-   Una hoja apoyada sobre la mesa: sombra corta y dura, como un objeto
-   real, no como una card flotante de dashboard. */
 .papel {
   background-color: var(--color-hoja);
   background-image: repeating-linear-gradient(0deg, rgb(0 0 0 / 0.014) 0 1px, transparent 1px 3px);
@@ -92,12 +59,9 @@ body {
     0 3px 8px rgb(0 0 0 / 0.38);
 }
 
-/* La hoja se apoya apenas torcida. Nunca dos con el mismo ángulo. */
 .papel-torcido-1 { transform: rotate(-0.4deg); }
 .papel-torcido-2 { transform: rotate(0.5deg); }
 
-/* ── El sello: el elemento firma ───────────────────────────────
-   Tinta de goma: mordida, en diagonal, con el borde irregular. */
 .sello {
   font-family: var(--font-acta), monospace;
   font-weight: 700;
@@ -107,21 +71,18 @@ body {
   padding: 0.25rem 0.6rem;
   transform: rotate(-4deg);
   border-radius: 1px;
-  /* El multiply hace que la tinta se coma la trama del papel. */
   mix-blend-mode: multiply;
 }
 
 .sello-verde { color: #2c6a4c; }
 .sello-bronce { color: var(--color-bronce); }
 
-/* Sobre el paño el multiply apaga todo: ahí van los tonos claros. */
 .sello-sobre-pano {
   mix-blend-mode: normal;
   color: var(--color-sello-claro);
 }
 .sello-sobre-pano.sello-bronce { color: var(--color-bronce-claro); }
 
-/* El golpe del sello al firmar: baja, muerde y se asienta. */
 @keyframes sellar {
   0% { transform: rotate(-14deg) scale(2.2); opacity: 0; }
   55% { transform: rotate(-3deg) scale(0.94); opacity: 1; }
@@ -131,7 +92,6 @@ body {
 
 .sello-anim { animation: sellar 340ms cubic-bezier(0.2, 0.9, 0.3, 1.2) both; }
 
-/* La hoja entra desde abajo, como si la deslizaran sobre la mesa. */
 @keyframes deslizar {
   from { transform: translateY(12px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
@@ -139,8 +99,6 @@ body {
 
 .deslizar { animation: deslizar 220ms ease-out both; }
 
-
-/* ── Accesibilidad ─────────────────────────────────────────────*/
 :focus-visible {
   outline: 2px solid var(--color-bronce-claro);
   outline-offset: 2px;

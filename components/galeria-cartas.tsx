@@ -1,25 +1,5 @@
 'use client';
 
-/**
- * La galería: todas las cartas del juego, una abajo de la otra.
- *
- * Existe por lo mismo que existe `scripts/cobertura.ts`, pero para el ojo en
- * vez de para los números. El catálogo tiene ciento treinta y una cartas y una
- * presidencia larga muestra noventa y seis: encontrar una carta puntual jugando
- * es cuestión de suerte, así que hasta ahora había prosa escrita, medida y
- * comiteada que nunca había pasado por una pantalla. Cincuenta y dos de golpe,
- * la última vez.
- *
- * Renderiza con `FaseEvento`, el componente de verdad, y no con una copia: una
- * galería que dibuja las cartas a su manera miente justo en lo que se quiere
- * mirar. Por eso también reproduce el contenedor del juego —`max-w-xl px-4`
- * sobre el paño— y por eso muestra TODAS las opciones de cada carta, incluso
- * las que en partida están detrás de una condición.
- *
- * Lo único que no es del juego es el encabezado gris de cada carta, que dice
- * el id y las condiciones. Eso es para quien escribe, no para quien juega.
- */
-
 import { useMemo, useState } from 'react';
 
 import { ASCENSO } from '@/content/events/ascenso';
@@ -42,11 +22,6 @@ interface Frente {
   cartas: GameEvent[];
 }
 
-/**
- * Se listan uno por uno, y no desde `ALL_EVENTS`, porque el frente al que
- * pertenece una carta es justo lo que hay que poder ver de un vistazo: es lo
- * que dice si el catálogo está parejo o si hay un frente que quedó flaco.
- */
 const FRENTES: Frente[] = [
   { archivo: 'vestuario', cartas: VESTUARIO },
   { archivo: 'hinchada', cartas: HINCHADA },
@@ -147,19 +122,7 @@ export function GaleriaCartas() {
   );
 }
 
-/**
- * Una carta con su encabezado de taller.
- *
- * El `section` no es decorativo: la barra de decisión de `FaseEvento` es
- * `sticky bottom-0`, y sin un contenedor propio por carta todas competirían por
- * el mismo borde inferior de la ventana. Adentro de su sección, cada barra se
- * pega mientras su carta está a la vista y se va con ella, que es como se ve en
- * el juego.
- */
 function Ficha({ carta, verConsecuencias }: { carta: GameEvent; verConsecuencias: boolean }) {
-  // En partida el motor filtra las opciones que no cumplen su condición. Acá se
-  // muestran todas: una opción que solo aparece con mucha influencia también
-  // hay que poder leerla.
   const todas = carta.options.map((_, i) => i);
 
   return (
@@ -184,15 +147,6 @@ function Ficha({ carta, verConsecuencias }: { carta: GameEvent; verConsecuencias
   );
 }
 
-/**
- * Lo que se lee después de firmar.
- *
- * Vale la pena mirarlo junto a la carta porque el texto de resultado de una
- * opción común **es su propia pista**: el motor usa `option.hint` cuando no hay
- * sorteo. O sea que esa línea se lee dos veces —como promesa y como
- * consecuencia— y tiene que funcionar en los dos tiempos. Las opciones de dado
- * sí traen texto propio, uno por desenlace, y son los que nunca ve nadie.
- */
 function Consecuencias({ carta }: { carta: GameEvent }) {
   return (
     <div className="mt-3 border-l-2 border-pano-borde pl-3">
@@ -207,10 +161,6 @@ function Consecuencias({ carta }: { carta: GameEvent }) {
             <ul>
               {option.random.map((salida, j) => (
                 <li key={j} className="mt-1 font-body text-[14px] leading-snug text-papel">
-                  {/* El peso es relativo, no un porcentaje: hay cartas que
-                      reparten 40/60 y otras 3/1. Se muestra ya convertido
-                      porque lo que se quiere saber al leerlo es cuán probable
-                      es este desenlace. */}
                   <span className="font-acta text-[11px] text-papel-2">
                     {Math.round((salida.weight / pesoTotal(option.random!)) * 100)}%{' '}
                   </span>
@@ -259,7 +209,6 @@ function Chip({
   );
 }
 
-/** Las condiciones en una línea, para leerlas al lado de la carta. */
 function describirCondicion(c: Condition): string {
   const partes: string[] = [];
   if (c.minSeason) partes.push(`desde la ${c.minSeason}`);

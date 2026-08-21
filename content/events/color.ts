@@ -1,11 +1,3 @@
-/**
- * "Pasan cosas": los eventos que le dan sabor a la presidencia.
- *
- * Efectos chicos a propósito. Están para que el mundo se sienta vivo, no para
- * mover el balance. Varios están condicionados por categoría, porque no es lo
- * mismo la semana del clásico en Primera que un martes en la B.
- */
-
 import type { GameEvent } from '@/lib/engine/types';
 
 export const COLOR: GameEvent[] = [

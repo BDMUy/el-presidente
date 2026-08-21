@@ -1,15 +1,6 @@
-/**
- * Clubes argentinos, solo por nombre y colores.
- *
- * Sin escudos, sin fotos, sin planteles reales: nombre, colores y parámetros
- * de juego. `size` (1-10) es el peso institucional y define presupuesto,
- * socios, expectativa de la hinchada y calidad del plantel inicial.
- */
-
 import type { Club } from '@/lib/engine/types';
 
 export const CLUBS: Club[] = [
-  // ── Liga Profesional ──────────────────────────────────────
   { id: 'boca', name: 'Boca Juniors', short: 'Boca', colors: ['#0a3a8c', '#f2c200'], category: 'primera', size: 10, nickname: 'el Xeneize' },
   { id: 'river', name: 'River Plate', short: 'River', colors: ['#ffffff', '#d81e3f'], category: 'primera', size: 10, nickname: 'el Millonario' },
   { id: 'racing', name: 'Racing Club', short: 'Racing', colors: ['#7ab8e6', '#ffffff'], category: 'primera', size: 9, nickname: 'la Academia' },
@@ -41,7 +32,6 @@ export const CLUBS: Club[] = [
   { id: 'barracas', name: 'Barracas Central', short: 'Barracas', colors: ['#d3222a', '#ffffff'], category: 'primera', size: 3, nickname: 'el Guapo' },
   { id: 'riestra', name: 'Deportivo Riestra', short: 'Riestra', colors: ['#000000', '#f2c200'], category: 'primera', size: 3, nickname: 'el Blanquinegro' },
 
-  // ── Primera Nacional ──────────────────────────────────────
   { id: 'quilmes', name: 'Quilmes', short: 'Quilmes', colors: ['#ffffff', '#1a4fa0'], category: 'nacional', size: 6, nickname: 'el Cervecero' },
   { id: 'ferro', name: 'Ferro Carril Oeste', short: 'Ferro', colors: ['#1a6b3c', '#ffffff'], category: 'nacional', size: 5, nickname: 'el Verdolaga' },
   { id: 'chacarita', name: 'Chacarita Juniors', short: 'Chacarita', colors: ['#d3222a', '#000000'], category: 'nacional', size: 5, nickname: 'el Funebrero' },
@@ -61,7 +51,6 @@ export const CLUBS: Club[] = [
   { id: 'guemes', name: 'Güemes', short: 'Güemes', colors: ['#000000', '#ffffff'], category: 'nacional', size: 2, nickname: 'el Gaucho' },
   { id: 'mitre', name: 'Mitre', short: 'Mitre', colors: ['#f2c200', '#000000'], category: 'nacional', size: 2, nickname: 'el Aurinegro' },
 
-  // ── Primera B ─────────────────────────────────────────────
   { id: 'losandes', name: 'Los Andes', short: 'Los Andes', colors: ['#d3222a', '#ffffff'], category: 'b', size: 3, nickname: 'el Milrayitas' },
   { id: 'colegiales', name: 'Colegiales', short: 'Colegiales', colors: ['#ffffff', '#000000'], category: 'b', size: 2, nickname: 'el Tricolor de Munro' },
   { id: 'acassuso', name: 'Acassuso', short: 'Acassuso', colors: ['#d3222a', '#1a4fa0'], category: 'b', size: 1, nickname: 'el Quemero de Boulogne' },

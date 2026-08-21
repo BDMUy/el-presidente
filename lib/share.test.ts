@@ -8,16 +8,9 @@ import type { GameState, Modo } from '@/lib/engine/types';
 import { MODOS } from '@/lib/engine/types';
 import { decodeRun, encodeRun, reconstruirPresidencia, shareUrl } from './share';
 
-/**
- * El decodificador tiene que aceptar exactamente lo que el codificador puede
- * escribir, ni un poco más: lo que acepta de más son partidas que después el
- * endpoint del ranking rechaza, o que ni siquiera existen.
- */
 describe('decodeRun no acepta más de lo que encodeRun produce', () => {
   it('rechaza una semilla de más de 32 bits', () => {
-    // Seis caracteres en base 64 llegan a 68.719.476.735.
     expect(decodeRun('______AA')).toBeNull();
-    // El máximo real sí entra.
     expect(decodeRun(encodeRun({ seed: 0xffffffff, clubId: 'boca', choices: [0] }))?.seed).toBe(
       0xffffffff,
     );
@@ -31,7 +24,6 @@ describe('decodeRun no acepta más de lo que encodeRun produce', () => {
   });
 });
 
-/** Juega una partida entera con decisiones al azar y devuelve el estado final. */
 function partidaCompleta(seed: number, clubId: string): GameState {
   const chooser = new Rand(seed ^ 0x1234567);
   let state = startRun({ seed, clubId });
@@ -63,8 +55,6 @@ describe('codificación de partidas', () => {
   });
 
   it('el modo va y vuelve, en cualquier club', () => {
-    // El primero, el último y uno del medio: el modo se empaqueta con el índice
-    // del club, así que los bordes del catálogo son donde se rompería.
     const bordes = [CLUBS[0], CLUBS[Math.floor(CLUBS.length / 2)], CLUBS[CLUBS.length - 1]];
     for (const modo of MODOS) {
       for (const club of bordes) {
@@ -75,10 +65,6 @@ describe('codificación de partidas', () => {
   });
 
   it('un link escrito antes de que existieran los modos sigue siendo normal', () => {
-    // Ésta es la garantía que hace que empaquetar el modo adentro del campo del
-    // club valga la pena. El link de abajo se generó con la versión anterior,
-    // que no sabía nada de modos: son seis caracteres de semilla y dos de club,
-    // sin nada más. Tiene que decodificar igual que entonces.
     const viejo = 'AABnkyAABCACACAAAAAAABAAAAABAAAADAAAAAAA';
     const datos = decodeRun(viejo);
 
@@ -86,7 +72,6 @@ describe('codificación de partidas', () => {
     expect(datos!.modo).toBe('normal');
     expect(datos!.seed).toBe(424242);
     expect(datos!.clubId).toBe('boca');
-    // Y el codificador de hoy, pidiéndole una normal, escribe exactamente eso.
     expect(encodeRun({ ...datos!, modo: 'normal' })).toBe(viejo);
   });
 
@@ -99,7 +84,6 @@ describe('codificación de partidas', () => {
 
   it('el código es seguro para pegar en cualquier lado', () => {
     const code = encodeRun({ seed: 0xffffffff, clubId: 'boca', choices: [55, 0, 12] });
-    // Sin caracteres que rompan una URL ni que un chat convierta en otra cosa.
     expect(code).toMatch(/^[A-Za-z0-9_-]+$/);
     expect(encodeURIComponent(code)).toBe(code);
   });
@@ -111,8 +95,6 @@ describe('codificación de partidas', () => {
   });
 
   it('reconstruye la partida exacta desde el link', () => {
-    // Es la garantía del link: quien lo abre tiene que ver la misma partida
-    // que jugó quien lo mandó, sin base de datos en el medio.
     for (const seed of [11, 222, 3333, 44444]) {
       const original = partidaCompleta(seed, 'lanus');
       const code = encodeRun({
@@ -136,13 +118,10 @@ describe('codificación de partidas', () => {
   });
 
   it('rechaza un índice de club que no existe', () => {
-    // Seis caracteres de semilla y un índice altísimo de club.
     expect(decodeRun('AAAAAA__')).toBeNull();
   });
 
   it('falla fuerte si algo no entra, en vez de truncar', () => {
-    // Un link truncado en silencio reconstruye otra partida, que es peor que
-    // no poder compartir.
     expect(() => encodeRun({ seed: 1, clubId: 'no-existe', choices: [] })).toThrow(/Club/);
     expect(() => encodeRun({ seed: 1, clubId: 'boca', choices: [64] })).toThrow(/Decisión/);
     expect(() => encodeRun({ seed: 1, clubId: 'boca', choices: [-1] })).toThrow(/Decisión/);
@@ -175,28 +154,16 @@ describe('logros', () => {
   });
 
   it('los logros son alcanzables en partidas reales', () => {
-    // Un logro que nadie puede conseguir es contenido muerto, igual que una
-    // carta con condiciones imposibles.
     const conseguidos = new Set<string>();
     for (let seed = 0; seed < 600; seed++) {
       const state = partidaCompleta(seed * 2654435761, CLUBS[seed % CLUBS.length].id);
       for (const id of logrosDeLaPartida(state)) conseguidos.add(id);
     }
-    // Con decisiones al azar no se consiguen todos; los básicos sí.
     expect(conseguidos.has('primera-vuelta')).toBe(true);
     expect(conseguidos.size).toBeGreaterThanOrEqual(4);
   });
 });
 
-/**
- * Todo lo que lee un link tiene que leerlo por el mismo lugar.
- *
- * `replayRun` toma el modo como `normal` cuando no se lo pasan, así que una
- * reconstrucción a la que se le olvida el modo no falla: devuelve otra partida,
- * completamente válida, con otro final y otro puntaje. Eso ya pasó una vez —la
- * imagen de vista previa lo omitía y la página no— y la única forma de que no
- * vuelva a pasar es que exista un solo camino.
- */
 describe('reconstruirPresidencia', () => {
   function jugarEnModo(seed: number, clubId: string, modo: Modo): GameState {
     const chooser = new Rand(seed ^ 0x1234567);
@@ -226,8 +193,6 @@ describe('reconstruirPresidencia', () => {
   });
 
   it('descarta lo que no es una presidencia terminada', () => {
-    // Un link a medio jugar existe —el juego los arma mientras se juega— pero
-    // la página compartida y su imagen solo muestran presidencias cerradas.
     const aMedias = encodeRun({ seed: 4242, clubId: 'boca', choices: [0, 0, 0] });
     expect(reconstruirPresidencia(aMedias)).toBeNull();
   });

@@ -1,21 +1,9 @@
-/**
- * Formato de cifras para la UI. Todo se muestra como en un balance argentino:
- * coma decimal, millones abreviados, signo explícito cuando importa.
- */
-
 export function plata(millones: number): string {
   const signo = millones < 0 ? '−' : '';
   const abs = Math.abs(millones);
   return `${signo}US$ ${abs.toFixed(1).replace('.', ',')}M`;
 }
 
-/**
- * Versión corta para el carnet, sin la unidad: `12,4M`.
- *
- * Repetir "US$" en cada celda de una barra de cinco cifras es ruido, y además
- * no entra: `US$ 12,4M` mide 90px en una celda de 82 y se cortaría sin avisar.
- * La unidad va en la etiqueta de la columna.
- */
 export function plataCorta(millones: number): string {
   const signo = millones < 0 ? '−' : '';
   return `${signo}${Math.abs(millones).toFixed(1).replace('.', ',')}M`;
@@ -38,7 +26,6 @@ export function ordinal(posicion: number): string {
   return `${posicion}°`;
 }
 
-/** "3 títulos" / "1 título" — el plural que aparece en toda la interfaz. */
 export function plural(n: number, singular: string, plural_: string): string {
   return `${n} ${n === 1 ? singular : plural_}`;
 }
