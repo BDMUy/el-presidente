@@ -26,8 +26,9 @@ npm run dev
 En <http://localhost:3000>. **No hace falta base de datos**: el juego entero
 funciona sin configurar nada. Lo único que no aparece sin `DATABASE_URL` es la
 tabla de posiciones, porque sus rutas responden 503 y la interfaz las esconde.
-Ver [`.env.example`](.env.example) para las variables y
-[`DESPLIEGUE.md`](DESPLIEGUE.md) para publicarlo.
+Las variables que existen, y para qué sirve cada una, están en
+[`.env.example`](.env.example). Para publicarlo alcanza con cualquier hosting
+que corra Next: no hay nada propio del proveedor en el código.
 
 | | |
 |---|---|

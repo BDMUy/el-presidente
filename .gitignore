@@ -81,6 +81,14 @@ yarn-error.log*
 # no del proyecto: si dos personas la comitean, se pisan el vínculo.
 .netlify
 
+# La guia de despliegue
+#
+# Es un runbook de esta instalacion, no documentacion del proyecto: nombra el
+# proveedor de la base, el alcance de cada variable y que mirar en los logs.
+# Nada de eso es un secreto por si solo, pero junto es el mapa de como esta
+# armada la produccion, y no le sirve a nadie mas.
+DESPLIEGUE.md
+
 # Herramientas del entorno de desarrollo, no del juego
 #
 # Configuración y estado de las herramientas con las que se trabaja el
