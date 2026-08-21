@@ -25,8 +25,8 @@
 Thumbs.db
 ehthumbs.db
 
-# Configuración de editores. `.claude/launch.json` sí se comitea, porque dice
-# cómo se levanta ESTE proyecto; esto otro es de cada quien.
+# Configuración de editores y de herramientas de desarrollo. Nada de esto es
+# del proyecto: es de la máquina de cada quien.
 .idea/
 .vscode/
 
@@ -83,11 +83,11 @@ yarn-error.log*
 
 # Herramientas del entorno de desarrollo, no del juego
 #
-# Son skills instaladas localmente por el asistente. `.claude/launch.json` sí
-# se comitea, y no es una inconsistencia: eso dice cómo se levanta el servidor
-# de este proyecto y le sirve a cualquiera que lo clone. Esto otro es qué
-# tenía instalado quien lo escribió.
+# Configuración y estado de las herramientas con las que se trabaja el
+# proyecto. Cambian de máquina a máquina y no le dicen nada a quien lo clone.
 .agents/
+.claude/
+CLAUDE.md
 skills-lock.json
 .neon
 
