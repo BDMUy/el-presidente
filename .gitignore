@@ -22,7 +22,39 @@
 
 # misc
 .DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Configuración de editores. `.claude/launch.json` sí se comitea, porque dice
+# cómo se levanta ESTE proyecto; esto otro es de cada quien.
+.idea/
+.vscode/
+
+# Credenciales y llaves, por nombre
+#
+# Esta lista no puede estar completa —siempre va a existir un nombre de archivo
+# que a nadie se le ocurrió— y por eso no es la única defensa: el hook de
+# .githooks/pre-commit mira el CONTENIDO de lo que se está por comitear. Esto
+# es la primera puerta, no la última.
 *.pem
+*.key
+*.p12
+*.pfx
+id_rsa
+id_ed25519
+.npmrc
+.netrc
+secrets.json
+credentials.json
+service-account*.json
+
+# Volcados de base. Las migraciones de db/migrations/ NO entran acá: son parte
+# del proyecto y tienen que subirse.
+/dump*.sql
+/backup*.sql
+*.dump
+*.sqlite
+*.sqlite3
 
 # debug
 npm-debug.log*

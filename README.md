@@ -37,6 +37,12 @@ Ver [`.env.example`](.env.example) para las variables y
 | `npm run lint` | eslint |
 | `npm run build` | build de producción |
 
+`npm install` además activa `.githooks/pre-commit`, que frena el commit si en
+lo que está por entrar hay una cadena de conexión con contraseña, un token de
+Neon, AWS, GitHub o Anthropic, un bloque de clave privada, un archivo de
+entorno o algo de más de 5 MB. `.gitignore` filtra por nombre; el hook lee el
+contenido, que es lo que un nombre no puede ver.
+
 ---
 
 ## Cómo está hecho
