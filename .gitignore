@@ -86,8 +86,6 @@ yarn-error.log*
 # Configuración y estado de las herramientas con las que se trabaja el
 # proyecto. Cambian de máquina a máquina y no le dicen nada a quien lo clone.
 .agents/
-.claude/
-CLAUDE.md
 skills-lock.json
 .neon
 
