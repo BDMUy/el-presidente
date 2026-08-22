@@ -1,12 +1,11 @@
 import type {
-  Category,
   Condition,
   Effects,
   GameState,
   PendingEffect,
   Resources,
 } from './types';
-import { DEUDA_INHIBICION, RESOURCE_BOUNDS } from './types';
+import { countryOf, DEUDA_INHIBICION, RESOURCE_BOUNDS } from './types';
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
@@ -88,12 +87,13 @@ export function meetsCondition(
   clubSize: number,
 ): boolean {
   if (!condition) return true;
-  const { resources, season, category, flags } = state;
+  const { resources, season, league, flags } = state;
 
   if (condition.minSeason !== undefined && season < condition.minSeason) return false;
   if (condition.maxSeason !== undefined && season > condition.maxSeason) return false;
 
-  if (condition.category && !condition.category.includes(category)) return false;
+  if (condition.league && !condition.league.includes(league)) return false;
+  if (condition.country && !condition.country.includes(countryOf(league))) return false;
 
   if (condition.minHinchada !== undefined && resources.hinchada < condition.minHinchada) return false;
   if (condition.maxHinchada !== undefined && resources.hinchada > condition.maxHinchada) return false;
@@ -116,8 +116,4 @@ export function meetsCondition(
   }
 
   return true;
-}
-
-export function categoryLabel(category: Category): string {
-  return { primera: 'Primera', nacional: 'la Nacional', b: 'la B' }[category];
 }

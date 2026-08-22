@@ -1,6 +1,6 @@
 'use client';
 
-import { CATEGORY_RULES, TITLES, type ElectionResult, type GameState, type SeasonResult } from '@/lib/engine/types';
+import { LEAGUES, TITLES, type ElectionResult, type GameState, type SeasonResult } from '@/lib/engine/types';
 import { resolveEconomy } from '@/lib/engine/season';
 import { ordinal, plataConSigno } from '@/lib/format';
 import { Continuar, Membrete, Papel, Puntos, Sello, Titulo } from './ui';
@@ -14,7 +14,7 @@ export function FaseTemporada({
   result: SeasonResult;
   onContinuar: () => void;
 }) {
-  const economia = resolveEconomy(state.resources, state.category, result);
+  const economia = resolveEconomy(state.resources, state.league, result);
 
   const sello = result.champion
     ? { texto: 'Campeón', tono: 'verde' as const }
@@ -59,7 +59,7 @@ export function FaseTemporada({
             Categoría
           </dt>
           <dd className="font-display text-[15px] font-bold text-tinta uppercase">
-            {CATEGORY_RULES[result.category].label}
+            {LEAGUES[result.league].label}
           </dd>
         </div>
       </dl>

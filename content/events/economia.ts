@@ -54,7 +54,7 @@ export const ECONOMIA: GameEvent[] = [
     kind: 'dilema',
     title: 'PALCOS VIP',
     text: 'Una consultora propone convertir el sector central de la platea en palcos corporativos. Son mil socios menos y mucha plata más.',
-    requires: { minSeason: 3, category: ['primera'] },
+    requires: { minSeason: 3, league: ['ar-primera', 'uy-primera'] },
     options: [
       {
         label: 'Construirlos',
@@ -207,7 +207,7 @@ export const ECONOMIA: GameEvent[] = [
     kind: 'golpe',
     title: 'SE DISPARÓ EL DÓLAR',
     text: 'Amaneció con una devaluación del cuarenta por ciento. Los contratos de los extranjeros están en dólares. Los ingresos, no.',
-    requires: { minSeason: 2 },
+    requires: { minSeason: 2, country: ['argentina'] },
     weight: 2,
     options: [
       {

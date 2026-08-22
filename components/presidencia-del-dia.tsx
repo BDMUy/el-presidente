@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { getClub } from '@/content/clubs';
 import { faltaParaLaProxima, formatearEspera, presidenciaDelDia } from '@/lib/daily';
-import { CATEGORY_RULES } from '@/lib/engine/types';
+import { LEAGUES } from '@/lib/engine/types';
 import { expectedPosition } from '@/lib/engine/season';
 
 const KEY_JUGADA = 'el-presidente:diaria-jugada';
@@ -66,8 +66,8 @@ export function PresidenciaDelDia({ onJugar }: { onJugar: () => void }) {
           {club.name}
         </p>
         <p className="font-body text-[13px] text-papel-2">
-          {CATEGORY_RULES[club.category].label} · te esperan{' '}
-          {expectedPosition(club, club.category)}° de {CATEGORY_RULES[club.category].teams}
+          {LEAGUES[club.league].label} · te esperan{' '}
+          {expectedPosition(club, club.league)}° de {LEAGUES[club.league].teams}
         </p>
 
         <p className="mt-2 font-body text-[13px] leading-snug text-papel-2">

@@ -152,7 +152,7 @@ export function Juego() {
         season={state.season}
         year={state.year}
         mandate={state.mandate}
-        category={state.category}
+        league={state.league}
         inhibido={state.phase.kind === 'mercado' && state.phase.inhibido}
       />
 

@@ -6,7 +6,7 @@ export const COLOR: GameEvent[] = [
     kind: 'color',
     title: 'SE ROMPIÓ EL MICRO',
     text: 'El micro del plantel se quedó en la ruta camino a Santiago. Los jugadores subieron fotos desde la banquina.',
-    requires: { category: ['nacional', 'b'] },
+    requires: { league: ['ar-nacional', 'ar-b', 'uy-segunda'] },
     options: [
       {
         label: 'Alquilar otro de urgencia',
@@ -103,6 +103,7 @@ export const COLOR: GameEvent[] = [
     kind: 'golpe',
     title: 'SE INUNDÓ LA CANCHA',
     text: 'Llovió tres días seguidos y el campo de juego es una laguna. Hay partido el domingo y la AFA no quiere reprogramar.',
+    requires: { country: ['argentina'] },
     options: [
       {
         label: 'Trabajar toda la noche para dejarla jugable',
@@ -124,7 +125,7 @@ export const COLOR: GameEvent[] = [
     kind: 'dilema',
     title: 'GIRA POR ASIA',
     text: 'Ofrecen tres amistosos en pretemporada con un cheque importante. Son veinte días afuera y catorce horas de vuelo.',
-    requires: { category: ['primera'], minSize: 6 },
+    requires: { league: ['ar-primera', 'uy-primera'], minSize: 6 },
     options: [
       {
         label: 'Ir',
@@ -141,9 +142,9 @@ export const COLOR: GameEvent[] = [
   {
     id: 'ascenso-suenio',
     kind: 'color',
-    title: 'EL SUEÑO DE LA B',
+    title: 'EL SUEÑO DEL ASCENSO',
     text: 'Un hincha te para en la calle y te dice que su viejo se murió sin verlos en Primera. No te pide nada. Solo te lo dice.',
-    requires: { category: ['b', 'nacional'] },
+    requires: { league: ['ar-nacional', 'ar-b', 'uy-segunda'] },
     options: [
       {
         label: 'Prometerle que van a subir',

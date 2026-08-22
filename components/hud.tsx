@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import { CATEGORY_RULES, type Club, type Resources } from '@/lib/engine/types';
+import { LEAGUES, type Club, type Resources } from '@/lib/engine/types';
 import { entero, plataCorta, socios } from '@/lib/format';
 import { RECURSOS_POR_ID } from '@/lib/recursos';
 import { Cifra } from './ui';
@@ -13,7 +13,7 @@ export interface HudProps {
   season: number;
   year: number;
   mandate: number;
-  category: Club['category'];
+  league: Club['league'];
   inhibido: boolean;
 }
 
@@ -23,7 +23,7 @@ export function Hud({
   season,
   year,
   mandate,
-  category,
+  league,
   inhibido,
 }: HudProps) {
   const [abierto, setAbierto] = useState<keyof Resources | null>(null);
@@ -51,7 +51,7 @@ export function Hud({
         </div>
 
         <p className="mt-1 px-3 font-acta text-[11px] font-bold tracking-[0.06em] text-bronce-claro uppercase sm:px-4">
-          {CATEGORY_RULES[category].label} · Mandato {mandate}
+          {LEAGUES[league].label} · Mandato {mandate}
           {inhibido && <span className="ml-2 text-sello-claro">· inhibido</span>}
         </p>
 

@@ -2,6 +2,7 @@ import { Rand } from './rng';
 import type { Club, ElectionResult, Ending, EndingId, GameState, Modo } from './types';
 import {
   HINCHADA_ASAMBLEA,
+  LEAGUES,
   SEASONS_PER_MANDATE,
   TEMPORADAS_POR_MODO,
   TITLES,
@@ -92,7 +93,7 @@ function matiz(state: GameState, club: Club): string {
   const { resources, titles, descensos, ascensos, history } = state;
   const puntos = titles.reduce((sum, t) => sum + TITLES[t.id].points, 0);
   const continental = titles.some((t) => t.id === 'libertadores' || t.id === 'sudamericana');
-  const empezoEn = history[0]?.category;
+  const empezoEn = history[0]?.league;
 
   if (state.modo === 'llamas' && state.season >= TEMPORADAS_POR_MODO.llamas) {
     return (
@@ -112,7 +113,7 @@ function matiz(state: GameState, club: Club): string {
   if (continental) {
     return 'Hay una noche, en una cancha del continente, que la gente va a contarles a sus nietos.';
   }
-  if (empezoEn === 'b' && state.category === 'primera') {
+  if (empezoEn && LEAGUES[empezoEn].relegatesTo === null && LEAGUES[state.league].promotesTo === null) {
     return `Recibiste a ${club.name} en la B y lo dejaste en Primera. Eso no se borra con ninguna auditoría.`;
   }
   if (ascensos > 0 && descensos > 0) {

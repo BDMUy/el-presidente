@@ -6,10 +6,10 @@ import { CLUBS } from '@/content/clubs';
 import { mandatosDe } from '@/lib/engine/election';
 import { expectedPosition } from '@/lib/engine/season';
 import {
-  CATEGORY_RULES,
+  LEAGUES,
   MODOS,
   TEMPORADAS_POR_MODO,
-  type Category,
+  type LeagueId,
   type Club,
   type Modo,
 } from '@/lib/engine/types';
@@ -22,7 +22,7 @@ import { Ranking } from './ranking';
 import { SelectorClub } from './selector-club';
 import { VitrinaPanel } from './vitrina';
 
-const CATEGORIAS: Category[] = ['primera', 'nacional', 'b'];
+const LIGAS: LeagueId[] = ['ar-primera', 'ar-nacional', 'ar-b'];
 
 const PARTIDAS: Record<Modo, string> = {
   corta: 'Corta · 8 temporadas, 5 minutos',
@@ -53,28 +53,28 @@ export function Arranque({
   onAbandonar?: () => void;
 }) {
   const [elegido, setElegido] = useState<string | null>(null);
-  const [categoria, setCategoria] = useState<Category>('primera');
+  const [liga, setLiga] = useState<LeagueId>('ar-primera');
   const [modo, setModo] = useState<Modo>('normal');
 
-  const deLaCategoria = useMemo(
-    () => CLUBS.filter((c) => c.category === categoria).sort((a, b) => b.size - a.size),
-    [categoria],
+  const deLaLiga = useMemo(
+    () => CLUBS.filter((c) => c.league === liga).sort((a, b) => b.size - a.size),
+    [liga],
   );
 
   const club = elegido ? (CLUBS.find((c) => c.id === elegido) ?? null) : null;
 
-  const cambiarCategoria = (valor: string) => {
-    const nueva = valor as Category;
-    setCategoria(nueva);
+  const cambiarLiga = (valor: string) => {
+    const nueva = valor as LeagueId;
+    setLiga(nueva);
     setElegido((actual) => {
       const c = actual ? CLUBS.find((x) => x.id === actual) : null;
-      return c && c.category === nueva ? actual : null;
+      return c && c.league === nueva ? actual : null;
     });
   };
 
   const sortear = () => {
     const sorteado = CLUBS[Math.floor(Math.random() * CLUBS.length)];
-    setCategoria(sorteado.category);
+    setLiga(sorteado.league);
     setElegido(sorteado.id);
   };
 
@@ -142,15 +142,15 @@ export function Arranque({
           )}
 
           <div className="mt-3 grid gap-3 sm:grid-cols-2">
-            <CampoSelect etiqueta="Categoría" valor={categoria} onChange={cambiarCategoria}>
-              {CATEGORIAS.map((id) => (
+            <CampoSelect etiqueta="Categoría" valor={liga} onChange={cambiarLiga}>
+              {LIGAS.map((id) => (
                 <option key={id} value={id}>
-                  {CATEGORY_RULES[id].label}
+                  {LEAGUES[id].label}
                 </option>
               ))}
             </CampoSelect>
 
-            <SelectorClub clubes={deLaCategoria} elegido={club} onElegir={setElegido} />
+            <SelectorClub clubes={deLaLiga} elegido={club} onElegir={setElegido} />
           </div>
 
           <CampoNombre />
@@ -323,9 +323,9 @@ function PanelElegido({
               Te esperan
             </dt>
             <dd className="font-display text-[26px] leading-none font-black text-papel tabular-nums">
-              {expectedPosition(club, club.category)}°
+              {expectedPosition(club, club.league)}°
               <span className="ml-1 font-acta text-[12px] font-normal text-papel-2">
-                de {CATEGORY_RULES[club.category].teams}
+                de {LEAGUES[club.league].teams}
               </span>
             </dd>
           </div>
@@ -334,7 +334,7 @@ function PanelElegido({
               Categoría
             </dt>
             <dd className="truncate font-display text-[17px] leading-tight font-bold text-papel">
-              {CATEGORY_RULES[club.category].label}
+              {LEAGUES[club.league].label}
             </dd>
           </div>
           <div className="min-w-0">

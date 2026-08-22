@@ -39,7 +39,7 @@ export const RECURSOS: readonly RecursoDef[] = [
     id: 'influencia',
     label: 'Influencia',
     texto:
-      'Tu peso ante la AFA, la prensa y la interna del club, de 0 a 100. Se gana votando con los de arriba, ganando finales y siendo reelecto. Se gasta en blindarte de una operación, en sobrevivir una asamblea y en gestiones que no conviene detallar.',
+      'Tu peso ante la federación, la prensa y la interna del club, de 0 a 100. Se gana votando con los de arriba, ganando finales y siendo reelecto. Se gasta en blindarte de una operación, en sobrevivir una asamblea y en gestiones que no conviene detallar.',
     limite: 'Suma votos en la elección: alcanza para sostener un mandato mediocre.',
   },
 ];

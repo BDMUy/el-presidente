@@ -1,5 +1,5 @@
 import type { GameState } from '@/lib/engine/types';
-import { TEMPORADAS_POR_MODO, TITLES } from '@/lib/engine/types';
+import { LEAGUES, TEMPORADAS_POR_MODO, TITLES } from '@/lib/engine/types';
 
 export interface LogroDef {
   id: string;
@@ -33,9 +33,12 @@ export const LOGROS: readonly LogroDef[] = [
   },
   {
     id: 'de-la-b-a-primera',
-    label: 'De la B a Primera',
-    pista: 'Agarrá un club en la B y dejalo en Primera.',
-    cumple: (s) => s.history[0]?.category === 'b' && s.category === 'primera',
+    label: 'Del fondo a la cima',
+    pista: 'Agarrá un club en la última categoría de su país y dejalo en Primera.',
+    cumple: (s) => {
+      const empezoEn = s.history[0]?.league;
+      return !!empezoEn && LEAGUES[empezoEn].relegatesTo === null && LEAGUES[s.league].promotesTo === null;
+    },
   },
   {
     id: 'noche-continental',

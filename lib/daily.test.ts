@@ -27,14 +27,14 @@ describe('Presidencia del Día', () => {
     }
   });
 
-  it('reparte clubes de las tres categorías a lo largo del año', () => {
-    const categorias = new Set<string>();
+  it('reparte clubes de las tres ligas argentinas a lo largo del año', () => {
+    const ligas = new Set<string>();
     for (let i = 0; i < 365; i++) {
       const fecha = new Date(Date.UTC(2026, 0, 1 + i)).toISOString().slice(0, 10);
       const club = CLUBS.find((c) => c.id === presidenciaDelDia(fecha).clubId)!;
-      categorias.add(club.category);
+      ligas.add(club.league);
     }
-    expect(categorias.size).toBe(3);
+    expect(ligas.size).toBe(3);
   });
 
   it('la fecha se calcula con el reloj argentino, no con UTC', () => {

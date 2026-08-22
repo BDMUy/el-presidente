@@ -149,7 +149,7 @@ export const LEGADO: GameEvent[] = [
     kind: 'dilema',
     title: 'TE QUIEREN EN LA AFA',
     text: 'Te ofrecen un cargo en la dirigencia del fútbol argentino. Es más poder, y es dejar el club a mitad de mandato.',
-    requires: { minSeason: 12, minInfluencia: 55 },
+    requires: { minSeason: 12, minInfluencia: 55, country: ['argentina'] },
     options: [
       {
         label: 'Aceptar el cargo y seguir en el club',

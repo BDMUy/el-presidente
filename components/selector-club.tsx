@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 
 import { expectedPosition } from '@/lib/engine/season';
-import { CATEGORY_RULES, type Club } from '@/lib/engine/types';
+import { LEAGUES, type Club } from '@/lib/engine/types';
 
 const MEMORIA_TECLEO = 700;
 
@@ -226,7 +226,7 @@ export function SelectorClub({
                     )}
                   </span>
                   <span className="shrink-0 font-acta text-[11px] text-papel-2 tabular-nums">
-                    {expectedPosition(c, c.category)}° de {CATEGORY_RULES[c.category].teams}
+                    {expectedPosition(c, c.league)}° de {LEAGUES[c.league].teams}
                   </span>
                 </li>
               );

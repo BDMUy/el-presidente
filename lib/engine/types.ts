@@ -1,29 +1,66 @@
 export type Country = 'argentina' | 'uruguay';
 
-export type Category = 'primera' | 'nacional' | 'b';
+export type LeagueId = 'ar-primera' | 'ar-nacional' | 'ar-b' | 'uy-primera' | 'uy-segunda';
 
 export interface Club {
   id: string;
   name: string;
   short: string;
   colors: [string, string];
-  category: Category;
+  league: LeagueId;
   size: number;
   nickname?: string;
 }
 
-export interface CategoryRules {
+export interface LeagueDef {
+  id: LeagueId;
+  country: Country;
+  tier: number;
   teams: number;
   promote: number;
   relegate: number;
   continental: boolean;
   label: string;
+  championTitle: TitleId;
+  promotesTo: LeagueId | null;
+  relegatesTo: LeagueId | null;
 }
 
-export const CATEGORY_RULES: Record<Category, CategoryRules> = {
-  primera: { teams: 30, promote: 0, relegate: 2, continental: true, label: 'Liga Profesional' },
-  nacional: { teams: 38, promote: 1, relegate: 2, continental: false, label: 'Primera Nacional' },
-  b: { teams: 20, promote: 1, relegate: 2, continental: false, label: 'Primera B' },
+export const LEAGUES: Record<LeagueId, LeagueDef> = {
+  'ar-primera': {
+    id: 'ar-primera', country: 'argentina', tier: 1, teams: 30, promote: 0, relegate: 2,
+    continental: true, label: 'Liga Profesional', championTitle: 'ar-liga-primera',
+    promotesTo: null, relegatesTo: 'ar-nacional',
+  },
+  'ar-nacional': {
+    id: 'ar-nacional', country: 'argentina', tier: 2, teams: 38, promote: 1, relegate: 2,
+    continental: false, label: 'Primera Nacional', championTitle: 'ar-liga-nacional',
+    promotesTo: 'ar-primera', relegatesTo: 'ar-b',
+  },
+  'ar-b': {
+    id: 'ar-b', country: 'argentina', tier: 3, teams: 20, promote: 1, relegate: 2,
+    continental: false, label: 'Primera B', championTitle: 'ar-liga-b',
+    promotesTo: 'ar-nacional', relegatesTo: null,
+  },
+  'uy-primera': {
+    id: 'uy-primera', country: 'uruguay', tier: 1, teams: 16, promote: 0, relegate: 2,
+    continental: true, label: 'Liga AUF Uruguaya', championTitle: 'uy-liga',
+    promotesTo: null, relegatesTo: 'uy-segunda',
+  },
+  'uy-segunda': {
+    id: 'uy-segunda', country: 'uruguay', tier: 2, teams: 14, promote: 3, relegate: 2,
+    continental: false, label: 'Segunda División', championTitle: 'uy-segunda-liga',
+    promotesTo: 'uy-primera', relegatesTo: null,
+  },
+};
+
+export function countryOf(league: LeagueId): Country {
+  return LEAGUES[league].country;
+}
+
+export const DOMESTIC_CUPS: Record<Country, { title: TitleId; label: string }> = {
+  argentina: { title: 'ar-copa', label: 'Copa Argentina' },
+  uruguay: { title: 'uy-copa', label: 'Copa AUF Uruguay' },
 };
 
 export interface Resources {
@@ -79,7 +116,8 @@ export const EVENT_KIND_LABEL: Record<EventKind, string> = {
 export interface Condition {
   minSeason?: number;
   maxSeason?: number;
-  category?: Category[];
+  league?: LeagueId[];
+  country?: Country[];
   minHinchada?: number;
   maxHinchada?: number;
   minCaja?: number;
@@ -173,11 +211,15 @@ export interface BigMatch {
 export type MesaChicaAssignment = Record<Frente, number>;
 
 export type TitleId =
-  | 'liga-primera'
-  | 'liga-nacional'
-  | 'liga-b'
-  | 'copa-argentina'
-  | 'supercopa'
+  | 'ar-liga-primera'
+  | 'ar-liga-nacional'
+  | 'ar-liga-b'
+  | 'uy-liga'
+  | 'uy-segunda-liga'
+  | 'ar-copa'
+  | 'ar-supercopa'
+  | 'uy-copa'
+  | 'uy-supercopa'
   | 'libertadores'
   | 'sudamericana'
   | 'ascenso';
@@ -189,11 +231,15 @@ export interface TitleDef {
 }
 
 export const TITLES: Record<TitleId, TitleDef> = {
-  'liga-primera': { id: 'liga-primera', label: 'Liga Profesional', points: 100 },
-  'liga-nacional': { id: 'liga-nacional', label: 'Primera Nacional', points: 45 },
-  'liga-b': { id: 'liga-b', label: 'Primera B', points: 30 },
-  'copa-argentina': { id: 'copa-argentina', label: 'Copa Argentina', points: 70 },
-  supercopa: { id: 'supercopa', label: 'Supercopa Argentina', points: 40 },
+  'ar-liga-primera': { id: 'ar-liga-primera', label: 'Liga Profesional', points: 100 },
+  'ar-liga-nacional': { id: 'ar-liga-nacional', label: 'Primera Nacional', points: 45 },
+  'ar-liga-b': { id: 'ar-liga-b', label: 'Primera B', points: 30 },
+  'uy-liga': { id: 'uy-liga', label: 'Liga AUF Uruguaya', points: 100 },
+  'uy-segunda-liga': { id: 'uy-segunda-liga', label: 'Segunda División', points: 30 },
+  'ar-copa': { id: 'ar-copa', label: 'Copa Argentina', points: 70 },
+  'ar-supercopa': { id: 'ar-supercopa', label: 'Supercopa Argentina', points: 40 },
+  'uy-copa': { id: 'uy-copa', label: 'Copa AUF Uruguay', points: 70 },
+  'uy-supercopa': { id: 'uy-supercopa', label: 'Supercopa Uruguaya', points: 40 },
   libertadores: { id: 'libertadores', label: 'Copa Libertadores', points: 250 },
   sudamericana: { id: 'sudamericana', label: 'Copa Sudamericana', points: 140 },
   ascenso: { id: 'ascenso', label: 'Ascenso', points: 80 },
@@ -208,7 +254,7 @@ export interface WonTitle {
 export interface SeasonResult {
   position: number;
   teams: number;
-  category: Category;
+  league: LeagueId;
   champion: boolean;
   promoted: boolean;
   relegated: boolean;
@@ -221,7 +267,7 @@ export interface SeasonRecord {
   season: number;
   year: number;
   clubId: string;
-  category: Category;
+  league: LeagueId;
   position: number;
   titles: TitleId[];
   hinchada: number;
@@ -270,7 +316,7 @@ export interface GameState {
   seed: number;
   rng: number;
   clubId: string;
-  category: Category;
+  league: LeagueId;
   modo: Modo;
   season: number;
   year: number;

@@ -75,6 +75,16 @@ describe('codificación de partidas', () => {
     expect(encodeRun({ ...datos!, modo: 'normal' })).toBe(viejo);
   });
 
+  it('el último club argentino antes de sumar otro país decodifica siempre igual', () => {
+    const viejo = 'AACHojA_DHM';
+    const datos = decodeRun(viejo);
+
+    expect(datos).not.toBeNull();
+    expect(datos!.clubId).toBe('ituzaingo');
+    expect(CLUBS.findIndex((c) => c.id === 'ituzaingo')).toBe(63);
+    expect(encodeRun({ ...datos!, modo: 'normal' })).toBe(viejo);
+  });
+
   it('soporta semillas en todo el rango de 32 bits', () => {
     for (const seed of [0, 1, 65535, 2 ** 31, 0xffffffff]) {
       const run = { seed, clubId: 'river', choices: [0] };

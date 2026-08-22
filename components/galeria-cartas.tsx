@@ -213,7 +213,8 @@ function describirCondicion(c: Condition): string {
   const partes: string[] = [];
   if (c.minSeason) partes.push(`desde la ${c.minSeason}`);
   if (c.maxSeason) partes.push(`hasta la ${c.maxSeason}`);
-  if (c.category) partes.push(c.category.join('/'));
+  if (c.league) partes.push(c.league.join('/'));
+  if (c.country) partes.push(c.country.join('/'));
   if (c.minCaja !== undefined) partes.push(`caja ≥ ${c.minCaja}`);
   if (c.maxCaja !== undefined) partes.push(`caja ≤ ${c.maxCaja}`);
   if (c.minHinchada !== undefined) partes.push(`hinchada ≥ ${c.minHinchada}`);

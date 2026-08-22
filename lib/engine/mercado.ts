@@ -1,7 +1,8 @@
 import { CRACKS } from '@/content/parodias';
 import { APELLIDOS, NOMBRES } from '@/content/nombres';
 import { Rand } from './rng';
-import type { Category, Country, PlayerOffer } from './types';
+import type { Country, LeagueId, PlayerOffer } from './types';
+import { countryOf } from './types';
 
 const CHANCE_CRACK = 0.35;
 
@@ -27,7 +28,10 @@ const ARQUETIPOS_VENTA = [
   { archetype: 'el capitán', note: 'Lleva la cinta desde hace cuatro años.', edad: [28, 34] },
 ] as const;
 
-const PRICE_SCALE: Record<Category, number> = { primera: 1, nacional: 0.35, b: 0.15 };
+const PRICE_SCALE: Record<LeagueId, number> = {
+  'ar-primera': 1, 'ar-nacional': 0.35, 'ar-b': 0.15,
+  'uy-primera': 0.8, 'uy-segunda': 0.2,
+};
 
 function nombre(country: Country, rand: Rand, usados: Set<string>): string {
   const apellidos = APELLIDOS[country];
@@ -42,14 +46,14 @@ function round1(value: number): number {
 }
 
 export function generateOffers(
-  category: Category,
-  country: Country,
+  league: LeagueId,
   plantel: number,
   rand: Rand,
   season = 1,
   seed = 0,
 ): PlayerOffer[] {
-  const scale = PRICE_SCALE[category];
+  const country: Country = countryOf(league);
+  const scale = PRICE_SCALE[league];
   const offers: PlayerOffer[] = [];
   const apellidosUsados = new Set<string>();
 

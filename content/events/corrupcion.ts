@@ -323,7 +323,7 @@ export const CORRUPCION: GameEvent[] = [
     title: 'PIDEN INHABILITARTE',
     text: 'La AFA analiza inhabilitarte para ejercer cargos en el fútbol. No es una condena penal: es peor, porque no necesita juicio y sale la semana que viene.',
     weight: 3,
-    requires: { minFlag: { prontuario: 8 }, minSeason: 6 },
+    requires: { minFlag: { prontuario: 8 }, minSeason: 6, country: ['argentina'] },
     options: [
       {
         label: 'Aceptar y poner a alguien de confianza',

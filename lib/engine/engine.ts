@@ -33,18 +33,19 @@ import type {
 } from './types';
 import {
   EVENTS_PER_SEASON,
+  LEAGUES,
   START_YEAR,
   TEMPORADAS_POR_MODO,
 } from './types';
 
 export function initialResources(club: Club): Resources {
   const s = club.size;
-  const esperada = expectedPosition(club, club.category);
+  const esperada = expectedPosition(club, club.league);
   return {
     caja: Math.round((s * 0.9 - 2) * 10) / 10,
     hinchada: 55,
     socios: Math.round(s * s * 1.35 * 10) / 10,
-    plantel: Math.round(plantelForPosition(esperada, club.category) * 10) / 10,
+    plantel: Math.round(plantelForPosition(esperada, club.league) * 10) / 10,
     influencia: 30,
   };
 }
@@ -72,7 +73,7 @@ export function startRun({ seed, clubId, modo = 'normal' }: StartOptions): GameS
     seed,
     rng: rand.s,
     clubId,
-    category: club.category,
+    league: club.league,
     modo,
     season: 1,
     year: START_YEAR,
@@ -163,8 +164,7 @@ function openMercado(state: GameState): GameState {
   const inhibido = estaInhibido(state.resources);
 
   const all = generateOffers(
-    state.category,
-    'argentina',
+    state.league,
     state.resources.plantel,
     rand,
     state.season,
@@ -293,7 +293,7 @@ function openMesaChicaOrTemporada(state: GameState): GameState {
   const rand = new Rand(state.rng);
   const club = getClub(state.clubId);
 
-  const position = resolvePosition(state.resources, state.category, rand);
+  const position = resolvePosition(state.resources, state.league, rand);
   const bigMatch = rollBigMatch(state, club, position, rand);
 
   const staged: GameState = { ...state, rng: rand.s, pendingPosition: position, bigMatch };
@@ -334,28 +334,28 @@ function closeSeason(state: GameState, result: import('./types').SeasonResult): 
   const club = getClub(state.clubId);
   const rand = new Rand(state.rng);
 
-  const economy = resolveEconomy(state.resources, state.category, result);
+  const economy = resolveEconomy(state.resources, state.league, result);
   const mood = resolveMood(club, result);
 
   let next = applyEffects({ ...state, rng: rand.s }, {
     caja: economy.neto,
     hinchada: mood.hinchada + desgasteDelCargo(state.mandate),
     socios: mood.socios,
-    plantel: plantelDecay(state.category),
+    plantel: plantelDecay(state.league),
   });
 
   const titles = result.titles.map((id) => ({ id, season: state.season, year: state.year }));
 
-  const category = result.promoted
-    ? promote(state.category)
+  const league = result.promoted
+    ? promote(state.league)
     : result.relegated
-      ? relegate(state.category)
-      : state.category;
+      ? relegate(state.league)
+      : state.league;
 
   next = {
     ...next,
     titles: [...next.titles, ...titles],
-    category,
+    league,
     descensos: next.descensos + (result.relegated ? 1 : 0),
     ascensos: next.ascensos + (result.promoted ? 1 : 0),
     history: [
@@ -364,7 +364,7 @@ function closeSeason(state: GameState, result: import('./types').SeasonResult): 
         season: state.season,
         year: state.year,
         clubId: state.clubId,
-        category: state.category,
+        league: state.league,
         position: result.position,
         titles: result.titles,
         hinchada: Math.round(next.resources.hinchada),
@@ -421,10 +421,10 @@ function finish(state: GameState, endingId: import('./types').EndingId, club: Cl
   };
 }
 
-function promote(category: GameState['category']): GameState['category'] {
-  return category === 'b' ? 'nacional' : 'primera';
+function promote(league: GameState['league']): GameState['league'] {
+  return LEAGUES[league].promotesTo ?? league;
 }
 
-function relegate(category: GameState['category']): GameState['category'] {
-  return category === 'primera' ? 'nacional' : 'b';
+function relegate(league: GameState['league']): GameState['league'] {
+  return LEAGUES[league].relegatesTo ?? league;
 }

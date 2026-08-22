@@ -95,7 +95,7 @@ describe('el hilo de corrupción', () => {
     const impecable = {
       ...estado(0, 16),
       resources: { caja: 40, hinchada: 90, socios: 120, plantel: 85, influencia: 60 },
-      titles: Array.from({ length: 6 }, (_, i) => ({ id: 'liga-primera' as const, season: i + 2, year: 2027 + i })),
+      titles: Array.from({ length: 6 }, (_, i) => ({ id: 'ar-liga-primera' as const, season: i + 2, year: 2027 + i })),
       descensos: 0,
     };
 
@@ -106,7 +106,7 @@ describe('el hilo de corrupción', () => {
   it('el prontuario tolerado escala con la duración', () => {
     const base = {
       resources: { caja: 40, hinchada: 90, socios: 120, plantel: 85, influencia: 60 },
-      titles: Array.from({ length: 8 }, (_, i) => ({ id: 'liga-primera' as const, season: i + 2, year: 2027 + i })),
+      titles: Array.from({ length: 8 }, (_, i) => ({ id: 'ar-liga-primera' as const, season: i + 2, year: 2027 + i })),
       descensos: 0,
       flags: { prontuario: 3 },
     };

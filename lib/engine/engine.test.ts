@@ -11,8 +11,8 @@ import { generateOffers } from './mercado';
 import { Rand, seedFromString } from './rng';
 import { expectedPosition, plantelForPosition, resolvePosition } from './season';
 import { RECURSOS_POR_ID } from '@/lib/recursos';
-import type { GameState } from './types';
-import { FICHAS_MESA_CHICA, HINCHADA_ASAMBLEA, TEMPORADAS_POR_MODO } from './types';
+import type { GameState, LeagueId } from './types';
+import { FICHAS_MESA_CHICA, HINCHADA_ASAMBLEA, LEAGUES, TEMPORADAS_POR_MODO } from './types';
 
 function playThrough(seed: number, clubId: string, pick: (state: GameState) => number): GameState {
   let state = startRun({ seed, clubId });
@@ -90,9 +90,14 @@ describe('condiciones', () => {
     expect(meetsCondition(undefined, state, 5)).toBe(true);
   });
 
-  it('filtra por categoría', () => {
-    expect(meetsCondition({ category: ['nacional'] }, state, 5)).toBe(true);
-    expect(meetsCondition({ category: ['primera'] }, state, 5)).toBe(false);
+  it('filtra por liga', () => {
+    expect(meetsCondition({ league: ['ar-nacional'] }, state, 5)).toBe(true);
+    expect(meetsCondition({ league: ['ar-primera'] }, state, 5)).toBe(false);
+  });
+
+  it('filtra por país', () => {
+    expect(meetsCondition({ country: ['argentina'] }, state, 5)).toBe(true);
+    expect(meetsCondition({ country: ['uruguay'] }, state, 5)).toBe(false);
   });
 
   it('filtra por temporada', () => {
@@ -113,8 +118,8 @@ describe('resolución deportiva', () => {
     const flojo: number[] = [];
     const fuerte: number[] = [];
     for (let i = 0; i < 400; i++) {
-      flojo.push(resolvePosition({ caja: 0, hinchada: 50, socios: 0, plantel: 45, influencia: 0 }, 'primera', rand));
-      fuerte.push(resolvePosition({ caja: 0, hinchada: 50, socios: 0, plantel: 75, influencia: 0 }, 'primera', rand));
+      flojo.push(resolvePosition({ caja: 0, hinchada: 50, socios: 0, plantel: 45, influencia: 0 }, 'ar-primera', rand));
+      fuerte.push(resolvePosition({ caja: 0, hinchada: 50, socios: 0, plantel: 75, influencia: 0 }, 'ar-primera', rand));
     }
     const avg = (xs: number[]) => xs.reduce((s, x) => s + x, 0) / xs.length;
     expect(avg(fuerte)).toBeLessThan(avg(flojo));
@@ -125,7 +130,7 @@ describe('resolución deportiva', () => {
     for (let i = 0; i < 500; i++) {
       const pos = resolvePosition(
         { caja: 0, hinchada: 50, socios: 0, plantel: rand.int(0, 100), influencia: 0 },
-        'primera',
+        'ar-primera',
         rand,
       );
       expect(pos).toBeGreaterThanOrEqual(1);
@@ -134,11 +139,11 @@ describe('resolución deportiva', () => {
   });
 
   it('plantelForPosition es la inversa de resolvePosition sin ruido', () => {
-    const plantel = plantelForPosition(10, 'primera');
+    const plantel = plantelForPosition(10, 'ar-primera');
     const rand = new Rand(555);
     const results: number[] = [];
     for (let i = 0; i < 800; i++) {
-      results.push(resolvePosition({ caja: 0, hinchada: 50, socios: 0, plantel, influencia: 0 }, 'primera', rand));
+      results.push(resolvePosition({ caja: 0, hinchada: 50, socios: 0, plantel, influencia: 0 }, 'ar-primera', rand));
     }
     results.sort((a, b) => a - b);
     expect(results[400]).toBeGreaterThan(6);
@@ -148,7 +153,37 @@ describe('resolución deportiva', () => {
   it('la expectativa respeta el tamaño dentro de cada categoría', () => {
     const boca = getClub('boca');
     const riestra = getClub('riestra');
-    expect(expectedPosition(boca, 'primera')).toBeLessThan(expectedPosition(riestra, 'primera'));
+    expect(expectedPosition(boca, 'ar-primera')).toBeLessThan(expectedPosition(riestra, 'ar-primera'));
+  });
+});
+
+const LEAGUES_MAX_STEPS = Object.keys(LEAGUES).length;
+
+describe('LEAGUES', () => {
+  it('cada promotesTo/relegatesTo apunta a una liga real o a null', () => {
+    for (const league of Object.values(LEAGUES)) {
+      if (league.promotesTo !== null) expect(LEAGUES[league.promotesTo]).toBeDefined();
+      if (league.relegatesTo !== null) expect(LEAGUES[league.relegatesTo]).toBeDefined();
+    }
+  });
+
+  it('subir desde el fondo y bajar desde arriba no entra en un ciclo', () => {
+    for (const start of Object.keys(LEAGUES) as LeagueId[]) {
+      let current = start;
+      let steps = 0;
+      while (LEAGUES[current].promotesTo !== null && steps++ < LEAGUES_MAX_STEPS) {
+        current = LEAGUES[current].promotesTo!;
+      }
+      expect(steps, start).toBeLessThan(LEAGUES_MAX_STEPS);
+      expect(LEAGUES[current].promotesTo).toBeNull();
+    }
+  });
+
+  it('cada liga pertenece al país que dice, sin mezclar', () => {
+    for (const league of Object.values(LEAGUES)) {
+      if (league.promotesTo) expect(LEAGUES[league.promotesTo].country).toBe(league.country);
+      if (league.relegatesTo) expect(LEAGUES[league.relegatesTo].country).toBe(league.country);
+    }
   });
 });
 
@@ -192,15 +227,15 @@ describe('Mesa Chica', () => {
   });
 
   it('más fichas nunca bajan la probabilidad de ganar', () => {
-    const match = { competition: 'copa' as const, label: 'x', rival: 'y', baseWin: 0.4, title: 'copa-argentina' as const };
+    const match = { competition: 'copa' as const, label: 'x', rival: 'y', baseWin: 0.4, title: 'ar-copa' as const };
     const nada = { plantel: 0, dt: 0, hinchada: 0, prensa: 0, gestion: 0 };
     const todo = { plantel: 3, dt: 0, hinchada: 0, prensa: 0, gestion: 0 };
     expect(winProbability(match, todo)).toBeGreaterThan(winProbability(match, nada));
   });
 
   it('la probabilidad queda siempre acotada', () => {
-    const imposible = { competition: 'copa' as const, label: 'x', rival: 'y', baseWin: -5, title: 'copa-argentina' as const };
-    const seguro = { competition: 'copa' as const, label: 'x', rival: 'y', baseWin: 5, title: 'copa-argentina' as const };
+    const imposible = { competition: 'copa' as const, label: 'x', rival: 'y', baseWin: -5, title: 'ar-copa' as const };
+    const seguro = { competition: 'copa' as const, label: 'x', rival: 'y', baseWin: 5, title: 'ar-copa' as const };
     const todo = { plantel: 0, dt: 0, hinchada: 0, prensa: 0, gestion: 3 };
     expect(winProbability(imposible, todo)).toBeGreaterThanOrEqual(0.05);
     expect(winProbability(seguro, todo)).toBeLessThanOrEqual(0.92);
@@ -211,7 +246,7 @@ describe('arranque', () => {
   it('cada club arranca en su expectativa', () => {
     for (const club of CLUBS) {
       const resources = initialResources(club);
-      const esperado = plantelForPosition(expectedPosition(club, club.category), club.category);
+      const esperado = plantelForPosition(expectedPosition(club, club.league), club.league);
       expect(Math.abs(resources.plantel - esperado)).toBeLessThan(0.2);
     }
   });
@@ -381,7 +416,7 @@ describe('mercado', () => {
   it('no repite apellidos dentro de la misma ventana', () => {
     const rand = new Rand(2024);
     for (let i = 0; i < 300; i++) {
-      const offers = generateOffers('primera', 'argentina', 60, rand);
+      const offers = generateOffers('ar-primera', 60, rand);
       const apellidos = offers.map((o) => o.name.split(' ')[1]);
       expect(new Set(apellidos).size).toBe(apellidos.length);
     }
@@ -390,7 +425,7 @@ describe('mercado', () => {
   it('siempre ofrece una venta, una compra y un libre', () => {
     const rand = new Rand(99);
     for (let i = 0; i < 100; i++) {
-      const kinds = generateOffers('nacional', 'argentina', 45, rand).map((o) => o.kind).sort();
+      const kinds = generateOffers('ar-nacional', 45, rand).map((o) => o.kind).sort();
       expect(kinds).toEqual(['compra', 'libre', 'venta']);
     }
   });
@@ -398,7 +433,7 @@ describe('mercado', () => {
   it('genera nombres uruguayos para un club uruguayo', () => {
     const rand = new Rand(2026);
     for (let i = 0; i < 50; i++) {
-      const offers = generateOffers('primera', 'uruguay', 60, rand);
+      const offers = generateOffers('uy-primera', 60, rand);
       expect(offers.every((o) => !APELLIDOS.argentina.includes(o.name.split(' ').pop() ?? ''))).toBe(true);
     }
   });

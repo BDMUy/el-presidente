@@ -1,6 +1,6 @@
 import type { GameEvent } from '@/lib/engine/types';
 
-const SOLO_ASCENSO = { category: ['nacional', 'b'] as const };
+const SOLO_ASCENSO = { league: ['ar-nacional', 'ar-b', 'uy-segunda'] as const };
 
 export const ASCENSO: GameEvent[] = [
   {
@@ -9,7 +9,7 @@ export const ASCENSO: GameEvent[] = [
     title: 'EL ARBITRAJE DEL ASCENSO',
     text: 'Tercer partido seguido con un penal en contra en el descuento. En el ascenso nadie mira, y eso lo saben todos.',
     weight: 2,
-    requires: { category: [...SOLO_ASCENSO.category], minSeason: 2 },
+    requires: { league: [...SOLO_ASCENSO.league], minSeason: 2 },
     options: [
       {
         label: 'Denunciarlo en conferencia',
@@ -33,7 +33,7 @@ export const ASCENSO: GameEvent[] = [
     kind: 'golpe',
     title: 'CLAUSURARON LA CANCHA',
     text: 'La policía no da el operativo: hay que jugar de local a cien kilómetros y sin público durante dos meses.',
-    requires: { category: [...SOLO_ASCENSO.category] },
+    requires: { league: [...SOLO_ASCENSO.league] },
     options: [
       {
         label: 'Poner los micros para que la gente viaje',
@@ -52,7 +52,7 @@ export const ASCENSO: GameEvent[] = [
     kind: 'color',
     title: 'EL VECINO DE ENFRENTE',
     text: 'Un vecino se queja de que los reflectores le dan en la ventana y amenaza con un amparo que suspendería los partidos nocturnos.',
-    requires: { category: [...SOLO_ASCENSO.category] },
+    requires: { league: [...SOLO_ASCENSO.league] },
     options: [
       {
         label: 'Ponerle cortinas blackout en su casa',
@@ -74,7 +74,7 @@ export const ASCENSO: GameEvent[] = [
     kind: 'dilema',
     title: 'EL LATERAL TRABAJA DE ALBAÑIL',
     text: 'Tu mejor lateral entrena a la mañana y trabaja en una obra a la tarde. Llega fundido a los partidos.',
-    requires: { category: ['b'] },
+    requires: { league: ['ar-b', 'uy-segunda'] },
     options: [
       {
         label: 'Ponerle un contrato profesional',
@@ -120,7 +120,7 @@ export const ASCENSO: GameEvent[] = [
     kind: 'dilema',
     title: 'BAJA UN NOMBRE DE PRIMERA',
     text: 'Un jugador que fue campeón en Primera acepta bajar a jugar con vos. Cobra tres veces lo que cobra el que más cobra.',
-    requires: { category: [...SOLO_ASCENSO.category], minSeason: 2 },
+    requires: { league: [...SOLO_ASCENSO.league], minSeason: 2 },
     weight: 2,
     options: [
       {
@@ -148,7 +148,7 @@ export const ASCENSO: GameEvent[] = [
     kind: 'color',
     title: 'CUENTAS DEL REDUCIDO',
     text: 'Faltan dos fechas y todo el mundo hace cuentas. Un empate podría alcanzar, o no, según lo que pase en otras tres canchas.',
-    requires: { category: [...SOLO_ASCENSO.category], minSeason: 2 },
+    requires: { league: [...SOLO_ASCENSO.league], minSeason: 2 },
     options: [
       {
         label: 'Prometer premio si entran',
@@ -167,7 +167,7 @@ export const ASCENSO: GameEvent[] = [
     kind: 'dilema',
     title: 'LOS TABLONES DE MADERA',
     text: 'La popular todavía es de tablones. Cambiarlos por cemento es caro; dejarlos es esperar el día que se rompa uno con gente arriba.',
-    requires: { category: [...SOLO_ASCENSO.category] },
+    requires: { league: [...SOLO_ASCENSO.league] },
     options: [
       {
         label: 'Cambiarlos ahora',
@@ -188,8 +188,8 @@ export const ASCENSO: GameEvent[] = [
     id: 'asc-clasico-de-barrio',
     kind: 'color',
     title: 'EL CLÁSICO DE BARRIO',
-    text: 'Se juega el clásico contra el club que está a doce cuadras. En la B esto es más importante que cualquier campeonato.',
-    requires: { category: [...SOLO_ASCENSO.category] },
+    text: 'Se juega el clásico contra el club que está a doce cuadras. Acá esto es más importante que cualquier campeonato.',
+    requires: { league: [...SOLO_ASCENSO.league] },
     weight: 2,
     options: [
       {
@@ -209,7 +209,7 @@ export const ASCENSO: GameEvent[] = [
     kind: 'dilema',
     title: 'SI SUBIMOS, ¿CON QUÉ?',
     text: 'El contador te muestra los números de la categoría de arriba: sueldos al doble, viajes al doble. Ascender sin reforzar es descender el año siguiente.',
-    requires: { category: [...SOLO_ASCENSO.category], minSeason: 3 },
+    requires: { league: [...SOLO_ASCENSO.league], minSeason: 3 },
     options: [
       {
         label: 'Guardar plata desde ahora',
@@ -233,7 +233,7 @@ export const ASCENSO: GameEvent[] = [
     kind: 'color',
     title: 'NO HAY TRIBUNA VISITANTE',
     text: 'La cancha no tiene sector visitante habilitado y el rival de la fecha trae ochocientos. O se acomodan en la platea local, o no entran.',
-    requires: { category: [...SOLO_ASCENSO.category] },
+    requires: { league: [...SOLO_ASCENSO.league] },
     options: [
       {
         label: 'Que entren a la platea',
@@ -255,7 +255,7 @@ export const ASCENSO: GameEvent[] = [
     kind: 'dilema',
     title: 'EL MICRO ES DE 1988',
     text: 'Se rompió tres veces esta temporada, siempre volviendo de visitante y siempre de madrugada. El chofer dice que ya no se consiguen los repuestos.',
-    requires: { category: [...SOLO_ASCENSO.category], minSeason: 2 },
+    requires: { league: [...SOLO_ASCENSO.league], minSeason: 2 },
     options: [
       {
         label: 'Comprar uno usado',
@@ -287,8 +287,8 @@ export const ASCENSO: GameEvent[] = [
     id: 'asc-oferta-de-primera',
     kind: 'dilema',
     title: 'UN GRANDE QUIERE A TU DELANTERO',
-    text: 'Hizo dieciocho goles y lo vino a ver un club de Primera. Ofrecen una cifra que en la B no se ve nunca, y el equipo está peleando el ascenso.',
-    requires: { category: [...SOLO_ASCENSO.category], minSeason: 2 },
+    text: 'Hizo dieciocho goles y lo vino a ver un club de Primera. Ofrecen una cifra que acá no se ve nunca, y el equipo está peleando el ascenso.',
+    requires: { league: [...SOLO_ASCENSO.league], minSeason: 2 },
     options: [
       {
         label: 'Venderlo ya',
