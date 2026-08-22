@@ -121,6 +121,28 @@ export const COLOR: GameEvent[] = [
     ],
   },
   {
+    id: 'cancha-inundada-uy',
+    kind: 'golpe',
+    title: 'SE INUNDÓ LA CANCHA',
+    text: 'Llovió tres días seguidos y el campo de juego es una laguna. Hay partido el domingo y la AUF no quiere reprogramar.',
+    requires: { country: ['uruguay'] },
+    options: [
+      {
+        label: 'Trabajar toda la noche para dejarla jugable',
+        hint: 'Se juega. El campo queda destruido por dos meses.',
+        effects: { caja: -0.5, plantel: -2 },
+      },
+      {
+        label: 'Pedir postergación con informe técnico',
+        hint: 'Depende de con quién hables.',
+        random: [
+          { weight: 45, text: 'Aceptaron postergarlo. Se jugó dos semanas después con la cancha impecable.', effects: { influencia: -4, plantel: 2 } },
+          { weight: 55, text: 'No aceptaron. Se jugó igual y encima quedaste como el que quiso especular.', effects: { hinchada: -4, plantel: -2 } },
+        ],
+      },
+    ],
+  },
+  {
     id: 'gira-exterior',
     kind: 'dilema',
     title: 'GIRA POR ASIA',

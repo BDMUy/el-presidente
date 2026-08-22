@@ -10,8 +10,8 @@ import type { GameEvent, GameState } from '@/lib/engine/types';
 const tentaciones = CORRUPCION.filter((e) => !e.requires?.minFlag);
 const escalada = CORRUPCION.filter((e) => e.requires?.minFlag);
 
-function estado(prontuario: number, season = 8): GameState {
-  const base = startRun({ seed: 1, clubId: 'boca', modo: 'larga' });
+function estado(prontuario: number, season = 8, clubId = 'boca'): GameState {
+  const base = startRun({ seed: 1, clubId, modo: 'larga' });
   return {
     ...base,
     season,
@@ -19,6 +19,9 @@ function estado(prontuario: number, season = 8): GameState {
     resources: { caja: 50, hinchada: 80, socios: 100, plantel: 70, influencia: 80 },
   };
 }
+
+const escaladaDeArgentina = escalada.filter((e) => !e.requires?.country?.includes('uruguay'));
+const escaladaDeUruguay = escalada.filter((e) => !e.requires?.country?.includes('argentina'));
 
 const visible = (e: GameEvent, s: GameState) => meetsCondition(e.requires, s, 9);
 
@@ -36,11 +39,18 @@ describe('el hilo de corrupción', () => {
   });
 
   it('la escalada se abre de a poco, no toda junta', () => {
-    const abiertasEn = (p: number) => escalada.filter((e) => visible(e, estado(p, 16))).length;
+    const abiertasEn = (p: number) => escaladaDeArgentina.filter((e) => visible(e, estado(p, 16))).length;
     expect(abiertasEn(1)).toBe(0);
     expect(abiertasEn(2)).toBeGreaterThan(0);
-    expect(abiertasEn(2)).toBeLessThan(escalada.length);
-    expect(abiertasEn(9)).toBe(escalada.length);
+    expect(abiertasEn(2)).toBeLessThan(escaladaDeArgentina.length);
+    expect(abiertasEn(9)).toBe(escaladaDeArgentina.length);
+  });
+
+  it('lo mismo pasa con un club uruguayo, con la versión AUF de la carta', () => {
+    const abiertasEn = (p: number) =>
+      escaladaDeUruguay.filter((e) => visible(e, estado(p, 16, 'penarol'))).length;
+    expect(abiertasEn(1)).toBe(0);
+    expect(abiertasEn(9)).toBe(escaladaDeUruguay.length);
   });
 
   it('las tentaciones están disponibles sin haber hecho nada', () => {

@@ -228,6 +228,31 @@ export const ECONOMIA: GameEvent[] = [
     ],
   },
   {
+    id: 'eco-crisis-vecina',
+    kind: 'golpe',
+    title: 'SE FRENÓ EL CRUCE',
+    text: 'La devaluación del lado argentino paró en seco el turismo de compras. El free shop que te puso el nombre en la camiseta pide renegociar a la baja, o se va.',
+    requires: { minSeason: 2, country: ['uruguay'] },
+    weight: 2,
+    options: [
+      {
+        label: 'Aceptar la rebaja',
+        hint: 'Se cobra menos, pero se sigue cobrando.',
+        effects: { caja: -2.5 },
+      },
+      {
+        label: 'Rescindirle y salir a buscar otro',
+        hint: 'Unos meses sin nadie en el pecho. Y sin esa plata tampoco.',
+        effects: { caja: -4, influencia: 2 },
+      },
+      {
+        label: 'Buscar uno que le apueste al mercado local, no al turista',
+        hint: 'Menos plata que antes, pero no depende de lo que pase del otro lado del río.',
+        effects: { caja: -1.5, hinchada: -2 },
+      },
+    ],
+  },
+  {
     id: 'eco-museo',
     kind: 'color',
     title: 'EL MUSEO DEL CLUB',
