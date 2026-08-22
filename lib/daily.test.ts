@@ -4,6 +4,7 @@ import { CLUBS } from '@/content/clubs';
 import { computeScore } from '@/lib/engine/election';
 import { applyChoice, optionCount, replayRun, startRun } from '@/lib/engine/engine';
 import { Rand } from '@/lib/engine/rng';
+import { LEAGUES } from '@/lib/engine/types';
 import { fechaDelDia, faltaParaLaProxima, formatearEspera, presidenciaDelDia } from './daily';
 
 describe('Presidencia del Día', () => {
@@ -27,14 +28,14 @@ describe('Presidencia del Día', () => {
     }
   });
 
-  it('reparte clubes de las tres ligas argentinas a lo largo del año', () => {
+  it('reparte clubes de todas las ligas a lo largo del año', () => {
     const ligas = new Set<string>();
     for (let i = 0; i < 365; i++) {
       const fecha = new Date(Date.UTC(2026, 0, 1 + i)).toISOString().slice(0, 10);
       const club = CLUBS.find((c) => c.id === presidenciaDelDia(fecha).clubId)!;
       ligas.add(club.league);
     }
-    expect(ligas.size).toBe(3);
+    expect(ligas.size).toBe(Object.keys(LEAGUES).length);
   });
 
   it('la fecha se calcula con el reloj argentino, no con UTC', () => {

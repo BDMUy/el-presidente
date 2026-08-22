@@ -72,8 +72,10 @@ export function Arranque({
     });
   };
 
+  const seleccionables = useMemo(() => CLUBS.filter((c) => LIGAS.includes(c.league)), []);
+
   const sortear = () => {
-    const sorteado = CLUBS[Math.floor(Math.random() * CLUBS.length)];
+    const sorteado = seleccionables[Math.floor(Math.random() * seleccionables.length)];
     setLiga(sorteado.league);
     setElegido(sorteado.id);
   };
