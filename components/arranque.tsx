@@ -6,9 +6,11 @@ import { CLUBS } from '@/content/clubs';
 import { mandatosDe } from '@/lib/engine/election';
 import { expectedPosition } from '@/lib/engine/season';
 import {
+  countryOf,
   LEAGUES,
   MODOS,
   TEMPORADAS_POR_MODO,
+  type Country,
   type LeagueId,
   type Club,
   type Modo,
@@ -22,7 +24,14 @@ import { Ranking } from './ranking';
 import { SelectorClub } from './selector-club';
 import { VitrinaPanel } from './vitrina';
 
-const LIGAS: LeagueId[] = ['ar-primera', 'ar-nacional', 'ar-b'];
+const PAISES: Country[] = ['argentina', 'uruguay'];
+
+const PAIS_LABEL: Record<Country, string> = { argentina: 'Argentina', uruguay: 'Uruguay' };
+
+const LIGAS_POR_PAIS: Record<Country, LeagueId[]> = {
+  argentina: ['ar-primera', 'ar-nacional', 'ar-b'],
+  uruguay: ['uy-primera', 'uy-segunda'],
+};
 
 const PARTIDAS: Record<Modo, string> = {
   corta: 'Corta · 8 temporadas, 5 minutos',
@@ -53,8 +62,11 @@ export function Arranque({
   onAbandonar?: () => void;
 }) {
   const [elegido, setElegido] = useState<string | null>(null);
+  const [pais, setPais] = useState<Country>('argentina');
   const [liga, setLiga] = useState<LeagueId>('ar-primera');
   const [modo, setModo] = useState<Modo>('normal');
+
+  const ligasDelPais = LIGAS_POR_PAIS[pais];
 
   const deLaLiga = useMemo(
     () => CLUBS.filter((c) => c.league === liga).sort((a, b) => b.size - a.size),
@@ -62,6 +74,17 @@ export function Arranque({
   );
 
   const club = elegido ? (CLUBS.find((c) => c.id === elegido) ?? null) : null;
+
+  const cambiarPais = (valor: string) => {
+    const nuevo = valor as Country;
+    const nuevaLiga = LIGAS_POR_PAIS[nuevo][0];
+    setPais(nuevo);
+    setLiga(nuevaLiga);
+    setElegido((actual) => {
+      const c = actual ? CLUBS.find((x) => x.id === actual) : null;
+      return c && c.league === nuevaLiga ? actual : null;
+    });
+  };
 
   const cambiarLiga = (valor: string) => {
     const nueva = valor as LeagueId;
@@ -72,10 +95,9 @@ export function Arranque({
     });
   };
 
-  const seleccionables = useMemo(() => CLUBS.filter((c) => LIGAS.includes(c.league)), []);
-
   const sortear = () => {
-    const sorteado = seleccionables[Math.floor(Math.random() * seleccionables.length)];
+    const sorteado = CLUBS[Math.floor(Math.random() * CLUBS.length)];
+    setPais(countryOf(sorteado.league));
     setLiga(sorteado.league);
     setElegido(sorteado.id);
   };
@@ -144,14 +166,24 @@ export function Arranque({
           )}
 
           <div className="mt-3 grid gap-3 sm:grid-cols-2">
+            <CampoSelect etiqueta="País" valor={pais} onChange={cambiarPais}>
+              {PAISES.map((id) => (
+                <option key={id} value={id}>
+                  {PAIS_LABEL[id]}
+                </option>
+              ))}
+            </CampoSelect>
+
             <CampoSelect etiqueta="Categoría" valor={liga} onChange={cambiarLiga}>
-              {LIGAS.map((id) => (
+              {ligasDelPais.map((id) => (
                 <option key={id} value={id}>
                   {LEAGUES[id].label}
                 </option>
               ))}
             </CampoSelect>
+          </div>
 
+          <div className="mt-3">
             <SelectorClub clubes={deLaLiga} elegido={club} onElegir={setElegido} />
           </div>
 
