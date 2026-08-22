@@ -22,17 +22,17 @@ const SEASON_NOISE = 11;
 
 const TV_MONEY: Record<LeagueId, number> = {
   'ar-primera': 3.5, 'ar-nacional': 1, 'ar-b': 0.35,
-  'uy-primera': 2.6, 'uy-segunda': 0.4,
+  'uy-primera': 2.9, 'uy-segunda': 0.4,
 };
 
 const WAGE_FACTOR: Record<LeagueId, number> = {
   'ar-primera': 0.13, 'ar-nacional': 0.06, 'ar-b': 0.03,
-  'uy-primera': 0.085, 'uy-segunda': 0.04,
+  'uy-primera': 0.08, 'uy-segunda': 0.04,
 };
 
 const PRIZE_MAX: Record<LeagueId, number> = {
   'ar-primera': 3.5, 'ar-nacional': 0.9, 'ar-b': 0.3,
-  'uy-primera': 2.2, 'uy-segunda': 0.4,
+  'uy-primera': 2.4, 'uy-segunda': 0.4,
 };
 
 const SOCIO_INCOME = 0.045;
