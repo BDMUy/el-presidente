@@ -2,8 +2,8 @@ import { CLUBS } from '../content/clubs';
 import { ALL_EVENTS } from '../content/events';
 import { applyChoice, optionCount, startRun } from '../lib/engine/engine';
 import { Rand } from '../lib/engine/rng';
-import type { GameState, Modo } from '../lib/engine/types';
-import { MODOS, TEMPORADAS_POR_MODO } from '../lib/engine/types';
+import type { Country, GameState, Modo } from '../lib/engine/types';
+import { countryOf, MODOS, TEMPORADAS_POR_MODO } from '../lib/engine/types';
 
 const posicionales = process.argv.slice(2).filter((a) => !a.startsWith('--'));
 const runs = Number(posicionales[0] ?? 3000);
@@ -15,6 +15,13 @@ if (!(MODOS as readonly string[]).includes(argModo)) {
 }
 const modo = argModo as Modo;
 const TOPE = TEMPORADAS_POR_MODO[modo];
+
+const argPais = process.argv.find((a) => a.startsWith('--pais='))?.slice(7) as Country | undefined;
+const pool = argPais ? CLUBS.filter((c) => countryOf(c.league) === argPais) : CLUBS;
+if (pool.length === 0) {
+  console.error(`No hay clubes para pais="${argPais}"`);
+  process.exit(1);
+}
 
 function elegir(state: GameState, chooser: Rand): number {
   if (state.phase.kind === 'mercado') {
@@ -76,7 +83,7 @@ let sorteosEnLargas = 0;
 let repetidasEnLargas = 0;
 
 for (let i = 0; i < runs; i++) {
-  const club = CLUBS[i % CLUBS.length];
+  const club = pool[i % pool.length];
   const state = jugar(i * 2654435761, club.id);
   cartasPorPartida += state.usedEvents.length;
   temporadas += state.season;

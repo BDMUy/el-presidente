@@ -3,12 +3,14 @@ import { computeScore } from '../lib/engine/election';
 import { applyChoice, optionCount, startRun } from '../lib/engine/engine';
 import { enumerateAssignments, winProbability } from '../lib/engine/mesa-chica';
 import { Rand } from '../lib/engine/rng';
-import type { Effects, EndingId, GameState, Modo } from '../lib/engine/types';
-import { MODOS, TEMPORADAS_POR_MODO } from '../lib/engine/types';
+import type { Country, Effects, EndingId, GameState, Modo } from '../lib/engine/types';
+import { countryOf, MODOS, TEMPORADAS_POR_MODO } from '../lib/engine/types';
 
 const posicionales = process.argv.slice(2).filter((a) => !a.startsWith('--'));
 const runs = Number(posicionales[0] ?? 2000);
 const clubFilter = posicionales[1];
+
+const argPais = process.argv.find((a) => a.startsWith('--pais='))?.slice(7) as Country | undefined;
 
 const argModo = process.argv.find((a) => a.startsWith('--modo='))?.slice(7) ?? 'normal';
 const modos: Modo[] = argModo === 'todos' ? [...MODOS] : [argModo as Modo];
@@ -179,9 +181,12 @@ function report(policy: Policy, outcomes: Outcome[], modo: Modo) {
   console.log(`  ascensos por partida       ${(outcomes.reduce((s, o) => s + o.ascensos, 0) / n).toFixed(2)}`);
 }
 
-const pool = clubFilter ? CLUBS.filter((c) => c.id === clubFilter) : CLUBS;
+const pool = CLUBS.filter(
+  (c) => (!clubFilter || c.id === clubFilter) && (!argPais || countryOf(c.league) === argPais),
+);
 if (pool.length === 0) {
-  console.error(`No existe el club "${clubFilter}"`);
+  const filtros = [clubFilter && `club="${clubFilter}"`, argPais && `pais="${argPais}"`].filter(Boolean);
+  console.error(`No hay clubes para ${filtros.join(' ')}`);
   process.exit(1);
 }
 
