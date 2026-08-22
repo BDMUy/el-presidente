@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { CLUBS, getClub } from '@/content/clubs';
 import { ALL_EVENTS, findDuplicateIds } from '@/content/events';
+import { APELLIDOS } from '@/content/nombres';
 import { applyEffects, applyResources, estaInhibido, meetsCondition } from './effects';
 import { checkEarlyExit, computeScore, DEUDA_QUIEBRA, resolveElection } from './election';
 import { applyChoice, initialResources, optionCount, replayRun, startRun } from './engine';
@@ -380,7 +381,7 @@ describe('mercado', () => {
   it('no repite apellidos dentro de la misma ventana', () => {
     const rand = new Rand(2024);
     for (let i = 0; i < 300; i++) {
-      const offers = generateOffers('primera', 60, rand);
+      const offers = generateOffers('primera', 'argentina', 60, rand);
       const apellidos = offers.map((o) => o.name.split(' ')[1]);
       expect(new Set(apellidos).size).toBe(apellidos.length);
     }
@@ -389,8 +390,16 @@ describe('mercado', () => {
   it('siempre ofrece una venta, una compra y un libre', () => {
     const rand = new Rand(99);
     for (let i = 0; i < 100; i++) {
-      const kinds = generateOffers('nacional', 45, rand).map((o) => o.kind).sort();
+      const kinds = generateOffers('nacional', 'argentina', 45, rand).map((o) => o.kind).sort();
       expect(kinds).toEqual(['compra', 'libre', 'venta']);
+    }
+  });
+
+  it('genera nombres uruguayos para un club uruguayo', () => {
+    const rand = new Rand(2026);
+    for (let i = 0; i < 50; i++) {
+      const offers = generateOffers('primera', 'uruguay', 60, rand);
+      expect(offers.every((o) => !APELLIDOS.argentina.includes(o.name.split(' ').pop() ?? ''))).toBe(true);
     }
   });
 });

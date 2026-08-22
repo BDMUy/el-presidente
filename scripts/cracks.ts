@@ -5,7 +5,8 @@ import { Rand } from '../lib/engine/rng';
 import type { GameState } from '../lib/engine/types';
 
 const CORRIDAS = Number(process.argv[2] ?? 400);
-const CATALOGO = new Set(CRACKS);
+const TODOS_LOS_CRACKS = Object.values(CRACKS).flat();
+const CATALOGO = new Set(TODOS_LOS_CRACKS);
 
 let ventanas = 0;
 let conCrack = 0;
@@ -46,10 +47,10 @@ console.log(`\n${CORRIDAS} presidencias · ${ventanas} ventanas de mercado\n`);
 console.log(`  ventanas con un crack     ${conCrack} (${pct(conCrack, ventanas)})`);
 console.log(`  dos en la misma ventana   ${dosEnLaMisma}`);
 console.log(`  presidencias con repetido ${partidasConRepetido}`);
-console.log(`  del catálogo se vieron    ${frecuencia.size} de ${CRACKS.length}\n`);
+console.log(`  del catálogo se vieron    ${frecuencia.size} de ${TODOS_LOS_CRACKS.length}\n`);
 
 const orden = [...frecuencia.entries()].sort((a, b) => b[1] - a[1]);
-const sinVer = CRACKS.filter((c) => !frecuencia.has(c));
+const sinVer = TODOS_LOS_CRACKS.filter((c) => !frecuencia.has(c));
 if (orden.length > 0) {
   console.log(`  más visto  ${orden[0][0]} (${orden[0][1]})`);
   console.log(`  menos      ${orden[orden.length - 1][0]} (${orden[orden.length - 1][1]})`);

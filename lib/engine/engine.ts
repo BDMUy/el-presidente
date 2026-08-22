@@ -164,6 +164,7 @@ function openMercado(state: GameState): GameState {
 
   const all = generateOffers(
     state.category,
+    'argentina',
     state.resources.plantel,
     rand,
     state.season,

@@ -1,21 +1,9 @@
 import { CRACKS } from '@/content/parodias';
+import { APELLIDOS, NOMBRES } from '@/content/nombres';
 import { Rand } from './rng';
-import type { Category, PlayerOffer } from './types';
+import type { Category, Country, PlayerOffer } from './types';
 
 const CHANCE_CRACK = 0.35;
-
-const NOMBRES = [
-  'Matías', 'Lucas', 'Nahuel', 'Julián', 'Facundo', 'Tomás', 'Agustín', 'Franco',
-  'Bruno', 'Emiliano', 'Thiago', 'Valentín', 'Ramiro', 'Joaquín', 'Ignacio', 'Gonzalo',
-  'Alan', 'Brian', 'Kevin', 'Maximiliano', 'Rodrigo', 'Santiago', 'Elías', 'Lautaro',
-];
-
-const APELLIDOS = [
-  'Ferreyra', 'Quiroga', 'Bustamante', 'Ledesma', 'Ojeda', 'Sosa', 'Villalba', 'Cáceres',
-  'Maidana', 'Peralta', 'Aguirre', 'Coronel', 'Barrios', 'Zárate', 'Bogado', 'Insúa',
-  'Mansilla', 'Verón', 'Cabral', 'Rolón', 'Arce', 'Chávez', 'Godoy', 'Almirón',
-  'Escalante', 'Rivarola', 'Toledo', 'Miranda', 'Alderete', 'Paredes',
-];
 
 const ARQUETIPOS_COMPRA = [
   { archetype: '9 de área', note: 'No baja a buscarla, pero adentro no perdona.' },
@@ -41,11 +29,12 @@ const ARQUETIPOS_VENTA = [
 
 const PRICE_SCALE: Record<Category, number> = { primera: 1, nacional: 0.35, b: 0.15 };
 
-function nombre(rand: Rand, usados: Set<string>): string {
-  const disponibles = APELLIDOS.filter((a) => !usados.has(a));
-  const apellido = rand.pick(disponibles.length > 0 ? disponibles : APELLIDOS);
+function nombre(country: Country, rand: Rand, usados: Set<string>): string {
+  const apellidos = APELLIDOS[country];
+  const disponibles = apellidos.filter((a) => !usados.has(a));
+  const apellido = rand.pick(disponibles.length > 0 ? disponibles : apellidos);
   usados.add(apellido);
-  return `${rand.pick(NOMBRES)} ${apellido}`;
+  return `${rand.pick(NOMBRES[country])} ${apellido}`;
 }
 
 function round1(value: number): number {
@@ -54,6 +43,7 @@ function round1(value: number): number {
 
 export function generateOffers(
   category: Category,
+  country: Country,
   plantel: number,
   rand: Rand,
   season = 1,
@@ -63,11 +53,12 @@ export function generateOffers(
   const offers: PlayerOffer[] = [];
   const apellidosUsados = new Set<string>();
 
+  const cracks = CRACKS[country];
   const hayCrack = rand.chance(CHANCE_CRACK);
   const slotCrack = rand.int(0, 2);
-  const crack = CRACKS[(seed + season) % CRACKS.length];
+  const crack = cracks[(seed + season) % cracks.length];
   const nombreDe = (indice: number, usados: Set<string>): string =>
-    hayCrack && indice === slotCrack ? crack : nombre(rand, usados);
+    hayCrack && indice === slotCrack ? crack : nombre(country, rand, usados);
 
   const fuerte = rand.pick(ARQUETIPOS_COMPRA);
   const deltaFuerte = rand.int(6, 11);

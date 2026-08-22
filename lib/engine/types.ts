@@ -1,3 +1,5 @@
+export type Country = 'argentina' | 'uruguay';
+
 export type Category = 'primera' | 'nacional' | 'b';
 
 export interface Club {
