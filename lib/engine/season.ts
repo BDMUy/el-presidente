@@ -22,17 +22,17 @@ const SEASON_NOISE = 11;
 
 const TV_MONEY: Record<LeagueId, number> = {
   'ar-primera': 3.5, 'ar-nacional': 1, 'ar-b': 0.35,
-  'uy-primera': 2.9, 'uy-segunda': 0.4,
+  'uy-primera': 2.8, 'uy-segunda': 0.4,
 };
 
 const WAGE_FACTOR: Record<LeagueId, number> = {
   'ar-primera': 0.13, 'ar-nacional': 0.06, 'ar-b': 0.03,
-  'uy-primera': 0.08, 'uy-segunda': 0.04,
+  'uy-primera': 0.082, 'uy-segunda': 0.04,
 };
 
 const PRIZE_MAX: Record<LeagueId, number> = {
   'ar-primera': 3.5, 'ar-nacional': 0.9, 'ar-b': 0.3,
-  'uy-primera': 2.4, 'uy-segunda': 0.4,
+  'uy-primera': 2.3, 'uy-segunda': 0.4,
 };
 
 const SOCIO_INCOME = 0.045;
@@ -56,7 +56,7 @@ const DOMESTIC_CUP_TITLES = new Set(Object.values(DOMESTIC_CUPS).map((c) => c.ti
 
 const SIZE_RANGE: Record<LeagueId, [number, number]> = {
   'ar-primera': [3, 10], 'ar-nacional': [2, 6], 'ar-b': [1, 3],
-  'uy-primera': [2, 8], 'uy-segunda': [1, 3],
+  'uy-primera': [3, 8], 'uy-segunda': [1, 3],
 };
 
 export function expectedPosition(club: Club, league: LeagueId): number {
