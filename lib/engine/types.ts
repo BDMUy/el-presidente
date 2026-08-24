@@ -1,6 +1,9 @@
-export type Country = 'argentina' | 'uruguay';
+export type Country = 'argentina' | 'uruguay' | 'peru';
 
-export type LeagueId = 'ar-primera' | 'ar-nacional' | 'ar-b' | 'uy-primera' | 'uy-segunda';
+export type LeagueId =
+  | 'ar-primera' | 'ar-nacional' | 'ar-b'
+  | 'uy-primera' | 'uy-segunda'
+  | 'pe-primera' | 'pe-segunda';
 
 export interface Club {
   id: string;
@@ -52,6 +55,16 @@ export const LEAGUES: Record<LeagueId, LeagueDef> = {
     continental: false, label: 'Segunda División', championTitle: 'uy-segunda-liga',
     promotesTo: 'uy-primera', relegatesTo: null,
   },
+  'pe-primera': {
+    id: 'pe-primera', country: 'peru', tier: 1, teams: 18, promote: 0, relegate: 1,
+    continental: true, label: 'Liga 1', championTitle: 'pe-liga',
+    promotesTo: null, relegatesTo: 'pe-segunda',
+  },
+  'pe-segunda': {
+    id: 'pe-segunda', country: 'peru', tier: 2, teams: 16, promote: 2, relegate: 2,
+    continental: false, label: 'Liga 2', championTitle: 'pe-segunda-liga',
+    promotesTo: 'pe-primera', relegatesTo: null,
+  },
 };
 
 export function countryOf(league: LeagueId): Country {
@@ -61,6 +74,7 @@ export function countryOf(league: LeagueId): Country {
 export const DOMESTIC_CUPS: Record<Country, { title: TitleId; label: string }> = {
   argentina: { title: 'ar-copa', label: 'Copa Argentina' },
   uruguay: { title: 'uy-copa', label: 'Copa AUF Uruguay' },
+  peru: { title: 'pe-copa', label: 'Copa de la Liga' },
 };
 
 export interface Resources {
@@ -216,10 +230,13 @@ export type TitleId =
   | 'ar-liga-b'
   | 'uy-liga'
   | 'uy-segunda-liga'
+  | 'pe-liga'
+  | 'pe-segunda-liga'
   | 'ar-copa'
   | 'ar-supercopa'
   | 'uy-copa'
   | 'uy-supercopa'
+  | 'pe-copa'
   | 'libertadores'
   | 'sudamericana'
   | 'ascenso';
@@ -240,6 +257,9 @@ export const TITLES: Record<TitleId, TitleDef> = {
   'ar-supercopa': { id: 'ar-supercopa', label: 'Supercopa Argentina', points: 40 },
   'uy-copa': { id: 'uy-copa', label: 'Copa AUF Uruguay', points: 70 },
   'uy-supercopa': { id: 'uy-supercopa', label: 'Supercopa Uruguaya', points: 40 },
+  'pe-liga': { id: 'pe-liga', label: 'Liga 1', points: 100 },
+  'pe-segunda-liga': { id: 'pe-segunda-liga', label: 'Liga 2', points: 30 },
+  'pe-copa': { id: 'pe-copa', label: 'Copa de la Liga', points: 70 },
   libertadores: { id: 'libertadores', label: 'Copa Libertadores', points: 250 },
   sudamericana: { id: 'sudamericana', label: 'Copa Sudamericana', points: 140 },
   ascenso: { id: 'ascenso', label: 'Ascenso', points: 80 },

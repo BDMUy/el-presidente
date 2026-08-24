@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 
 import { CLUBS, getClub } from '@/content/clubs';
 import { ALL_EVENTS, findDuplicateIds } from '@/content/events';
-import { APELLIDOS } from '@/content/nombres';
+import { APELLIDOS, NOMBRES } from '@/content/nombres';
+import { CRACKS } from '@/content/parodias';
 import { applyEffects, applyResources, estaInhibido, meetsCondition } from './effects';
 import { checkEarlyExit, computeScore, DEUDA_QUIEBRA, resolveElection } from './election';
 import { applyChoice, initialResources, optionCount, replayRun, startRun } from './engine';
@@ -435,6 +436,20 @@ describe('mercado', () => {
     for (let i = 0; i < 50; i++) {
       const offers = generateOffers('uy-primera', 60, rand);
       expect(offers.every((o) => !APELLIDOS.argentina.includes(o.name.split(' ').pop() ?? ''))).toBe(true);
+    }
+  });
+
+  it('ningún crack coincide con una combinación real de nombre y apellido genéricos', () => {
+    for (const country of Object.keys(NOMBRES) as (keyof typeof NOMBRES)[]) {
+      const combos = new Set<string>();
+      for (const nombre of NOMBRES[country]) {
+        for (const apellido of APELLIDOS[country]) {
+          combos.add(`${nombre} ${apellido}`);
+        }
+      }
+      for (const crack of CRACKS[country]) {
+        expect(combos.has(crack), `${country}: ${crack}`).toBe(false);
+      }
     }
   });
 });

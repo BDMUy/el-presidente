@@ -54,7 +54,7 @@ export const ECONOMIA: GameEvent[] = [
     kind: 'dilema',
     title: 'PALCOS VIP',
     text: 'Una consultora propone convertir el sector central de la platea en palcos corporativos. Son mil socios menos y mucha plata más.',
-    requires: { minSeason: 3, league: ['ar-primera', 'uy-primera'] },
+    requires: { minSeason: 3, league: ['ar-primera', 'uy-primera', 'pe-primera'] },
     options: [
       {
         label: 'Construirlos',
@@ -249,6 +249,35 @@ export const ECONOMIA: GameEvent[] = [
         label: 'Buscar uno que le apueste al mercado local, no al turista',
         hint: 'Menos plata que antes, pero no depende de lo que pase del otro lado del río.',
         effects: { caja: -1.5, hinchada: -2 },
+      },
+    ],
+  },
+  {
+    id: 'eco-guerra-tv',
+    kind: 'golpe',
+    title: 'GUERRA DE SEÑALES',
+    text: 'El canal que tiene los derechos del torneo entra en conflicto con el que se los quiere quedar. Nadie sabe todavía en qué pantalla se ve el partido del domingo, y el cheque de este mes se retrasa.',
+    requires: { minSeason: 2, country: ['peru'] },
+    weight: 2,
+    options: [
+      {
+        label: 'Aceptar cobrar menos hasta que se resuelva',
+        hint: 'Una fracción de lo pactado, hasta que el lío se destrabe.',
+        effects: { caja: -2.5 },
+      },
+      {
+        label: 'Armar una señal propia por streaming',
+        hint: 'Cuesta ponerla en pie. Después no depende de nadie más.',
+        effects: { caja: -1.5, influencia: 2 },
+      },
+      {
+        label: 'Presionar junto al resto de los clubes',
+        hint: 'Juntos pesan más. El conflicto se estira igual un tiempo.',
+        effects: {
+          influencia: -3,
+          hinchada: -1,
+          deferred: [{ inSeasons: 1, text: 'El conflicto se resolvió y volvió la señal. Cobraste lo que te debían.', effects: { caja: 3 } }],
+        },
       },
     ],
   },

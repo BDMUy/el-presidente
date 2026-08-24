@@ -183,6 +183,25 @@ export const LEGADO: GameEvent[] = [
     ],
   },
   {
+    id: 'leg-oferta-fpf',
+    kind: 'dilema',
+    title: 'TE QUIEREN EN LA FPF',
+    text: 'Te ofrecen un cargo en la dirigencia del fútbol peruano. Es más poder, y es dejar el club a mitad de mandato.',
+    requires: { minSeason: 12, minInfluencia: 55, country: ['peru'] },
+    options: [
+      {
+        label: 'Aceptar el cargo y seguir en el club',
+        hint: 'Los dos sombreros. Nadie va a creer que no hay conflicto.',
+        effects: { influencia: 18, hinchada: -10, caja: 1.5 },
+      },
+      {
+        label: 'Rechazarlo',
+        hint: 'Te quedás donde estás. Y lo dicen todos los micrófonos.',
+        effects: { hinchada: 12, influencia: -6 },
+      },
+    ],
+  },
+  {
     id: 'leg-estatua-en-vida',
     kind: 'color',
     title: 'LA PEÑA DEL INTERIOR',

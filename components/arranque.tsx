@@ -24,13 +24,14 @@ import { Ranking } from './ranking';
 import { SelectorClub } from './selector-club';
 import { VitrinaPanel } from './vitrina';
 
-const PAISES: Country[] = ['argentina', 'uruguay'];
+const PAISES: Country[] = ['argentina', 'uruguay', 'peru'];
 
-const PAIS_LABEL: Record<Country, string> = { argentina: 'Argentina', uruguay: 'Uruguay' };
+const PAIS_LABEL: Record<Country, string> = { argentina: 'Argentina', uruguay: 'Uruguay', peru: 'Perú' };
 
 const LIGAS_POR_PAIS: Record<Country, LeagueId[]> = {
   argentina: ['ar-primera', 'ar-nacional', 'ar-b'],
   uruguay: ['uy-primera', 'uy-segunda'],
+  peru: ['pe-primera', 'pe-segunda'],
 };
 
 const PARTIDAS: Record<Modo, string> = {

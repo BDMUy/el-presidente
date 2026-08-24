@@ -5,7 +5,7 @@ import { ALL_EVENTS } from './events';
 import { applyEffects, meetsCondition } from '@/lib/engine/effects';
 import { finalEnding } from '@/lib/engine/election';
 import { startRun } from '@/lib/engine/engine';
-import type { GameEvent, GameState } from '@/lib/engine/types';
+import type { Country, GameEvent, GameState } from '@/lib/engine/types';
 
 const tentaciones = CORRUPCION.filter((e) => !e.requires?.minFlag);
 const escalada = CORRUPCION.filter((e) => e.requires?.minFlag);
@@ -20,8 +20,12 @@ function estado(prontuario: number, season = 8, clubId = 'boca'): GameState {
   };
 }
 
-const escaladaDeArgentina = escalada.filter((e) => !e.requires?.country?.includes('uruguay'));
-const escaladaDeUruguay = escalada.filter((e) => !e.requires?.country?.includes('argentina'));
+const escaladaDe = (country: Country) =>
+  escalada.filter((e) => !e.requires?.country || e.requires.country.includes(country));
+
+const escaladaDeArgentina = escaladaDe('argentina');
+const escaladaDeUruguay = escaladaDe('uruguay');
+const escaladaDePeru = escaladaDe('peru');
 
 const visible = (e: GameEvent, s: GameState) => meetsCondition(e.requires, s, 9);
 
@@ -51,6 +55,13 @@ describe('el hilo de corrupción', () => {
       escaladaDeUruguay.filter((e) => visible(e, estado(p, 16, 'penarol'))).length;
     expect(abiertasEn(1)).toBe(0);
     expect(abiertasEn(9)).toBe(escaladaDeUruguay.length);
+  });
+
+  it('lo mismo pasa con un club peruano, con la versión FPF de la carta', () => {
+    const abiertasEn = (p: number) =>
+      escaladaDePeru.filter((e) => visible(e, estado(p, 16, 'alianzalima'))).length;
+    expect(abiertasEn(1)).toBe(0);
+    expect(abiertasEn(9)).toBe(escaladaDePeru.length);
   });
 
   it('las tentaciones están disponibles sin haber hecho nada', () => {

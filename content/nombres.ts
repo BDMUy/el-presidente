@@ -11,6 +11,11 @@ export const NOMBRES: Record<Country, string[]> = {
     'Andrés', 'Fernando', 'Gastón', 'Leandro', 'Guillermo', 'Mauricio', 'Marcelo', 'Damián',
     'Cristian', 'Gerónimo', 'Jonathan', 'Guzmán', 'Maicol', 'Rodolfo', 'Braian', 'Nahitan',
   ],
+  peru: [
+    'Jefferson', 'Paolo', 'Christian', 'André', 'Renato', 'Yoshimar', 'Edison', 'Wilder',
+    'Percy', 'Gianluca', 'Josepmir', 'Aldair', 'Yordy', 'Piero', 'Jhilmar', 'Jesús',
+    'Wilmer', 'Alex', 'Kluivert', 'Raziel', 'Adrián', 'Erick', 'Josimar', 'Bryan',
+  ],
 };
 
 export const APELLIDOS: Record<Country, string[]> = {
@@ -25,5 +30,10 @@ export const APELLIDOS: Record<Country, string[]> = {
     'Núñez', 'Techera', 'Píriz', 'Correa', 'Larrosa', 'Ferreira', 'Pintos', 'Rivero',
     'Acosta', 'Reyes', 'Corbo', 'Nández', 'Laxalt', 'Coates', 'Cardozo', 'Damonte',
     'Recalde', 'Zunino', 'Viña', 'Ripa', 'Aguerre', 'Barreto',
+  ],
+  peru: [
+    'Farfán', 'Guerrero', 'Cueva', 'Advíncula', 'Trauco', 'Abram', 'Zambrano', 'Tapia',
+    'Yotún', 'Ruidíaz', 'Carrillo', 'Peña', 'Lapadula', 'Cartagena', 'Gallese', 'Corzo',
+    'Callens', 'Vílchez', 'Quispe', 'Mendoza', 'Rivera', 'Vargas', 'Chumpitaz', 'Balbín',
   ],
 };
