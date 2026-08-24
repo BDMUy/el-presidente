@@ -26,6 +26,7 @@ const escaladaDe = (country: Country) =>
 const escaladaDeArgentina = escaladaDe('argentina');
 const escaladaDeUruguay = escaladaDe('uruguay');
 const escaladaDePeru = escaladaDe('peru');
+const escaladaDeColombia = escaladaDe('colombia');
 
 const visible = (e: GameEvent, s: GameState) => meetsCondition(e.requires, s, 9);
 
@@ -62,6 +63,13 @@ describe('el hilo de corrupción', () => {
       escaladaDePeru.filter((e) => visible(e, estado(p, 16, 'alianzalima'))).length;
     expect(abiertasEn(1)).toBe(0);
     expect(abiertasEn(9)).toBe(escaladaDePeru.length);
+  });
+
+  it('lo mismo pasa con un club colombiano, con la versión Dimayor de la carta', () => {
+    const abiertasEn = (p: number) =>
+      escaladaDeColombia.filter((e) => visible(e, estado(p, 16, 'millonarios'))).length;
+    expect(abiertasEn(1)).toBe(0);
+    expect(abiertasEn(9)).toBe(escaladaDeColombia.length);
   });
 
   it('las tentaciones están disponibles sin haber hecho nada', () => {

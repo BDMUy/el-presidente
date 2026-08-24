@@ -15,6 +15,7 @@ const LEAGUE_AVERAGE: Record<LeagueId, number> = {
   'ar-primera': 58, 'ar-nacional': 42, 'ar-b': 30,
   'uy-primera': 50, 'uy-segunda': 28,
   'pe-primera': 50, 'pe-segunda': 28,
+  'co-primera': 54, 'co-segunda': 28,
 };
 
 const LEAGUE_SPREAD = 7;
@@ -25,18 +26,21 @@ const TV_MONEY: Record<LeagueId, number> = {
   'ar-primera': 3.5, 'ar-nacional': 1, 'ar-b': 0.35,
   'uy-primera': 2.8, 'uy-segunda': 0.4,
   'pe-primera': 2.2, 'pe-segunda': 0.4,
+  'co-primera': 3, 'co-segunda': 0.4,
 };
 
 const WAGE_FACTOR: Record<LeagueId, number> = {
   'ar-primera': 0.13, 'ar-nacional': 0.06, 'ar-b': 0.03,
   'uy-primera': 0.082, 'uy-segunda': 0.04,
   'pe-primera': 0.095, 'pe-segunda': 0.04,
+  'co-primera': 0.1, 'co-segunda': 0.04,
 };
 
 const PRIZE_MAX: Record<LeagueId, number> = {
   'ar-primera': 3.5, 'ar-nacional': 0.9, 'ar-b': 0.3,
   'uy-primera': 2.3, 'uy-segunda': 0.4,
   'pe-primera': 1.8, 'pe-segunda': 0.4,
+  'co-primera': 2.5, 'co-segunda': 0.4,
 };
 
 const SOCIO_INCOME = 0.045;
@@ -54,6 +58,9 @@ const TITLE_INCOME: Partial<Record<TitleId, number>> = {
   'uy-copa': 1.5,
   'uy-supercopa': 0.75,
   'pe-copa': 0.8,
+  'co-liga': 4,
+  'co-segunda-liga': 0.7,
+  'co-copa': 2,
   libertadores: 18,
   sudamericana: 6,
   ascenso: 4,
@@ -67,6 +74,7 @@ const SIZE_RANGE: Record<LeagueId, [number, number]> = {
   'ar-primera': [3, 10], 'ar-nacional': [2, 6], 'ar-b': [1, 3],
   'uy-primera': [3, 8], 'uy-segunda': [1, 3],
   'pe-primera': [2, 9], 'pe-segunda': [1, 3],
+  'co-primera': [2, 9], 'co-segunda': [1, 3],
 };
 
 export function expectedPosition(club: Club, league: LeagueId): number {

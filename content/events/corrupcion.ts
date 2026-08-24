@@ -405,6 +405,35 @@ export const CORRUPCION: GameEvent[] = [
     ],
   },
   {
+    id: 'cor-inhabilitacion-co',
+    kind: 'golpe',
+    title: 'PIDEN INHABILITARTE',
+    text: 'La Dimayor analiza inhabilitarte para ejercer cargos en el fútbol. No es una condena penal: es peor, porque no necesita juicio y sale la semana que viene.',
+    weight: 3,
+    requires: { minFlag: { prontuario: 8 }, minSeason: 6, country: ['colombia'] },
+    options: [
+      {
+        label: 'Aceptar y poner a alguien de confianza',
+        hint: 'Salís del cargo y seguís mandando. Eso creés.',
+        effects: { influencia: -12, hinchada: -8 },
+      },
+      {
+        label: 'Negociar con los que mandan',
+        hint: 'Todo lo que te queda, en una llamada.',
+        requires: { minInfluencia: 25 },
+        effects: { influencia: -25, hinchada: -6 },
+      },
+      {
+        label: 'Ir de frente y pelearla',
+        hint: 'Sin teléfonos, con la gente. Puede alcanzar.',
+        random: [
+          { weight: 35, text: 'La hinchada coreó tu nombre durante nueve minutos y la Dimayor archivó el expediente.', effects: { hinchada: 4, influencia: -6 } },
+          { weight: 65, text: 'Te inhabilitaron igual. Firmaste la salida un jueves, sin cámaras.', effects: { hinchada: -20, influencia: -20 } },
+        ],
+      },
+    ],
+  },
+  {
     id: 'cor-el-arrepentido',
     kind: 'golpe',
     title: 'ALGUIEN SE ARREPINTIÓ',

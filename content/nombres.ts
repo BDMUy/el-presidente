@@ -16,6 +16,11 @@ export const NOMBRES: Record<Country, string[]> = {
     'Percy', 'Gianluca', 'Josepmir', 'Aldair', 'Yordy', 'Piero', 'Jhilmar', 'Jesús',
     'Wilmer', 'Alex', 'Kluivert', 'Raziel', 'Adrián', 'Erick', 'Josimar', 'Bryan',
   ],
+  colombia: [
+    'Radamel', 'James', 'Juan', 'David', 'Mario', 'Willington', 'Arnoldo', 'Óscar',
+    'Adolfo', 'Antony', 'Luis', 'Yerry', 'Duván', 'Wilmar', 'Jhon', 'Stiven',
+    'Jáder', 'Yeison', 'Éder', 'Deiver', 'Frank', 'Wilson', 'Harold', 'Gustavo',
+  ],
 };
 
 export const APELLIDOS: Record<Country, string[]> = {
@@ -35,5 +40,10 @@ export const APELLIDOS: Record<Country, string[]> = {
     'Farfán', 'Guerrero', 'Cueva', 'Advíncula', 'Trauco', 'Abram', 'Zambrano', 'Tapia',
     'Yotún', 'Ruidíaz', 'Carrillo', 'Peña', 'Lapadula', 'Cartagena', 'Gallese', 'Corzo',
     'Callens', 'Vílchez', 'Quispe', 'Mendoza', 'Rivera', 'Vargas', 'Chumpitaz', 'Balbín',
+  ],
+  colombia: [
+    'Valderrama', 'Higuita', 'Asprilla', 'Rincón', 'Córdoba', 'Falcao', 'Bacca', 'Cuadrado',
+    'Ospina', 'Escobar', 'Yepes', 'Ángel', 'Ortiz', 'Iguarán', 'Valencia', 'Ávila',
+    'Díaz', 'Lerma', 'Gómez', 'Muñoz', 'Zapata', 'Mosquera', 'Perea', 'Borja',
   ],
 };

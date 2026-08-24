@@ -54,7 +54,7 @@ export const ECONOMIA: GameEvent[] = [
     kind: 'dilema',
     title: 'PALCOS VIP',
     text: 'Una consultora propone convertir el sector central de la platea en palcos corporativos. Son mil socios menos y mucha plata más.',
-    requires: { minSeason: 3, league: ['ar-primera', 'uy-primera', 'pe-primera'] },
+    requires: { minSeason: 3, league: ['ar-primera', 'uy-primera', 'pe-primera', 'co-primera'] },
     options: [
       {
         label: 'Construirlos',
@@ -278,6 +278,34 @@ export const ECONOMIA: GameEvent[] = [
           hinchada: -1,
           deferred: [{ inSeasons: 1, text: 'El conflicto se resolvió y volvió la señal. Cobraste lo que te debían.', effects: { caja: 3 } }],
         },
+      },
+    ],
+  },
+  {
+    id: 'eco-oferta-ficha',
+    kind: 'golpe',
+    title: 'QUIEREN LA FICHA',
+    text: 'Un grupo inversor de otra ciudad ofrece comprar la ficha del club para trasladarla. Pasa seguido acá: la plata alcanza para salir de todos los problemas.',
+    requires: { minSeason: 2, country: ['colombia'] },
+    weight: 2,
+    options: [
+      {
+        label: 'Escuchar la oferta y negociar',
+        hint: 'Entra plata fuerte. La hinchada se entera y no lo toma bien.',
+        effects: { caja: 5, hinchada: -12, influencia: -3 },
+      },
+      {
+        label: 'Rechazarla de plano',
+        hint: 'La gente respira. La ficha, sin comprador, vale menos si algún día hace falta venderla.',
+        effects: { hinchada: 8, influencia: 2 },
+      },
+      {
+        label: 'Usarla de amenaza para pedir ayuda a la alcaldía',
+        hint: 'Juego de café con leche. A veces sale bien.',
+        random: [
+          { weight: 50, text: 'La alcaldía aportó para retenerlos. Se salvó el nombre y entró algo de plata.', effects: { caja: 2, influencia: 3 } },
+          { weight: 50, text: 'La alcaldía no mordió el anzuelo. Quedaste pidiendo en público y sin nada.', effects: { influencia: -6, hinchada: -4 } },
+        ],
       },
     ],
   },
