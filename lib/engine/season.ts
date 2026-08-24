@@ -41,18 +41,20 @@ const TITLE_INCOME: Partial<Record<TitleId, number>> = {
   'ar-liga-primera': 6,
   'ar-liga-nacional': 2,
   'ar-liga-b': 1,
-  'uy-liga': 6,
-  'uy-segunda-liga': 1,
+  'uy-liga': 3,
+  'uy-segunda-liga': 0.5,
   'ar-copa': 3,
   'ar-supercopa': 1.5,
-  'uy-copa': 3,
-  'uy-supercopa': 1.5,
+  'uy-copa': 1.5,
+  'uy-supercopa': 0.75,
   libertadores: 18,
   sudamericana: 6,
   ascenso: 4,
 };
 
 const DOMESTIC_CUP_TITLES = new Set(Object.values(DOMESTIC_CUPS).map((c) => c.title));
+
+const CONTINENTAL_RATIO = 6 / 30;
 
 const SIZE_RANGE: Record<LeagueId, [number, number]> = {
   'ar-primera': [3, 10], 'ar-nacional': [2, 6], 'ar-b': [1, 3],
@@ -157,8 +159,9 @@ export function buildSeasonResult(
   const promoted = promotedDirect || promotedPlayoff;
   const relegated = position > rules.teams - rules.relegate;
 
+  const continentalSlots = Math.round(rules.teams * CONTINENTAL_RATIO);
   const qualifiedContinental =
-    (rules.continental && position <= 6) ||
+    (rules.continental && position <= continentalSlots) ||
     titles.some((t) => DOMESTIC_CUP_TITLES.has(t)) ||
     titles.includes('libertadores') ||
     titles.includes('sudamericana');
