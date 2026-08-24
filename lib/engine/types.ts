@@ -43,7 +43,7 @@ export const LEAGUES: Record<LeagueId, LeagueDef> = {
     promotesTo: 'ar-nacional', relegatesTo: null,
   },
   'uy-primera': {
-    id: 'uy-primera', country: 'uruguay', tier: 1, teams: 16, promote: 0, relegate: 2,
+    id: 'uy-primera', country: 'uruguay', tier: 1, teams: 16, promote: 0, relegate: 1,
     continental: true, label: 'Liga AUF Uruguaya', championTitle: 'uy-liga',
     promotesTo: null, relegatesTo: 'uy-segunda',
   },
