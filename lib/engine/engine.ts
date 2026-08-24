@@ -27,6 +27,7 @@ import type {
   Effects,
   GameEvent,
   GameState,
+  LeagueId,
   Modo,
   PlayerOffer,
   Resources,
@@ -52,9 +53,19 @@ export function initialResources(club: Club): Resources {
 
 const DEUDA_EN_LLAMAS = -22;
 
+const BONUS_PLANTEL_LLAMAS: Record<LeagueId, number> = {
+  'ar-primera': 12, 'ar-nacional': 12, 'ar-b': 12,
+  'uy-primera': 7, 'uy-segunda': 12,
+};
+
 function recibirElClubEnLlamas(club: Club): Resources {
   const base = initialResources(club);
-  return { ...base, caja: DEUDA_EN_LLAMAS, plantel: base.plantel + 12, hinchada: 40 };
+  return {
+    ...base,
+    caja: DEUDA_EN_LLAMAS,
+    plantel: base.plantel + BONUS_PLANTEL_LLAMAS[club.league],
+    hinchada: 40,
+  };
 }
 
 export interface StartOptions {
