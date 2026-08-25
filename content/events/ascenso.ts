@@ -1,6 +1,6 @@
 import type { GameEvent } from '@/lib/engine/types';
 
-const SOLO_ASCENSO = { league: ['ar-nacional', 'ar-b', 'uy-segunda', 'pe-segunda', 'co-segunda', 'cl-segunda', 'py-segunda'] as const };
+const SOLO_ASCENSO = { league: ['ar-nacional', 'ar-b', 'uy-segunda', 'pe-segunda', 'co-segunda', 'cl-segunda', 'py-segunda', 'bo-segunda'] as const };
 
 export const ASCENSO: GameEvent[] = [
   {
@@ -74,7 +74,7 @@ export const ASCENSO: GameEvent[] = [
     kind: 'dilema',
     title: 'EL LATERAL TRABAJA DE ALBAÑIL',
     text: 'Tu mejor lateral entrena a la mañana y trabaja en una obra a la tarde. Llega fundido a los partidos.',
-    requires: { league: ['ar-b', 'uy-segunda', 'pe-segunda', 'co-segunda', 'cl-segunda', 'py-segunda'] },
+    requires: { league: ['ar-b', 'uy-segunda', 'pe-segunda', 'co-segunda', 'cl-segunda', 'py-segunda', 'bo-segunda'] },
     options: [
       {
         label: 'Ponerle un contrato profesional',

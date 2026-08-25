@@ -35,6 +35,7 @@ const PRICE_SCALE: Record<LeagueId, number> = {
   'co-primera': 0.9, 'co-segunda': 0.2,
   'cl-primera': 0.85, 'cl-segunda': 0.2,
   'py-primera': 0.75, 'py-segunda': 0.2,
+  'bo-primera': 0.7, 'bo-segunda': 0.2,
 };
 
 function nombre(country: Country, rand: Rand, usados: Set<string>): string {

@@ -54,7 +54,7 @@ export const ECONOMIA: GameEvent[] = [
     kind: 'dilema',
     title: 'PALCOS VIP',
     text: 'Una consultora propone convertir el sector central de la platea en palcos corporativos. Son mil socios menos y mucha plata más.',
-    requires: { minSeason: 3, league: ['ar-primera', 'uy-primera', 'pe-primera', 'co-primera', 'cl-primera', 'py-primera'] },
+    requires: { minSeason: 3, league: ['ar-primera', 'uy-primera', 'pe-primera', 'co-primera', 'cl-primera', 'py-primera', 'bo-primera'] },
     options: [
       {
         label: 'Construirlos',
@@ -362,6 +362,34 @@ export const ECONOMIA: GameEvent[] = [
         label: 'Denunciarlo públicamente',
         hint: 'La gente te banca. Arriba te anotan.',
         effects: { hinchada: 6, influencia: -8 },
+      },
+    ],
+  },
+  {
+    id: 'eco-viaje-a-la-altura',
+    kind: 'dilema',
+    title: 'VIAJAN A JUGAR A LA ALTURA',
+    text: 'Toca visitante en El Alto, a más de cuatro mil metros. El cuerpo médico pide anticipar el viaje varios días para aclimatarse; el calendario no da para tanto.',
+    requires: { minSeason: 2, country: ['bolivia'] },
+    weight: 2,
+    options: [
+      {
+        label: 'Viajar con una semana de anticipación',
+        hint: 'El cuerpo no rinde si llega de golpe. Cuesta caja y días de trabajo en casa.',
+        effects: { caja: -1.5, plantel: 2 },
+      },
+      {
+        label: 'Instalar una cámara hipobárica en el predio',
+        hint: 'Inversión grande. Sirve para este viaje y para todos los que vengan.',
+        effects: {
+          caja: -4,
+          deferred: [{ inSeasons: 3, text: 'La cámara hipobárica ya se pagó sola: cada viaje a la altura rinde mejor.', effects: { plantel: 3 } }],
+        },
+      },
+      {
+        label: 'Viajar el día anterior, como siempre',
+        hint: 'Se ahorra el gasto. El equipo llega con la cabeza pesada.',
+        effects: { plantel: -3 },
       },
     ],
   },

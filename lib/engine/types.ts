@@ -1,4 +1,4 @@
-export type Country = 'argentina' | 'uruguay' | 'peru' | 'colombia' | 'chile' | 'paraguay';
+export type Country = 'argentina' | 'uruguay' | 'peru' | 'colombia' | 'chile' | 'paraguay' | 'bolivia';
 
 export type LeagueId =
   | 'ar-primera' | 'ar-nacional' | 'ar-b'
@@ -6,7 +6,8 @@ export type LeagueId =
   | 'pe-primera' | 'pe-segunda'
   | 'co-primera' | 'co-segunda'
   | 'cl-primera' | 'cl-segunda'
-  | 'py-primera' | 'py-segunda';
+  | 'py-primera' | 'py-segunda'
+  | 'bo-primera' | 'bo-segunda';
 
 export interface Club {
   id: string;
@@ -98,6 +99,16 @@ export const LEAGUES: Record<LeagueId, LeagueDef> = {
     continental: false, label: 'División Intermedia', championTitle: 'py-segunda-liga',
     promotesTo: 'py-primera', relegatesTo: null,
   },
+  'bo-primera': {
+    id: 'bo-primera', country: 'bolivia', tier: 1, teams: 16, promote: 0, relegate: 1,
+    continental: true, label: 'División Profesional', championTitle: 'bo-liga',
+    promotesTo: null, relegatesTo: 'bo-segunda',
+  },
+  'bo-segunda': {
+    id: 'bo-segunda', country: 'bolivia', tier: 2, teams: 9, promote: 1, relegate: 1,
+    continental: false, label: 'Copa Simón Bolívar', championTitle: 'bo-segunda-liga',
+    promotesTo: 'bo-primera', relegatesTo: null,
+  },
 };
 
 export function countryOf(league: LeagueId): Country {
@@ -111,6 +122,7 @@ export const DOMESTIC_CUPS: Record<Country, { title: TitleId; label: string }> =
   colombia: { title: 'co-copa', label: 'Copa BetPlay' },
   chile: { title: 'cl-copa', label: 'Copa Chile' },
   paraguay: { title: 'py-copa', label: 'Copa Paraguay' },
+  bolivia: { title: 'bo-copa', label: 'Copa Bolivia' },
 };
 
 export interface Resources {
@@ -274,6 +286,8 @@ export type TitleId =
   | 'cl-segunda-liga'
   | 'py-liga'
   | 'py-segunda-liga'
+  | 'bo-liga'
+  | 'bo-segunda-liga'
   | 'ar-copa'
   | 'ar-supercopa'
   | 'uy-copa'
@@ -282,6 +296,7 @@ export type TitleId =
   | 'co-copa'
   | 'cl-copa'
   | 'py-copa'
+  | 'bo-copa'
   | 'libertadores'
   | 'sudamericana'
   | 'ascenso';
@@ -314,6 +329,9 @@ export const TITLES: Record<TitleId, TitleDef> = {
   'py-liga': { id: 'py-liga', label: 'Copa de Primera', points: 100 },
   'py-segunda-liga': { id: 'py-segunda-liga', label: 'División Intermedia', points: 30 },
   'py-copa': { id: 'py-copa', label: 'Copa Paraguay', points: 70 },
+  'bo-liga': { id: 'bo-liga', label: 'División Profesional', points: 100 },
+  'bo-segunda-liga': { id: 'bo-segunda-liga', label: 'Copa Simón Bolívar', points: 30 },
+  'bo-copa': { id: 'bo-copa', label: 'Copa Bolivia', points: 70 },
   libertadores: { id: 'libertadores', label: 'Copa Libertadores', points: 250 },
   sudamericana: { id: 'sudamericana', label: 'Copa Sudamericana', points: 140 },
   ascenso: { id: 'ascenso', label: 'Ascenso', points: 80 },

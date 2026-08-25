@@ -31,6 +31,11 @@ export const NOMBRES: Record<Country, string[]> = {
     'Francisco', 'Diego', 'Édgar', 'Jonathan', 'Cristian', 'Richard', 'Robert', 'Ángel',
     'Adalberto', 'Gustavo', 'Miguel', 'Junior', 'Nelson', 'Fredy', 'Iván', 'Ever',
   ],
+  bolivia: [
+    'Marco', 'Joaquín', 'Erwin', 'Julio', 'Milton', 'Ronald', 'Vladimir', 'Jhasmani',
+    'Marcelo', 'Wilder', 'Alejandro', 'Diego', 'Henry', 'Raúl', 'Grover', 'Óscar',
+    'Rudy', 'Franz', 'Gualberto', 'Freddy', 'Boris', 'Limbert', 'Wálter', 'Edwin',
+  ],
 };
 
 export const APELLIDOS: Record<Country, string[]> = {
@@ -65,5 +70,10 @@ export const APELLIDOS: Record<Country, string[]> = {
     'Villar', 'Gamarra', 'Caniza', 'Torres', 'Cardozo', 'González', 'Almirón', 'Gómez',
     'Alcaraz', 'Ayala', 'Arce', 'Barreto', 'Santana', 'Riveros', 'Ortiz', 'Romero',
     'Román', 'Duarte', 'Ríos', 'Vera', 'Rojas', 'Insfrán', 'Recalde', 'Franco',
+  ],
+  bolivia: [
+    'Sánchez', 'Sandy', 'Trucco', 'Soria', 'Campos', 'Terrazas', 'Chumacero', 'Wayar',
+    'Vaca', 'Mamani', 'Quispe', 'Choque', 'Condori', 'Flores', 'Justiniano', 'Peña',
+    'Melgar', 'Zambrana', 'Áñez', 'Ustariz', 'Pinto', 'Rivero', 'Egüez', 'Céspedes',
   ],
 };

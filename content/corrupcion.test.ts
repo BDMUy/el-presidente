@@ -29,6 +29,7 @@ const escaladaDePeru = escaladaDe('peru');
 const escaladaDeColombia = escaladaDe('colombia');
 const escaladaDeChile = escaladaDe('chile');
 const escaladaDeParaguay = escaladaDe('paraguay');
+const escaladaDeBolivia = escaladaDe('bolivia');
 
 const visible = (e: GameEvent, s: GameState) => meetsCondition(e.requires, s, 9);
 
@@ -86,6 +87,13 @@ describe('el hilo de corrupción', () => {
       escaladaDeParaguay.filter((e) => visible(e, estado(p, 16, 'olimpia'))).length;
     expect(abiertasEn(1)).toBe(0);
     expect(abiertasEn(9)).toBe(escaladaDeParaguay.length);
+  });
+
+  it('lo mismo pasa con un club boliviano, con la versión FBF de la carta', () => {
+    const abiertasEn = (p: number) =>
+      escaladaDeBolivia.filter((e) => visible(e, estado(p, 16, 'bolivar'))).length;
+    expect(abiertasEn(1)).toBe(0);
+    expect(abiertasEn(9)).toBe(escaladaDeBolivia.length);
   });
 
   it('las tentaciones están disponibles sin haber hecho nada', () => {

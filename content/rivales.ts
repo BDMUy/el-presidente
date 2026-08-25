@@ -25,4 +25,8 @@ export const RIVALES: Record<Country, string[]> = {
     'Olimpia', 'Cerro Porteño', 'Libertad', 'Guaraní', 'Nacional', 'Luqueño',
     '2 de Mayo', 'Recoleta', 'Trinidense', 'Ameliano', 'San Lorenzo', 'Rubio Ñu',
   ],
+  bolivia: [
+    'Bolívar', 'The Strongest', 'Always Ready', 'ABB', 'Aurora', 'Blooming',
+    'Guabirá', 'Oriente Petrolero', 'GV San José', 'Nacional Potosí', 'Real Potosí', 'Independiente Petrolero',
+  ],
 };
