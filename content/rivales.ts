@@ -17,4 +17,8 @@ export const RIVALES: Record<Country, string[]> = {
     'Millonarios', 'Atlético Nacional', 'América de Cali', 'Independiente Santa Fe', 'Independiente Medellín',
     'Junior', 'Deportivo Cali', 'Once Caldas', 'Deportes Tolima', 'Atlético Bucaramanga', 'Cúcuta Deportivo', 'Envigado',
   ],
+  chile: [
+    'Colo-Colo', 'U. de Chile', 'U. Católica', 'Everton', "O'Higgins", 'Cobreloa',
+    'Unión Española', 'Palestino', 'Audax Italiano', 'Huachipato', 'Wanderers', 'Coquimbo Unido',
+  ],
 };

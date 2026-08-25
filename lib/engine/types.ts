@@ -1,10 +1,11 @@
-export type Country = 'argentina' | 'uruguay' | 'peru' | 'colombia';
+export type Country = 'argentina' | 'uruguay' | 'peru' | 'colombia' | 'chile';
 
 export type LeagueId =
   | 'ar-primera' | 'ar-nacional' | 'ar-b'
   | 'uy-primera' | 'uy-segunda'
   | 'pe-primera' | 'pe-segunda'
-  | 'co-primera' | 'co-segunda';
+  | 'co-primera' | 'co-segunda'
+  | 'cl-primera' | 'cl-segunda';
 
 export interface Club {
   id: string;
@@ -76,6 +77,16 @@ export const LEAGUES: Record<LeagueId, LeagueDef> = {
     continental: false, label: 'Categoría Primera B', championTitle: 'co-segunda-liga',
     promotesTo: 'co-primera', relegatesTo: null,
   },
+  'cl-primera': {
+    id: 'cl-primera', country: 'chile', tier: 1, teams: 16, promote: 0, relegate: 1,
+    continental: true, label: 'Liga de Primera', championTitle: 'cl-liga',
+    promotesTo: null, relegatesTo: 'cl-segunda',
+  },
+  'cl-segunda': {
+    id: 'cl-segunda', country: 'chile', tier: 2, teams: 16, promote: 1, relegate: 1,
+    continental: false, label: 'Primera B', championTitle: 'cl-segunda-liga',
+    promotesTo: 'cl-primera', relegatesTo: null,
+  },
 };
 
 export function countryOf(league: LeagueId): Country {
@@ -87,6 +98,7 @@ export const DOMESTIC_CUPS: Record<Country, { title: TitleId; label: string }> =
   uruguay: { title: 'uy-copa', label: 'Copa AUF Uruguay' },
   peru: { title: 'pe-copa', label: 'Copa de la Liga' },
   colombia: { title: 'co-copa', label: 'Copa BetPlay' },
+  chile: { title: 'cl-copa', label: 'Copa Chile' },
 };
 
 export interface Resources {
@@ -246,12 +258,15 @@ export type TitleId =
   | 'pe-segunda-liga'
   | 'co-liga'
   | 'co-segunda-liga'
+  | 'cl-liga'
+  | 'cl-segunda-liga'
   | 'ar-copa'
   | 'ar-supercopa'
   | 'uy-copa'
   | 'uy-supercopa'
   | 'pe-copa'
   | 'co-copa'
+  | 'cl-copa'
   | 'libertadores'
   | 'sudamericana'
   | 'ascenso';
@@ -278,6 +293,9 @@ export const TITLES: Record<TitleId, TitleDef> = {
   'co-liga': { id: 'co-liga', label: 'Categoría Primera A', points: 100 },
   'co-segunda-liga': { id: 'co-segunda-liga', label: 'Categoría Primera B', points: 30 },
   'co-copa': { id: 'co-copa', label: 'Copa BetPlay', points: 70 },
+  'cl-liga': { id: 'cl-liga', label: 'Liga de Primera', points: 100 },
+  'cl-segunda-liga': { id: 'cl-segunda-liga', label: 'Primera B', points: 30 },
+  'cl-copa': { id: 'cl-copa', label: 'Copa Chile', points: 70 },
   libertadores: { id: 'libertadores', label: 'Copa Libertadores', points: 250 },
   sudamericana: { id: 'sudamericana', label: 'Copa Sudamericana', points: 140 },
   ascenso: { id: 'ascenso', label: 'Ascenso', points: 80 },

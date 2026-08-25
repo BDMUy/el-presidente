@@ -27,6 +27,7 @@ const escaladaDeArgentina = escaladaDe('argentina');
 const escaladaDeUruguay = escaladaDe('uruguay');
 const escaladaDePeru = escaladaDe('peru');
 const escaladaDeColombia = escaladaDe('colombia');
+const escaladaDeChile = escaladaDe('chile');
 
 const visible = (e: GameEvent, s: GameState) => meetsCondition(e.requires, s, 9);
 
@@ -70,6 +71,13 @@ describe('el hilo de corrupción', () => {
       escaladaDeColombia.filter((e) => visible(e, estado(p, 16, 'millonarios'))).length;
     expect(abiertasEn(1)).toBe(0);
     expect(abiertasEn(9)).toBe(escaladaDeColombia.length);
+  });
+
+  it('lo mismo pasa con un club chileno, con la versión ANFP de la carta', () => {
+    const abiertasEn = (p: number) =>
+      escaladaDeChile.filter((e) => visible(e, estado(p, 16, 'colocolo'))).length;
+    expect(abiertasEn(1)).toBe(0);
+    expect(abiertasEn(9)).toBe(escaladaDeChile.length);
   });
 
   it('las tentaciones están disponibles sin haber hecho nada', () => {

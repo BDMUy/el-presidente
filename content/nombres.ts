@@ -21,6 +21,11 @@ export const NOMBRES: Record<Country, string[]> = {
     'Adolfo', 'Antony', 'Luis', 'Yerry', 'Duván', 'Wilmar', 'Jhon', 'Stiven',
     'Jáder', 'Yeison', 'Éder', 'Deiver', 'Frank', 'Wilson', 'Harold', 'Gustavo',
   ],
+  chile: [
+    'Arturo', 'Alexis', 'Claudio', 'Gary', 'Eduardo', 'Charles', 'Mauricio', 'Jean',
+    'Esteban', 'Humberto', 'Jorge', 'Iván', 'Cristóbal', 'Vicente', 'Benjamín', 'Darío',
+    'Osvaldo', 'Patricio', 'Fabián', 'Ángelo', 'Erwin', 'Nicolás', 'Diego', 'Sebastián',
+  ],
 };
 
 export const APELLIDOS: Record<Country, string[]> = {
@@ -45,5 +50,10 @@ export const APELLIDOS: Record<Country, string[]> = {
     'Valderrama', 'Higuita', 'Asprilla', 'Rincón', 'Córdoba', 'Falcao', 'Bacca', 'Cuadrado',
     'Ospina', 'Escobar', 'Yepes', 'Ángel', 'Ortiz', 'Iguarán', 'Valencia', 'Ávila',
     'Díaz', 'Lerma', 'Gómez', 'Muñoz', 'Zapata', 'Mosquera', 'Perea', 'Borja',
+  ],
+  chile: [
+    'Vidal', 'Sánchez', 'Bravo', 'Medel', 'Vargas', 'Aránguiz', 'Isla', 'Díaz',
+    'Beausejour', 'Paredes', 'Suazo', 'Fernández', 'Valdivia', 'Zamorano', 'Salas', 'Fuentes',
+    'Contreras', 'Rojas', 'Muñoz', 'Fuenzalida', 'Orellana', 'Toro', 'Pizarro', 'Mena',
   ],
 };

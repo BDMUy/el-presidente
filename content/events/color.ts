@@ -6,7 +6,7 @@ export const COLOR: GameEvent[] = [
     kind: 'color',
     title: 'SE ROMPIÓ EL MICRO',
     text: 'El micro del plantel se quedó en la ruta camino a la cancha de visitante. Los jugadores subieron fotos desde la banquina.',
-    requires: { league: ['ar-nacional', 'ar-b', 'uy-segunda', 'pe-segunda', 'co-segunda'] },
+    requires: { league: ['ar-nacional', 'ar-b', 'uy-segunda', 'pe-segunda', 'co-segunda', 'cl-segunda'] },
     options: [
       {
         label: 'Alquilar otro de urgencia',
@@ -187,11 +187,33 @@ export const COLOR: GameEvent[] = [
     ],
   },
   {
+    id: 'cancha-inundada-cl',
+    kind: 'golpe',
+    title: 'SE INUNDÓ LA CANCHA',
+    text: 'Llovió tres días seguidos y el campo de juego es una laguna. Hay partido el domingo y la ANFP no quiere reprogramar.',
+    requires: { country: ['chile'] },
+    options: [
+      {
+        label: 'Trabajar toda la noche para dejarla jugable',
+        hint: 'Se juega. El campo queda destruido por dos meses.',
+        effects: { caja: -0.5, plantel: -2 },
+      },
+      {
+        label: 'Pedir postergación con informe técnico',
+        hint: 'Depende de con quién hables.',
+        random: [
+          { weight: 45, text: 'Aceptaron postergarlo. Se jugó dos semanas después con la cancha impecable.', effects: { influencia: -4, plantel: 2 } },
+          { weight: 55, text: 'No aceptaron. Se jugó igual y encima quedaste como el que quiso especular.', effects: { hinchada: -4, plantel: -2 } },
+        ],
+      },
+    ],
+  },
+  {
     id: 'gira-exterior',
     kind: 'dilema',
     title: 'GIRA POR ASIA',
     text: 'Ofrecen tres amistosos en pretemporada con un cheque importante. Son veinte días afuera y catorce horas de vuelo.',
-    requires: { league: ['ar-primera', 'uy-primera', 'pe-primera', 'co-primera'], minSize: 6 },
+    requires: { league: ['ar-primera', 'uy-primera', 'pe-primera', 'co-primera', 'cl-primera'], minSize: 6 },
     options: [
       {
         label: 'Ir',
@@ -210,7 +232,7 @@ export const COLOR: GameEvent[] = [
     kind: 'color',
     title: 'EL SUEÑO DEL ASCENSO',
     text: 'Un hincha te para en la calle y te dice que su viejo se murió sin verlos en Primera. No te pide nada. Solo te lo dice.',
-    requires: { league: ['ar-nacional', 'ar-b', 'uy-segunda', 'pe-segunda', 'co-segunda'] },
+    requires: { league: ['ar-nacional', 'ar-b', 'uy-segunda', 'pe-segunda', 'co-segunda', 'cl-segunda'] },
     options: [
       {
         label: 'Prometerle que van a subir',

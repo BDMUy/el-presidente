@@ -54,7 +54,7 @@ export const ECONOMIA: GameEvent[] = [
     kind: 'dilema',
     title: 'PALCOS VIP',
     text: 'Una consultora propone convertir el sector central de la platea en palcos corporativos. Son mil socios menos y mucha plata más.',
-    requires: { minSeason: 3, league: ['ar-primera', 'uy-primera', 'pe-primera', 'co-primera'] },
+    requires: { minSeason: 3, league: ['ar-primera', 'uy-primera', 'pe-primera', 'co-primera', 'cl-primera'] },
     options: [
       {
         label: 'Construirlos',
@@ -306,6 +306,34 @@ export const ECONOMIA: GameEvent[] = [
           { weight: 50, text: 'La alcaldía aportó para retenerlos. Se salvó el nombre y entró algo de plata.', effects: { caja: 2, influencia: 3 } },
           { weight: 50, text: 'La alcaldía no mordió el anzuelo. Quedaste pidiendo en público y sin nada.', effects: { influencia: -6, hinchada: -4 } },
         ],
+      },
+    ],
+  },
+  {
+    id: 'eco-opa-bolsa',
+    kind: 'golpe',
+    title: 'ENTRÓ UN FONDO A LA BOLSA',
+    text: 'La sociedad anónima que controla al club cotiza en bolsa, y un fondo de inversión empezó a comprar en silencio. Ya juntó más del cinco por ciento y no da señales de parar.',
+    requires: { minSeason: 2, country: ['chile'] },
+    weight: 2,
+    options: [
+      {
+        label: 'Salir a comprar acciones para blindarte',
+        hint: 'Cuesta caja. El control del directorio sigue siendo tuyo.',
+        effects: { caja: -3, influencia: 4 },
+      },
+      {
+        label: 'No hacer nada, la mayoría la tenés vos',
+        hint: 'Ahorrás la plata. El fondo puede seguir comprando igual.',
+        random: [
+          { weight: 55, text: 'El fondo se cansó y vendió su posición con una diferencia menor. Todo sigue como estaba.', effects: { influencia: 2 } },
+          { weight: 45, text: 'El fondo juntó suficiente para pedir un directorio y ahora opina de todo.', effects: { influencia: -8, caja: 1 } },
+        ],
+      },
+      {
+        label: 'Ofrecerle un lugar en el directorio antes de que lo pida',
+        hint: 'Cede poder a cambio de tenerlo de tu lado.',
+        effects: { influencia: -5, caja: 2 },
       },
     ],
   },
