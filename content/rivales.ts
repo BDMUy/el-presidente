@@ -29,4 +29,8 @@ export const RIVALES: Record<Country, string[]> = {
     'Bolívar', 'The Strongest', 'Always Ready', 'ABB', 'Aurora', 'Blooming',
     'Guabirá', 'Oriente Petrolero', 'GV San José', 'Nacional Potosí', 'Real Potosí', 'Independiente Petrolero',
   ],
+  ecuador: [
+    'Barcelona SC', 'Emelec', 'LDU Quito', 'Independiente del Valle', 'U. Católica', 'Aucas',
+    'Deportivo Cuenca', 'Delfín', 'Manta FC', 'Macará', 'Orense', 'Mushuc Runa',
+  ],
 };

@@ -54,7 +54,7 @@ export const ECONOMIA: GameEvent[] = [
     kind: 'dilema',
     title: 'PALCOS VIP',
     text: 'Una consultora propone convertir el sector central de la platea en palcos corporativos. Son mil socios menos y mucha plata más.',
-    requires: { minSeason: 3, league: ['ar-primera', 'uy-primera', 'pe-primera', 'co-primera', 'cl-primera', 'py-primera', 'bo-primera'] },
+    requires: { minSeason: 3, league: ['ar-primera', 'uy-primera', 'pe-primera', 'co-primera', 'cl-primera', 'py-primera', 'bo-primera', 'ec-primera'] },
     options: [
       {
         label: 'Construirlos',
@@ -390,6 +390,34 @@ export const ECONOMIA: GameEvent[] = [
         label: 'Viajar el día anterior, como siempre',
         hint: 'Se ahorra el gasto. El equipo llega con la cabeza pesada.',
         effects: { plantel: -3 },
+      },
+    ],
+  },
+  {
+    id: 'eco-exportacion-juvenil',
+    kind: 'dilema',
+    title: 'UN CLUB EUROPEO QUIERE A UN PIBE DE INFERIORES',
+    text: 'Un club europeo hace una oferta por un juvenil de las inferiores que todavía ni debutó en primera. Acá se estila vender así: la cifra de hoy ya es una fortuna, y lo que puede llegar a valer, mucho más.',
+    requires: { minSeason: 2, country: ['ecuador'] },
+    weight: 2,
+    options: [
+      {
+        label: 'Venderlo ya, sin esperar',
+        hint: 'Plata segura. Si explota afuera, no vas a ver un centavo más.',
+        effects: { caja: 4, hinchada: -2 },
+      },
+      {
+        label: 'Esperar a que debute en primera para que suba el precio',
+        hint: 'Si rinde, la cifra se multiplica. Si se lesiona, la oferta puede no volver.',
+        random: [
+          { weight: 55, text: 'Debutó, jugó bien, y el mismo club subió la oferta al doble.', effects: { caja: 8, plantel: 2, hinchada: 3 } },
+          { weight: 45, text: 'Se cansaron de esperar y se llevaron a otro pibe de otro club.', effects: { hinchada: -3 } },
+        ],
+      },
+      {
+        label: 'Rechazar la oferta y quedárselo',
+        hint: 'Es una apuesta a mediano plazo. El plantel mejora ahora, no la caja.',
+        effects: { plantel: 3, caja: -0.3 },
       },
     ],
   },

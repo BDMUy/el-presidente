@@ -24,11 +24,11 @@ import { Ranking } from './ranking';
 import { SelectorClub } from './selector-club';
 import { VitrinaPanel } from './vitrina';
 
-const PAISES: Country[] = ['argentina', 'uruguay', 'peru', 'colombia', 'chile', 'paraguay', 'bolivia'];
+const PAISES: Country[] = ['argentina', 'uruguay', 'peru', 'colombia', 'chile', 'paraguay', 'bolivia', 'ecuador'];
 
 const PAIS_LABEL: Record<Country, string> = {
   argentina: 'Argentina', uruguay: 'Uruguay', peru: 'Perú', colombia: 'Colombia', chile: 'Chile',
-  paraguay: 'Paraguay', bolivia: 'Bolivia',
+  paraguay: 'Paraguay', bolivia: 'Bolivia', ecuador: 'Ecuador',
 };
 
 const LIGAS_POR_PAIS: Record<Country, LeagueId[]> = {
@@ -39,6 +39,7 @@ const LIGAS_POR_PAIS: Record<Country, LeagueId[]> = {
   chile: ['cl-primera', 'cl-segunda'],
   paraguay: ['py-primera', 'py-segunda'],
   bolivia: ['bo-primera', 'bo-segunda'],
+  ecuador: ['ec-primera', 'ec-segunda'],
 };
 
 const PARTIDAS: Record<Modo, string> = {
