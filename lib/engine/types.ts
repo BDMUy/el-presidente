@@ -1,4 +1,4 @@
-export type Country = 'argentina' | 'uruguay' | 'peru' | 'colombia' | 'chile' | 'paraguay' | 'bolivia' | 'ecuador';
+export type Country = 'argentina' | 'uruguay' | 'peru' | 'colombia' | 'chile' | 'paraguay' | 'bolivia' | 'ecuador' | 'venezuela';
 
 export type LeagueId =
   | 'ar-primera' | 'ar-nacional' | 'ar-b'
@@ -8,7 +8,8 @@ export type LeagueId =
   | 'cl-primera' | 'cl-segunda'
   | 'py-primera' | 'py-segunda'
   | 'bo-primera' | 'bo-segunda'
-  | 'ec-primera' | 'ec-segunda';
+  | 'ec-primera' | 'ec-segunda'
+  | 've-primera' | 've-segunda';
 
 export interface Club {
   id: string;
@@ -120,6 +121,16 @@ export const LEAGUES: Record<LeagueId, LeagueDef> = {
     continental: false, label: 'Serie B', championTitle: 'ec-segunda-liga',
     promotesTo: 'ec-primera', relegatesTo: null,
   },
+  've-primera': {
+    id: 've-primera', country: 'venezuela', tier: 1, teams: 14, promote: 0, relegate: 1,
+    continental: true, label: 'Liga FUTVE', championTitle: 've-liga',
+    promotesTo: null, relegatesTo: 've-segunda',
+  },
+  've-segunda': {
+    id: 've-segunda', country: 'venezuela', tier: 2, teams: 12, promote: 1, relegate: 1,
+    continental: false, label: 'Liga FUTVE 2', championTitle: 've-segunda-liga',
+    promotesTo: 've-primera', relegatesTo: null,
+  },
 };
 
 export function countryOf(league: LeagueId): Country {
@@ -135,6 +146,7 @@ export const DOMESTIC_CUPS: Record<Country, { title: TitleId; label: string }> =
   paraguay: { title: 'py-copa', label: 'Copa Paraguay' },
   bolivia: { title: 'bo-copa', label: 'Copa Bolivia' },
   ecuador: { title: 'ec-copa', label: 'Copa Ecuador' },
+  venezuela: { title: 've-copa', label: 'Copa Venezuela' },
 };
 
 export interface Resources {
@@ -302,6 +314,8 @@ export type TitleId =
   | 'bo-segunda-liga'
   | 'ec-liga'
   | 'ec-segunda-liga'
+  | 've-liga'
+  | 've-segunda-liga'
   | 'ar-copa'
   | 'ar-supercopa'
   | 'uy-copa'
@@ -312,6 +326,7 @@ export type TitleId =
   | 'py-copa'
   | 'bo-copa'
   | 'ec-copa'
+  | 've-copa'
   | 'libertadores'
   | 'sudamericana'
   | 'ascenso';
@@ -350,6 +365,9 @@ export const TITLES: Record<TitleId, TitleDef> = {
   'ec-liga': { id: 'ec-liga', label: 'LigaPro Serie A', points: 100 },
   'ec-segunda-liga': { id: 'ec-segunda-liga', label: 'Serie B', points: 30 },
   'ec-copa': { id: 'ec-copa', label: 'Copa Ecuador', points: 70 },
+  've-liga': { id: 've-liga', label: 'Liga FUTVE', points: 100 },
+  've-segunda-liga': { id: 've-segunda-liga', label: 'Liga FUTVE 2', points: 30 },
+  've-copa': { id: 've-copa', label: 'Copa Venezuela', points: 70 },
   libertadores: { id: 'libertadores', label: 'Copa Libertadores', points: 250 },
   sudamericana: { id: 'sudamericana', label: 'Copa Sudamericana', points: 140 },
   ascenso: { id: 'ascenso', label: 'Ascenso', points: 80 },

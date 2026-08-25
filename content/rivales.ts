@@ -33,4 +33,8 @@ export const RIVALES: Record<Country, string[]> = {
     'Barcelona SC', 'Emelec', 'LDU Quito', 'Independiente del Valle', 'U. Católica', 'Aucas',
     'Deportivo Cuenca', 'Delfín', 'Manta FC', 'Macará', 'Orense', 'Mushuc Runa',
   ],
+  venezuela: [
+    'Táchira', 'Caracas FC', 'La Guaira', 'Metropolitanos', 'Carabobo', 'Monagas',
+    'Puerto Cabello', 'UCV FC', 'Zamora', 'Portuguesa', 'Anzoátegui', 'Rayo Zuliano',
+  ],
 };

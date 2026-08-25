@@ -62,6 +62,7 @@ const BONUS_PLANTEL_LLAMAS: Record<LeagueId, number> = {
   'py-primera': 6, 'py-segunda': 12,
   'bo-primera': 7, 'bo-segunda': 12,
   'ec-primera': 6, 'ec-segunda': 12,
+  've-primera': 6, 've-segunda': 12,
 };
 
 function recibirElClubEnLlamas(club: Club): Resources {

@@ -31,6 +31,7 @@ const escaladaDeChile = escaladaDe('chile');
 const escaladaDeParaguay = escaladaDe('paraguay');
 const escaladaDeBolivia = escaladaDe('bolivia');
 const escaladaDeEcuador = escaladaDe('ecuador');
+const escaladaDeVenezuela = escaladaDe('venezuela');
 
 const visible = (e: GameEvent, s: GameState) => meetsCondition(e.requires, s, 9);
 
@@ -102,6 +103,13 @@ describe('el hilo de corrupción', () => {
       escaladaDeEcuador.filter((e) => visible(e, estado(p, 16, 'barcelonasc'))).length;
     expect(abiertasEn(1)).toBe(0);
     expect(abiertasEn(9)).toBe(escaladaDeEcuador.length);
+  });
+
+  it('lo mismo pasa con un club venezolano, con la versión FVF de la carta', () => {
+    const abiertasEn = (p: number) =>
+      escaladaDeVenezuela.filter((e) => visible(e, estado(p, 16, 'tachira'))).length;
+    expect(abiertasEn(1)).toBe(0);
+    expect(abiertasEn(9)).toBe(escaladaDeVenezuela.length);
   });
 
   it('las tentaciones están disponibles sin haber hecho nada', () => {

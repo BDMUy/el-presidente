@@ -41,6 +41,11 @@ export const NOMBRES: Record<Country, string[]> = {
     'Álex', 'Antonio', 'Felipe', 'Jefferson', 'Byron', 'Joffre', 'Jairo', 'Néicer',
     'Gonzalo', 'Kendry', 'Pervis', 'Piero', 'Willian', 'Robert', 'Moisés', 'Enner',
   ],
+  venezuela: [
+    'Yohandry', 'Stalin', 'Telasco', 'Kervin', 'Jhonder', 'Deyna', 'Wuilker', 'Yorman',
+    'Alixon', 'Junior', 'Anderson', 'Endry', 'Frank', 'Kelvin', 'Maikel', 'Nervin',
+    'Osman', 'Yefry', 'Alí', 'Giancarlo', 'Franklin', 'Grenddy', 'Renny', 'Oswaldo',
+  ],
 };
 
 export const APELLIDOS: Record<Country, string[]> = {
@@ -85,5 +90,10 @@ export const APELLIDOS: Record<Country, string[]> = {
     'Hurtado', 'Delgado', 'Aguinaga', 'Méndez', 'Spencer', 'Benítez', 'Valencia', 'Caicedo',
     'Montero', 'Guagua', 'Castillo', 'Reasco', 'Ayoví', 'Cevallos', 'Campos', 'Bolaños',
     'Guerrón', 'Urrutia', 'Hincapié', 'Estupiñán', 'Pacho', 'Preciado', 'Domínguez', 'Arboleda',
+  ],
+  venezuela: [
+    'Dudamel', 'Vega', 'Rey', 'Vizcarrondo', 'Cichero', 'Rosales', 'Amorebieta', 'Arango',
+    'Rincón', 'Rivas', 'Orozco', 'Guerra', 'Maldonado', 'Fedor', 'Dolgetta', 'Savarese',
+    'Moreno', 'Perozo', 'Seijas', 'Lucena', 'Romo', 'Osorio', 'Chancellor', 'Herrera',
   ],
 };

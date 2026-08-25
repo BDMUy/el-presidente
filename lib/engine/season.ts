@@ -20,6 +20,7 @@ const LEAGUE_AVERAGE: Record<LeagueId, number> = {
   'py-primera': 50, 'py-segunda': 28,
   'bo-primera': 50, 'bo-segunda': 28,
   'ec-primera': 52, 'ec-segunda': 28,
+  've-primera': 50, 've-segunda': 28,
 };
 
 const LEAGUE_SPREAD = 7;
@@ -35,6 +36,7 @@ const TV_MONEY: Record<LeagueId, number> = {
   'py-primera': 2.4, 'py-segunda': 0.4,
   'bo-primera': 1.98, 'bo-segunda': 0.4,
   'ec-primera': 2.35, 'ec-segunda': 0.4,
+  've-primera': 1.95, 've-segunda': 0.4,
 };
 
 const WAGE_FACTOR: Record<LeagueId, number> = {
@@ -46,6 +48,7 @@ const WAGE_FACTOR: Record<LeagueId, number> = {
   'py-primera': 0.075, 'py-segunda': 0.04,
   'bo-primera': 0.087, 'bo-segunda': 0.04,
   'ec-primera': 0.086, 'ec-segunda': 0.04,
+  've-primera': 0.076, 've-segunda': 0.04,
 };
 
 const PRIZE_MAX: Record<LeagueId, number> = {
@@ -57,6 +60,7 @@ const PRIZE_MAX: Record<LeagueId, number> = {
   'py-primera': 2.2, 'py-segunda': 0.4,
   'bo-primera': 1.78, 'bo-segunda': 0.4,
   'ec-primera': 2.15, 'ec-segunda': 0.4,
+  've-primera': 1.73, 've-segunda': 0.4,
 };
 
 const SOCIO_INCOME = 0.045;
@@ -89,6 +93,9 @@ const TITLE_INCOME: Partial<Record<TitleId, number>> = {
   'ec-liga': 2.8,
   'ec-segunda-liga': 0.45,
   'ec-copa': 1.3,
+  've-liga': 1.45,
+  've-segunda-liga': 0.22,
+  've-copa': 0.6,
   libertadores: 18,
   sudamericana: 6,
   ascenso: 4,
@@ -107,6 +114,7 @@ const SIZE_RANGE: Record<LeagueId, [number, number]> = {
   'py-primera': [2, 9], 'py-segunda': [1, 3],
   'bo-primera': [2, 9], 'bo-segunda': [1, 3],
   'ec-primera': [2, 9], 'ec-segunda': [1, 3],
+  've-primera': [2, 9], 've-segunda': [1, 3],
 };
 
 export function expectedPosition(club: Club, league: LeagueId): number {

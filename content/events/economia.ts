@@ -54,7 +54,7 @@ export const ECONOMIA: GameEvent[] = [
     kind: 'dilema',
     title: 'PALCOS VIP',
     text: 'Una consultora propone convertir el sector central de la platea en palcos corporativos. Son mil socios menos y mucha plata más.',
-    requires: { minSeason: 3, league: ['ar-primera', 'uy-primera', 'pe-primera', 'co-primera', 'cl-primera', 'py-primera', 'bo-primera', 'ec-primera'] },
+    requires: { minSeason: 3, league: ['ar-primera', 'uy-primera', 'pe-primera', 'co-primera', 'cl-primera', 'py-primera', 'bo-primera', 'ec-primera', 've-primera'] },
     options: [
       {
         label: 'Construirlos',
@@ -418,6 +418,34 @@ export const ECONOMIA: GameEvent[] = [
         label: 'Rechazar la oferta y quedárselo',
         hint: 'Es una apuesta a mediano plazo. El plantel mejora ahora, no la caja.',
         effects: { plantel: 3, caja: -0.3 },
+      },
+    ],
+  },
+  {
+    id: 'eco-exodo-salarial',
+    kind: 'golpe',
+    title: 'SE VAN POR EL SUELDO, NO POR EL PASE',
+    text: 'Con la inflación como está, lo que cobran en el club no les alcanza para vivir. Dos titulares ya preguntaron por firmar en una liga chica de Colombia con tal de cobrar en dólares.',
+    requires: { minSeason: 2, country: ['venezuela'] },
+    weight: 2,
+    options: [
+      {
+        label: 'Pagar una parte en dólares en efectivo',
+        hint: 'Los retiene. Es plata que no queda en ningún papel.',
+        effects: { caja: -3, plantel: 4 },
+      },
+      {
+        label: 'Ofrecerles una mejora salarial en bolívares',
+        hint: 'Sube el sueldo nominal. La inflación se lo come en dos meses.',
+        effects: { caja: -1, plantel: 1 },
+      },
+      {
+        label: 'Dejarlos ir',
+        hint: 'Entra algo de plata por el pase. El equipo se debilita.',
+        random: [
+          { weight: 55, text: 'Se fueron los dos. Entró algo de plata, pero el equipo quedó corto.', effects: { caja: 3, plantel: -6, hinchada: -4 } },
+          { weight: 45, text: 'Uno se arrepintió al final y se quedó.', effects: { plantel: -2, hinchada: -1 } },
+        ],
       },
     ],
   },
