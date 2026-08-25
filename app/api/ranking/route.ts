@@ -6,7 +6,6 @@ import type { Modo } from '@/lib/engine/types';
 import { MODOS } from '@/lib/engine/types';
 
 const LIMITE = 50;
-const CACHE_SEGUNDOS = 30;
 
 export async function GET(request: Request) {
   const db = getDb();
@@ -47,12 +46,5 @@ export async function GET(request: Request) {
     return NextResponse.json({ ok: false, error: 'No se pudo leer.', filas: [] }, { status: 500 });
   }
 
-  return NextResponse.json(
-    { ok: true, tipo, modo: tipo === 'global' ? modo : null, filas },
-    {
-      headers: {
-        'Cache-Control': `public, s-maxage=${CACHE_SEGUNDOS}, stale-while-revalidate=120`,
-      },
-    },
-  );
+  return NextResponse.json({ ok: true, tipo, modo: tipo === 'global' ? modo : null, filas });
 }
