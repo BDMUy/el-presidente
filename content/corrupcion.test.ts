@@ -28,6 +28,7 @@ const escaladaDeUruguay = escaladaDe('uruguay');
 const escaladaDePeru = escaladaDe('peru');
 const escaladaDeColombia = escaladaDe('colombia');
 const escaladaDeChile = escaladaDe('chile');
+const escaladaDeParaguay = escaladaDe('paraguay');
 
 const visible = (e: GameEvent, s: GameState) => meetsCondition(e.requires, s, 9);
 
@@ -78,6 +79,13 @@ describe('el hilo de corrupción', () => {
       escaladaDeChile.filter((e) => visible(e, estado(p, 16, 'colocolo'))).length;
     expect(abiertasEn(1)).toBe(0);
     expect(abiertasEn(9)).toBe(escaladaDeChile.length);
+  });
+
+  it('lo mismo pasa con un club paraguayo, con la versión APF de la carta', () => {
+    const abiertasEn = (p: number) =>
+      escaladaDeParaguay.filter((e) => visible(e, estado(p, 16, 'olimpia'))).length;
+    expect(abiertasEn(1)).toBe(0);
+    expect(abiertasEn(9)).toBe(escaladaDeParaguay.length);
   });
 
   it('las tentaciones están disponibles sin haber hecho nada', () => {

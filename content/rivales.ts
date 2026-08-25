@@ -21,4 +21,8 @@ export const RIVALES: Record<Country, string[]> = {
     'Colo-Colo', 'U. de Chile', 'U. Católica', 'Everton', "O'Higgins", 'Cobreloa',
     'Unión Española', 'Palestino', 'Audax Italiano', 'Huachipato', 'Wanderers', 'Coquimbo Unido',
   ],
+  paraguay: [
+    'Olimpia', 'Cerro Porteño', 'Libertad', 'Guaraní', 'Nacional', 'Luqueño',
+    '2 de Mayo', 'Recoleta', 'Trinidense', 'Ameliano', 'San Lorenzo', 'Rubio Ñu',
+  ],
 };

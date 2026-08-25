@@ -54,7 +54,7 @@ export const ECONOMIA: GameEvent[] = [
     kind: 'dilema',
     title: 'PALCOS VIP',
     text: 'Una consultora propone convertir el sector central de la platea en palcos corporativos. Son mil socios menos y mucha plata más.',
-    requires: { minSeason: 3, league: ['ar-primera', 'uy-primera', 'pe-primera', 'co-primera', 'cl-primera'] },
+    requires: { minSeason: 3, league: ['ar-primera', 'uy-primera', 'pe-primera', 'co-primera', 'cl-primera', 'py-primera'] },
     options: [
       {
         label: 'Construirlos',
@@ -334,6 +334,34 @@ export const ECONOMIA: GameEvent[] = [
         label: 'Ofrecerle un lugar en el directorio antes de que lo pida',
         hint: 'Cede poder a cambio de tenerlo de tu lado.',
         effects: { influencia: -5, caja: 2 },
+      },
+    ],
+  },
+  {
+    id: 'eco-apuestas-dirigencia',
+    kind: 'golpe',
+    title: 'LA FEDERACIÓN Y LAS APUESTAS',
+    text: 'Trascendió que un dirigente de la federación tiene participación en una casa de apuestas deportivas, justo cuando se destrabó la regulación del rubro. El cruce está prohibido por riesgo de arreglo de partidos, y la investigación ya cruzó la frontera.',
+    requires: { minSeason: 2, country: ['paraguay'] },
+    weight: 2,
+    options: [
+      {
+        label: 'Cortar el sponsoreo de esa casa de apuestas',
+        hint: 'Perdés un ingreso fijo. Quedás afuera de la foto.',
+        effects: { caja: -2, influencia: 3 },
+      },
+      {
+        label: 'No opinar, no es un problema tuyo',
+        hint: 'El escándalo es de arriba. Puede salpicar igual.',
+        random: [
+          { weight: 60, text: 'El escándalo quedó donde empezó, en la dirigencia. A tu club no lo mencionaron.', effects: { influencia: 1 } },
+          { weight: 40, text: 'Un cruce viejo con esa casa de apuestas te metió en la misma nota.', effects: { hinchada: -6, influencia: -5 } },
+        ],
+      },
+      {
+        label: 'Denunciarlo públicamente',
+        hint: 'La gente te banca. Arriba te anotan.',
+        effects: { hinchada: 6, influencia: -8 },
       },
     ],
   },

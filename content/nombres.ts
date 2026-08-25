@@ -26,6 +26,11 @@ export const NOMBRES: Record<Country, string[]> = {
     'Esteban', 'Humberto', 'Jorge', 'Iván', 'Cristóbal', 'Vicente', 'Benjamín', 'Darío',
     'Osvaldo', 'Patricio', 'Fabián', 'Ángelo', 'Erwin', 'Nicolás', 'Diego', 'Sebastián',
   ],
+  paraguay: [
+    'Derlis', 'Roque', 'Antolín', 'Justo', 'Óscar', 'Néstor', 'Celso', 'Aureliano',
+    'Francisco', 'Diego', 'Édgar', 'Jonathan', 'Cristian', 'Richard', 'Robert', 'Ángel',
+    'Adalberto', 'Gustavo', 'Miguel', 'Junior', 'Nelson', 'Fredy', 'Iván', 'Ever',
+  ],
 };
 
 export const APELLIDOS: Record<Country, string[]> = {
@@ -55,5 +60,10 @@ export const APELLIDOS: Record<Country, string[]> = {
     'Vidal', 'Sánchez', 'Bravo', 'Medel', 'Vargas', 'Aránguiz', 'Isla', 'Díaz',
     'Beausejour', 'Paredes', 'Suazo', 'Fernández', 'Valdivia', 'Zamorano', 'Salas', 'Fuentes',
     'Contreras', 'Rojas', 'Muñoz', 'Fuenzalida', 'Orellana', 'Toro', 'Pizarro', 'Mena',
+  ],
+  paraguay: [
+    'Villar', 'Gamarra', 'Caniza', 'Torres', 'Cardozo', 'González', 'Almirón', 'Gómez',
+    'Alcaraz', 'Ayala', 'Arce', 'Barreto', 'Santana', 'Riveros', 'Ortiz', 'Romero',
+    'Román', 'Duarte', 'Ríos', 'Vera', 'Rojas', 'Insfrán', 'Recalde', 'Franco',
   ],
 };
