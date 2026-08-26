@@ -30,7 +30,7 @@ const SEASON_NOISE = 11;
 
 const TV_MONEY: Record<LeagueId, number> = {
   'ar-primera': 3.5, 'ar-nacional': 1, 'ar-b': 0.35,
-  'uy-primera': 2.8, 'uy-segunda': 0.4,
+  'uy-primera': 3.0, 'uy-segunda': 0.4,
   'pe-primera': 2.2, 'pe-segunda': 0.4,
   'co-primera': 3, 'co-segunda': 0.4,
   'cl-primera': 2.5, 'cl-segunda': 0.4,
@@ -38,12 +38,12 @@ const TV_MONEY: Record<LeagueId, number> = {
   'bo-primera': 1.98, 'bo-segunda': 0.4,
   'ec-primera': 2.35, 'ec-segunda': 0.4,
   've-primera': 1.95, 've-segunda': 0.4,
-  'br-primera': 4.7, 'br-segunda': 0.6,
+  'br-primera': 4.85, 'br-segunda': 0.6,
 };
 
 const WAGE_FACTOR: Record<LeagueId, number> = {
   'ar-primera': 0.13, 'ar-nacional': 0.06, 'ar-b': 0.03,
-  'uy-primera': 0.082, 'uy-segunda': 0.04,
+  'uy-primera': 0.097, 'uy-segunda': 0.04,
   'pe-primera': 0.095, 'pe-segunda': 0.04,
   'co-primera': 0.1, 'co-segunda': 0.04,
   'cl-primera': 0.094, 'cl-segunda': 0.04,
@@ -51,7 +51,7 @@ const WAGE_FACTOR: Record<LeagueId, number> = {
   'bo-primera': 0.087, 'bo-segunda': 0.04,
   'ec-primera': 0.086, 'ec-segunda': 0.04,
   've-primera': 0.076, 've-segunda': 0.04,
-  'br-primera': 0.09, 'br-segunda': 0.05,
+  'br-primera': 0.096, 'br-segunda': 0.05,
 };
 
 const PRIZE_MAX: Record<LeagueId, number> = {
@@ -73,14 +73,14 @@ const TITLE_INCOME: Partial<Record<TitleId, number>> = {
   'ar-liga-primera': 6,
   'ar-liga-nacional': 2,
   'ar-liga-b': 1,
-  'uy-liga': 3,
+  'uy-liga': 2.3,
   'uy-segunda-liga': 0.5,
   'pe-liga': 1.5,
   'pe-segunda-liga': 0.3,
   'ar-copa': 3,
   'ar-supercopa': 1.5,
-  'uy-copa': 1.5,
-  'uy-supercopa': 0.75,
+  'uy-copa': 1.15,
+  'uy-supercopa': 0.58,
   'pe-copa': 0.8,
   'co-liga': 4,
   'co-segunda-liga': 0.7,

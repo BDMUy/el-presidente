@@ -55,7 +55,7 @@ const DEUDA_EN_LLAMAS = -22;
 
 const BONUS_PLANTEL_LLAMAS: Record<LeagueId, number> = {
   'ar-primera': 12, 'ar-nacional': 12, 'ar-b': 12,
-  'uy-primera': 5, 'uy-segunda': 12,
+  'uy-primera': 7, 'uy-segunda': 12,
   'pe-primera': 10, 'pe-segunda': 12,
   'co-primera': 6, 'co-segunda': 12,
   'cl-primera': 7, 'cl-segunda': 12,
@@ -63,7 +63,7 @@ const BONUS_PLANTEL_LLAMAS: Record<LeagueId, number> = {
   'bo-primera': 7, 'bo-segunda': 12,
   'ec-primera': 6, 'ec-segunda': 12,
   've-primera': 6, 've-segunda': 12,
-  'br-primera': 0, 'br-segunda': 12,
+  'br-primera': -4, 'br-segunda': 12,
 };
 
 function recibirElClubEnLlamas(club: Club): Resources {
