@@ -54,7 +54,7 @@ export const ECONOMIA: GameEvent[] = [
     kind: 'dilema',
     title: 'PALCOS VIP',
     text: 'Una consultora propone convertir el sector central de la platea en palcos corporativos. Son mil socios menos y mucha plata más.',
-    requires: { minSeason: 3, league: ['ar-primera', 'uy-primera', 'pe-primera', 'co-primera', 'cl-primera', 'py-primera', 'bo-primera', 'ec-primera', 've-primera'] },
+    requires: { minSeason: 3, league: ['ar-primera', 'uy-primera', 'pe-primera', 'co-primera', 'cl-primera', 'py-primera', 'bo-primera', 'ec-primera', 've-primera', 'br-primera'] },
     options: [
       {
         label: 'Construirlos',
@@ -446,6 +446,31 @@ export const ECONOMIA: GameEvent[] = [
           { weight: 55, text: 'Se fueron los dos. Entró algo de plata, pero el equipo quedó corto.', effects: { caja: 3, plantel: -6, hinchada: -4 } },
           { weight: 45, text: 'Uno se arrepintió al final y se quedó.', effects: { plantel: -2, hinchada: -1 } },
         ],
+      },
+    ],
+  },
+  {
+    id: 'eco-fondo-quiebra',
+    kind: 'golpe',
+    title: 'EL FONDO QUE COMPRÓ EL CLUB QUEBRÓ',
+    text: 'El fondo de inversión extranjero que se quedó con la mayoría accionaria del club vía la sociedad anónima entró en quiebra en su país de origen. Nadie sabe todavía quién controla legalmente al club a partir de mañana.',
+    requires: { minSeason: 2, country: ['brasil'] },
+    weight: 2,
+    options: [
+      {
+        label: 'Iniciar una demanda para recuperar el control',
+        hint: 'Puede tardar años. Mientras tanto, nadie manda con autoridad clara.',
+        effects: { influencia: -6, caja: -1 },
+      },
+      {
+        label: 'Buscar un comprador local de urgencia',
+        hint: 'Sale más barato que lo que pagó el fondo. Entra plata rápido.',
+        effects: { caja: 5, influencia: -4, hinchada: -3 },
+      },
+      {
+        label: 'Aprovechar el vacío de poder para consolidar tu propia gestión',
+        hint: 'Nadie te controla por un tiempo. Hasta que alguien lo haga.',
+        effects: { influencia: 6, caja: -2 },
       },
     ],
   },

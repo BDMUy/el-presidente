@@ -37,4 +37,8 @@ export const RIVALES: Record<Country, string[]> = {
     'Táchira', 'Caracas FC', 'La Guaira', 'Metropolitanos', 'Carabobo', 'Monagas',
     'Puerto Cabello', 'UCV FC', 'Zamora', 'Portuguesa', 'Anzoátegui', 'Rayo Zuliano',
   ],
+  brasil: [
+    'Flamengo', 'Palmeiras', 'Corinthians', 'São Paulo', 'Santos', 'Grêmio',
+    'Internacional', 'Cruzeiro', 'Atlético-MG', 'Fluminense', 'Botafogo', 'Vasco',
+  ],
 };

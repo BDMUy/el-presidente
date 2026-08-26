@@ -46,6 +46,11 @@ export const NOMBRES: Record<Country, string[]> = {
     'Alixon', 'Junior', 'Anderson', 'Endry', 'Frank', 'Kelvin', 'Maikel', 'Nervin',
     'Osman', 'Yefry', 'Alí', 'Giancarlo', 'Franklin', 'Grenddy', 'Renny', 'Oswaldo',
   ],
+  brasil: [
+    'Everton', 'Wendell', 'Emerson', 'Vagner', 'Wallace', 'Anderson', 'Douglas', 'Robson',
+    'Elias', 'Rogério', 'Adriano', 'Vanderlei', 'Reinaldo', 'Wilson', 'Edmilson', 'Jefferson',
+    'Weverton', 'Renato', 'Fabrício', 'Cleiton', 'Deivid', 'Elano', 'Grafite', 'Luizão',
+  ],
 };
 
 export const APELLIDOS: Record<Country, string[]> = {
@@ -95,5 +100,10 @@ export const APELLIDOS: Record<Country, string[]> = {
     'Dudamel', 'Vega', 'Rey', 'Vizcarrondo', 'Cichero', 'Rosales', 'Amorebieta', 'Arango',
     'Rincón', 'Rivas', 'Orozco', 'Guerra', 'Maldonado', 'Fedor', 'Dolgetta', 'Savarese',
     'Moreno', 'Perozo', 'Seijas', 'Lucena', 'Romo', 'Osorio', 'Chancellor', 'Herrera',
+  ],
+  brasil: [
+    'Silva', 'Souza', 'Oliveira', 'Santos', 'Pereira', 'Costa', 'Rodrigues', 'Almeida',
+    'Nascimento', 'Carvalho', 'Gomes', 'Martins', 'Araújo', 'Ribeiro', 'Barbosa', 'Freitas',
+    'Barros', 'Mendes', 'Cardoso', 'Nunes', 'Correia', 'Teixeira', 'Fonseca', 'Moreira',
   ],
 };

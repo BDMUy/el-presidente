@@ -32,6 +32,7 @@ const escaladaDeParaguay = escaladaDe('paraguay');
 const escaladaDeBolivia = escaladaDe('bolivia');
 const escaladaDeEcuador = escaladaDe('ecuador');
 const escaladaDeVenezuela = escaladaDe('venezuela');
+const escaladaDeBrasil = escaladaDe('brasil');
 
 const visible = (e: GameEvent, s: GameState) => meetsCondition(e.requires, s, 9);
 
@@ -110,6 +111,13 @@ describe('el hilo de corrupción', () => {
       escaladaDeVenezuela.filter((e) => visible(e, estado(p, 16, 'tachira'))).length;
     expect(abiertasEn(1)).toBe(0);
     expect(abiertasEn(9)).toBe(escaladaDeVenezuela.length);
+  });
+
+  it('lo mismo pasa con un club brasileño, con la versión CBF de la carta', () => {
+    const abiertasEn = (p: number) =>
+      escaladaDeBrasil.filter((e) => visible(e, estado(p, 16, 'flamengo'))).length;
+    expect(abiertasEn(1)).toBe(0);
+    expect(abiertasEn(9)).toBe(escaladaDeBrasil.length);
   });
 
   it('las tentaciones están disponibles sin haber hecho nada', () => {
