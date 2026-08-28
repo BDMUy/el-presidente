@@ -1,66 +1,91 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, type CSSProperties } from 'react';
 
-import type { Effects, GameEvent } from '@/lib/engine/types';
+import type { Club, Effects, EventKind, GameEvent } from '@/lib/engine/types';
 import { EVENT_KIND_LABEL } from '@/lib/engine/types';
 import { plataConSigno } from '@/lib/format';
-import { BarraDecision, Continuar, Membrete, Papel, Puntos, Renglon, Sello, Titulo } from './ui';
+import { useTintaClub } from '@/lib/tema';
+import {
+  BarraDecision,
+  Continuar,
+  Cuerpo,
+  Ladillo,
+  Puntos,
+  Recuadro,
+  Renglon,
+  Titular,
+  Volanta,
+} from './ui';
+
+const TONO_EVENTO: Record<EventKind, 'alerta' | 'tinta' | 'favorable'> = {
+  golpe: 'alerta',
+  dilema: 'tinta',
+  color: 'favorable',
+};
 
 export function FaseEvento({
+  club,
   event,
   available,
   enLaTemporada,
   porTemporada,
   onElegir,
 }: {
+  club: Club;
   event: GameEvent;
   available: number[];
   enLaTemporada: number;
   porTemporada: number;
   onElegir: (choice: number) => void;
 }) {
-  const tono = event.kind === 'golpe' ? 'rojo' : event.kind === 'dilema' ? 'bronce' : 'verde';
-
+  const tintaClub = useTintaClub(club);
   const [elegida, setElegida] = useState<number | null>(null);
   const opcion = elegida === null ? null : event.options[available[elegida]];
 
   return (
-    <>
-      <Papel torcido={1}>
+    <div style={{ '--club': tintaClub } as CSSProperties}>
+      <Recuadro acento="club">
         <div className="flex items-start justify-between gap-4">
-          <Membrete>
-            Acta {enLaTemporada} de {porTemporada}
-          </Membrete>
-          <Sello tono={tono} className="shrink-0">
+          <Volanta>
+            Sección · {enLaTemporada} de {porTemporada}
+          </Volanta>
+          <Ladillo tono={TONO_EVENTO[event.kind]} className="shrink-0">
             {EVENT_KIND_LABEL[event.kind]}
-          </Sello>
+          </Ladillo>
         </div>
 
         <div className="mt-4">
-          <Titulo>{event.title}</Titulo>
-          <p className="mt-3 font-body text-[16px] leading-relaxed text-tinta">{event.text}</p>
+          <Titular>{event.title}</Titular>
+          <Cuerpo className="mt-3">{event.text}</Cuerpo>
         </div>
 
         <div className="mt-6">
-          <Membrete>Resuelve la presidencia</Membrete>
-          <div className="mt-2 space-y-2">
-            {available.map((optionIndex, displayIndex) => {
-              const option = event.options[optionIndex];
-              return (
-                <Renglon
-                  key={optionIndex}
-                  label={option.label}
-                  hint={option.hint}
-                  azaroso={Boolean(option.random)}
-                  seleccionado={elegida === displayIndex}
-                  onClick={() => setElegida(displayIndex)}
-                />
-              );
-            })}
+          <div className="filete-animado flex h-1" aria-hidden>
+            <div className="flex-1" style={{ backgroundColor: club.colors[0] }} />
+            <div className="flex-1" style={{ backgroundColor: club.colors[1] }} />
+          </div>
+          <div className="pt-4">
+            <Volanta>La decisión</Volanta>
+            <div className="mt-2 border-t border-corondel">
+              {available.map((optionIndex, displayIndex) => {
+                const option = event.options[optionIndex];
+                return (
+                  <Renglon
+                    key={optionIndex}
+                    label={option.label}
+                    hint={option.hint}
+                    azaroso={Boolean(option.random)}
+                    seleccionado={elegida === displayIndex}
+                    onClick={() => setElegida(displayIndex)}
+                    retraso={displayIndex * 40}
+                  />
+                );
+              })}
+            </div>
           </div>
         </div>
-      </Papel>
+      </Recuadro>
 
       <BarraDecision
         resumen={opcion ? opcion.label : 'Elegí cómo resolverlo'}
@@ -69,57 +94,64 @@ export function FaseEvento({
         habilitada={elegida !== null}
         onConfirmar={() => elegida !== null && onElegir(elegida)}
       />
-    </>
+    </div>
   );
 }
 
 export function FaseResultadoEvento({
+  club,
   text,
   effects,
   onContinuar,
 }: {
+  club: Club;
   text: string;
   effects: Effects;
   onContinuar: () => void;
 }) {
+  const tintaClub = useTintaClub(club);
   const cambios = listarCambios(effects);
   const diferidos = effects.deferred ?? [];
 
   return (
-    <Papel torcido={2}>
-      <div className="flex justify-end">
-        <Sello tono="rojo" animado>
-          Resuelto
-        </Sello>
-      </div>
+    <div style={{ '--club': tintaClub } as CSSProperties}>
+      <Recuadro acento="club">
+        <div className="flex items-start justify-between gap-4">
+          <Volanta>Edición siguiente</Volanta>
+          <Ladillo tono="club" animado className="shrink-0">
+            Resuelto
+          </Ladillo>
+        </div>
 
-      <p className="mt-2 font-body text-[17px] leading-relaxed text-tinta">{text}</p>
+        <Cuerpo className="mt-3">{text}</Cuerpo>
 
-      {cambios.length > 0 && (
-        <ul className="mt-6 border-t border-hoja-linea pt-3">
-          {cambios.map((cambio) => (
-            <li
-              key={cambio.label}
-              className="flex items-baseline py-1.5 font-acta text-[13px] uppercase"
-            >
-              <span className="text-tinta-2">{cambio.label}</span>
-              <Puntos />
-              <span className={cambio.positivo ? 'text-emerald-800' : 'text-sello'}>
-                {cambio.valor}
-              </span>
-            </li>
-          ))}
-        </ul>
-      )}
+        {cambios.length > 0 && (
+          <ul className="mt-6 border-t border-corondel pt-3">
+            {cambios.map((cambio, indice) => (
+              <li
+                key={cambio.label}
+                style={{ animationDelay: `${indice * 60}ms` }}
+                className="entrar-nota flex items-baseline py-1.5 font-tabla text-[13px] uppercase"
+              >
+                <span className="text-tinta-2">{cambio.label}</span>
+                <Puntos />
+                <span className={cambio.positivo ? 'text-favorable' : 'text-alerta'}>
+                  {cambio.valor}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
 
-      {diferidos.length > 0 && (
-        <p className="mt-4 border-l-2 border-bronce pl-3 font-acta text-[12px] leading-relaxed tracking-wide text-tinta-2 uppercase">
-          Queda asentado en el libro de actas. Esto vuelve.
-        </p>
-      )}
+        {diferidos.length > 0 && (
+          <p className="mt-4 border-l-2 border-[var(--club)] pl-3 font-tabla text-[12px] leading-relaxed tracking-wide text-tinta-2 uppercase">
+            Queda asentado en el libro de actas. Esto vuelve.
+          </p>
+        )}
 
-      <Continuar onClick={onContinuar} />
-    </Papel>
+        <Continuar onClick={onContinuar} />
+      </Recuadro>
+    </div>
   );
 }
 

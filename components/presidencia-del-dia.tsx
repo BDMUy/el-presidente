@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type CSSProperties } from 'react';
 
 import { getClub } from '@/content/clubs';
 import { faltaParaLaProxima, formatearEspera, presidenciaDelDia } from '@/lib/daily';
 import { LEAGUES } from '@/lib/engine/types';
 import { expectedPosition } from '@/lib/engine/season';
+import { useTintaClub } from '@/lib/tema';
 
 const KEY_JUGADA = 'el-presidente:diaria-jugada';
 
@@ -39,50 +40,72 @@ export function PresidenciaDelDia({ onJugar }: { onJugar: () => void }) {
     setDatos({ clubId: hoy.clubId, fecha: hoy.fecha, yaJugada: diariaJugada() === hoy.fecha });
 
     const tick = () => setEspera(formatearEspera(faltaParaLaProxima()));
-    tick();
-    const id = setInterval(tick, 1000);
-    return () => clearInterval(id);
+    let id: ReturnType<typeof setInterval> | undefined;
+
+    const arrancar = () => {
+      tick();
+      id ??= setInterval(tick, 1000);
+    };
+    const frenar = () => {
+      clearInterval(id);
+      id = undefined;
+    };
+    const alCambiarVisibilidad = () => {
+      if (document.visibilityState === 'visible') arrancar();
+      else frenar();
+    };
+
+    alCambiarVisibilidad();
+    document.addEventListener('visibilitychange', alCambiarVisibilidad);
+    return () => {
+      frenar();
+      document.removeEventListener('visibilitychange', alCambiarVisibilidad);
+    };
   }, []);
 
-  if (!datos) {
-    return <div className="mt-6 h-[92px] border border-linea" aria-hidden />;
+  const club = datos ? getClub(datos.clubId) : null;
+  const tintaClub = useTintaClub(club);
+
+  if (!datos || !club) {
+    return <div className="min-h-[193px] border border-corondel bg-fondo-2/60" aria-hidden />;
   }
 
-  const club = getClub(datos.clubId);
-
   return (
-    <div className="mt-2 border border-bronce-claro/50 bg-pano-alto/50">
+    <div
+      className="min-h-[193px] border border-[var(--club)]/50 bg-fondo-2/60"
+      style={{ '--club': tintaClub } as CSSProperties}
+    >
       <div className="flex h-1" aria-hidden>
         <div className="flex-1" style={{ backgroundColor: club.colors[0] }} />
         <div className="flex-1" style={{ backgroundColor: club.colors[1] }} />
       </div>
 
       <div className="px-3 py-3">
-        <p className="text-right font-acta text-[11px] tracking-[0.06em] text-papel-2 tabular-nums uppercase">
+        <p className="text-right font-tabla text-[11px] tracking-[0.06em] text-tinta-2 tabular-nums uppercase">
           cambia en {espera}
         </p>
 
-        <p className="mt-1.5 font-display text-[17px] leading-tight font-black text-papel">
+        <p className="mt-1.5 font-titular text-[17px] leading-tight font-black text-tinta">
           {club.name}
         </p>
-        <p className="font-body text-[13px] text-papel-2">
+        <p className="font-cuerpo text-[13px] text-tinta-2">
           {LEAGUES[club.league].label} · te esperan{' '}
           {expectedPosition(club, club.league)}° de {LEAGUES[club.league].teams}
         </p>
 
-        <p className="mt-2 font-body text-[13px] leading-snug text-papel-2">
+        <p className="mt-2 font-cuerpo text-[13px] leading-snug text-tinta-2">
           Hoy todos juegan esta misma partida. Mismo club, misma suerte, mismos eventos.
         </p>
 
         {datos.yaJugada ? (
-          <p className="mt-3 border-t border-linea pt-2.5 font-acta text-[11px] tracking-[0.06em] text-papel-2 uppercase">
+          <p className="mt-3 border-t border-corondel pt-2.5 font-tabla text-[11px] tracking-[0.06em] text-tinta-2 uppercase">
             Ya la jugaste. Volvé mañana.
           </p>
         ) : (
           <button
             type="button"
             onClick={onJugar}
-            className="mt-3 min-h-11 w-full bg-bronce-claro py-2.5 font-display text-[13px] font-black tracking-[0.1em] text-tinta uppercase transition-transform active:scale-[0.99]"
+            className="mt-3 min-h-11 w-full bg-[var(--club)] py-2.5 font-titular text-[13px] font-black tracking-[0.1em] text-fondo uppercase transition-opacity active:opacity-90"
           >
             Jugar la del día
           </button>

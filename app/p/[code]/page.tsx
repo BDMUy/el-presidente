@@ -6,7 +6,7 @@ import { getClub } from '@/content/clubs';
 import { computeScore } from '@/lib/engine/election';
 import { reconstruirPresidencia } from '@/lib/share';
 import { ResumenPresidencia } from '@/components/resumen-presidencia';
-import { Membrete, Papel } from '@/components/ui';
+import { Recuadro, Volanta } from '@/components/ui';
 
 export async function generateMetadata({
   params,
@@ -44,22 +44,22 @@ export default async function PresidenciaCompartida({
   const club = getClub(state.clubId);
 
   return (
-    <main className="mx-auto w-full max-w-xl px-4 py-8">
+    <main id="principal" tabIndex={-1} className="mx-auto w-full max-w-xl px-4 py-8 focus:outline-none">
       <div className="mb-5 text-center">
-        <Membrete sobrePano>Presidencia compartida</Membrete>
+        <Volanta>Presidencia compartida</Volanta>
       </div>
 
-      <Papel torcido={0}>
+      <Recuadro>
         <ResumenPresidencia state={state} club={club} ending={state.ending} />
-      </Papel>
+      </Recuadro>
 
       <div className="mt-8 text-center">
-        <p className="font-body text-[15px] text-papel-2">
+        <p className="font-cuerpo text-[15px] text-tinta-2">
           ¿Te animás a hacerlo mejor con tu club?
         </p>
         <Link
           href="/"
-          className="mt-3 inline-block bg-papel px-8 py-3.5 font-display text-[14px] font-black tracking-[0.12em] text-tinta uppercase transition-transform active:scale-[0.98]"
+          className="mt-3 inline-block bg-tinta px-8 py-3.5 font-titular text-[14px] font-black tracking-[0.12em] text-fondo uppercase transition-[color,background-color,transform] active:scale-[0.97] active:bg-tinta-2"
         >
           Jugar El Presidente
         </Link>

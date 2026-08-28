@@ -1,8 +1,10 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import Link from 'next/link';
+import { useEffect, useMemo, useState, type CSSProperties } from 'react';
 
 import { CLUBS } from '@/content/clubs';
+import { leerNombre, reasignarNombre } from '@/lib/dispositivo';
 import { mandatosDe } from '@/lib/engine/election';
 import { expectedPosition } from '@/lib/engine/season';
 import {
@@ -15,7 +17,9 @@ import {
   type Club,
   type Modo,
 } from '@/lib/engine/types';
-import { Membrete, Sello } from './ui';
+import { useTintaClub } from '@/lib/tema';
+import { Bajada, Ladillo, Volanta } from './ui';
+import { BarraSuperior } from './barra-superior';
 import { CampoNombre } from './campo-nombre';
 import { CampoSelect } from './campo-select';
 import { Plegable } from './plegable';
@@ -76,6 +80,11 @@ export function Arranque({
   const [pais, setPais] = useState<Country>('argentina');
   const [liga, setLiga] = useState<LeagueId>('ar-primera');
   const [modo, setModo] = useState<Modo>('normal');
+  const [fecha, setFecha] = useState('');
+
+  useEffect(() => {
+    setFecha(new Date().toLocaleDateString('es-AR', { day: 'numeric', month: 'long', year: 'numeric' }));
+  }, []);
 
   const ligasDelPais = LIGAS_POR_PAIS[pais];
 
@@ -111,132 +120,153 @@ export function Arranque({
     setPais(countryOf(sorteado.league));
     setLiga(sorteado.league);
     setElegido(sorteado.id);
+    if (!leerNombre().trim()) reasignarNombre();
   };
 
   return (
-    <div className="mx-auto w-full max-w-[1280px] px-4 pb-10 lg:grid lg:grid-cols-[minmax(340px,420px)_1fr] lg:gap-10 lg:px-8">
-      <div className="pt-8 lg:sticky lg:top-0 lg:h-dvh lg:overflow-y-auto lg:pt-10 lg:pb-10">
-        <Membrete sobrePano>Asamblea ordinaria de socios</Membrete>
+    <div className="mx-auto w-full max-w-[1280px] px-4 pb-10 lg:px-8">
+      <div className="pt-3 lg:pt-4">
+        <BarraSuperior />
+      </div>
 
-        <h1 className="mt-3 font-display text-[clamp(2.5rem,11vw,3.75rem)] leading-[0.86] font-black tracking-[-0.03em] text-papel uppercase lg:text-[3rem] xl:text-[3.5rem]">
-          El
-          <br />
-          Presidente
-        </h1>
-
-        <p className="mt-4 max-w-[46ch] font-body text-[15px] leading-relaxed text-papel lg:mt-6 lg:text-[16px]">
-          Ganás la elección y tenés cuatro mandatos para que no te echen. Manejás la caja, la
-          hinchada y la influencia.{' '}
-          <span className="font-semibold">Vos armás el plantel; el plantel juega.</span>
+      <header className="pt-8 lg:pt-10">
+        <p className="border-b border-corondel pb-1.5 font-tabla text-[11px] tracking-[0.14em] text-tinta-2 uppercase">
+          {fecha || '···'} · Asamblea ordinaria de socios
         </p>
 
-        {enCurso && onContinuar && onAbandonar && (
-          <PanelEnCurso enCurso={enCurso} onContinuar={onContinuar} onAbandonar={onAbandonar} />
-        )}
+        <h1
+          className="revelar-titular mt-4 border-t-4 border-b-2 border-tinta py-3 font-titular text-[clamp(2.75rem,11vw,4.5rem)] leading-[0.86] font-black tracking-[-0.03em] text-tinta uppercase"
+          style={{ fontStretch: '80%' }}
+        >
+          El Presidente
+        </h1>
 
-        <div className="mt-6">
-          <p className="font-acta text-[12px] font-bold tracking-[0.1em] text-papel-2 uppercase">
-            Presidencia del día
-          </p>
-          <PresidenciaDelDia onJugar={onEmpezarDiaria} />
-        </div>
-      </div>
+        <Bajada className="mt-4 max-w-[52ch]">
+          Ganás la elección y tenés cuatro mandatos para que no te echen. Manejás la caja, la
+          hinchada y la influencia. Vos armás el plantel; el plantel juega.
+        </Bajada>
+      </header>
 
-      <div className="mt-8 lg:mt-0 lg:pt-10 lg:pb-10">
-        <div className="flex items-center justify-between gap-3">
-          <Membrete sobrePano>El padrón</Membrete>
-          <button
-            type="button"
-            onClick={sortear}
-            className="flex min-h-11 shrink-0 items-center border border-linea px-4 font-acta text-[11px] tracking-[0.06em] text-bronce-claro uppercase transition-colors hover:border-bronce-claro hover:text-papel"
-          >
-            Al azar
-          </button>
-        </div>
+      {enCurso && onContinuar && onAbandonar && (
+        <PanelEnCurso enCurso={enCurso} onContinuar={onContinuar} onAbandonar={onAbandonar} />
+      )}
 
-        <div className="mt-3 border border-linea p-3 sm:p-4">
-          <CampoSelect
-            etiqueta="Partida"
-            valor={modo}
-            onChange={(v) => setModo(v as Modo)}
-          >
-            {MODOS.map((m) => (
-              <option key={m} value={m}>
-                {PARTIDAS[m]}
-              </option>
-            ))}
-          </CampoSelect>
-
-          {modo === 'llamas' && (
-            <p className="mt-2 border-l-2 border-sello pl-3 font-body text-[14px] leading-snug text-papel-2">
-              Recibís el club con 22 millones de deuda —inhibido, no podés
-              comprar a nadie—, la hinchada en 40 cuando con menos de 45 perdés
-              la elección, y un plantel demasiado bueno para lo que el club
-              puede pagar. Venderlo es la única caja que hay.
-            </p>
-          )}
-
-          <div className="mt-3 grid gap-3 sm:grid-cols-2">
-            <CampoSelect etiqueta="País" valor={pais} onChange={cambiarPais}>
-              {PAISES.map((id) => (
-                <option key={id} value={id}>
-                  {PAIS_LABEL[id]}
-                </option>
-              ))}
-            </CampoSelect>
-
-            <CampoSelect etiqueta="Categoría" valor={liga} onChange={cambiarLiga}>
-              {ligasDelPais.map((id) => (
-                <option key={id} value={id}>
-                  {LEAGUES[id].label}
-                </option>
-              ))}
-            </CampoSelect>
-          </div>
-
+      <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_minmax(300px,360px)] lg:items-start lg:divide-x lg:divide-corondel">
+        <div className="min-w-0 lg:pr-10">
+          <Volanta>Presidencia del día</Volanta>
           <div className="mt-3">
-            <SelectorClub clubes={deLaLiga} elegido={club} onElegir={setElegido} />
+            <PresidenciaDelDia onJugar={onEmpezarDiaria} />
           </div>
 
-          <CampoNombre />
+          <div className="mt-8 flex items-center justify-between gap-3">
+            <Volanta>El padrón</Volanta>
+            <button
+              type="button"
+              onClick={sortear}
+              className="flex min-h-11 shrink-0 items-center border border-corondel px-4 font-tabla text-[11px] tracking-[0.06em] text-tinta-2 uppercase transition-colors hover:border-tinta hover:text-tinta"
+            >
+              Al azar
+            </button>
+          </div>
+
+          <div className="mt-3 border border-corondel p-3 sm:p-4">
+            <CampoSelect
+              etiqueta="Partida"
+              valor={modo}
+              onChange={(v) => setModo(v as Modo)}
+            >
+              {MODOS.map((m) => (
+                <option key={m} value={m}>
+                  {PARTIDAS[m]}
+                </option>
+              ))}
+            </CampoSelect>
+
+            {modo === 'llamas' && (
+              <p className="mt-2 border-l-2 border-alerta pl-3 font-cuerpo text-[14px] leading-snug text-tinta-2">
+                Recibís el club con 22 millones de deuda —inhibido, no podés
+                comprar a nadie—, la hinchada en 40 cuando con menos de 45 perdés
+                la elección, y un plantel demasiado bueno para lo que el club
+                puede pagar. Venderlo es la única caja que hay.
+              </p>
+            )}
+
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              <CampoSelect etiqueta="País" valor={pais} onChange={cambiarPais}>
+                {PAISES.map((id) => (
+                  <option key={id} value={id}>
+                    {PAIS_LABEL[id]}
+                  </option>
+                ))}
+              </CampoSelect>
+
+              <CampoSelect etiqueta="Categoría" valor={liga} onChange={cambiarLiga}>
+                {ligasDelPais.map((id) => (
+                  <option key={id} value={id}>
+                    {LEAGUES[id].label}
+                  </option>
+                ))}
+              </CampoSelect>
+            </div>
+
+            <div className="mt-3">
+              <SelectorClub clubes={deLaLiga} elegido={club} onElegir={setElegido} />
+            </div>
+
+            <CampoNombre />
+          </div>
+
+          <div className="mt-4">
+            {club ? (
+              <PanelElegido club={club} modo={modo} onEmpezar={() => onEmpezar(club.id, modo)} />
+            ) : (
+              <PanelVacio />
+            )}
+          </div>
         </div>
 
-        <div className="mt-4">
-          {club ? (
-            <PanelElegido club={club} modo={modo} onEmpezar={() => onEmpezar(club.id, modo)} />
-          ) : (
-            <PanelVacio />
-          )}
+        <div className="min-w-0 lg:pl-10">
+          <Plegable titulo="Tabla de posiciones" resumen="Quién llegó más lejos" abiertoPorDefecto>
+            <Ranking />
+          </Plegable>
+
+          <VitrinaPanel />
         </div>
-
-        <Plegable titulo="Tabla de posiciones" resumen="Quién llegó más lejos">
-          <Ranking />
-        </Plegable>
-
-        <VitrinaPanel />
-
-        <PieDeLicencia />
       </div>
+
+      <PieDePagina />
     </div>
   );
 }
 
-function PieDeLicencia() {
+function PieDePagina() {
   const fuente = process.env.NEXT_PUBLIC_SOURCE_URL;
-  if (!fuente) return null;
 
   return (
-    <p className="mt-4 font-acta text-[11px] leading-relaxed tracking-[0.06em] text-papel-2 uppercase">
-      Software libre bajo AGPL v3 ·{' '}
-      <a
-        href={fuente}
-        target="_blank"
-        rel="noreferrer"
-        className="-mx-2 -my-1 inline-block px-2 py-3 underline underline-offset-4 transition-colors hover:text-papel"
-      >
-        Código fuente
-      </a>
-    </p>
+    <footer className="mt-10 border-t border-corondel pt-4">
+      <p className="font-tabla text-[11px] leading-relaxed tracking-[0.06em] text-tinta-2 uppercase">
+        <Link
+          href="/privacidad"
+          className="-mx-2 -my-1 inline-block px-2 py-3 underline underline-offset-4 transition-colors hover:text-tinta"
+        >
+          Privacidad
+        </Link>
+        {fuente && (
+          <>
+            {' '}
+            · Software libre bajo AGPL v3 ·{' '}
+            <a
+              href={fuente}
+              target="_blank"
+              rel="noreferrer"
+              className="-mx-2 -my-1 inline-block px-2 py-3 underline underline-offset-4 transition-colors hover:text-tinta"
+            >
+              Código fuente
+            </a>
+          </>
+        )}
+      </p>
+    </footer>
   );
 }
 
@@ -251,49 +281,51 @@ function PanelEnCurso({
 }) {
   const [confirmando, setConfirmando] = useState(false);
   const { club, season, year, diaria, terminada } = enCurso;
+  const tintaClub = useTintaClub(club);
 
   return (
-    <div className="mt-6 border border-bronce-claro/40 bg-pano-alto/60">
-      <BandaSuperior club={club} />
-
+    <div
+      className="mt-6 border border-[var(--club)]/50 bg-fondo-2/60"
+      style={{ '--club': tintaClub } as CSSProperties}
+    >
       <div className="px-4 py-4">
-        <Membrete sobrePano>
+        <Volanta>
           {terminada ? 'Tu última presidencia' : 'Presidencia en curso'}
           {diaria && ' · la del día'}
-        </Membrete>
+        </Volanta>
 
-        <p className="mt-2 font-display text-[20px] leading-tight font-black text-papel">
+        <p className="mt-2 font-titular text-[20px] leading-tight font-black text-tinta">
           {club.name}
         </p>
-        <p className="mt-0.5 font-acta text-[11px] tracking-[0.06em] text-papel-2 uppercase tabular-nums">
+        <p className="mt-0.5 font-tabla text-[11px] tracking-[0.06em] text-tinta-2 uppercase tabular-nums">
           Temporada {season} · {year}
         </p>
 
         <button
           type="button"
           onClick={onContinuar}
-          className="mt-4 w-full bg-papel py-3.5 font-display text-[14px] font-black tracking-[0.1em] text-tinta uppercase transition-transform active:scale-[0.99]"
+          className="mt-4 w-full bg-[var(--club)] py-3.5 font-titular text-[14px] font-black tracking-[0.1em] text-fondo uppercase transition-opacity active:opacity-90"
         >
           {terminada ? 'Ver el epílogo' : 'Continuar'}
         </button>
 
         {confirmando ? (
-          <div className="mt-3 border-t border-linea pt-3">
-            <p className="font-body text-[14px] leading-snug text-papel">
+          <div className="mt-3 border-t border-corondel pt-3">
+            <p className="font-cuerpo text-[14px] leading-snug text-tinta">
               Si renunciás, esta presidencia se borra y no se puede recuperar.
             </p>
             <div className="mt-2.5 flex gap-2">
               <button
                 type="button"
                 onClick={onAbandonar}
-                className="min-h-11 flex-1 border border-sello-claro px-3 font-acta text-[11px] tracking-[0.1em] text-sello-claro uppercase transition-colors hover:bg-sello-claro/10"
+                className="min-h-11 flex-1 border border-alerta px-3 font-tabla text-[11px] tracking-[0.1em] text-alerta uppercase transition-colors hover:bg-alerta/10"
               >
                 Renunciar
               </button>
               <button
                 type="button"
                 onClick={() => setConfirmando(false)}
-                className="min-h-11 flex-1 border border-linea px-3 font-acta text-[11px] tracking-[0.1em] text-papel-2 uppercase transition-colors hover:text-papel"
+                className="min-h-11 flex-1 border border-corondel px-3 font-tabla text-[11px] tracking-[0.1em] text-tinta-2 uppercase transition-colors hover:text-tinta"
               >
                 Seguir
               </button>
@@ -303,7 +335,7 @@ function PanelEnCurso({
           <button
             type="button"
             onClick={() => setConfirmando(true)}
-            className="mt-2 min-h-11 w-full font-acta text-[11px] tracking-[0.14em] text-papel-2 uppercase underline underline-offset-4 transition-colors hover:text-papel"
+            className="mt-2 min-h-11 w-full font-tabla text-[11px] tracking-[0.14em] text-tinta-2 uppercase underline underline-offset-4 transition-colors hover:text-tinta"
           >
             Renunciar y empezar otra
           </button>
@@ -313,21 +345,12 @@ function PanelEnCurso({
   );
 }
 
-function BandaSuperior({ club }: { club: Club }) {
-  return (
-    <div className="flex h-1.5" aria-hidden>
-      <div className="flex-1" style={{ backgroundColor: club.colors[0] }} />
-      <div className="flex-1" style={{ backgroundColor: club.colors[1] }} />
-    </div>
-  );
-}
-
 function PanelVacio() {
   return (
-    <div className="border border-linea px-4 py-5">
-      <p className="font-body text-[15px] leading-relaxed text-papel-2">
+    <div className="border border-corondel px-4 py-5">
+      <p className="font-cuerpo text-[15px] leading-relaxed text-tinta-2">
         Elegí un club del padrón. El número que ves al lado de cada uno es la posición que su gente
-        espera: <span className="text-papel">contra eso te van a medir</span> durante dieciséis
+        espera: <span className="text-tinta">contra eso te van a medir</span> durante dieciséis
         temporadas.
       </p>
     </div>
@@ -343,52 +366,55 @@ function PanelElegido({
   modo: Modo;
   onEmpezar: () => void;
 }) {
-  return (
-    <div className="border border-bronce-claro/40 bg-pano-alto/60">
-      <BandaSuperior club={club} />
+  const tintaClub = useTintaClub(club);
 
-      <div className="px-4 py-4 sm:px-5 sm:py-5">
+  return (
+    <div
+      className="border border-[var(--club)]/50 bg-fondo-2/60"
+      style={{ '--club': tintaClub } as CSSProperties}
+    >
+      <div className="border-t-4 border-[var(--club)] px-4 py-4 sm:px-5 sm:py-5">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <h2 className="font-display text-[22px] leading-tight font-black text-papel sm:text-[26px]">
+            <h2 className="font-titular text-[22px] leading-tight font-black text-tinta sm:text-[26px]">
               {club.name}
             </h2>
             {club.nickname && (
-              <p className="mt-0.5 font-body text-[14px] text-papel-2">{club.nickname}</p>
+              <p className="mt-0.5 font-cuerpo text-[14px] text-tinta-2">{club.nickname}</p>
             )}
           </div>
-          <Sello tono="bronce" sobrePano className="shrink-0">
+          <Ladillo tono="club" className="shrink-0">
             Elegido
-          </Sello>
+          </Ladillo>
         </div>
 
-        <dl className="mt-5 flex gap-8 border-t border-linea pt-4">
+        <dl className="mt-5 flex gap-8 border-t border-corondel pt-4">
           <div>
-            <dt className="font-acta text-[11px] tracking-[0.06em] text-papel-2 uppercase">
+            <dt className="font-tabla text-[11px] tracking-[0.06em] text-tinta-2 uppercase">
               Te esperan
             </dt>
-            <dd className="font-display text-[26px] leading-none font-black text-papel tabular-nums">
+            <dd className="font-titular text-[26px] leading-none font-black text-tinta tabular-nums">
               {expectedPosition(club, club.league)}°
-              <span className="ml-1 font-acta text-[12px] font-normal text-papel-2">
+              <span className="ml-1 font-tabla text-[12px] font-normal text-tinta-2">
                 de {LEAGUES[club.league].teams}
               </span>
             </dd>
           </div>
           <div className="min-w-0">
-            <dt className="font-acta text-[11px] tracking-[0.06em] text-papel-2 uppercase">
+            <dt className="font-tabla text-[11px] tracking-[0.06em] text-tinta-2 uppercase">
               Categoría
             </dt>
-            <dd className="truncate font-display text-[17px] leading-tight font-bold text-papel">
+            <dd className="truncate font-titular text-[17px] leading-tight font-bold text-tinta">
               {LEAGUES[club.league].label}
             </dd>
           </div>
           <div className="min-w-0">
-            <dt className="font-acta text-[11px] tracking-[0.06em] text-papel-2 uppercase">
+            <dt className="font-tabla text-[11px] tracking-[0.06em] text-tinta-2 uppercase">
               Mandatos
             </dt>
-            <dd className="font-display text-[17px] leading-tight font-bold text-papel tabular-nums">
+            <dd className="font-titular text-[17px] leading-tight font-bold text-tinta tabular-nums">
               {mandatosDe(modo)}
-              <span className="ml-1 font-acta text-[12px] font-normal text-papel-2">
+              <span className="ml-1 font-tabla text-[12px] font-normal text-tinta-2">
                 de {TEMPORADAS_POR_MODO[modo]} temp.
               </span>
             </dd>
@@ -398,7 +424,7 @@ function PanelElegido({
         <button
           type="button"
           onClick={onEmpezar}
-          className="mt-5 w-full bg-papel py-4 font-display text-[15px] font-black tracking-[0.1em] text-tinta uppercase transition-transform active:scale-[0.99]"
+          className="mt-5 w-full bg-[var(--club)] py-4 font-titular text-[15px] font-black tracking-[0.1em] text-fondo uppercase transition-opacity active:opacity-90"
         >
           Asumir el cargo
         </button>

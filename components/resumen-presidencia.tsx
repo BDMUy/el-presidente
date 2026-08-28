@@ -1,7 +1,12 @@
+'use client';
+
+import type { CSSProperties } from 'react';
+
 import { computeScore } from '@/lib/engine/election';
 import { TITLES, type Club, type Ending, type GameState, type TitleId } from '@/lib/engine/types';
 import { plataCorta, plural } from '@/lib/format';
-import { Membrete, Sello } from './ui';
+import { useTintaClub } from '@/lib/tema';
+import { Ladillo, Volanta } from './ui';
 
 export function ResumenPresidencia({
   state,
@@ -12,6 +17,7 @@ export function ResumenPresidencia({
   club: Club;
   ending: Ending;
 }) {
+  const tintaClub = useTintaClub(club);
   const score = computeScore(state);
   const porTitulo = new Map<TitleId, number>();
   for (const title of state.titles) {
@@ -19,77 +25,84 @@ export function ResumenPresidencia({
   }
 
   return (
-    <>
-      <div className="-mx-5 -mt-5 mb-5 flex h-1.5 sm:-mx-7 sm:-mt-7" aria-hidden>
-        <div className="flex-1" style={{ backgroundColor: club.colors[0] }} />
-        <div className="flex-1" style={{ backgroundColor: club.colors[1] }} />
-      </div>
+    <div style={{ '--club': tintaClub } as CSSProperties}>
+      <div className="-mx-5 -mt-5 mb-5 h-1.5 bg-[var(--club)] sm:-mx-7 sm:-mt-7" aria-hidden />
 
-      <Membrete>
+      <Volanta>
         {club.name} · {state.history[0]?.year ?? state.year}–{state.year}
-      </Membrete>
+      </Volanta>
 
-      <h1 className="mt-3 font-display text-[clamp(1.8rem,8vw,2.6rem)] leading-[0.95] font-black tracking-tight text-tinta uppercase">
+      <h1
+        className="revelar-titular mt-3 font-titular text-[clamp(2.25rem,10vw,4rem)] leading-[0.9] font-black tracking-[-0.02em] text-tinta uppercase"
+        style={{ fontStretch: '75%' }}
+      >
         {ending.title}
       </h1>
 
-      <p className="mt-4 font-body text-[16px] leading-relaxed text-tinta">{ending.text}</p>
+      <p className="mt-4 font-cuerpo text-[16px] leading-relaxed text-tinta">{ending.text}</p>
 
-      <dl className="mt-7 grid grid-cols-3 gap-3 border-y border-hoja-linea py-4">
-        <Dato label="Temporadas" valor={String(state.season)} />
-        <Dato label="Títulos" valor={String(state.titles.length)} />
-        <Dato label="Hinchada" valor={String(Math.round(state.resources.hinchada))} />
-        <Dato label="Socios" valor={`${Math.round(state.resources.socios)}k`} />
-        <Dato label="Caja US$" valor={plataCorta(state.resources.caja)} />
-        <Dato label="Asc./Desc." valor={`${state.ascensos}/${state.descensos}`} />
-      </dl>
+      <div className="mt-7 border-y border-corondel py-4">
+        <dl className="grid grid-cols-3 divide-x divide-corondel">
+          <Dato label="Temporadas" valor={String(state.season)} />
+          <Dato label="Títulos" valor={String(state.titles.length)} />
+          <Dato label="Hinchada" valor={String(Math.round(state.resources.hinchada))} />
+        </dl>
+        <dl className="mt-4 grid grid-cols-3 divide-x divide-corondel">
+          <Dato label="Socios" valor={`${Math.round(state.resources.socios)}k`} />
+          <Dato label="Caja US$" valor={plataCorta(state.resources.caja)} />
+          <Dato label="Asc./Desc." valor={`${state.ascensos}/${state.descensos}`} />
+        </dl>
+      </div>
 
       {porTitulo.size > 0 ? (
         <div className="mt-5">
-          <Membrete>Vitrina de esta presidencia</Membrete>
+          <Volanta>Vitrina de esta presidencia</Volanta>
           <ul className="mt-2 flex flex-wrap gap-2">
             {[...porTitulo].map(([id, veces]) => (
               <li key={id}>
-                <Sello tono="bronce">
+                <Ladillo tono="club">
                   {TITLES[id].label}
                   {veces > 1 && ` ×${veces}`}
-                </Sello>
+                </Ladillo>
               </li>
             ))}
           </ul>
         </div>
       ) : (
-        <p className="mt-5 font-acta text-[12px] tracking-[0.08em] text-tinta-2 uppercase">
+        <p className="mt-5 font-tabla text-[12px] tracking-[0.08em] text-tinta-2 uppercase">
           Vitrina vacía. No todas las presidencias dejan una copa.
         </p>
       )}
 
       {state.modo === 'llamas' && (
-        <p className="mt-5 border-l-2 border-sello pl-3 font-acta text-[12px] leading-relaxed tracking-wide text-sello uppercase">
+        <p className="mt-5 border-l-2 border-alerta pl-3 font-tabla text-[12px] leading-relaxed tracking-wide text-alerta uppercase">
           Club en llamas · veintidós millones de deuda y la gente en contra
         </p>
       )}
 
-      <div className="mt-7 border-t-2 border-tinta pt-4 text-center">
-        <p className="font-acta text-[11px] tracking-[0.16em] text-tinta-2 uppercase">
+      <div
+        className="entrar-nota mt-7 border-t-2 border-[var(--club)] pt-4 text-center"
+        style={{ animationDelay: '420ms' }}
+      >
+        <p className="font-tabla text-[11px] tracking-[0.16em] text-tinta-2 uppercase">
           Puntaje de la presidencia
         </p>
-        <p className="font-display text-5xl leading-none font-black tabular-nums text-tinta">
+        <p className="font-titular text-5xl leading-none font-black tabular-nums text-tinta">
           {score.toLocaleString('es-AR')}
         </p>
-        <p className="mt-2 font-body text-[14px] text-tinta-2">
+        <p className="mt-2 font-cuerpo text-[14px] text-tinta-2">
           {plural(state.season, 'temporada', 'temporadas')} al frente de {club.name}
         </p>
       </div>
-    </>
+    </div>
   );
 }
 
 function Dato({ label, valor }: { label: string; valor: string }) {
   return (
-    <div>
-      <dt className="font-acta text-[11px] tracking-[0.08em] text-tinta-2 uppercase">{label}</dt>
-      <dd className="mt-0.5 font-display text-lg leading-none font-black tabular-nums text-tinta">
+    <div className="pl-3 first:pl-0">
+      <dt className="font-tabla text-[11px] tracking-[0.08em] text-tinta-2 uppercase">{label}</dt>
+      <dd className="mt-0.5 font-titular text-lg leading-none font-black tabular-nums text-tinta">
         {valor}
       </dd>
     </div>

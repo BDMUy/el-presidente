@@ -1,24 +1,22 @@
 import type { Metadata, Viewport } from 'next';
-import { Archivo, Chivo, Courier_Prime } from 'next/font/google';
+import { Archivo, Newsreader } from 'next/font/google';
+import Script from 'next/script';
 import './globals.css';
-
-const chivo = Chivo({
-  variable: '--font-chivo',
-  subsets: ['latin'],
-  weight: ['700', '900'],
-});
 
 const archivo = Archivo({
   variable: '--font-archivo',
   subsets: ['latin'],
-  weight: ['400', '500', '600'],
+  axes: ['wdth'],
 });
 
-const courier = Courier_Prime({
-  variable: '--font-courier',
+const newsreader = Newsreader({
+  variable: '--font-newsreader',
   subsets: ['latin'],
-  weight: ['400', '700'],
+  style: ['normal', 'italic'],
+  axes: ['opsz'],
 });
+
+const SCRIPT_TEMA = `try{var t=localStorage.getItem('el-presidente:tema');if(!t){t=matchMedia('(prefers-color-scheme: light)').matches?'claro':'oscuro'}if(t==='claro'){document.documentElement.setAttribute('data-tema','claro')}}catch(e){}`;
 
 function baseDelSitio(): URL {
   const configurada = process.env.SITE_URL ?? process.env.URL;
@@ -37,16 +35,30 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#14342a',
+  themeColor: [
+    { media: '(prefers-color-scheme: dark)', color: '#23242a' },
+    { media: '(prefers-color-scheme: light)', color: '#f1efe9' },
+  ],
 };
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
     <html
       lang="es-AR"
-      className={`${chivo.variable} ${archivo.variable} ${courier.variable} h-full antialiased`}
+      className={`${archivo.variable} ${newsreader.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        <Script id="tema-inicial" strategy="beforeInteractive">
+          {SCRIPT_TEMA}
+        </Script>
+        <a
+          href="#principal"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:border-2 focus:border-tinta focus:bg-fondo focus:px-4 focus:py-2 focus:font-tabla focus:text-[11px] focus:font-bold focus:tracking-[0.1em] focus:text-tinta focus:uppercase"
+        >
+          Saltar al contenido
+        </a>
+        {children}
+      </body>
     </html>
   );
 }

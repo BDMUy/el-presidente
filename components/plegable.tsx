@@ -17,7 +17,7 @@ export function Plegable({
   const id = useId();
 
   return (
-    <section className="mt-6 border border-linea lg:border-0">
+    <section className="mt-6 border border-corondel lg:border-0">
       <button
         type="button"
         onClick={() => setAbierto((a) => !a)}
@@ -26,24 +26,24 @@ export function Plegable({
         className="flex min-h-11 w-full items-center gap-3 px-3 text-left lg:hidden"
       >
         <span className="min-w-0 flex-1">
-          <span className="block font-acta text-[12px] font-bold tracking-[0.1em] text-papel-2 uppercase">
+          <span className="block font-tabla text-[12px] font-bold tracking-[0.1em] text-tinta-2 uppercase">
             {titulo}
           </span>
           {resumen && !abierto && (
-            <span className="mt-0.5 block truncate font-body text-[13px] text-papel-2">
+            <span className="mt-0.5 block truncate font-cuerpo text-[13px] text-tinta-2">
               {resumen}
             </span>
           )}
         </span>
         <span
           aria-hidden
-          className="shrink-0 font-display text-[18px] leading-none font-black text-bronce-claro"
+          className="shrink-0 font-titular text-[18px] leading-none font-black text-tinta"
         >
           {abierto ? '−' : '+'}
         </span>
       </button>
 
-      <p className="hidden font-acta text-[12px] font-bold tracking-[0.1em] text-papel-2 uppercase lg:block">
+      <p className="hidden font-tabla text-[12px] font-bold tracking-[0.1em] text-tinta-2 uppercase lg:block">
         {titulo}
       </p>
 

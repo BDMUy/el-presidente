@@ -1,44 +1,5 @@
-type RGB = [number, number, number];
-
-function hex(color: string): RGB {
-  const h = color.replace('#', '');
-  return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
-}
-
-function aHex([r, g, b]: RGB): string {
-  return `#${[r, g, b].map((c) => Math.round(c).toString(16).padStart(2, '0')).join('')}`;
-}
-
-function mezclar(frente: RGB, fondo: RGB, alfa: number): RGB {
-  return frente.map((c, i) => c * alfa + fondo[i] * (1 - alfa)) as RGB;
-}
-
-function luminancia([r, g, b]: RGB): number {
-  const canal = (v: number) => {
-    const s = v / 255;
-    return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
-  };
-  return 0.2126 * canal(r) + 0.7152 * canal(g) + 0.0722 * canal(b);
-}
-
-function ratio(a: RGB, b: RGB): number {
-  const la = luminancia(a);
-  const lb = luminancia(b);
-  return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
-}
-
-function resolver(desde: RGB, hacia: RGB, fondo: RGB, objetivo: number): { color: RGB; r: number } {
-  let lo = 0;
-  let hi = 1;
-  for (let i = 0; i < 40; i++) {
-    const mid = (lo + hi) / 2;
-    const candidato = mezclar(hacia, desde, mid);
-    if (ratio(candidato, fondo) >= objetivo) hi = mid;
-    else lo = mid;
-  }
-  const color = mezclar(hacia, desde, hi);
-  return { color, r: ratio(color, fondo) };
-}
+import { CLUBS } from '../content/clubs';
+import { aHex, FONDO_CLARO, FONDO_OSCURO, hex, mezclar, ratio, resolver, tintaDeClub, type RGB } from '../lib/color';
 
 const T = {
   pano: '#14342a',
@@ -57,6 +18,29 @@ const T = {
   verde800: '#065f46',
   blanco: '#ffffff',
 };
+
+const TEMAS = {
+  oscuro: {
+    nombre: 'oscuro',
+    fondo: FONDO_OSCURO,
+    bloque: '#2B2C33',
+    tinta: '#E6E3DB',
+    tinta2: '#A3A09A',
+    tinta3: '#85827C',
+    alerta: '#F07A6B',
+    favorable: '#8FBF8A',
+  },
+  claro: {
+    nombre: 'claro',
+    fondo: FONDO_CLARO,
+    bloque: '#E4E1D8',
+    tinta: '#1C1B20',
+    tinta2: '#57545C',
+    tinta3: '#7C7982',
+    alerta: '#B3261E',
+    favorable: '#2C6A4C',
+  },
+} as const;
 
 if (process.argv[2] === 'resolver') {
   console.log('\nTOKENS DERIVADOS PARA FONDO OSCURO\n');
@@ -94,6 +78,31 @@ if (process.argv[2] === 'resolver') {
   process.exit(0);
 }
 
+if (process.argv[2] === 'clubes') {
+  console.log('\nTINTA DE CLUB — AUDITORÍA DE CONTRASTE\n');
+  console.log(`  ${CLUBS.length} clubes, objetivo 4.5:1, contra los dos temas.\n`);
+
+  let fallas = 0;
+  for (const tema of Object.values(TEMAS)) {
+    console.log(`--- tema ${tema.nombre} (fondo ${tema.fondo}) ---\n`);
+    for (const club of CLUBS) {
+      const original = club.colors[0];
+      const ajustado = tintaDeClub(original, tema.fondo, 4.5);
+      const r = ratio(hex(ajustado), hex(tema.fondo));
+      const pasa = r >= 4.5;
+      if (!pasa) fallas++;
+      const movido = ajustado.toLowerCase() !== original.toLowerCase();
+      console.log(
+        `  ${pasa ? 'OK   ' : 'FALLA'} ${r.toFixed(2).padStart(6)}:1  ${original} -> ${ajustado}${movido ? '' : '  (sin cambios)'}  ${club.name}`,
+      );
+    }
+    console.log('');
+  }
+
+  console.log(fallas === 0 ? 'Todo pasa.\n' : `${fallas} pares club/tema fallan.\n`);
+  process.exit(fallas === 0 ? 0 : 1);
+}
+
 interface Caso {
   donde: string;
   frente: string;
@@ -123,7 +132,7 @@ const CASOS: Caso[] = [
   { donde: 'Botón Asumir (tinta sobre papel)', frente: T.tinta, fondo: T.papel },
 ];
 
-console.log('\nAUDITORÍA DE CONTRASTE (WCAG 2.1)\n');
+console.log('\nAUDITORÍA DE CONTRASTE (WCAG 2.1) — TOKENS ACTUALES\n');
 let fallas = 0;
 for (const caso of CASOS) {
   const fondo = hex(caso.fondo);
@@ -136,4 +145,31 @@ for (const caso of CASOS) {
     `  ${pasa ? (r >= 7 ? 'AAA ' : 'AA  ') : 'FALLA'} ${r.toFixed(2).padStart(6)}:1  (mín ${minimo})  ${caso.donde}`,
   );
 }
-console.log(`\n${fallas === 0 ? 'Todo pasa.' : `${fallas} de ${CASOS.length} pares fallan.`}\n`);
+
+console.log('\nAUDITORÍA DE CONTRASTE (WCAG 2.1) — TEMAS NUEVOS\n');
+for (const tema of Object.values(TEMAS)) {
+  const filas: Caso[] = [
+    { donde: `[${tema.nombre}] tinta sobre fondo`, frente: tema.tinta, fondo: tema.fondo },
+    { donde: `[${tema.nombre}] tinta-2 sobre fondo`, frente: tema.tinta2, fondo: tema.fondo },
+    { donde: `[${tema.nombre}] tinta-3 sobre fondo (grande)`, frente: tema.tinta3, fondo: tema.fondo, grande: true },
+    { donde: `[${tema.nombre}] tinta sobre bloque`, frente: tema.tinta, fondo: tema.bloque },
+    { donde: `[${tema.nombre}] tinta-2 sobre bloque`, frente: tema.tinta2, fondo: tema.bloque },
+    { donde: `[${tema.nombre}] alerta sobre fondo`, frente: tema.alerta, fondo: tema.fondo },
+    { donde: `[${tema.nombre}] favorable sobre fondo`, frente: tema.favorable, fondo: tema.fondo },
+    { donde: `[${tema.nombre}] separación fondo/bloque`, frente: tema.bloque, fondo: tema.fondo, minimo: 1 },
+  ];
+  for (const caso of filas) {
+    const f = hex(caso.frente);
+    const b = hex(caso.fondo);
+    const r = ratio(f, b);
+    const minimo = caso.minimo ?? (caso.grande ? 3 : 4.5);
+    const pasa = r >= minimo;
+    if (!pasa) fallas++;
+    console.log(
+      `  ${pasa ? (r >= 7 ? 'AAA ' : 'AA  ') : 'FALLA'} ${r.toFixed(2).padStart(6)}:1  (mín ${minimo})  ${caso.donde}`,
+    );
+  }
+}
+
+console.log(`\n${fallas === 0 ? 'Todo pasa.' : `${fallas} pares fallan.`}\n`);
+process.exit(fallas === 0 ? 0 : 1);

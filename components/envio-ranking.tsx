@@ -1,11 +1,12 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import Link from 'next/link';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { marcarDiariaJugada } from '@/components/presidencia-del-dia';
 import type { GameState } from '@/lib/engine/types';
 import { guardarNombre, idDispositivo, nombreDelPresidente } from '@/lib/dispositivo';
-import { Membrete } from './ui';
+import { Volanta } from './ui';
 
 type Estado =
   | { fase: 'cargando' }
@@ -18,6 +19,7 @@ type Estado =
 export function EnvioAlRanking({ state, diaria }: { state: GameState; diaria: string | null }) {
   const [estado, setEstado] = useState<Estado>({ fase: 'cargando' });
   const [nombre, setNombre] = useState('');
+  const nombreRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     let vivo = true;
@@ -37,6 +39,7 @@ export function EnvioAlRanking({ state, diaria }: { state: GameState; diaria: st
     const limpio = nombre.trim();
     if (limpio.length === 0) {
       setEstado({ fase: 'error', mensaje: 'Poné un nombre para aparecer en la tabla.' });
+      nombreRef.current?.focus();
       return;
     }
 
@@ -75,9 +78,9 @@ export function EnvioAlRanking({ state, diaria }: { state: GameState; diaria: st
 
   if (estado.fase === 'enviado') {
     return (
-      <div className="mt-7 border-t border-hoja-linea pt-4">
-        <Membrete>{diaria ? 'Ranking del día' : 'Ranking global'}</Membrete>
-        <p className="mt-2 font-body text-[15px] leading-relaxed text-tinta">
+      <div className="mt-7 border-t border-corondel pt-4">
+        <Volanta>{diaria ? 'Ranking del día' : 'Ranking global'}</Volanta>
+        <p className="mt-2 font-cuerpo text-[15px] leading-relaxed text-tinta">
           Tu presidencia entró a la tabla con{' '}
           <span className="font-semibold">{estado.puntaje.toLocaleString('es-AR')}</span> puntos.
         </p>
@@ -86,39 +89,60 @@ export function EnvioAlRanking({ state, diaria }: { state: GameState; diaria: st
   }
 
   return (
-    <div className="mt-7 border-t border-hoja-linea pt-4">
-      <Membrete>{diaria ? 'Ranking del día' : 'Ranking global'}</Membrete>
+    <div className="mt-7 border-t border-corondel pt-4">
+      <Volanta>{diaria ? 'Ranking del día' : 'Ranking global'}</Volanta>
 
-      <p className="mt-2 font-body text-[14px] leading-snug text-tinta-2">
+      <p className="mt-2 font-cuerpo text-[14px] leading-snug text-tinta-2">
         {diaria
           ? 'Hoy todos jugaron esta misma partida. Compará tu presidencia con la del resto.'
           : 'Entrá en la tabla histórica con esta presidencia.'}
       </p>
 
-      <div className="mt-3 flex gap-2">
+      <p className="mt-2 font-cuerpo text-[12px] leading-snug text-tinta-2">
+        Al enviar guardamos tu nombre y tu partida para el ranking.{' '}
+        <Link href="/privacidad" className="underline underline-offset-2 hover:text-tinta">
+          Política de privacidad
+        </Link>
+        .
+      </p>
+
+      <form
+        noValidate
+        onSubmit={(e) => {
+          e.preventDefault();
+          enviar();
+        }}
+        className="mt-3 flex gap-2"
+      >
         <label className="flex-1">
           <span className="sr-only">Tu nombre en la tabla</span>
           <input
+            ref={nombreRef}
             type="text"
             value={nombre}
             onChange={(e) => setNombre(e.target.value)}
             maxLength={24}
+            required
+            aria-required
+            aria-invalid={estado.fase === 'error'}
+            aria-describedby={estado.fase === 'error' ? 'ranking-error' : undefined}
             placeholder="Tu nombre"
-            className="w-full border border-hoja-linea bg-transparent px-3 py-2.5 font-body text-[15px] text-tinta placeholder:text-tinta-2 focus:border-tinta focus:outline-none"
+            className="w-full border border-corondel bg-fondo-2 px-3 py-2.5 font-cuerpo text-[15px] text-tinta placeholder:text-tinta-2 focus:border-tinta focus:outline-none"
           />
         </label>
         <button
-          type="button"
-          onClick={enviar}
+          type="submit"
           disabled={estado.fase === 'enviando'}
-          className="shrink-0 bg-tinta px-5 py-2.5 font-display text-[13px] font-black tracking-[0.1em] text-hoja uppercase transition-transform active:scale-[0.98] disabled:opacity-50"
+          className="shrink-0 bg-tinta px-5 py-2.5 font-titular text-[13px] font-black tracking-[0.1em] text-fondo uppercase transition-colors active:bg-tinta-2 disabled:opacity-50"
         >
           {estado.fase === 'enviando' ? 'Enviando' : 'Enviar'}
         </button>
-      </div>
+      </form>
 
       {estado.fase === 'error' && (
-        <p className="mt-2 font-body text-[14px] text-sello">{estado.mensaje}</p>
+        <p id="ranking-error" role="alert" className="mt-2 font-cuerpo text-[14px] text-alerta">
+          {estado.mensaje}
+        </p>
       )}
     </div>
   );

@@ -1,21 +1,25 @@
 import Link from 'next/link';
 
-import { Membrete, Papel, Sello, Titulo } from '@/components/ui';
+import { Ladillo, Recuadro, Titular, Volanta } from '@/components/ui';
 
 export default function NoEncontrado() {
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-xl flex-col justify-center px-4 py-10">
-      <Papel torcido={1}>
+    <main
+      id="principal"
+      tabIndex={-1}
+      className="mx-auto flex min-h-dvh w-full max-w-xl flex-col justify-center px-4 py-10 focus:outline-none"
+    >
+      <Recuadro>
         <div className="flex items-start justify-between gap-4">
-          <Membrete>Mesa de entradas</Membrete>
-          <Sello tono="rojo" className="shrink-0">
+          <Volanta>Mesa de entradas</Volanta>
+          <Ladillo tono="alerta" className="shrink-0">
             No consta
-          </Sello>
+          </Ladillo>
         </div>
 
         <div className="mt-5">
-          <Titulo>Este expediente no existe</Titulo>
-          <p className="mt-3 font-body text-[16px] leading-relaxed text-tinta">
+          <Titular>Este expediente no existe</Titular>
+          <p className="mt-3 font-cuerpo text-[16px] leading-relaxed text-tinta">
             Si llegaste hasta acá por el link de una presidencia, es probable que se haya cortado
             en el camino. Pediselo de nuevo a quien te lo mandó, entero.
           </p>
@@ -23,11 +27,11 @@ export default function NoEncontrado() {
 
         <Link
           href="/"
-          className="mt-6 block w-full bg-tinta py-4 text-center font-display text-[14px] font-black tracking-[0.12em] text-hoja uppercase transition-transform active:scale-[0.99]"
+          className="mt-6 block w-full bg-tinta py-4 text-center font-titular text-[14px] font-black tracking-[0.12em] text-fondo uppercase transition-[color,background-color,transform] active:scale-[0.97] active:bg-tinta-2"
         >
           Dirigí tu club
         </Link>
-      </Papel>
+      </Recuadro>
     </main>
   );
 }

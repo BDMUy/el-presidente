@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-import { guardarNombre, leerNombre, nombreAsignado } from '@/lib/dispositivo';
+import { alReasignarNombre, guardarNombre, leerNombre, nombreAsignado } from '@/lib/dispositivo';
 import { LARGO_MAXIMO_NOMBRE, limpiarNombre } from '@/lib/nombre';
 
 export function CampoNombre() {
@@ -13,6 +13,7 @@ export function CampoNombre() {
   useEffect(() => {
     setNombre(leerNombre());
     setAsignado(nombreAsignado());
+    return alReasignarNombre(() => setAsignado(nombreAsignado()));
   }, []);
 
   const cambiar = (crudo: string) => {
@@ -35,7 +36,7 @@ export function CampoNombre() {
   return (
     <div className="mt-5">
       <label className="block">
-        <span className="font-acta text-[12px] font-bold tracking-[0.1em] text-papel-2 uppercase">
+        <span className="font-tabla text-[12px] font-bold tracking-[0.1em] text-tinta-2 uppercase">
           Tu nombre
         </span>
         <input
@@ -48,10 +49,10 @@ export function CampoNombre() {
           autoComplete="name"
           autoCorrect="off"
           spellCheck={false}
-          className="mt-1.5 w-full border border-linea bg-pano-alto px-3 py-2.5 font-body text-[15px] text-papel placeholder:text-papel-2 focus:border-bronce-claro focus:outline-none"
+          className="mt-1.5 w-full border border-corondel bg-fondo-2 px-3 py-2.5 font-cuerpo text-[15px] text-tinta placeholder:text-tinta-2 focus:border-tinta focus:outline-none"
         />
       </label>
-      <p className="mt-1.5 font-body text-[13px] leading-snug text-papel-2">
+      <p className="mt-1.5 font-cuerpo text-[13px] leading-snug text-tinta-2">
         {guardado
           ? 'Con ese nombre vas a figurar en la tabla de posiciones.'
           : nombre.trim().length > 0

@@ -1,12 +1,12 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { getClub } from '@/content/clubs';
 import { presidenciaDelDia } from '@/lib/daily';
 import { applyChoice, replayRun, startRun } from '@/lib/engine/engine';
 import { EVENTS_PER_SEASON, type GameState, type Modo } from '@/lib/engine/types';
-import { borrar, guardar, leer, marcarActaVista, vioActa } from '@/lib/storage';
+import { borrar, guardar, leer } from '@/lib/storage';
 import { ActaAsuncion } from './acta-asuncion';
 import { Arranque } from './arranque';
 import { Cargando } from './cargando';
@@ -33,6 +33,19 @@ export function Juego() {
 
   const [enJuego, setEnJuego] = useState(false);
 
+  const principalRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const main = principalRef.current;
+    if (!main) return;
+    const heading = main.querySelector('h1');
+    if (heading) {
+      heading.tabIndex = -1;
+      heading.style.outline = 'none';
+    }
+    (heading ?? main).focus({ preventScroll: true });
+  }, [enJuego, mostrarActa, partida?.state.choices.length]);
+
   useEffect(() => {
     const guardada = leer();
     if (guardada) {
@@ -56,7 +69,7 @@ export function Juego() {
   const empezar = useCallback((clubId: string, modo: Modo) => {
     const seed = Math.floor(Math.random() * 0xffffffff);
     setPartida({ state: startRun({ seed, clubId, modo }), diaria: null });
-    setMostrarActa(!vioActa());
+    setMostrarActa(true);
     setEnJuego(true);
     guardar({ seed, clubId, modo, choices: [], diaria: null });
     alTope();
@@ -65,7 +78,7 @@ export function Juego() {
   const empezarDiaria = useCallback(() => {
     const { seed, clubId, fecha } = presidenciaDelDia();
     setPartida({ state: startRun({ seed, clubId, modo: 'normal' }), diaria: fecha });
-    setMostrarActa(!vioActa());
+    setMostrarActa(true);
     setEnJuego(true);
     guardar({ seed, clubId, modo: 'normal', choices: [], diaria: fecha });
     alTope();
@@ -82,7 +95,6 @@ export function Juego() {
   }, []);
 
   const cerrarActa = useCallback(() => {
-    marcarActaVista();
     setMostrarActa(false);
   }, []);
 
@@ -119,7 +131,7 @@ export function Juego() {
 
   if (!enJuego || !partida) {
     return (
-      <main>
+      <main ref={principalRef} id="principal" tabIndex={-1} className="focus:outline-none">
         <Arranque
           onEmpezar={empezar}
           onEmpezarDiaria={empezarDiaria}
@@ -145,7 +157,12 @@ export function Juego() {
   const club = getClub(state.clubId);
 
   return (
-    <main className="flex min-h-dvh flex-col">
+    <main
+      ref={principalRef}
+      id="principal"
+      tabIndex={-1}
+      className="flex min-h-dvh flex-col focus:outline-none"
+    >
       <Hud
         club={club}
         resources={state.resources}
@@ -154,6 +171,7 @@ export function Juego() {
         mandate={state.mandate}
         league={state.league}
         inhibido={state.phase.kind === 'mercado' && state.phase.inhibido}
+        onVolver={volverAlInicio}
       />
 
       <div className="mx-auto w-full max-w-xl flex-1 px-4 py-6">
@@ -162,6 +180,7 @@ export function Juego() {
             club={club}
             resources={state.resources}
             modo={state.modo}
+            seed={state.seed}
             onAsumir={cerrarActa}
           />
         ) : (
@@ -174,16 +193,6 @@ export function Juego() {
           />
         )}
       </div>
-
-      <footer className="mx-auto w-full max-w-xl px-4 pb-6">
-        <button
-          type="button"
-          onClick={volverAlInicio}
-          className="-mx-2 px-2 py-3 font-acta text-[11px] tracking-[0.14em] text-papel-2 uppercase underline underline-offset-4 transition-colors hover:text-papel"
-        >
-          ← Volver al inicio
-        </button>
-      </footer>
     </main>
   );
 }
@@ -200,6 +209,7 @@ function Pantalla({
   onReiniciar: () => void;
 }) {
   const { phase } = state;
+  const club = getClub(state.clubId);
 
   switch (phase.kind) {
     case 'mercado':
@@ -216,6 +226,7 @@ function Pantalla({
     case 'evento':
       return (
         <FaseEvento
+          club={club}
           event={phase.event}
           available={phase.available}
           enLaTemporada={state.eventsThisSeason}
@@ -227,6 +238,7 @@ function Pantalla({
     case 'resultado-evento':
       return (
         <FaseResultadoEvento
+          club={club}
           text={phase.text}
           effects={phase.effects}
           onContinuar={() => onElegir(0)}
@@ -264,7 +276,7 @@ function Pantalla({
       return (
         <FaseFin
           state={state}
-          club={getClub(state.clubId)}
+          club={club}
           ending={phase.ending}
           diaria={diaria}
           onReiniciar={onReiniciar}

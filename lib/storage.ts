@@ -51,25 +51,6 @@ export function leer(): PartidaGuardada | null {
   }
 }
 
-const KEY_ACTA = 'el-presidente:vio-acta';
-
-export function vioActa(): boolean {
-  if (typeof window === 'undefined') return true;
-  try {
-    return window.localStorage.getItem(KEY_ACTA) === '1';
-  } catch {
-    return true;
-  }
-}
-
-export function marcarActaVista(): void {
-  if (typeof window === 'undefined') return;
-  try {
-    window.localStorage.setItem(KEY_ACTA, '1');
-  } catch {
-  }
-}
-
 export function borrar(): void {
   if (typeof window === 'undefined') return;
   try {

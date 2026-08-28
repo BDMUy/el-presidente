@@ -68,7 +68,7 @@ Consequences to respect:
 
 Events are typed declarative objects in `content/events/`. Adding content means
 adding a file and listing it in `content/events/index.ts`. The engine is not
-touched. The catalogue is 131 cards across twelve fronts, plus 64 clubs, 8
+touched. The catalogue is 167 cards across twelve fronts, plus 344 clubs, 36
 titles and 18 achievements.
 
 Cards without a `requires` condition are the general pool; conditioned cards
@@ -130,7 +130,7 @@ Mobile first, and 375px is the real target, not an edge case. Interactive
 elements get `min-h-11`. Text that can be long must wrap or clamp, never
 silently truncate a decision the player is about to confirm.
 
-`/cartas` renders all 131 cards using the real `FaseEvento` component. It is
+`/cartas` renders all 167 cards using the real `FaseEvento` component. It is
 disabled in production via `notFound()`. Use it to read content at the width it
 will be read at; a gallery that draws cards its own way lies about exactly what
 you want to check.
