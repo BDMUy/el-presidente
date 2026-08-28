@@ -1,0 +1,222 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-28",
+  "title": "Design System: El Presidente",
+  "extensions": {
+    "colorMeta": {
+      "fondo": {
+        "role": "neutral",
+        "displayName": "Newsprint",
+        "canonical": "#23242a",
+        "lightEdition": "#f1efe9",
+        "tonalRamp": ["#1b1c21", "#23242a", "#2b2c33", "#33343c", "#3d3e47", "#4b4c56", "#5d5e69", "#71727e"]
+      },
+      "fondo-2": {
+        "role": "neutral",
+        "displayName": "Raised Block",
+        "canonical": "#2b2c33",
+        "lightEdition": "#e4e1d8",
+        "tonalRamp": ["#1f2025", "#272830", "#2b2c33", "#34353d", "#3e3f49", "#4d4e59", "#60616d", "#757682"]
+      },
+      "tinta": {
+        "role": "primary",
+        "displayName": "Warm Newsprint Ink",
+        "canonical": "#e6e3db",
+        "lightEdition": "#1c1b20",
+        "tonalRamp": ["#3c3a34", "#575349", "#726d61", "#8d8779", "#a8a296", "#c2bcb1", "#d7d3ca", "#efece4"]
+      },
+      "tinta-2": {
+        "role": "primary",
+        "displayName": "Ink 2",
+        "canonical": "#a3a09a",
+        "lightEdition": "#57545c",
+        "tonalRamp": ["#3a3934", "#4f4d47", "#65625b", "#7c7970", "#928f86", "#a9a69d", "#c3c0b8", "#dedbd4"]
+      },
+      "tinta-3": {
+        "role": "primary",
+        "displayName": "Ink 3",
+        "canonical": "#85827c",
+        "lightEdition": "#7c7982",
+        "tonalRamp": ["#33322e", "#464540", "#5a5852", "#6e6c65", "#838079", "#98958d", "#b3b0a8", "#cfccc5"]
+      },
+      "corondel": {
+        "role": "neutral",
+        "displayName": "Corondel",
+        "canonical": "#45474e",
+        "lightEdition": "#c9c5ba",
+        "tonalRamp": ["#26272c", "#313339", "#3b3d44", "#45474e", "#565963", "#6e7079", "#8b8d95", "#adaeb4"]
+      },
+      "corondel-fuerte": {
+        "role": "neutral",
+        "displayName": "Corondel Fuerte",
+        "canonical": "#6e7079",
+        "lightEdition": "#8e8b83",
+        "tonalRamp": ["#2e2f34", "#3c3d43", "#4a4b53", "#585a63", "#6e7079", "#888a93", "#a6a8b0", "#c6c7cd"]
+      },
+      "alerta": {
+        "role": "secondary",
+        "displayName": "Alert Coral",
+        "canonical": "#f07a6b",
+        "lightEdition": "#b3261e",
+        "tonalRamp": ["#4a1a14", "#6d251c", "#8f3227", "#b23f31", "#d0503f", "#f07a6b", "#f5a79c", "#fbd3cd"]
+      },
+      "favorable": {
+        "role": "secondary",
+        "displayName": "Favor Sage",
+        "canonical": "#8fbf8a",
+        "lightEdition": "#2c6a4c",
+        "tonalRamp": ["#1f3a1d", "#2f572c", "#3f733b", "#4f8f4a", "#6aa563", "#8fbf8a", "#b3d5af", "#d6ead4"]
+      },
+      "club-accent": {
+        "role": "tertiary",
+        "displayName": "Club Accent (runtime)",
+        "canonical": "var(--club)",
+        "note": "The club's real primary colour passed through tintaDeClub() — an OKLCH lightness search that shifts it toward the active theme background until it clears 4.5:1. Computed per club per theme; no static value. Representative solved value used in previews: #79b4a8.",
+        "tonalRamp": ["#16302c", "#1f453f", "#295a52", "#347066", "#4a8a7f", "#79b4a8", "#a6d2c9", "#d2e9e4"]
+      }
+    },
+    "typographyMeta": {
+      "scale": { "displayName": "Step scale", "purpose": "The non-heading editorial ramp, enumerated in frontmatter typography.scale: 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 26px. 11px is the functional-text floor; 10px only for aria-hidden glyphs and the 'al azar' micro-tag." },
+      "masthead": { "displayName": "Masthead", "purpose": "The 'El Presidente' nameplate on the home edition only. Archivo 900, clamp(2.75rem, 11vw, 4.5rem), width 80%, line-height 0.86, boxed in a 4px/2px rule pair. Wipes open with revelar-titular." },
+      "display": { "displayName": "Display / Titular", "purpose": "The headline of every event card, result, and acta. Archivo 800, clamp(1.75rem, 7vw, 2.75rem), width 66%, uppercase, line-height 0.92." },
+      "ending": { "displayName": "Ending", "purpose": "The outcome title in ResumenPresidencia and its Open Graph echo. Archivo 900, clamp(2.25rem, 10vw, 4rem), width 75%, uppercase." },
+      "page-title": { "displayName": "Page title", "purpose": "The standalone-page h1 (/privacidad). Archivo 900, clamp(2rem, 8vw, 3rem), width 80%, uppercase, boxed in the 4px/2px rule pair." },
+      "match-title": { "displayName": "Match title", "purpose": "The mesa-chica fixture name. Archivo 900, clamp(1.5rem, 7vw, 2rem), line-height 1.05, centred, uppercase." },
+      "headline": { "displayName": "Headline", "purpose": "Club-name headings and panel titles (20–26px in practice; canonical 22px). Archivo 900, line-height 1.05." },
+      "title": { "displayName": "Title / Volanta", "purpose": "The kicker line above a headline, with a corondel underline. Archivo 700, width 75%, tracking 0.14em, uppercase." },
+      "body": { "displayName": "Body / Cuerpo", "purpose": "Event text and all reading copy. Newsreader serif 17px, line-height 1.625, max 66ch." },
+      "deck": { "displayName": "Deck / Bajada", "purpose": "The italic standfirst under a headline. Newsreader italic 19px, line-height 1.375, ink-2, max 46ch." },
+      "label": { "displayName": "Label / Agate", "purpose": "Every label, timestamp, resource name, delta and figure. Archivo 700, 11px, tracking 0.06–0.14em, uppercase, tabular-nums when numeric." }
+    },
+    "shadows": [],
+    "shadowPhilosophy": "Flat. No box-shadow, drop-shadow or filter anywhere in the system. Depth is a single tonal step (fondo → fondo-2) plus a 4px coloured border-top. Sticky bars use bg opacity /97 + backdrop-blur as the only overlap cue.",
+    "motion": [
+      { "name": "ease-out", "value": "cubic-bezier(0.23, 1, 0.32, 1)", "purpose": "Default easing — content entrances, stripe draw, button press." },
+      { "name": "ease-in-out", "value": "cubic-bezier(0.77, 0, 0.175, 1)", "purpose": "Symmetric moves, e.g. the theme-icon sun/moon morph." },
+      { "name": "entrar-nota", "value": "translateY(6px) + opacity 0→1, 180ms ease-out", "purpose": "Every card and list item entrance; staggered with animationDelay = index * 40–60ms." },
+      { "name": "filete-animado", "value": "scaleX(0→1) from left, 320ms ease-out, 120ms delay", "purpose": "The two-colour club stripe drawing in under a headline or across the HUD." },
+      { "name": "revelar-titular", "value": "clip-path inset(0 100% 0 0) → inset(0), 480ms ease-out", "purpose": "Headline / masthead wipe-open reveal." },
+      { "name": "button-press", "value": "transform: scale(0.97), 160ms ease-out", "purpose": "Global :active on every button — the physical depress." },
+      { "name": "theme-wipe", "value": "circle(0 → corner radius) at pointer, 520ms cubic-bezier(0.65, 0, 0.35, 1)", "purpose": "View Transitions circular wipe on theme toggle; skipped under prefers-reduced-motion." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "lg", "value": "1024px" }
+    ],
+    "reducedMotion": "prefers-reduced-motion: reduce keeps meaningful feedback and reduces movement: entrar-nota becomes an opacity-only fade (no translate); filete-animado and revelar-titular are removed; the theme-icon morph is instant; the button :active scale(0.97) press keeps its 160ms ease; every other non-button transition snaps to ~0.01ms.",
+    "measures": { "body": "66ch", "deck": "46ch", "gameColumn": "36rem (576px)", "homeMax": "1280px", "minTapTarget": "44px (min-h-11)" }
+  },
+  "components": [
+    {
+      "name": "Primary Button (neutral)",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The default forward action off a game surface — solid ink slab, full width, uppercase agate, physical depress on tap.",
+      "html": "<button class=\"ds-btn-primary\">Asumir el cargo</button>",
+      "css": ".ds-btn-primary { display: block; width: 100%; padding: 16px 20px; border: none; border-radius: 0; background: var(--tinta, #e6e3db); color: var(--fondo, #23242a); font-family: Archivo, 'Helvetica Neue', Arial, sans-serif; font-size: 14px; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: background 160ms cubic-bezier(0.23,1,0.32,1), transform 160ms cubic-bezier(0.23,1,0.32,1); } .ds-btn-primary:hover { background: #f2efe7; } .ds-btn-primary:active { background: var(--tinta-2, #a3a09a); transform: scale(0.97); } .ds-btn-primary:focus-visible { outline: 2px solid var(--corondel-fuerte, #6e7079); outline-offset: 2px; }"
+    },
+    {
+      "name": "Primary Button (club-scoped)",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The presidency's forward actions ('Continuar', 'Ver el epilogo'). Identical to primary but filled with the contrast-solved club accent set at runtime as --club.",
+      "html": "<button class=\"ds-btn-club\">Continuar</button>",
+      "css": ".ds-btn-club { display: block; width: 100%; padding: 16px 20px; border: none; border-radius: 0; background: var(--club, #79b4a8); color: var(--fondo, #23242a); font-family: Archivo, 'Helvetica Neue', Arial, sans-serif; font-size: 14px; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: opacity 160ms cubic-bezier(0.23,1,0.32,1), transform 160ms cubic-bezier(0.23,1,0.32,1); } .ds-btn-club:active { opacity: 0.9; transform: scale(0.97); } .ds-btn-club:focus-visible { outline: 2px solid var(--corondel-fuerte, #6e7079); outline-offset: 2px; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Secondary / low-stakes action — hairline outline, no fill, raises to full ink on hover.",
+      "html": "<button class=\"ds-btn-ghost\">Al azar</button>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border: 1px solid var(--corondel, #45474e); border-radius: 0; background: transparent; color: var(--tinta-2, #a3a09a); font-family: Archivo, 'Helvetica Neue', Arial, sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: color 160ms cubic-bezier(0.23,1,0.32,1), border-color 160ms cubic-bezier(0.23,1,0.32,1), transform 160ms cubic-bezier(0.23,1,0.32,1); } .ds-btn-ghost:hover { color: var(--tinta, #e6e3db); border-color: var(--tinta, #e6e3db); } .ds-btn-ghost:active { transform: scale(0.97); } .ds-btn-ghost:focus-visible { outline: 2px solid var(--corondel-fuerte, #6e7079); outline-offset: 2px; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Ruled field on the raised-block surface. Focus shifts the corondel border to solid bright ink — no ring, no glow.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Tu nombre</span><input class=\"ds-input\" type=\"text\" placeholder=\"Bantiago Sernabeu\" /></label>",
+      "css": ".ds-field { display: block; } .ds-field-label { display: block; margin-bottom: 6px; font-family: Archivo, 'Helvetica Neue', Arial, sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--tinta-2, #a3a09a); } .ds-input { width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid var(--corondel, #45474e); border-radius: 0; background: var(--fondo-2, #2b2c33); color: var(--tinta, #e6e3db); font-family: Newsreader, Georgia, serif; font-size: 15px; } .ds-input::placeholder { color: var(--tinta-2, #a3a09a); } .ds-input:focus { outline: none; border-color: var(--tinta, #e6e3db); }"
+    },
+    {
+      "name": "Select",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Same ruled field, bold condensed value text, a literal chevron glyph rather than an icon.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Partida</span><span class=\"ds-select-wrap\"><select class=\"ds-select\"><option>Normal · 16 temporadas, 10 minutos</option><option>Corta · 8 temporadas, 5 minutos</option></select><span class=\"ds-select-arrow\" aria-hidden=\"true\">▼</span></span></label>",
+      "css": ".ds-select-wrap { position: relative; display: block; margin-top: 6px; } .ds-select { width: 100%; min-height: 44px; padding: 10px 36px 10px 12px; border: 1px solid var(--corondel, #45474e); border-radius: 0; background: var(--fondo-2, #2b2c33); color: var(--tinta, #e6e3db); font-family: Archivo, 'Helvetica Neue', Arial, sans-serif; font-size: 15px; font-weight: 700; appearance: none; -webkit-appearance: none; } .ds-select:focus { outline: none; border-color: var(--tinta, #e6e3db); } .ds-select-arrow { position: absolute; top: 0; bottom: 0; right: 12px; display: flex; align-items: center; font-size: 10px; color: var(--tinta-2, #a3a09a); pointer-events: none; }"
+    },
+    {
+      "name": "Card (Recuadro)",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "The one container. Raised-block fill, a single 4px top rule as its identity, no other border, no radius, no shadow.",
+      "html": "<div class=\"ds-card\"><p class=\"ds-volanta\">Sección · 3 de 9</p><h2 class=\"ds-titular\">La comisión directiva pide tu renuncia</h2><p class=\"ds-cuerpo\">El vicepresidente juntó firmas y las hizo públicas antes de avisarte. Ahora está en los diarios.</p></div>",
+      "css": ".ds-card { background: var(--fondo-2, #2b2c33); border-top: 4px solid var(--club, #79b4a8); border-radius: 0; padding: 20px; } @media (min-width: 640px) { .ds-card { padding: 28px; } } .ds-card .ds-volanta { margin: 0 0 12px; padding-bottom: 4px; border-bottom: 1px solid var(--corondel, #45474e); font-family: Archivo, 'Helvetica Neue', Arial, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--tinta-2, #a3a09a); font-stretch: 75%; } .ds-card .ds-titular { margin: 0 0 12px; font-family: Archivo, 'Helvetica Neue', Arial, sans-serif; font-size: clamp(1.75rem, 7vw, 2.75rem); font-weight: 800; line-height: 0.92; letter-spacing: -0.02em; text-transform: uppercase; color: var(--tinta, #e6e3db); font-stretch: 66%; } .ds-card .ds-cuerpo { margin: 0; max-width: 66ch; font-family: Newsreader, Georgia, serif; font-size: 17px; line-height: 1.625; color: var(--tinta, #e6e3db); }"
+    },
+    {
+      "name": "Tag (Ladillo)",
+      "kind": "chip",
+      "refersTo": "tag",
+      "description": "Solid rectangular label block. The tone (tinta / alerta / favorable / club) carries the meaning; the shape never changes.",
+      "html": "<span class=\"ds-tag\">Resuelto</span> <span class=\"ds-tag ds-tag-alerta\">Golpe</span> <span class=\"ds-tag ds-tag-favorable\">Color</span>",
+      "css": ".ds-tag { display: inline-block; padding: 2px 8px; border-radius: 0; background: var(--tinta, #e6e3db); color: var(--fondo, #23242a); font-family: Archivo, 'Helvetica Neue', Arial, sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; } .ds-tag-alerta { background: var(--alerta, #f07a6b); } .ds-tag-favorable { background: var(--favorable, #8fbf8a); }"
+    },
+    {
+      "name": "Choice Row (Renglon)",
+      "kind": "custom",
+      "refersTo": "choice-row",
+      "description": "The ballot line. Full-width button on a hairline rule; the selected row inverts entirely to ink-on-paper.",
+      "html": "<div class=\"ds-choices\"><button class=\"ds-row\"><span class=\"ds-row-label\">Aceptar la renuncia del vice</span><span class=\"ds-row-hint\">Perdés un aliado en la comisión, ganás la calle.</span></button><button class=\"ds-row ds-row-selected\"><span class=\"ds-row-label\">Echarlo con causa <span class=\"ds-row-tag\">al azar</span></span><span class=\"ds-row-hint\">Si sale bien, escarmiento. Si sale mal, juicio.</span></button></div>",
+      "css": ".ds-choices { border-top: 1px solid var(--corondel, #45474e); } .ds-row { display: block; width: 100%; padding: 12px; border: none; border-bottom: 1px solid var(--corondel, #45474e); border-radius: 0; background: transparent; text-align: left; cursor: pointer; transition: background 140ms cubic-bezier(0.23,1,0.32,1); } .ds-row:hover { background: rgba(35,36,42,0.6); } .ds-row-label { display: flex; align-items: baseline; gap: 8px; font-family: Archivo, 'Helvetica Neue', Arial, sans-serif; font-size: 16px; font-weight: 700; line-height: 1.2; color: var(--tinta, #e6e3db); } .ds-row-hint { display: block; margin-top: 4px; font-family: Newsreader, Georgia, serif; font-size: 14px; line-height: 1.4; color: var(--tinta-2, #a3a09a); } .ds-row-tag { margin-left: auto; padding: 2px 6px; border: 1px solid var(--tinta-2, #a3a09a); font-family: Archivo, 'Helvetica Neue', Arial, sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--tinta-2, #a3a09a); } .ds-row-selected { background: var(--tinta, #e6e3db); } .ds-row-selected:hover { background: var(--tinta, #e6e3db); } .ds-row-selected .ds-row-label { color: var(--fondo, #23242a); } .ds-row-selected .ds-row-hint { color: rgba(35,36,42,0.8); } .ds-row-selected .ds-row-tag { border-color: var(--fondo, #23242a); color: var(--fondo, #23242a); } .ds-row:focus-visible { outline: 2px solid var(--corondel-fuerte, #6e7079); outline-offset: -2px; }"
+    },
+    {
+      "name": "Stat (Cifra)",
+      "kind": "custom",
+      "refersTo": "button-ghost",
+      "description": "Agate label over a black tabular figure, sitting on an underline that is dotted at rest and solid when expanded. The figure turns alert-coloured past a critical threshold.",
+      "html": "<div class=\"ds-stats\"><button class=\"ds-cifra\"><span class=\"ds-cifra-label\">Caja</span><span class=\"ds-cifra-value ds-cifra-alerta\">−US$4,2M</span></button><button class=\"ds-cifra ds-cifra-open\"><span class=\"ds-cifra-label\">Hinchada</span><span class=\"ds-cifra-value\">61</span></button></div>",
+      "css": ".ds-stats { display: flex; gap: 4px; } .ds-cifra { min-height: 44px; min-width: 0; padding: 2px 4px 4px; border: none; border-bottom: 2px dotted var(--corondel-fuerte, #6e7079); border-radius: 0; background: transparent; text-align: left; cursor: pointer; transition: border-color 140ms cubic-bezier(0.23,1,0.32,1); } .ds-cifra:hover { border-bottom-color: var(--tinta-2, #a3a09a); } .ds-cifra-open { border-bottom: 2px solid var(--tinta, #e6e3db); } .ds-cifra-label { display: block; font-family: Archivo, 'Helvetica Neue', Arial, sans-serif; font-size: 11px; line-height: 1; text-transform: uppercase; color: var(--tinta-3, #85827c); } .ds-cifra-value { display: block; margin-top: 6px; font-family: Archivo, 'Helvetica Neue', Arial, sans-serif; font-size: 17px; font-weight: 900; line-height: 1; font-variant-numeric: tabular-nums; color: var(--tinta, #e6e3db); } .ds-cifra-alerta { color: var(--alerta, #f07a6b); } .ds-cifra:focus-visible { outline: 2px solid var(--corondel-fuerte, #6e7079); outline-offset: 2px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Sports Daily",
+    "overview": "Every screen is an edition of the newspaper that covers your presidency. The vocabulary is a print desk's, not an app's: a volanta (kicker) sits above a condensed titular (headline), a bajada (italic deck) under it, cuerpo (serif body) below that, and the whole thing is held together by corondeles — the hairline column rules a compositor draws between stories. Numbers and labels are set in agate: small, uppercase, letter-spaced, tabular. The masthead reads 'El Presidente' locked between a 4px rule above and a 2px rule below, the way a broadsheet nameplate is boxed.\n\nThe world is achromatic on purpose — one warm ink on dark newsprint, in four steps — and the single chromatic voice on any game screen is the club's own colour, run through a contrast solver so it always clears 4.5:1 against the page. Depth is flat: no shadows, no gradients, no rounded corners. Blocks are told apart by a tonal step (fondo → fondo-2) and a coloured rule across the top, exactly as a printed page separates a boxed sidebar from the column beside it. Motion is a press run: the club stripe draws in from the left, headlines wipe open, result lines drop in one after another.\n\nIt should feel tactile and press-like — type locked in a chase, ink pressed into paper. Buttons are solid slabs that physically depress on tap (scale 0.97); the selected choice inverts to ink-on-white like a stamped ballot; the club's two real colours run as a printed stripe along headline and masthead. The explicit anti-reference is generic SaaS / dashboard UI: no rounded cards, no soft shadows, no blue-500 accent, no gradient buttons, no pill badges, no emoji. If a screen could be dropped into any other web app without anyone noticing, it is wrong.",
+    "keyCharacteristics": [
+      "One warm ink on dark newsprint; two semantic colours; one runtime club accent.",
+      "Condensed grotesque display (Archivo, width axis pulled to 66–80%) over a serif reading face (Newsreader).",
+      "Structure drawn entirely with rules and borders — zero radius, zero shadow.",
+      "Agate everywhere: every label, timestamp, and figure is uppercase tracked Archivo 700.",
+      "The club's colour is the only chroma on a game screen, and it is always contrast-solved.",
+      "Mobile-first at 375px; the desktop layout is a newspaper's column-plus-rail."
+    ],
+    "rules": [
+      { "name": "The One Ink Rule", "body": "A game screen carries exactly one chromatic colour: the club's, contrast-solved. Alert and Favor appear only as thin semantic accents on deltas and flags, never as surfaces. Everything else is a step of tinta on a step of fondo. No decorative colour, ever.", "section": "colors" },
+      { "name": "The Contrast-Solver Rule", "body": "Club colour never reaches text or a border directly. It goes through tintaDeClub() first. Raw club.colors[*] is aria-hidden decoration only.", "section": "colors" },
+      { "name": "The Agate Rule", "body": "If it is a label, a number, a date, or a status, it is font-tabla — Archivo 700, uppercase, letter-spaced, tabular where numeric. Prose is Newsreader serif; interface furniture is condensed Archivo. The two never trade places.", "section": "typography" },
+      { "name": "The Compression Rule", "body": "Display type uses Archivo's width axis, not just its weight. Headlines set at wdth 66–80% and line-height 0.86–0.92, fitted to the column the way a compositor fits a broadsheet headline.", "section": "typography" },
+      { "name": "The No-Truncated-Decision Rule", "body": "Text the player is about to act on wraps or clamps (line-clamp-2) — never a hard truncate. Only already-known metadata (a club name in the HUD, the detalle line) may ellipsize.", "section": "typography" },
+      { "name": "The Flat-Page Rule", "body": "Never add a shadow to lift something. Raise it with the tonal step and mark it with a top rule. If a thing needs to feel closer, it gets a heavier rule, not a glow.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do draw structure with rules: a border-t-4 for a block's identity, 1px corondel hairlines for every divider, 2px left rules for asides.",
+      "Do wrap every game surface in style={{ '--club': tintaClub }} and take all accent colour from var(--club) — never from club.colors[*] directly except in the aria-hidden filete.",
+      "Do set every label, figure, timestamp, and status in font-tabla — Archivo 700, uppercase, letter-spaced, tabular-nums when numeric.",
+      "Do compress display type with the width axis (font-stretch: 66%–80%) and set it tight (line-height 0.86–0.92).",
+      "Do keep the club accent contrast-solved: it must clear 4.5:1 against the active theme background (npm run contraste is the check).",
+      "Do invert on selection — the chosen Renglon becomes bg-tinta / text-fondo.",
+      "Do honour prefers-reduced-motion by reducing movement, not erasing feedback: entrar-nota drops to an opacity-only fade, filete-animado / revelar-titular / the theme-icon morph are removed, the button:active scale(0.97) press keeps its ease, and every other non-button transition snaps to ~0.",
+      "Do respect the reading measures (66ch body, 46ch deck) and min-h-11 on anything tappable."
+    ],
+    "donts": [
+      "Don't add border-radius to anything structural, or any box-shadow, drop-shadow, or gradient — the page is flat and sharp. (Functional 6–8px rounded-full dots are the only exception.)",
+      "Don't introduce a decorative colour. One club accent, two semantic signals (alerta, favorable), four steps of tinta. Nothing else earns chroma.",
+      "Don't let it drift toward generic SaaS / dashboard UI: no rounded cards, no soft shadows, no blue-500 accent, no gradient CTAs, no pill badges, no emoji, no glassmorphism.",
+      "Don't use a glow, ring, or colour-fill for input focus — the corondel border shifts to solid tinta, and that is all.",
+      "Don't hard-truncate any text the player is about to act on; wrap or line-clamp it.",
+      "Don't mix the type roles — prose stays Newsreader serif, furniture stays condensed Archivo.",
+      "Don't stack surfaces with overlap except the sticky HUD and action bars (/97 + backdrop-blur)."
+    ]
+  }
+}
