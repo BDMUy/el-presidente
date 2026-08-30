@@ -353,4 +353,64 @@ export const LEGADO: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'leg-el-crack-quiere-volver',
+    kind: 'color',
+    title: '"DARÍA CUALQUIER COSA POR VOLVER"',
+    text: 'Un ídolo histórico del club, ya grande y retirado, dice en una entrevista que daría cualquier cosa por ponerse la camiseta una vez más.',
+    requires: { minSeason: 3 },
+    weight: 2,
+    options: [
+      {
+        label: 'Llamarlo para un partido homenaje',
+        hint: 'La cancha se llena. El club también gasta.',
+        effects: { hinchada: 8, caja: -0.5, flags: { arco_crack_a: true } },
+      },
+      {
+        label: 'No hacer nada por ahora',
+        hint: 'Una entrevista no es una promesa.',
+        effects: { hinchada: 1, flags: { arco_crack_a: true } },
+      },
+    ],
+  },
+  {
+    id: 'leg-el-crack-pide-cargo',
+    kind: 'dilema',
+    title: 'EL ÍDOLO QUIERE UN CARGO',
+    text: 'Al ídolo le gustó tanto volver a estar cerca del club que ahora pide un lugar en la comisión directiva.',
+    requires: { flag: 'arco_crack_a', minSeason: 7 },
+    weight: 10,
+    options: [
+      {
+        label: 'Darle el cargo',
+        hint: 'Sabe de fútbol. No necesariamente sabe de gestión.',
+        effects: { hinchada: 6, influencia: -4, flags: { arco_crack_b: true } },
+      },
+      {
+        label: 'Ofrecerle un rol solo protocolar',
+        hint: 'Cauto. El ídolo capaz lo lee como un desaire.',
+        effects: { hinchada: 2, influencia: 2, flags: { arco_crack_b: true } },
+      },
+    ],
+  },
+  {
+    id: 'leg-el-crack-estatua',
+    kind: 'color',
+    title: 'LE HACEN UNA ESTATUA',
+    text: 'La comisión vota inaugurar una estatua del ídolo en la puerta del estadio. Te invitan al descubrimiento.',
+    requires: { flag: 'arco_crack_b', minSeason: 11 },
+    weight: 10,
+    options: [
+      {
+        label: 'Dar vos el discurso',
+        hint: 'Un poco de tu gestión queda pegada a la de él, para siempre.',
+        effects: { hinchada: 5, influencia: 3 },
+      },
+      {
+        label: 'Dejar que hable solo el ídolo',
+        hint: 'Es su día. No el tuyo.',
+        effects: { hinchada: 3 },
+      },
+    ],
+  },
 ];

@@ -67,7 +67,7 @@ export function Hud({
 
         <div
           className="mt-2 grid gap-1 divide-x divide-corondel border-t border-corondel px-2 py-2 sm:px-3"
-          style={{ gridTemplateColumns: 'minmax(76px, 1fr) 1fr 0.85fr 0.9fr 1.15fr' }}
+          style={{ gridTemplateColumns: 'minmax(76px, 1.1fr) 1fr 0.8fr 0.89fr 1.11fr' }}
         >
           <Cifra
             label="Caja"

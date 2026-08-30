@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import type { PlayerOffer } from '@/lib/engine/types';
+import { MOVIMIENTOS_POR_VENTANA, type PlayerOffer } from '@/lib/engine/types';
 import { plata, plataCorta } from '@/lib/format';
 import { BarraDecision, Ladillo, Puntos, Recuadro, Titular, Volanta } from './ui';
 
@@ -10,29 +10,37 @@ const ETIQUETA: Record<PlayerOffer['kind'], string> = {
   compra: 'Compra',
   libre: 'Libre',
   venta: 'Venta',
+  prestamo: 'Préstamo',
+  cesion: 'Cesión',
 };
 
 export function FaseMercado({
   offers,
   inhibido,
+  restantes,
   season,
   caja,
   onElegir,
 }: {
   offers: PlayerOffer[];
   inhibido: boolean;
+  restantes: number;
   season: number;
   caja: number;
   onElegir: (choice: number) => void;
 }) {
   const [elegida, setElegida] = useState<number | null>(null);
   const oferta = elegida !== null && elegida < offers.length ? offers[elegida] : null;
+  const primerMovimiento = restantes >= MOVIMIENTOS_POR_VENTANA;
 
   return (
     <>
       <Recuadro>
         <div className="flex items-start justify-between gap-4">
-          <Volanta>Ventana de pases · Temporada {season}</Volanta>
+          <Volanta>
+            Ventana de pases · Temporada {season} · {restantes}{' '}
+            {restantes === 1 ? 'movimiento' : 'movimientos'}
+          </Volanta>
           {inhibido && (
             <Ladillo tono="alerta" className="shrink-0">
               Inhibido
@@ -45,7 +53,9 @@ export function FaseMercado({
           <p className="mt-3 font-cuerpo text-[16px] leading-relaxed text-tinta">
             {inhibido
               ? 'El club está inhibido por deuda: no podés incorporar a nadie hasta sanear las cuentas. Lo único que se puede firmar es una salida.'
-              : 'Lo que llegó a la mesa esta ventana. Se firma una operación, o ninguna.'}
+              : primerMovimiento
+                ? `Lo que llegó a la mesa esta ventana. Podés firmar hasta ${MOVIMIENTOS_POR_VENTANA} operaciones, o cerrarla cuando quieras.`
+                : 'Lo que queda en la mesa. Podés firmar otra operación, o cerrar la ventana acá.'}
           </p>
         </div>
 
@@ -73,10 +83,12 @@ export function FaseMercado({
               }`}
             >
               <span className="block font-titular text-[16px] leading-tight font-bold text-tinta">
-                No mover nada
+                Cerrar la ventana
               </span>
               <span className="mt-1 block font-cuerpo text-[14px] leading-snug text-tinta-2">
-                El plantel se queda como está. Y se desgasta como está.
+                {primerMovimiento
+                  ? 'El plantel se queda como está. Y se desgasta como está.'
+                  : 'No hace falta usar todos los movimientos.'}
               </span>
             </button>
           </div>
@@ -90,7 +102,7 @@ export function FaseMercado({
             : oferta
               ? oferta.name
               :
-                'No mover nada'
+                'Cerrar la ventana'
         }
         detalle={
           oferta
@@ -116,13 +128,13 @@ function FilaOferta({
   seleccionada: boolean;
   onClick: () => void;
 }) {
-  const esVenta = offer.kind === 'venta';
+  const esSalida = offer.kind === 'venta' || offer.kind === 'cesion';
   const cajaDespues = Math.round((caja - offer.cost) * 10) / 10;
   const quedaEnRojo = cajaDespues < 0;
 
   const marco = seleccionada
     ? 'border-tinta bg-tinta/10'
-    : esVenta
+    : esSalida
       ? 'border-alerta/40 bg-alerta/6 hover:bg-tinta/6 active:bg-tinta/12'
       : 'border-corondel hover:bg-tinta/6 active:bg-tinta/12';
 
@@ -139,7 +151,7 @@ function FilaOferta({
         </span>
         <span
           className={`shrink-0 font-tabla text-[11px] tracking-[0.08em] uppercase ${
-            esVenta ? 'text-alerta' : 'text-tinta-2'
+            esSalida ? 'text-alerta' : 'text-tinta-2'
           }`}
         >
           {ETIQUETA[offer.kind]}
@@ -150,7 +162,7 @@ function FilaOferta({
         {offer.archetype}, {offer.age} años. {offer.note}
       </span>
 
-      <span className="mt-2.5 grid grid-cols-3 gap-2 border-t border-corondel pt-2">
+      <span className="mt-2.5 grid grid-cols-4 gap-2 border-t border-corondel pt-2">
         <Dato
           etiqueta={offer.cost >= 0 ? 'Cuesta' : 'Entra'}
           valor={offer.cost === 0 ? 'nada' : plataCorta(Math.abs(offer.cost))}
@@ -167,6 +179,11 @@ function FilaOferta({
           tono={
             offer.hinchadaDelta === 0 ? 'neutro' : offer.hinchadaDelta > 0 ? 'ingreso' : 'gasto'
           }
+        />
+        <Dato
+          etiqueta="Riesgo"
+          valor={offer.risk === 0 ? '—' : `${Math.round(offer.risk * 100)}%`}
+          tono={offer.risk === 0 ? 'neutro' : 'gasto'}
         />
       </span>
 
@@ -206,5 +223,6 @@ function Dato({
 }
 
 function conSigno(n: number): string {
-  return n > 0 ? `+${n}` : String(n);
+  if (n === 0) return '0';
+  return `${n > 0 ? '+' : '−'}${Math.abs(n)}`;
 }

@@ -1,10 +1,17 @@
 'use client';
 
+import Link from 'next/link';
 import { useId, type MouseEvent } from 'react';
 
 import { elegirTema, leerTema, temaDelSistema, useTemaActual, type Tema } from '@/lib/tema';
 
-export function BarraSuperior({ onVolver }: { onVolver?: () => void }) {
+export function BarraSuperior({
+  onVolver,
+  volverHref,
+}: {
+  onVolver?: () => void;
+  volverHref?: string;
+}) {
   const tema = useTemaActual();
 
   const cambiarTema = (evento: MouseEvent<HTMLButtonElement>) => {
@@ -48,6 +55,13 @@ export function BarraSuperior({ onVolver }: { onVolver?: () => void }) {
         >
           ← Volver al inicio
         </button>
+      ) : volverHref ? (
+        <Link
+          href={volverHref}
+          className="-mx-2 inline-flex min-h-11 items-center px-2 font-tabla text-[11px] tracking-[0.1em] text-tinta-2 uppercase transition-colors hover:text-tinta"
+        >
+          ← Volver al inicio
+        </Link>
       ) : (
         <span aria-hidden />
       )}

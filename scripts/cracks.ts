@@ -2,7 +2,7 @@ import { CLUBS } from '../content/clubs';
 import { CRACKS } from '../content/parodias';
 import { applyChoice, optionCount, startRun } from '../lib/engine/engine';
 import { Rand } from '../lib/engine/rng';
-import type { GameState } from '../lib/engine/types';
+import { MOVIMIENTOS_POR_VENTANA, type GameState } from '../lib/engine/types';
 
 const CORRIDAS = Number(process.argv[2] ?? 400);
 const TODOS_LOS_CRACKS = Object.values(CRACKS).flat();
@@ -22,7 +22,7 @@ for (let s = 0; s < CORRIDAS; s++) {
 
   let guarda = 0;
   while (estado.status === 'jugando' && guarda++ < 5000) {
-    if (estado.phase.kind === 'mercado') {
+    if (estado.phase.kind === 'mercado' && estado.phase.restantes === MOVIMIENTOS_POR_VENTANA) {
       ventanas++;
       const enLaVentana = estado.phase.offers.map((o) => o.name).filter((n) => CATALOGO.has(n));
       if (enLaVentana.length > 0) conCrack++;

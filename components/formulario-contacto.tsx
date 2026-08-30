@@ -23,7 +23,7 @@ export function FormularioContacto() {
   const [estado, setEstado] = useState<Estado>({ fase: 'cargando' });
   const [nombre, setNombre] = useState('');
   const [email, setEmail] = useState('');
-  const [tipo, setTipo] = useState<TipoContacto>('borrado');
+  const [tipo, setTipo] = useState<TipoContacto>('otra');
   const [mensaje, setMensaje] = useState('');
 
   const emailRef = useRef<HTMLInputElement>(null);
@@ -118,7 +118,7 @@ export function FormularioContacto() {
 
       <label className="block">
         <span className="font-tabla text-[11px] font-bold tracking-[0.1em] text-tinta-2 uppercase">
-          Tu email
+          Tu email (obligatorio)
         </span>
         <input
           ref={emailRef}
@@ -146,7 +146,7 @@ export function FormularioContacto() {
 
       <label className="block">
         <span className="font-tabla text-[11px] font-bold tracking-[0.1em] text-tinta-2 uppercase">
-          Mensaje
+          Mensaje (obligatorio)
         </span>
         <textarea
           ref={mensajeRef}

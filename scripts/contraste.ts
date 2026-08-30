@@ -171,5 +171,40 @@ for (const tema of Object.values(TEMAS)) {
   }
 }
 
+function fila(r: number, minimo: number, donde: string): boolean {
+  const pasa = r >= minimo;
+  console.log(
+    `  ${pasa ? (r >= 7 ? 'AAA ' : 'AA  ') : 'FALLA'} ${r.toFixed(2).padStart(6)}:1  (mín ${minimo})  ${donde}`,
+  );
+  return pasa;
+}
+
+const SUPERFICIES = [
+  ['fondo', (t: (typeof TEMAS)[keyof typeof TEMAS]) => t.fondo],
+  ['bloque', (t: (typeof TEMAS)[keyof typeof TEMAS]) => t.bloque],
+] as const;
+
+console.log('\nAUDITORÍA DE CONTRASTE (WCAG 2.1) — ACENTO DE CLUB EN VIVO\n');
+console.log(`  tintaDeClub() resuelto contra la superficie, medido sobre ${CLUBS.length} clubes reales.\n`);
+for (const tema of Object.values(TEMAS)) {
+  for (const [nombre, sacar] of SUPERFICIES) {
+    let peor = { r: Infinity, club: '' };
+    for (const club of CLUBS) {
+      const acento = tintaDeClub(club.colors[0], tema.bloque, 4.5);
+      const r = ratio(hex(acento), hex(sacar(tema)));
+      if (r < peor.r) peor = { r, club: club.name };
+    }
+    if (!fila(peor.r, 4.5, `[${tema.nombre}] acento de club sobre ${nombre} (peor: ${peor.club})`)) fallas++;
+  }
+}
+
+console.log('\nAUDITORÍA DE CONTRASTE (WCAG 2.1) — CONTORNO DE FOCO\n');
+for (const tema of Object.values(TEMAS)) {
+  for (const [nombre, sacar] of SUPERFICIES) {
+    const r = ratio(hex(tema.tinta), hex(sacar(tema)));
+    if (!fila(r, 3, `[${tema.nombre}] contorno :focus-visible sobre ${nombre}`)) fallas++;
+  }
+}
+
 console.log(`\n${fallas === 0 ? 'Todo pasa.' : `${fallas} pares fallan.`}\n`);
 process.exit(fallas === 0 ? 0 : 1);

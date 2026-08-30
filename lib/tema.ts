@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { fondoDelTema, tintaDeClub } from './color';
+import { superficieDelTema, tintaDeClub } from './color';
 import type { Club } from './engine/types';
 
 export type Tema = 'oscuro' | 'claro';
@@ -64,7 +64,7 @@ export function useTemaActual(): Tema {
 export function useTintaClub(club: Club | null): string | null {
   const tema = useTemaActual();
   return useMemo(
-    () => (club ? tintaDeClub(club.colors[0], fondoDelTema(tema)) : null),
+    () => (club ? tintaDeClub(club.colors[0], superficieDelTema(tema)) : null),
     [club, tema],
   );
 }

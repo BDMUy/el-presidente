@@ -418,4 +418,95 @@ export const COLOR: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'col-el-hincha-disfrazado',
+    kind: 'color',
+    title: 'EL HINCHA DEL DISFRAZ',
+    text: 'Hace diez años que un socio va a la cancha disfrazado del mismo personaje. Ya es más conocido que la mitad del plantel. Pide una acreditación oficial.',
+    options: [
+      {
+        label: 'Dársela',
+        hint: 'Formaliza algo que ya era parte del folclore.',
+        effects: { hinchada: 3, caja: -0.1 },
+      },
+      {
+        label: 'Que siga como siempre, sin papeles',
+        hint: 'Menos trámite. Menos reconocimiento también.',
+        effects: { hinchada: 1 },
+      },
+    ],
+  },
+  {
+    id: 'col-cambio-de-himno',
+    kind: 'dilema',
+    title: 'QUIEREN MODERNIZAR EL HIMNO',
+    text: 'Un grupo de socios propone grabar una nueva versión del himno del club, con una banda conocida. Dicen que el original ya casi no se escucha bien en la cancha.',
+    options: [
+      {
+        label: 'Aprobar la nueva versión',
+        hint: 'Suena mejor. Los de siempre van a extrañar la vieja.',
+        effects: { caja: -0.4, hinchada: -2, socios: 2 },
+      },
+      {
+        label: 'Dejar el himno como está',
+        hint: 'Se sigue escuchando mal. Nadie te lo reclama en la cara.',
+        effects: { hinchada: 1 },
+      },
+    ],
+  },
+  {
+    id: 'col-mural-en-la-sede',
+    kind: 'color',
+    title: 'UN MURAL PARA LA SEDE',
+    text: 'Un grupo de socios artistas se ofrece a pintar gratis un mural gigante en la pared externa de la sede, con la historia del club. Piden solo la pintura.',
+    weight: 2,
+    options: [
+      {
+        label: 'Financiar la pintura y dejarlos trabajar',
+        hint: 'Poca plata para algo que va a quedar años.',
+        effects: { caja: -0.3, hinchada: 4, socios: 1 },
+      },
+      {
+        label: 'Pedir que primero lo aprueben en comisión',
+        hint: 'Correcto y burocrático. El entusiasmo se puede enfriar.',
+        effects: { influencia: 1 },
+      },
+    ],
+  },
+  {
+    id: 'col-el-utilero-historico',
+    kind: 'color',
+    title: 'EL UTILERO DE TODA LA VIDA SE JUBILA',
+    text: 'El utilero lleva treinta y dos años en el club, cuatro presidencias más que la tuya. Anuncia que se jubila a fin de año.',
+    options: [
+      {
+        label: 'Hacerle un homenaje en la cancha',
+        hint: 'Treinta y dos años no los tiene ningún jugador de este plantel.',
+        effects: { caja: -0.2, hinchada: 4, socios: 1 },
+      },
+      {
+        label: 'Un simple acto interno',
+        hint: 'Correcto puertas adentro. Nadie de afuera se entera.',
+        effects: { hinchada: 1 },
+      },
+    ],
+  },
+  {
+    id: 'col-la-foto-viral',
+    kind: 'color',
+    title: 'UNA FOTO VIEJA SE HIZO VIRAL',
+    text: 'Una foto de un festejo de los años noventa, mal escaneada, empieza a circular en las redes con miles de comentarios. Te preguntan si el club la va a usar para algo.',
+    options: [
+      {
+        label: 'Imprimirla y venderla como póster oficial',
+        hint: 'Nostalgia que se puede colgar en la pared. Y que se puede cobrar.',
+        effects: { caja: 0.6, hinchada: 3 },
+      },
+      {
+        label: 'Dejar que circule sola, sin meterse',
+        hint: 'Es de la gente. Que siga siendo de la gente.',
+        effects: { hinchada: 2 },
+      },
+    ],
+  },
 ];

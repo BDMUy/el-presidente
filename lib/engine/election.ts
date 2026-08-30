@@ -41,10 +41,28 @@ export function resolveElection(state: GameState, rand: Rand): ElectionResult {
     won,
     votes,
     rival,
-    summary: won
-      ? `Ganaste con el ${votes}% de los votos. ${capitalize(rival)} pidió recuento y perdió también eso.`
-      : `Perdiste. Sacaste el ${votes}% y ${rival} se queda con el club.`,
+    summary: resumenElectoral(won, votes, rival),
   };
+}
+
+function resumenElectoral(won: boolean, votes: number, rival: string): string {
+  if (won) {
+    if (votes >= 75) {
+      return `Ganaste con el ${votes}% de los votos, una diferencia que no dejó margen para el reclamo. ${capitalize(rival)} ni pidió el recuento.`;
+    }
+    if (votes >= 60) {
+      return `Ganaste con el ${votes}% de los votos. ${capitalize(rival)} pidió recuento y perdió también eso.`;
+    }
+    return `Ganaste raspando, con el ${votes}% de los votos. ${capitalize(rival)} impugnó todo lo que pudo impugnar.`;
+  }
+
+  if (votes <= 25) {
+    return `Perdiste feo. Sacaste el ${votes}% y ${rival} se queda con el club sin discusión posible.`;
+  }
+  if (votes <= 40) {
+    return `Perdiste. Sacaste el ${votes}% y ${rival} se queda con el club.`;
+  }
+  return `Perdiste por un puñado de votos: el ${votes}% contra ${rival}. Una asamblea distinta y esto termina distinto.`;
 }
 
 export function isElectionSeason(season: number, modo: Modo = 'normal'): boolean {
@@ -165,6 +183,15 @@ export function buildEnding(id: EndingId, state: GameState, club: Club): Ending 
   const temporadas = TEMPORADAS_POR_MODO[state.modo];
   const mandatos = mandatosDe(state.modo);
 
+  const balanceTitulos =
+    titulos > 0
+      ? `${titulos} ${plural(titulos, 'título', 'títulos')} en la vitrina`
+      : state.descensos > 0
+        ? 'Sin títulos y con algún que otro sobresalto'
+        : 'Sin títulos, pero sin catástrofes';
+  const balanceCuentas =
+    state.resources.caja >= 0 ? 'las cuentas más o menos en orden' : 'una deuda que le queda al que te sucede';
+
   const endings: Record<EndingId, Ending> = {
     estatua: {
       id: 'estatua',
@@ -174,7 +201,7 @@ export function buildEnding(id: EndingId, state: GameState, club: Club): Ending 
     'reelecto-gris': {
       id: 'reelecto-gris',
       title: 'CUMPLISTE',
-      text: `Terminaste los ${letras(mandatos)} mandatos. ${titulos > 0 ? `${titulos} ${plural(titulos, 'título', 'títulos')} en la vitrina` : 'Sin títulos, pero sin catástrofes'}, las cuentas más o menos en orden y ${club.name} de pie. No te van a hacer una estatua. Tampoco te van a putear en el barrio.`,
+      text: `Terminaste los ${letras(mandatos)} mandatos. ${balanceTitulos}, ${balanceCuentas} y ${club.name} de pie. No te van a hacer una estatua. Tampoco te van a putear en el barrio.`,
     },
     'derrota-electoral': {
       id: 'derrota-electoral',
@@ -202,12 +229,18 @@ export function buildEnding(id: EndingId, state: GameState, club: Club): Ending 
   return { ...base, text: `${base.text} ${matiz(state, club)}` };
 }
 
+const PUNTOS_POR_TEMPORADA = 18;
+
+export function puntajePorTemporadas(state: GameState): number {
+  return state.season * PUNTOS_POR_TEMPORADA;
+}
+
 export function computeScore(state: GameState): number {
   const puntosTitulos = state.titles.reduce((sum, t) => sum + TITLES[t.id].points, 0);
 
   const score =
     puntosTitulos +
-    state.season * 18 +
+    puntajePorTemporadas(state) +
     state.resources.hinchada * 4 +
     Math.max(0, state.resources.caja) * 3 +
     state.resources.socios * 1.2 +

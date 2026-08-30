@@ -109,7 +109,25 @@ button:active {
 }
 
 .revelar-titular {
-  animation: revelar-titular 480ms var(--ease-out) both;
+  animation: revelar-titular 320ms var(--ease-out) both;
+}
+
+@keyframes parpadeo {
+  0%,
+  45% {
+    opacity: 1;
+  }
+  50%,
+  95% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.cursor-parpadeo {
+  animation: parpadeo 1100ms var(--ease-out) infinite;
 }
 
 @keyframes aparecer {
@@ -159,7 +177,7 @@ button:active {
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-corondel-fuerte);
+  outline: 2px solid var(--color-tinta);
   outline-offset: 2px;
 }
 
@@ -168,7 +186,8 @@ button:active {
     animation-name: aparecer;
   }
   .filete-animado,
-  .revelar-titular {
+  .revelar-titular,
+  .cursor-parpadeo {
     animation: none;
   }
   .icono-tema .rayos line,

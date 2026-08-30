@@ -68,6 +68,7 @@ export function resolveMesaChica(
   match: BigMatch,
   assignment: MesaChicaAssignment,
   rand: Rand,
+  hinchada: number,
 ): MesaChicaOutcome {
   const won = rand.chance(winProbability(match, assignment));
   const effects: Effects = {};
@@ -99,17 +100,25 @@ export function resolveMesaChica(
 
   return {
     won,
-    text: won ? victoryText(match, assignment, rand) : defeatText(match, assignment, rand),
+    text: won ? victoryText(match, assignment, rand, hinchada) : defeatText(match, assignment, rand),
     effects,
   };
 }
 
-function victoryText(match: BigMatch, assignment: MesaChicaAssignment, rand: Rand): string {
-  const base = rand.pick([
+function victoryText(
+  match: BigMatch,
+  assignment: MesaChicaAssignment,
+  rand: Rand,
+  hinchada: number,
+): string {
+  const opciones = [
     `Se ganó. El estadio no se vació hasta las tres de la mañana.`,
-    `Campeón. Te abrazaste con gente que dos meses atrás pedía tu renuncia.`,
     `Se dio. Contra ${match.rival}, que es como tenía que ser.`,
-  ]);
+  ];
+  if (hinchada < 55) {
+    opciones.push(`Campeón. Te abrazaste con gente que dos meses atrás pedía tu renuncia.`);
+  }
+  const base = rand.pick(opciones);
   if (assignment.gestion >= 2) {
     return `${base} Nadie preguntó demasiado por el arbitraje, y mejor así.`;
   }

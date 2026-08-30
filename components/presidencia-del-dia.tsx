@@ -105,7 +105,7 @@ export function PresidenciaDelDia({ onJugar }: { onJugar: () => void }) {
           <button
             type="button"
             onClick={onJugar}
-            className="mt-3 min-h-11 w-full bg-[var(--club)] py-2.5 font-titular text-[13px] font-black tracking-[0.1em] text-fondo uppercase transition-opacity active:opacity-90"
+            className="mt-3 min-h-11 w-full border border-corondel py-2.5 font-titular text-[13px] font-black tracking-[0.1em] text-tinta uppercase transition-colors hover:border-tinta"
           >
             Jugar la del día
           </button>

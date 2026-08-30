@@ -55,6 +55,13 @@ const PARTIDAS: Record<Modo, string> = {
   llamas: 'En llamas · 16 temporadas, brutal',
 };
 
+const MODO_LABEL: Record<Modo, string> = {
+  corta: 'Corta',
+  normal: 'Normal',
+  larga: 'Larga',
+  llamas: 'En llamas',
+};
+
 export interface EnCurso {
   club: Club;
   season: number;
@@ -94,6 +101,8 @@ export function Arranque({
   );
 
   const club = elegido ? (CLUBS.find((c) => c.id === elegido) ?? null) : null;
+
+  const resumenAjustes = `${MODO_LABEL[modo]} · ${PAIS_LABEL[pais]} · ${LEAGUES[liga].label}`;
 
   const cambiarPais = (valor: string) => {
     const nuevo = valor as Country;
@@ -135,7 +144,7 @@ export function Arranque({
         </p>
 
         <h1
-          className="revelar-titular mt-4 border-t-4 border-b-2 border-tinta py-3 font-titular text-[clamp(2.75rem,11vw,4.5rem)] leading-[0.86] font-black tracking-[-0.03em] text-tinta uppercase"
+          className="mt-4 border-t-4 border-b-2 border-tinta py-3 font-titular text-[clamp(2.75rem,11vw,4.5rem)] leading-[0.86] font-black tracking-[-0.03em] text-tinta uppercase"
           style={{ fontStretch: '80%' }}
         >
           El Presidente
@@ -153,13 +162,8 @@ export function Arranque({
 
       <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_minmax(300px,360px)] lg:items-start lg:divide-x lg:divide-corondel">
         <div className="min-w-0 lg:pr-10">
-          <Volanta>Presidencia del día</Volanta>
-          <div className="mt-3">
-            <PresidenciaDelDia onJugar={onEmpezarDiaria} />
-          </div>
-
-          <div className="mt-8 flex items-center justify-between gap-3">
-            <Volanta>El padrón</Volanta>
+          <div className="flex items-center justify-between gap-3">
+            <Volanta as="h2">El padrón</Volanta>
             <button
               type="button"
               onClick={sortear}
@@ -169,12 +173,12 @@ export function Arranque({
             </button>
           </div>
 
-          <div className="mt-3 border border-corondel p-3 sm:p-4">
-            <CampoSelect
-              etiqueta="Partida"
-              valor={modo}
-              onChange={(v) => setModo(v as Modo)}
-            >
+          <div className="mt-3">
+            <SelectorClub clubes={deLaLiga} elegido={club} onElegir={setElegido} />
+          </div>
+
+          <Plegable titulo="Ajustes de la partida" resumen={resumenAjustes}>
+            <CampoSelect etiqueta="Partida" valor={modo} onChange={(v) => setModo(v as Modo)}>
               {MODOS.map((m) => (
                 <option key={m} value={m}>
                   {PARTIDAS[m]}
@@ -208,24 +212,28 @@ export function Arranque({
                 ))}
               </CampoSelect>
             </div>
+          </Plegable>
 
-            <div className="mt-3">
-              <SelectorClub clubes={deLaLiga} elegido={club} onElegir={setElegido} />
-            </div>
+          <CampoNombre />
 
-            <CampoNombre />
-          </div>
-
-          <div className="mt-4">
+          <div className="mt-7">
             {club ? (
               <PanelElegido club={club} modo={modo} onEmpezar={() => onEmpezar(club.id, modo)} />
             ) : (
-              <PanelVacio />
+              <PanelVacio modo={modo} />
             )}
+          </div>
+
+          <div className="mt-10">
+            <Volanta as="h2">Presidencia del día</Volanta>
+            <div className="mt-3">
+              <PresidenciaDelDia onJugar={onEmpezarDiaria} />
+            </div>
           </div>
         </div>
 
         <div className="min-w-0 lg:pl-10">
+          <Volanta as="h2">Antecedentes</Volanta>
           <Plegable titulo="Tabla de posiciones" resumen="Quién llegó más lejos" abiertoPorDefecto>
             <Ranking />
           </Plegable>
@@ -247,7 +255,7 @@ function PieDePagina() {
       <p className="font-tabla text-[11px] leading-relaxed tracking-[0.06em] text-tinta-2 uppercase">
         <Link
           href="/privacidad"
-          className="-mx-2 -my-1 inline-block px-2 py-3 underline underline-offset-4 transition-colors hover:text-tinta"
+          className="-mx-2 -my-1 inline-block min-h-11 px-2 py-3 underline underline-offset-4 transition-colors hover:text-tinta"
         >
           Privacidad
         </Link>
@@ -259,7 +267,7 @@ function PieDePagina() {
               href={fuente}
               target="_blank"
               rel="noreferrer"
-              className="-mx-2 -my-1 inline-block px-2 py-3 underline underline-offset-4 transition-colors hover:text-tinta"
+              className="-mx-2 -my-1 inline-block min-h-11 px-2 py-3 underline underline-offset-4 transition-colors hover:text-tinta"
             >
               Código fuente
             </a>
@@ -345,14 +353,22 @@ function PanelEnCurso({
   );
 }
 
-function PanelVacio() {
+function PanelVacio({ modo }: { modo: Modo }) {
   return (
-    <div className="border border-corondel px-4 py-5">
+    <div className="border border-corondel px-4 py-4 sm:px-5 sm:py-5">
       <p className="font-cuerpo text-[15px] leading-relaxed text-tinta-2">
         Elegí un club del padrón. El número que ves al lado de cada uno es la posición que su gente
-        espera: <span className="text-tinta">contra eso te van a medir</span> durante dieciséis
-        temporadas.
+        espera: <span className="text-tinta">contra eso te van a medir</span> durante{' '}
+        {TEMPORADAS_POR_MODO[modo]} temporadas.
       </p>
+
+      <button
+        type="button"
+        disabled
+        className="mt-5 w-full cursor-not-allowed border border-corondel py-4 font-titular text-[15px] font-black tracking-[0.1em] text-tinta-3 uppercase"
+      >
+        Asumir el cargo
+      </button>
     </div>
   );
 }

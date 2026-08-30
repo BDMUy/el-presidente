@@ -5,9 +5,15 @@ import { ALL_EVENTS, findDuplicateIds } from '@/content/events';
 import { APELLIDOS, NOMBRES } from '@/content/nombres';
 import { CRACKS } from '@/content/parodias';
 import { applyEffects, applyResources, estaInhibido, meetsCondition } from './effects';
-import { checkEarlyExit, computeScore, DEUDA_QUIEBRA, resolveElection } from './election';
-import { applyChoice, initialResources, optionCount, replayRun, startRun } from './engine';
-import { assignmentIndex, enumerateAssignments, winProbability } from './mesa-chica';
+import {
+  checkEarlyExit,
+  computeScore,
+  DEUDA_QUIEBRA,
+  puntajePorTemporadas,
+  resolveElection,
+} from './election';
+import { applyChoice, initialResources, optionCount, replayRun, startRun, terminarRun } from './engine';
+import { assignmentIndex, enumerateAssignments, resolveMesaChica, winProbability } from './mesa-chica';
 import { generateOffers } from './mercado';
 import { Rand, seedFromString } from './rng';
 import { expectedPosition, plantelForPosition, resolvePosition } from './season';
@@ -267,7 +273,7 @@ describe('arranque', () => {
 
     expect(llamas.resources.caja).toBe(-22);
     expect(estaInhibido(llamas.resources)).toBe(true);
-    expect(llamas.resources.plantel).toBe(normal.resources.plantel + 12);
+    expect(llamas.resources.plantel).toBe(normal.resources.plantel + 19);
     expect(llamas.resources.hinchada).toBe(40);
     expect(llamas.resources.hinchada).toBeLessThan(45);
 
@@ -296,7 +302,7 @@ describe('determinismo', () => {
     expect(b).toEqual(a);
   });
 
-  it('replayRun reconstruye exactamente una partida a partir del log', () => {
+  it('replayRun + terminarRun reconstruye exactamente una partida a partir del log', () => {
     const chooser = new Rand(31337);
     let original = startRun({ seed: 9001, clubId: 'racing' });
     let guard = 0;
@@ -305,11 +311,41 @@ describe('determinismo', () => {
       if (options === 0) break;
       original = applyChoice(original, chooser.int(0, options - 1));
     }
+    expect(original.status).toBe('terminado');
 
-    const replayed = replayRun(9001, 'racing', original.choices);
+    const replayed = terminarRun(replayRun(9001, 'racing', original.choices));
     expect(replayed.choices).toEqual(original.choices);
     expect(computeScore(replayed)).toBe(computeScore(original));
     expect(replayed).toEqual(original);
+  });
+
+  it('applyChoice solo anota en choices las decisiones reales', () => {
+    let state = startRun({ seed: 9001, clubId: 'racing' });
+    let guard = 0;
+    while (state.status === 'jugando' && guard++ < 2000) {
+      const options = optionCount(state);
+      if (options === 0) break;
+      if (options === 1) {
+        const antes = state.choices.length;
+        state = applyChoice(state, 0);
+        expect(state.choices.length).toBe(antes);
+      } else {
+        state = applyChoice(state, 0);
+      }
+    }
+  });
+
+  it('replayRun sin terminarRun se detiene en la primera pantalla de un solo botón', () => {
+    let state = startRun({ seed: 42, clubId: 'quilmes' });
+    state = applyChoice(state, 0);
+    while (state.status === 'jugando' && optionCount(state) === 1) {
+      state = applyChoice(state, 0);
+    }
+    expect(optionCount(state)).toBeGreaterThan(1);
+
+    const antesDeLaProxima = replayRun(42, 'quilmes', state.choices);
+    expect(optionCount(antesDeLaProxima)).toBeGreaterThan(1);
+    expect(antesDeLaProxima).toEqual(state);
   });
 
   it('semillas distintas divergen', () => {
@@ -411,6 +447,13 @@ describe('puntaje', () => {
     const conDescenso = { ...conPlata, descensos: 1 };
     expect(computeScore(conDescenso)).toBeLessThan(computeScore(base));
   });
+
+  it('el tramo por temporadas es parte del total y no lo supera en una presidencia sana', () => {
+    const base = startRun({ seed: 7, clubId: 'boca' });
+    const corrido = { ...base, season: 12 };
+    expect(puntajePorTemporadas(corrido)).toBe(12 * 18);
+    expect(computeScore(corrido)).toBeGreaterThanOrEqual(puntajePorTemporadas(corrido));
+  });
 });
 
 describe('mercado', () => {
@@ -423,12 +466,25 @@ describe('mercado', () => {
     }
   });
 
-  it('siempre ofrece una venta, una compra y un libre', () => {
+  it('siempre ofrece dos compras, un libre y dos ventas, y a veces un movimiento extra', () => {
     const rand = new Rand(99);
-    for (let i = 0; i < 100; i++) {
-      const kinds = generateOffers('ar-nacional', 45, rand).map((o) => o.kind).sort();
-      expect(kinds).toEqual(['compra', 'libre', 'venta']);
+    let conExtra = 0;
+    for (let i = 0; i < 200; i++) {
+      const offers = generateOffers('ar-nacional', 45, rand);
+      const conteo = { compra: 0, libre: 0, venta: 0, prestamo: 0, cesion: 0 };
+      for (const o of offers) conteo[o.kind]++;
+
+      expect(conteo.compra, JSON.stringify(conteo)).toBe(2);
+      expect(conteo.libre, JSON.stringify(conteo)).toBe(1);
+      expect(conteo.venta, JSON.stringify(conteo)).toBe(2);
+      expect(conteo.prestamo + conteo.cesion, JSON.stringify(conteo)).toBeLessThanOrEqual(1);
+      expect(offers.length, JSON.stringify(conteo)).toBeGreaterThanOrEqual(5);
+      expect(offers.length, JSON.stringify(conteo)).toBeLessThanOrEqual(6);
+
+      if (conteo.prestamo + conteo.cesion === 1) conExtra++;
     }
+    expect(conExtra).toBeGreaterThan(0);
+    expect(conExtra).toBeLessThan(200);
   });
 
   it('genera nombres uruguayos para un club uruguayo', () => {
@@ -509,6 +565,97 @@ describe('contenido', () => {
       expect(club.colors[1], club.id).toMatch(/^#[0-9a-f]{6}$/i);
       expect(club.size, club.id).toBeGreaterThanOrEqual(1);
       expect(club.size, club.id).toBeLessThanOrEqual(10);
+    }
+  });
+});
+
+describe('congruencia de mensajes', () => {
+  interface Muestra {
+    fase: string;
+    texto: string;
+    state: GameState;
+    votes?: number;
+    posicion?: number;
+  }
+
+  it('el resumen de temporada, la elección y el final no contradicen el estado', () => {
+    const muestras: Muestra[] = [];
+
+    for (let i = 0; i < 150; i++) {
+      const club = CLUBS[i % CLUBS.length];
+      const modo = i % 2 === 0 ? 'normal' : 'larga';
+      const chooser = new Rand(i ^ 0x9e3779b9);
+      let state = startRun({ seed: i * 2654435761, clubId: club.id, modo });
+      let guard = 0;
+      while (state.status === 'jugando' && guard++ < 2000) {
+        const options = optionCount(state);
+        if (options === 0) break;
+        state = applyChoice(state, chooser.int(0, options - 1));
+
+        const { phase } = state;
+        if (phase.kind === 'temporada') {
+          muestras.push({ fase: 'temporada', texto: phase.result.summary, state, posicion: phase.result.position });
+        } else if (phase.kind === 'eleccion') {
+          muestras.push({ fase: 'eleccion', texto: phase.result.summary, state, votes: phase.result.votes });
+        } else if (phase.kind === 'fin') {
+          muestras.push({ fase: 'fin', texto: phase.ending.text, state });
+        }
+      }
+    }
+
+    const reglas: { id: string; patron: RegExp; prohibido: (m: Muestra) => boolean }[] = [
+      {
+        id: 'renuncia-con-hinchada-alta',
+        patron: /pid(e|ió).{0,20}renuncia|que se vaya|escrache/i,
+        prohibido: (m) => m.fase === 'temporada' && m.state.resources.hinchada >= 60,
+      },
+      {
+        id: 'cuentas-en-orden-con-deuda',
+        patron: /cuentas.{0,15}en orden|balance impecable/i,
+        prohibido: (m) => m.fase === 'fin' && m.state.resources.caja < 0,
+      },
+      {
+        id: 'ni-fiesta-ni-tragedia-lejos-de-la-expectativa',
+        patron: /Ni fiesta ni tragedia/,
+        prohibido: (m) => {
+          if (m.fase !== 'temporada' || m.posicion === undefined) return false;
+          const esperada = expectedPosition(getClub(m.state.clubId), m.state.league);
+          return esperada - m.posicion <= -5;
+        },
+      },
+      {
+        id: 'sin-catastrofes-con-descenso',
+        patron: /sin catástrofes/,
+        prohibido: (m) => m.fase === 'fin' && m.state.descensos > 0,
+      },
+      {
+        id: 'paliza-electoral-ganada-sin-margen',
+        patron: /no dejó margen para el reclamo/,
+        prohibido: (m) => (m.votes ?? 100) < 75,
+      },
+      {
+        id: 'paliza-electoral-perdida-sin-margen',
+        patron: /sin discusión posible/,
+        prohibido: (m) => (m.votes ?? 0) > 25,
+      },
+    ];
+
+    const violaciones = muestras.filter((m) => reglas.some((r) => r.patron.test(m.texto) && r.prohibido(m)));
+    expect(
+      violaciones,
+      violaciones.slice(0, 3).map((m) => `${m.fase}: "${m.texto}"`).join(' | '),
+    ).toHaveLength(0);
+  });
+
+  it('la mesa chica no festeja "pedía tu renuncia" con la hinchada ya alta', () => {
+    const match = { competition: 'copa' as const, label: 'x', rival: 'Rival', baseWin: 0.9, title: 'ar-copa' as const };
+    const vacio = { plantel: 0, dt: 0, hinchada: 0, prensa: 0, gestion: 0 };
+
+    for (let seed = 0; seed < 200; seed++) {
+      const outcome = resolveMesaChica(match, vacio, new Rand(seed), 70);
+      if (outcome.won) {
+        expect(outcome.text, String(seed)).not.toMatch(/pedía tu renuncia/);
+      }
     }
   });
 });

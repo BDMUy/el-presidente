@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 
+import { BarraSuperior } from '@/components/barra-superior';
 import { FormularioContacto } from '@/components/formulario-contacto';
 import { Cuerpo, Volanta } from '@/components/ui';
 
@@ -20,12 +20,7 @@ function Seccion({ titulo, children }: { titulo: string; children: React.ReactNo
 export default function Privacidad() {
   return (
     <main id="principal" tabIndex={-1} className="mx-auto w-full max-w-xl px-4 py-10 focus:outline-none">
-      <Link
-        href="/"
-        className="-mx-2 inline-block min-h-11 px-2 py-2 font-tabla text-[11px] tracking-[0.1em] text-tinta-2 uppercase transition-colors hover:text-tinta"
-      >
-        ← Volver al inicio
-      </Link>
+      <BarraSuperior volverHref="/" />
 
       <h1
         className="mt-4 border-t-4 border-b-2 border-tinta py-3 font-titular text-[clamp(2rem,8vw,3rem)] leading-[0.9] font-black tracking-[-0.02em] text-tinta uppercase"
@@ -89,6 +84,9 @@ export default function Privacidad() {
 
       <Seccion titulo="Cambios">
         <Cuerpo>Si algo de esto cambia, se actualiza en esta misma página.</Cuerpo>
+        <p className="font-tabla text-[11px] tracking-[0.1em] text-tinta-2 uppercase">
+          Última actualización: 29 de agosto de 2026
+        </p>
       </Seccion>
     </main>
   );

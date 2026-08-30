@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from 'next';
 import { Archivo, Newsreader } from 'next/font/google';
-import Script from 'next/script';
 import './globals.css';
 
 const archivo = Archivo({
@@ -46,11 +45,12 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
     <html
       lang="es-AR"
       className={`${archivo.variable} ${newsreader.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: SCRIPT_TEMA }} />
+      </head>
       <body className="flex min-h-full flex-col">
-        <Script id="tema-inicial" strategy="beforeInteractive">
-          {SCRIPT_TEMA}
-        </Script>
         <a
           href="#principal"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:border-2 focus:border-tinta focus:bg-fondo focus:px-4 focus:py-2 focus:font-tabla focus:text-[11px] focus:font-bold focus:tracking-[0.1em] focus:text-tinta focus:uppercase"

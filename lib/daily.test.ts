@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { CLUBS } from '@/content/clubs';
 import { computeScore } from '@/lib/engine/election';
-import { applyChoice, optionCount, replayRun, startRun } from '@/lib/engine/engine';
+import { applyChoice, optionCount, replayRun, startRun, terminarRun } from '@/lib/engine/engine';
 import { Rand } from '@/lib/engine/rng';
 import { LEAGUES } from '@/lib/engine/types';
 import { fechaDelDia, faltaParaLaProxima, formatearEspera, presidenciaDelDia } from './daily';
@@ -81,7 +81,7 @@ describe('verificación de puntajes', () => {
         if (n === 0) break;
         original = applyChoice(original, chooser.int(0, n - 1));
       }
-      const verificado = replayRun(seed, 'huracan', original.choices);
+      const verificado = terminarRun(replayRun(seed, 'huracan', original.choices));
       expect(computeScore(verificado)).toBe(computeScore(original));
     }
   });

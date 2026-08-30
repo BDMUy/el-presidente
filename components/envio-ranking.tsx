@@ -4,8 +4,10 @@ import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { marcarDiariaJugada } from '@/components/presidencia-del-dia';
+import { puntajePorTemporadas } from '@/lib/engine/election';
 import type { GameState } from '@/lib/engine/types';
 import { guardarNombre, idDispositivo, nombreDelPresidente } from '@/lib/dispositivo';
+import { plural } from '@/lib/format';
 import { Volanta } from './ui';
 
 type Estado =
@@ -77,19 +79,28 @@ export function EnvioAlRanking({ state, diaria }: { state: GameState; diaria: st
   if (estado.fase === 'cargando' || estado.fase === 'no-disponible') return null;
 
   if (estado.fase === 'enviado') {
+    const piso = puntajePorTemporadas(state);
     return (
-      <div className="mt-7 border-t border-corondel pt-4">
+      <div className="entrar-nota mt-7 border-t border-corondel pt-4">
         <Volanta>{diaria ? 'Ranking del día' : 'Ranking global'}</Volanta>
         <p className="mt-2 font-cuerpo text-[15px] leading-relaxed text-tinta">
-          Tu presidencia entró a la tabla con{' '}
-          <span className="font-semibold">{estado.puntaje.toLocaleString('es-AR')}</span> puntos.
+          Tu presidencia quedó anotada con{' '}
+          <span className="font-semibold">{estado.puntaje.toLocaleString('es-AR')}</span> puntos
+          {estado.puntaje > 0 && piso <= estado.puntaje
+            ? `: ${piso.toLocaleString('es-AR')} por ${plural(state.season, 'temporada', 'temporadas')} en el cargo.`
+            : '.'}
+        </p>
+        <p className="mt-2 font-tabla text-[11px] tracking-[0.08em] text-tinta-2 uppercase">
+          {diaria
+            ? 'Sos de las primeras en el ranking de hoy.'
+            : 'Sos de las primeras presidencias en esta tabla.'}
         </p>
       </div>
     );
   }
 
   return (
-    <div className="mt-7 border-t border-corondel pt-4">
+    <div className="entrar-nota mt-7 border-t border-corondel pt-4">
       <Volanta>{diaria ? 'Ranking del día' : 'Ranking global'}</Volanta>
 
       <p className="mt-2 font-cuerpo text-[14px] leading-snug text-tinta-2">

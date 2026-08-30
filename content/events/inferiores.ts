@@ -191,4 +191,142 @@ export const INFERIORES: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'inf-la-joya-emerge',
+    kind: 'color',
+    title: 'HAY UNO QUE JUEGA DISTINTO',
+    text: 'En la séptima división hay un pibe que juega distinto a los demás. El profe de inferiores lo viene subiendo de a poco a los entrenamientos de primera.',
+    weight: 2,
+    options: [
+      {
+        label: 'Subirlo ya a los entrenamientos de primera',
+        hint: 'Se apura el proceso. Puede quemarlo, puede acelerarlo.',
+        effects: { plantel: 2, hinchada: 3, flags: { arco_joya_a: true } },
+      },
+      {
+        label: 'Dejarlo un año más en inferiores',
+        hint: 'Lo correcto. Menos vistoso.',
+        effects: { plantel: 1, flags: { arco_joya_a: true } },
+      },
+    ],
+  },
+  {
+    id: 'inf-joya-oferta-europea',
+    kind: 'dilema',
+    title: 'LO QUIEREN EN EUROPA',
+    text: 'Un club europeo pone sobre la mesa una cifra que el club no vio nunca en su historia por el pibe que subiste de inferiores.',
+    requires: { flag: 'arco_joya_a', minSeason: 5 },
+    weight: 10,
+    options: [
+      {
+        label: 'Venderlo',
+        hint: 'Plata que cambia el club. La tribuna no lo va a olvidar tan rápido.',
+        effects: { caja: 12, hinchada: -8, plantel: -6, flags: { arco_joya_vendida: true } },
+      },
+      {
+        label: 'Rechazar la oferta y retenerlo',
+        hint: 'Apuesta a que vale más quedándose. El club se lo debe.',
+        effects: { hinchada: 6, influencia: -4, flags: { arco_joya_quedo: true } },
+      },
+    ],
+  },
+  {
+    id: 'inf-joya-triunfa-afuera',
+    kind: 'color',
+    title: 'EL QUE VENDISTE ES FIGURA',
+    text: 'El pibe que vendiste es titular en Europa y lo empiezan a nombrar en la selección. Los memes te comparan con el que dejó ir a una joya por poca plata.',
+    requires: { flag: 'arco_joya_vendida', minSeason: 9 },
+    weight: 10,
+    options: [
+      {
+        label: 'Reivindicar la venta en una entrevista',
+        hint: 'Con la plata que entró se ordenaron las cuentas. Que lo digan los números.',
+        effects: { influencia: 4, hinchada: -3 },
+      },
+      {
+        label: 'No decir nada',
+        hint: 'Cada vez que juega, alguien te lo va a recordar igual.',
+        effects: { hinchada: 2 },
+      },
+    ],
+  },
+  {
+    id: 'inf-joya-capitan',
+    kind: 'color',
+    title: 'EL PIBE QUE NO VENDISTE ES CAPITÁN',
+    text: 'El pibe de inferiores que no vendiste lleva hoy la cinta y es el ídolo de la popular. Le ofrecen ponerle su nombre a las divisiones inferiores.',
+    requires: { flag: 'arco_joya_quedo', minSeason: 9 },
+    weight: 10,
+    options: [
+      {
+        label: 'Aceptar',
+        hint: 'Va a jugar con jugadores que crecieron mirando su nombre en la puerta.',
+        effects: { hinchada: 10, socios: 3 },
+      },
+      {
+        label: 'Esperar a que se retire',
+        hint: 'Protocolar. Correcto. Un poco tibio.',
+        effects: { hinchada: 3, influencia: 2 },
+      },
+    ],
+  },
+  {
+    id: 'inf-nuevo-predio',
+    kind: 'dilema',
+    title: 'SE PUEDE AMPLIAR EL PREDIO',
+    text: 'El terreno lindero al predio de inferiores está en venta. Comprarlo permitiría duplicar la cantidad de chicos que entrenan ahí.',
+    weight: 2,
+    options: [
+      {
+        label: 'Comprarlo',
+        hint: 'Inversión a largo plazo. El resultado se ve en años, no en meses.',
+        effects: { caja: -3, plantel: 1, socios: 2 },
+      },
+      {
+        label: 'Seguir con el predio actual',
+        hint: 'No se gasta nada. Tampoco crece nada.',
+        effects: { influencia: 1 },
+      },
+    ],
+  },
+  {
+    id: 'inf-madre-de-un-juvenil',
+    kind: 'dilema',
+    title: 'UNA MADRE PIDE HABLAR CON VOS',
+    text: 'La madre de un chico de inferiores pide una reunión con el presidente, algo que nunca pasa. Dice que a su hijo lo maltratan en los entrenamientos.',
+    weight: 2,
+    options: [
+      {
+        label: 'Recibirla e investigar el reclamo',
+        hint: 'Puede ser un exceso real de algún entrenador. Puede ser otra cosa.',
+        random: [
+          { weight: 50, text: 'El reclamo era real. Se corrigió a tiempo, sin escándalo.', effects: { influencia: 3, hinchada: 1 } },
+          { weight: 50, text: 'No había nada de fondo, pero la reunión incomodó a todo el cuerpo técnico.', effects: { influencia: -1, plantel: -1 } },
+        ],
+      },
+      {
+        label: 'Derivarlo directamente a inferiores',
+        hint: 'No es tu función bajar a ese detalle. Tampoco parece que a nadie más le importe.',
+        effects: { influencia: -2 },
+      },
+    ],
+  },
+  {
+    id: 'inf-torneo-local-de-menores',
+    kind: 'color',
+    title: 'ORGANIZAR UN TORNEO DE MENORES',
+    text: 'Clubes del barrio proponen organizar un torneo relámpago de menores usando la cancha auxiliar un fin de semana.',
+    options: [
+      {
+        label: 'Prestar la cancha y sumarse',
+        hint: 'Un gesto para el barrio que no cuesta casi nada.',
+        effects: { caja: -0.1, hinchada: 2, socios: 1 },
+      },
+      {
+        label: 'Declinar la invitación',
+        hint: 'La cancha auxiliar sigue libre para el plantel.',
+        effects: { plantel: 1 },
+      },
+    ],
+  },
 ];

@@ -2,6 +2,8 @@
 
 import { useId, useState } from 'react';
 
+import { Volanta } from './ui';
+
 export function Plegable({
   titulo,
   resumen,
@@ -43,9 +45,9 @@ export function Plegable({
         </span>
       </button>
 
-      <p className="hidden font-tabla text-[12px] font-bold tracking-[0.1em] text-tinta-2 uppercase lg:block">
-        {titulo}
-      </p>
+      <div className="hidden lg:block">
+        <Volanta>{titulo}</Volanta>
+      </div>
 
       <div
         id={id}

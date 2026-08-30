@@ -6,7 +6,7 @@ import { LOGROS_POR_ID } from '@/content/logros';
 import { TITLES, type Club, type Ending, type GameState } from '@/lib/engine/types';
 import { encodeRun, shareUrl } from '@/lib/share';
 import { useTintaClub } from '@/lib/tema';
-import { registrarPartida, type Novedades } from '@/lib/vitrina';
+import { calcularNovedades, guardarVitrina, type Novedades } from '@/lib/vitrina';
 import { EnvioAlRanking } from './envio-ranking';
 import { Continuar, Ladillo, Recuadro, Volanta } from './ui';
 import { ResumenPresidencia } from './resumen-presidencia';
@@ -24,16 +24,22 @@ export function FaseFin({
   diaria: string | null;
   onReiniciar: () => void;
 }) {
-  const [novedades, setNovedades] = useState<Novedades | null>(null);
+  const [novedades] = useState<Novedades>(() => calcularNovedades(state));
   const [copiado, setCopiado] = useState(false);
+  const [linkManual, setLinkManual] = useState<string | null>(null);
   const copiadoTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const linkManualRef = useRef<HTMLInputElement>(null);
   const tintaClub = useTintaClub(club);
 
   useEffect(() => {
-    setNovedades(registrarPartida(state));
-  }, [state]);
+    guardarVitrina(novedades.vitrina);
+  }, [novedades]);
 
   useEffect(() => () => clearTimeout(copiadoTimer.current), []);
+
+  useEffect(() => {
+    if (linkManual) linkManualRef.current?.select();
+  }, [linkManual]);
 
   const compartir = useCallback(async () => {
     const url = shareUrl(
@@ -62,7 +68,7 @@ export function FaseFin({
       clearTimeout(copiadoTimer.current);
       copiadoTimer.current = setTimeout(() => setCopiado(false), 2400);
     } catch {
-      window.prompt('Copiá el link de tu presidencia:', url);
+      setLinkManual(url);
     }
   }, [state, club, ending]);
 
@@ -71,9 +77,7 @@ export function FaseFin({
       <Recuadro acento="club">
         <ResumenPresidencia state={state} club={club} ending={ending} />
 
-        {novedades && <Novedad novedades={novedades} />}
-
-        <EnvioAlRanking state={state} diaria={diaria} />
+        <Novedad novedades={novedades} />
 
         <button
           type="button"
@@ -85,7 +89,25 @@ export function FaseFin({
           </span>
         </button>
 
+        {linkManual && (
+          <div className="entrar-nota mt-3 border border-corondel bg-fondo-2 p-3">
+            <p className="font-tabla text-[11px] font-bold tracking-[0.1em] text-tinta-2 uppercase">
+              Copiá el link a mano
+            </p>
+            <input
+              ref={linkManualRef}
+              type="text"
+              readOnly
+              value={linkManual}
+              onFocus={(e) => e.currentTarget.select()}
+              className="mt-1.5 min-h-11 w-full border border-corondel bg-fondo px-2.5 font-cuerpo text-[14px] text-tinta focus:border-tinta focus:outline-none"
+            />
+          </div>
+        )}
+
         <Continuar onClick={onReiniciar}>Otra presidencia</Continuar>
+
+        <EnvioAlRanking state={state} diaria={diaria} />
       </Recuadro>
     </div>
   );

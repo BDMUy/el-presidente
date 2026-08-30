@@ -41,22 +41,21 @@ function elegir(state: GameState, chooser: Rand): number {
   if (state.phase.kind !== 'evento') return chooser.int(0, optionCount(state) - 1);
 
   const { event, available } = state.phase;
-  let mejor = 0;
-  let mejorValor = -Infinity;
-  available.forEach((optionIndex, displayIndex) => {
+  const valores = available.map((optionIndex) => {
     const option = event.options[optionIndex];
-    const efectos = option.random
+    return option.random
       ? option.random.reduce(
           (s, o) => s + (o.weight / option.random!.reduce((t, x) => t + x.weight, 0)) * (o.effects.hinchada ?? 0),
           0,
         )
       : (option.effects?.hinchada ?? 0);
-    if (efectos > mejorValor) {
-      mejorValor = efectos;
-      mejor = displayIndex;
-    }
   });
-  return mejor;
+  const mejorValor = Math.max(...valores);
+  const empatados = valores
+    .map((v, displayIndex) => ({ v, displayIndex }))
+    .filter(({ v }) => v === mejorValor)
+    .map(({ displayIndex }) => displayIndex);
+  return chooser.pick(empatados);
 }
 
 function jugar(seed: number, clubId: string): GameState {

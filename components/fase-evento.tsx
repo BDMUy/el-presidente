@@ -5,6 +5,7 @@ import { useState, type CSSProperties } from 'react';
 import type { Club, Effects, EventKind, GameEvent } from '@/lib/engine/types';
 import { EVENT_KIND_LABEL } from '@/lib/engine/types';
 import { plataConSigno } from '@/lib/format';
+import { impactoDeOpcion } from '@/lib/impacto';
 import { useTintaClub } from '@/lib/tema';
 import {
   BarraDecision,
@@ -75,6 +76,7 @@ export function FaseEvento({
                     key={optionIndex}
                     label={option.label}
                     hint={option.hint}
+                    impacto={impactoDeOpcion(option)}
                     azaroso={Boolean(option.random)}
                     seleccionado={elegida === displayIndex}
                     onClick={() => setElegida(displayIndex)}

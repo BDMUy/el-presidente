@@ -178,8 +178,10 @@ colour, run through a contrast solver so it always clears 4.5:1 against the page
 Depth is flat: no shadows, no gradients, no rounded corners. Blocks are told
 apart by a tonal step (`fondo` → `fondo-2`) and a coloured rule across the top,
 exactly as a printed page separates a boxed sidebar from the column beside it.
-Motion is a press run: the club stripe draws in from the left, headlines wipe
-open, result lines drop in one after another.
+Motion is a press run: the club stripe draws in from the left, the closing
+headline wipes open, result lines drop in one after another, and a loading
+screen is a line of agate type with the compositor's cursor still blinking at
+its end.
 
 It should feel **tactile and press-like** — type locked in a chase, ink pressed
 into paper. Buttons are solid slabs that physically depress on tap
@@ -212,8 +214,9 @@ edition's values live in `.impeccable/design.json`.
 
 ### Primary
 - **Warm Newsprint Ink** (`#e6e3db`): the one text colour. Headlines, body,
-  primary button fills (as ink-on-fondo), the selected-row inversion. This is
-  `tinta` — everything readable is one of its four steps.
+  primary button fills (as ink-on-fondo), the selected-row inversion, and the
+  global `:focus-visible` outline (`2px solid`, `2px` offset). This is `tinta` —
+  everything readable is one of its four steps.
 - **Ink 2 / Secondary** (`#a3a09a`): decks, hints, metadata, inactive nav, the
   active/pressed state of primary buttons (`tinta-2`).
 - **Ink 3 / Tertiary** (`#85827c`): agate labels above figures, disabled text,
@@ -228,12 +231,16 @@ edition's values live in `.impeccable/design.json`.
 
 ### Tertiary
 - **Club Accent** (`var(--club)`, runtime): the club's real primary colour,
-  passed through `tintaDeClub()` — an OKLCH lightness search that shifts the hue
-  toward the background until it clears 4.5:1. Set as an inline CSS variable on
-  every game-surface wrapper. Used for: the 4px top rule on game cards, club-scoped
-  primary buttons ("Asumir el cargo", "Continuar"), section rules in results,
-  the "Elegido" / "Resuelto" tags, HUD league line. There is no static value —
-  it is computed per club per theme.
+  passed through `tintaDeClub()` — an OKLCH lightness search that walks the
+  colour toward the theme's *raised surface* (`fondo-2`, via
+  `superficieDelTema()`) until it clears 4.5:1, which also clears it against the
+  page (`fondo`), so the accent is safe on both. Set as an inline CSS variable on
+  every game-surface wrapper. Used for: the 4px top rule on game cards,
+  club-scoped primary buttons ("Asumir el cargo", "Continuar"), section rules in
+  results, the "Elegido" / "Resuelto" tags, the HUD league line. There is no
+  static value — it is computed per club per theme. (The Open Graph image, which
+  has no raised surface and always sits on the dark ground, solves against
+  `#23242a` directly.)
 - **Raw Club Colours** (`club.colors[0]`, `club.colors[1]`): the club's two
   unmodified brand colours, used *only* in the decorative `aria-hidden` "filete"
   stripe. Never carry text.
@@ -245,8 +252,9 @@ edition's values live in `.impeccable/design.json`.
   input fields. The only elevation cue besides a top rule — `fondo-2`.
 - **Corondel** (`#45474e` dark / `#c9c5ba` light): every hairline divider, the
   1px column rule, `divide-x` between rail and column, dotted leader lines.
-- **Corondel Fuerte** (`#6e7079` dark / `#8e8b83` light): the `:focus-visible`
-  outline, stronger separators, the dotted stat underline at rest.
+- **Corondel Fuerte** (`#6e7079` dark / `#8e8b83` light): stronger separators
+  and the dotted stat underline at rest. (The `:focus-visible` outline was moved
+  to `tinta`.)
 
 ### Named Rules
 **The One Ink Rule.** A game screen carries exactly one chromatic colour: the
@@ -255,7 +263,8 @@ deltas and flags, never as surfaces. Everything else is a step of `tinta` on a
 step of `fondo`. No decorative colour, ever.
 
 **The Contrast-Solver Rule.** Club colour never reaches text or a border
-directly. It goes through `tintaDeClub()` first. Raw `club.colors[*]` is
+directly. It goes through `tintaDeClub()` first, solved against the raised
+surface so it holds 4.5:1 on both `fondo` and `fondo-2`. Raw `club.colors[*]` is
 `aria-hidden` decoration only.
 
 ## Typography
@@ -271,13 +280,17 @@ tight to the measure; Newsreader carries the prose and, in italic, the deck.
 
 ### Hierarchy
 - **Masthead** (Archivo 900, `clamp(2.75rem, 11vw, 4.5rem)`, line-height 0.86,
-  `wdth` 80%, uppercase, boxed in a 4px/2px rule pair): the "El Presidente"
-  nameplate on the home edition only. Wipes open with `revelar-titular`.
+  `wdth` 80%, uppercase, boxed between a 4px rule above and a 2px rule below):
+  the "El Presidente" nameplate — an `<h1>` on the home edition, the same block
+  as a `<p>` atop a shared presidency (`/p/[code]`). Set once; static, no
+  reveal.
 - **Display / Titular** (Archivo 800, `clamp(1.75rem, 7vw, 2.75rem)`, line-height
   0.92, `wdth` 66%, uppercase): the headline of every event card, result, and
   acta.
-- **Ending** (Archivo 900, `clamp(2.25rem, 10vw, 4rem)`, `wdth` 75%, uppercase):
-  the outcome title in `ResumenPresidencia` and its Open Graph echo.
+- **Ending** (Archivo 900, `clamp(2.25rem, 10vw, 4rem)`, line-height 0.9,
+  `wdth` 75%, uppercase): the outcome title in `ResumenPresidencia` and its Open
+  Graph echo. This is the one headline that still wipes open (`revelar-titular`,
+  320ms).
 - **Page title** (Archivo 900, `clamp(2rem, 8vw, 3rem)`, `wdth` 80%, uppercase,
   boxed in the 4px/2px rule pair): the standalone-page h1 (`/privacidad`).
 - **Match title** (Archivo 900, `clamp(1.5rem, 7vw, 2rem)`, line-height 1.05,
@@ -405,8 +418,9 @@ software.** Sharp, ruled, solid, with a physical press on interaction.
   Selects use `font-titular` bold; text inputs use `font-cuerpo`.
 - **Label:** agate uppercase `tracking-[0.1em]` `text-tinta-2`, set above the
   field.
-- **Focus:** border shifts to `tinta`, `outline: none`. No glow, no ring, no
-  colour change — just the rule going solid-bright.
+- **Focus:** the `corondel` border shifts to solid `tinta` and the field itself
+  takes no outline. No glow, no colour change — just the rule going solid-bright.
+  (Buttons and links instead show the global 2px `tinta` `:focus-visible` ring.)
 - **Select chevron:** a literal `▼` glyph in `font-titular`, not an SVG.
 - **Disabled:** `opacity-45`.
 
@@ -431,13 +445,30 @@ Unselected: hint in `tinta-2`, hover `bg-fondo/60`. **Selected: the whole row
 inverts to `bg-tinta` / `text-fondo`** — ink stamped onto paper. Label is
 `font-titular` bold; an optional bordered "al azar" micro-tag sits at the end
 when the outcome is random. Rows drop in staggered (`animationDelay: index*40ms`).
+Below the hint, an optional row of **impact tokens** (see below).
+
+### Impact Token (`lib/impacto.ts` + `Renglon`'s token row)
+A `font-tabla` `10px` bold label (`CAJA`, `HINCHADA`, …) followed by its signo
+repeated once per grade — `+`, `++`, or `+++` (grade derived from the
+catalogue's own effect-size distribution, not a fixed number). Color carries
+the direction at rest: `text-favorable` for `+`, `text-alerta` for `−`,
+`text-tinta-2` for the neutral `DESPUÉS` token (an effect deferred to a later
+season, shown with no magnitude so it warns without spoiling the twist).
+**Inside a selected (inverted) `Renglon`, every token drops to `text-fondo/70`
+regardless of direction** — `favorable`/`alerta` do not pass contrast against
+`bg-tinta`, so on inversion the `+`/`−` glyphs alone carry the meaning. `null`
+(an `option.random`) renders no tokens — the "al azar" tag already covers that
+case. This is graded prose, not a number: see the prosa-vs-contrato rule under
+Do's and Don'ts for where a token is right and where an exact figure is owed
+instead.
 
 ### Stat (`Cifra`) — signature
-Agate label (`11px`, `tinta-3`, uppercase) over a `font-titular` black
-`tabular-nums` value. Sits on a `border-b-2` that is **dotted `corondel-fuerte`
-at rest, solid `tinta` when expanded**. Value turns `alerta` when it crosses a
-critical threshold (caja < 0, hinchada < 25). Tapping toggles an inline
-explanation panel.
+Agate label (`11px`, `tinta-2`, uppercase) over a `font-titular` black
+`tabular-nums` value, in a `min-h-11` tap target with near-zero horizontal
+padding so five sit across a 375px HUD. Sits on a `border-b-2` that is **dotted
+`corondel-fuerte` at rest, solid `tinta` when expanded**. Value turns `alerta`
+when it crosses a critical threshold (caja < 0, hinchada < 25). Tapping toggles
+an inline explanation panel.
 
 ### Sticky Action Bar (`BarraDecision`) — signature
 `sticky bottom-0 -mx-4`, `border-t-4 border-tinta`, `bg-fondo-2/97
@@ -447,32 +478,53 @@ uppercase confirm slab ("Firmar", "Definir"), disabled state is a hollow
 `border border-corondel` with `text-tinta-3`.
 
 ### HUD (`Hud`) — signature
-`sticky top-0 z-20` on `bg-fondo-2/97 backdrop-blur`. Top strip → club name +
-`T{season} · {year}` → club-tinted league/mandate line → a 5-column
-`divide-x divide-corondel` row of `Cifra` stats with a bespoke
-`grid-template-columns` so "Influencia" gets more room → optional expanded
-detail panel → the two-colour `filete` bar sealing the bottom edge.
+`sticky top-0 z-20` on `bg-fondo-2/97 backdrop-blur`. `BarraSuperior` → club
+name + `T{season} · {year}` → club-tinted league/mandate line → a 5-column
+`divide-x divide-corondel` row of `Cifra` stats on a bespoke
+`grid-template-columns` (`minmax(76px, 1.1fr) 1fr 0.8fr 0.89fr 1.11fr`) that
+floors "Caja" at 76px and gives "Caja" and "Influencia" the widest tracks so
+long figures never clip → optional expanded detail panel → the two-colour
+`filete` bar sealing the bottom edge.
 
 ### Navigation (`BarraSuperior`)
-A thin top strip, `border-b border-corondel py-2`, holding at most two agate
-uppercase text buttons: "← Volver al inicio" and the theme toggle. The toggle
-label is in-world — "Edición de día" / "Edición nocturna" — and carries a
-morphing sun/moon SVG. Switching themes runs a View Transitions circular wipe
-from the click point (520ms `cubic-bezier(0.65, 0, 0.35, 1)`), skipped under
-`prefers-reduced-motion`.
+A thin top strip, `border-b border-corondel py-2`, on every top-level surface —
+the home edition, an in-game screen, a shared presidency (`/p/[code]`),
+`/privacidad`, and the 404. It holds at most two agate uppercase controls:
+"← Volver al inicio" on the left and the theme toggle on the right. In game the
+back control is a `<button>` (`onVolver` callback); on standalone pages it is a
+`next/link` home (`volverHref`). The toggle label is in-world — "Edición de
+día" / "Edición nocturna" — and carries a morphing sun/moon SVG. Switching
+themes runs a View Transitions circular wipe from the click point (520ms
+`cubic-bezier(0.65, 0, 0.35, 1)`), skipped under `prefers-reduced-motion`.
 
 ### Disclosure (`Plegable`)
-Bordered box on mobile with a `+` / `−` glyph in `font-titular` black; on `lg`
-the border and toggle vanish and it becomes a static rail section with just its
-agate title.
+Bordered box on mobile with a `+` / `−` glyph in `font-titular` black and a
+truncated one-line `resumen` under the title while collapsed; on `lg` the border
+and toggle vanish and it becomes a static rail section headed by a plain
+`Volanta`.
 
-### Open Graph card (`/p/[code]`)
-1200×630, `#23242a` ground, `52px 64px` padding. Club-tinted 4px top rule under
-an agate "EL PRESIDENTE" wordmark; the ending title in `font-weight: 900`
-(`letter-spacing: -2`, steps down from 82px to 66px past 22 chars); a
-`1px solid #45474e` rule over a four-figure row (Temporadas / Títulos / Hinchada
-/ Puntaje); club-tinted solid title chips. The same edition, printed for
-WhatsApp.
+### Loading (`Cargando`) — signature
+A line still being set. The message is agate (`font-tabla` `11px`, tracked,
+uppercase, `tinta-2`) trailed by a blinking caret — a small `bg-current` block
+(`h-[0.85em] w-[0.45em]`, `aria-hidden`) running the `parpadeo` blink (1100ms).
+Two forms: `chico` is an inline `<p>` (tracking `0.06em`) dropped into a panel
+that is still fetching; the block form fills the viewport (`min-h-dvh`, centred,
+`role="status"`, tracking `0.2em`). No spinner, no orbs — the compositor's
+cursor is the whole idea. Server-rendered.
+
+### Open Graph card (`/p/[code]/opengraph-image`)
+1200×630, `#23242a` ground (always dark), `52px 64px` padding, set in the real
+type: condensed **Archivo** (`wdth` 75, weights 900 and 700) and **Newsreader**
+400, fetched once from Google Fonts as static-instanced WOFF and memoised; if
+the fetch fails the card still renders in the system stack. Composition, top to
+bottom: an agate "EL PRESIDENTE" wordmark over a 4px club-tinted rule; a
+club-tinted `CLUB · YYYY–YYYY` line; the ending title in Archivo 900
+(`letter-spacing: -2`, `line-height: 0.9`, 82px stepping to 66px past 22 chars);
+a **pull-quote** — the ending's first sentence (elided past 128 chars) in
+Newsreader 400 `#a3a09a` on a 2px club-tinted left rule, `max-width: 880`; a
+`1px solid #45474e` rule over the four-figure row (Temporadas / Títulos /
+Hinchada / Puntaje); up to four club-tinted solid title chips. The same edition,
+printed for WhatsApp.
 
 ## Do's and Don'ts
 
@@ -486,15 +538,23 @@ WhatsApp.
   Archivo 700, uppercase, letter-spaced, `tabular-nums` when numeric.
 - **Do** compress display type with the width axis (`font-stretch: 66%–80%`) and
   set it tight (line-height 0.86–0.92).
-- **Do** keep the club accent contrast-solved: it must clear 4.5:1 against the
-  active theme background (`npm run contraste` is the check).
+- **Do** keep the club accent contrast-solved against the *raised surface*
+  (`superficieDelTema()`), so it clears 4.5:1 on both `fondo` and `fondo-2` in
+  the active theme (`npm run contraste` is the check).
 - **Do** invert on selection — the chosen `Renglon` becomes `bg-tinta` /
   `text-fondo`.
+- **Do** follow the prosa-vs-contrato rule for showing impact: a **prose
+  screen** (an event card's options) gets graded signs (`HINCHADA ++`) —
+  it is reading a newspaper, not a spreadsheet. A **contract screen** (the
+  transfer window, the mesa chica) gets exact figures, because the player is
+  about to sign something and needs the real number. Never show a grade where
+  a figure is owed, or a figure where a grade would do (`Renglon`'s impact
+  tokens vs. `FaseMercado`'s `Dato` cells are the reference pair).
 - **Do** honour `prefers-reduced-motion` by reducing movement, not erasing
-  feedback: `entrar-nota` drops to an opacity-only fade, `filete-animado` /
-  `revelar-titular` / the theme-icon morph are removed, the `button:active`
-  `scale(0.97)` press keeps its ease, and every other non-button transition snaps
-  to ~0.
+  feedback: `entrar-nota` drops to an opacity-only fade (`aparecer`),
+  `filete-animado` / `revelar-titular` / the `cursor-parpadeo` blink / the
+  theme-icon morph are all stopped, the `button:active` `scale(0.97)` press keeps
+  its ease, and every other non-button transition snaps to ~0.
 - **Do** respect the reading measures (66ch body, 46ch deck) and `min-h-11` on
   anything tappable.
 

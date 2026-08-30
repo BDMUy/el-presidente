@@ -273,4 +273,136 @@ export const VESTUARIO: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'vest-nuevo-capitan',
+    kind: 'dilema',
+    title: 'HAY QUE ELEGIR CAPITÁN',
+    text: 'El capitán histórico se fue en el último mercado. El DT te pasa dos nombres y te pide que decidas vos, "para que no parezca cosa suya".',
+    weight: 2,
+    options: [
+      {
+        label: 'El más veterano del plantel',
+        hint: 'Autoridad garantizada. Cero sorpresas.',
+        effects: { plantel: 1, influencia: 2 },
+      },
+      {
+        label: 'El más joven con carácter',
+        hint: 'Mensaje claro puertas adentro. No todos lo bancan.',
+        effects: { plantel: 2, hinchada: 3 },
+      },
+    ],
+  },
+  {
+    id: 'vest-partido-a-puertas-cerradas',
+    kind: 'color',
+    title: 'AMISTOSO A PUERTAS CERRADAS',
+    text: 'Un amistoso de pretemporada sin cámaras ni prensa. Lo que se ve adentro no coincide con lo que se dice afuera.',
+    weight: 2,
+    options: [
+      {
+        label: 'Confiar en lo que muestra la cancha',
+        hint: 'Un partido no es una temporada. Pero algo dice.',
+        effects: { plantel: 2 },
+      },
+      {
+        label: 'Confiar en lo que dice el DT',
+        hint: 'Él los ve todos los días. Vos ves uno.',
+        effects: { plantel: 1, influencia: 1 },
+      },
+    ],
+  },
+  {
+    id: 'vest-el-que-no-corre',
+    kind: 'dilema',
+    title: 'EL QUE DEJÓ DE CORRER',
+    text: 'Las estadísticas del cuerpo técnico son claras: el mejor jugador del plantel corre la mitad que hace dos años. Todavía define partidos.',
+    options: [
+      {
+        label: 'Hablarlo con él en privado',
+        hint: 'Puede tomarlo bien. Puede no tomarlo nada bien.',
+        random: [
+          { weight: 55, text: 'Lo tomó bien. Volvió a entrenar como antes.', effects: { plantel: 3, hinchada: 2 } },
+          { weight: 45, text: 'Se ofendió. Rindió peor las siguientes fechas.', effects: { plantel: -2, hinchada: -1 } },
+        ],
+      },
+      {
+        label: 'No decir nada mientras siga metiendo goles',
+        hint: 'Funciona hasta que deja de funcionar.',
+        effects: { plantel: -1, hinchada: 1 },
+      },
+    ],
+  },
+  {
+    id: 'vest-cumpleanos-del-plantel',
+    kind: 'color',
+    title: 'EL CUMPLEAÑOS DEL PLANTEL',
+    text: 'Un jugador cumple años y organiza algo para todo el plantel. Te invita, "si tenés tiempo, presidente".',
+    options: [
+      {
+        label: 'Ir y quedarte un rato',
+        hint: 'Bajás a tierra. Algunos lo valoran, otros lo ven raro.',
+        effects: { hinchada: 1, influencia: 1, plantel: 1 },
+      },
+      {
+        label: 'Mandar un regalo y no ir',
+        hint: 'Correcto y distante, como casi todo lo tuyo con ellos.',
+        effects: { caja: -0.2 },
+      },
+    ],
+  },
+  {
+    id: 'vest-el-cabecilla-del-grupo',
+    kind: 'dilema',
+    title: 'EL QUE MANEJA EL GRUPO',
+    text: 'Hay un jugador que no es el capitán pero es el que realmente maneja el vestuario. El DT te lo confirma en voz baja: "sin él de tu lado, no arreglás nada ahí adentro".',
+    options: [
+      {
+        label: 'Cultivar esa relación en privado',
+        hint: 'Un canal informal que puede valer más que cualquier reunión.',
+        effects: { plantel: 2, influencia: -1 },
+      },
+      {
+        label: 'Ignorarlo y tratar a todos por igual',
+        hint: 'Correcto en el papel. Más difícil en la práctica.',
+        effects: { plantel: -1, influencia: 1 },
+      },
+    ],
+  },
+  {
+    id: 'vest-el-que-pide-la-diez',
+    kind: 'dilema',
+    title: 'DOS QUIEREN LA CAMISETA DIEZ',
+    text: 'El refuerzo nuevo pide la camiseta diez apenas firma. El que la usa hace tres años no está dispuesto a soltarla sin pelear.',
+    options: [
+      {
+        label: 'Dársela al nuevo',
+        hint: 'Mensaje claro sobre quién manda hoy en la cancha.',
+        effects: { plantel: 1, hinchada: -2 },
+      },
+      {
+        label: 'Que se la quede el de siempre',
+        hint: 'Respeta lo ganado. El nuevo empieza con un sabor amargo.',
+        effects: { hinchada: 1 },
+      },
+    ],
+  },
+  {
+    id: 'vest-el-chef-nuevo',
+    kind: 'color',
+    title: 'UN NUTRICIONISTA QUIERE CAMBIAR TODO',
+    text: 'El nutricionista nuevo propone tirar abajo el menú de toda la vida del predio. El plantel, sobre todo los más veteranos, no lo toma nada bien.',
+    weight: 2,
+    options: [
+      {
+        label: 'Bancar el cambio de menú',
+        hint: 'A la ciencia le cuesta entrar a un vestuario acostumbrado a otra cosa.',
+        effects: { caja: -0.4, plantel: 2 },
+      },
+      {
+        label: 'Mantener el menú de siempre',
+        hint: 'Nadie se queja. Tampoco cambia nada.',
+        effects: { plantel: -1 },
+      },
+    ],
+  },
 ];

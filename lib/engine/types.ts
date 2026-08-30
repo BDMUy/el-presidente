@@ -256,7 +256,9 @@ export interface GameEvent {
   once?: boolean;
 }
 
-export type OfferKind = 'compra' | 'venta' | 'libre';
+export type OfferKind = 'compra' | 'venta' | 'libre' | 'prestamo' | 'cesion';
+
+export const MOVIMIENTOS_POR_VENTANA = 3;
 
 export interface PlayerOffer {
   kind: OfferKind;
@@ -442,7 +444,7 @@ export interface Ending {
 }
 
 export type Phase =
-  | { kind: 'mercado'; offers: PlayerOffer[]; inhibido: boolean }
+  | { kind: 'mercado'; offers: PlayerOffer[]; inhibido: boolean; restantes: number }
   | { kind: 'evento'; event: GameEvent; available: number[] }
   | { kind: 'resultado-evento'; text: string; effects: Effects }
   | { kind: 'mesa-chica'; match: BigMatch }

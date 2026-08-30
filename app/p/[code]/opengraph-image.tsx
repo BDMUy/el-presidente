@@ -8,17 +8,79 @@ import { reconstruirPresidencia } from '@/lib/share';
 
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
-export const alt = 'Una presidencia de El Presidente';
+
+export async function generateImageMetadata({
+  params,
+}: {
+  params: Promise<{ code: string }>;
+}) {
+  const { code } = await params;
+  const state = reconstruirPresidencia(code);
+  const alt = state?.ending
+    ? `${state.ending.title} · ${getClub(state.clubId).name} — una presidencia de El Presidente`
+    : 'El Presidente — dirigí tu club';
+  return [{ id: 'default', alt, size, contentType }];
+}
 
 const FONDO = FONDO_OSCURO;
 const TINTA = '#e6e3db';
 const TINTA_2 = '#a3a09a';
 const CORONDEL = '#45474e';
 
+const UA_ESTATICA =
+  'Mozilla/5.0 (Windows NT 6.1; rv:6.0) Gecko/20110814 Firefox/6.0';
+
+const CSS_ARCHIVO_900 = 'https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75,900';
+const CSS_ARCHIVO_700 = 'https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75,700';
+const CSS_NEWSREADER = 'https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400';
+
+type FuenteOG = { name: string; data: ArrayBuffer; weight: 400 | 700 | 900; style: 'normal' };
+
+async function bajarFuente(css2: string): Promise<ArrayBuffer | null> {
+  try {
+    const css = await fetch(css2, {
+      headers: { 'User-Agent': UA_ESTATICA },
+      cache: 'force-cache',
+    }).then((r) => (r.ok ? r.text() : ''));
+    const url = css.match(/url\(([^)]+)\)/)?.[1];
+    if (!url) return null;
+    const bin = await fetch(url, { cache: 'force-cache' });
+    return bin.ok ? await bin.arrayBuffer() : null;
+  } catch {
+    return null;
+  }
+}
+
+let fuentesPromesa: Promise<FuenteOG[]> | null = null;
+
+function cargarFuentes(): Promise<FuenteOG[]> {
+  fuentesPromesa ??= (async () => {
+    const [titular, agate, cuerpo] = await Promise.all([
+      bajarFuente(CSS_ARCHIVO_900),
+      bajarFuente(CSS_ARCHIVO_700),
+      bajarFuente(CSS_NEWSREADER),
+    ]);
+    const fuentes: FuenteOG[] = [];
+    if (titular) fuentes.push({ name: 'Archivo', data: titular, weight: 900, style: 'normal' });
+    if (agate) fuentes.push({ name: 'Archivo', data: agate, weight: 700, style: 'normal' });
+    if (cuerpo) fuentes.push({ name: 'Newsreader', data: cuerpo, weight: 400, style: 'normal' });
+    return fuentes;
+  })();
+  return fuentesPromesa;
+}
+
+function primeraFrase(texto: string): string {
+  const frase = texto.split('. ')[0].trim();
+  if (frase.length <= 128) return frase;
+  const corte = frase.slice(0, 128);
+  return `${corte.slice(0, corte.lastIndexOf(' ')).trimEnd()}…`;
+}
+
 export default async function Image({ params }: { params: Promise<{ code: string }> }) {
   const { code } = await params;
 
   const state = reconstruirPresidencia(code);
+  const fonts = await cargarFuentes();
 
   if (!state?.ending) {
     return new ImageResponse(
@@ -33,15 +95,16 @@ export default async function Image({ params }: { params: Promise<{ code: string
             justifyContent: 'center',
             backgroundColor: FONDO,
             color: TINTA,
+            fontFamily: 'Archivo',
           }}
         >
           <div style={{ fontSize: 96, fontWeight: 900, letterSpacing: -3 }}>EL PRESIDENTE</div>
-          <div style={{ fontSize: 30, marginTop: 16, color: TINTA_2 }}>
+          <div style={{ fontSize: 30, marginTop: 16, color: TINTA_2, fontWeight: 700 }}>
             Dirigí tu club. Cuatro mandatos para que no te echen.
           </div>
         </div>
       ),
-      size,
+      { ...size, fonts },
     );
   }
 
@@ -52,7 +115,9 @@ export default async function Image({ params }: { params: Promise<{ code: string
 
   const dato = (label: string, valor: string) => (
     <div style={{ display: 'flex', flexDirection: 'column', paddingRight: 44 }}>
-      <div style={{ fontSize: 18, color: TINTA_2, letterSpacing: 2 }}>{label.toUpperCase()}</div>
+      <div style={{ fontSize: 18, fontWeight: 700, color: TINTA_2, letterSpacing: 2 }}>
+        {label.toUpperCase()}
+      </div>
       <div style={{ fontSize: 42, fontWeight: 900, color: TINTA, marginTop: 6 }}>{valor}</div>
     </div>
   );
@@ -67,6 +132,7 @@ export default async function Image({ params }: { params: Promise<{ code: string
           flexDirection: 'column',
           backgroundColor: FONDO,
           padding: '52px 64px',
+          fontFamily: 'Archivo',
         }}
       >
         <div
@@ -95,10 +161,26 @@ export default async function Image({ params }: { params: Promise<{ code: string
               color: TINTA,
               letterSpacing: -2,
               marginTop: 14,
-              lineHeight: 1.02,
+              lineHeight: 0.9,
             }}
           >
             {state.ending.title}
+          </div>
+
+          <div
+            style={{
+              marginTop: 20,
+              borderLeft: `2px solid ${tintaClub}`,
+              paddingLeft: 18,
+              maxWidth: 880,
+              fontFamily: 'Newsreader',
+              fontWeight: 400,
+              fontSize: 27,
+              lineHeight: 1.32,
+              color: TINTA_2,
+            }}
+          >
+            {primeraFrase(state.ending.text)}
           </div>
         </div>
 
@@ -138,6 +220,6 @@ export default async function Image({ params }: { params: Promise<{ code: string
         )}
       </div>
     ),
-    size,
+    { ...size, fonts },
   );
 }

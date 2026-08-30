@@ -68,13 +68,35 @@ Consequences to respect:
 
 Events are typed declarative objects in `content/events/`. Adding content means
 adding a file and listing it in `content/events/index.ts`. The engine is not
-touched. The catalogue is 167 cards across twelve fronts, plus 344 clubs, 36
+touched. The catalogue is 228 cards across twelve fronts, plus 344 clubs, 36
 titles and 18 achievements.
 
-Cards without a `requires` condition are the general pool; conditioned cards
-give texture to a specific situation. Only general cards fix repetition in a
-long run, because a healthy presidency spends almost all its time in the state
-where conditioned cards do not apply.
+Cards without a `requires` condition are the general pool (75 of the 228);
+conditioned cards give texture to a specific situation. The general pool is
+what a healthy presidency spends almost all its time drawing from, so it is
+the one that has to be large — grown from 33 to 75 specifically to cut
+between-presidency repetition (see below).
+
+Repetition across separate presidencies (not within one — the engine never
+repeats a card in the same run) is damped two ways:
+
+- **Per-seed weight rotation.** `rotacionPorSemilla(seed, id)` in
+  `lib/engine/engine.ts` multiplies a card's weight by a factor in
+  `[0.25, 2.0)` derived from a pure hash of `(seed, cardId)` — no extra RNG
+  stream consumption, fully deterministic. The same card that is common under
+  one seed is rare under another, so the early cards of a run stop feeling
+  identical every time.
+- **Multi-season arcs.** A handful of cards form 3-stage storylines: an
+  unconditioned opener sets an `arco_<nombre>_<etapa>` flag, and 1-2 follow-up
+  cards gated on `requires.flag` (plus a `minSeason` floor several seasons
+  later) pay it off — `weight: 10` so the payoff is near-certain once
+  unlocked, not just theoretically reachable. `npm run cobertura` can make an
+  individual arc branch look unreachable if its own crude "maximize hinchada"
+  heuristic always avoids that branch — verify with a genuinely random policy
+  before treating a `cobertura` "nunca aparece" as a real bug (see
+  `inf-joya-triunfa-afuera` for a worked example: 0/N under `cobertura`,
+  ~0.1-0.2% under uniform random, which is the correct, low-but-real rate for
+  a "sell the wonderkid" branch).
 
 ```
 lib/engine/      state, effects, events, market, board meeting, elections
@@ -93,7 +115,16 @@ db/migrations/   SQL, applied with `npm run migrar`
   packed into the club field using `MODOS_EN_LINK`, a wire ordering separate
   from the display ordering, so that `normal` is index 0 and pre-mode links
   still decode correctly. New modes append to the end of that array, never the
-  middle. The field is full at four modes.
+  middle. The field is full at four modes. This invariant was deliberately
+  broken once, in `CONTENT_VERSION` 6: `choices` stopped recording the
+  single-button "Continuar" screens (they carry no information — every
+  acknowledgement-phase resolver ignores the choice index it receives), which
+  roughly halves the length of a full presidency's choice log and freed the
+  budget the transfer-window and content work needed. There was no public
+  deploy and no ranking rows yet, so it was the one moment breaking it was
+  free; `lib/storage.ts` bumping `CONTENT_VERSION` invalidated saved games the
+  same way it always does for a content change. The invariant holds again from
+  here on.
 - **`lib/db.ts` carries `import 'server-only'`.** The connection string must
   never be named `NEXT_PUBLIC_*` and must never reach the browser. If it could,
   server-side verification would be worthless.
@@ -112,6 +143,7 @@ result is recorded where the decision lives.
 |---|---|
 | `npm run simulate 3000 --modo=todos` | balance: endings, scores, completion rate |
 | `npm run cobertura -- --modo=larga` | which cards appear, which never, which repeat |
+| `npm run coherencia 3000` | text at every phase transition checked against the state it describes |
 | `npm run contraste` | palette contrast against WCAG |
 | `npm run cracks` | parody names never repeat inside one run |
 | `npx tsx scripts/llamas.ts` | how much harder the "en llamas" mode is, and where runs die |
@@ -121,8 +153,12 @@ buttons — and must end badly almost always. `greedy` reads consequences and
 picks what suits it short term; it is the calibrated number. If the two curves
 look alike, decisions do not matter and the game is broken.
 
-Current completion rates under `greedy`: corta 78.8%, normal 62.7%, larga
-46.8%, llamas 15.8%.
+Current completion rates under `greedy`: corta 84.1%, normal 64.0%, larga
+45.6%, llamas 15.2%. `plantelDecay` (`lib/engine/season.ts`) and the "en
+llamas" starting bonus (`BONUS_PLANTEL_LLAMAS` in `lib/engine/engine.ts`) are
+the levers that hold this band — a larger market or a bigger content pool
+both raise it, since `greedy` gets more chances per season to find a good
+option, and needs recalibrating there after either kind of change.
 
 ## Interface
 
@@ -130,7 +166,7 @@ Mobile first, and 375px is the real target, not an edge case. Interactive
 elements get `min-h-11`. Text that can be long must wrap or clamp, never
 silently truncate a decision the player is about to confirm.
 
-`/cartas` renders all 167 cards using the real `FaseEvento` component. It is
+`/cartas` renders all 228 cards using the real `FaseEvento` component. It is
 disabled in production via `notFound()`. Use it to read content at the width it
 will be read at; a gallery that draws cards its own way lies about exactly what
 you want to check.

@@ -35,9 +35,11 @@ result, a score, and a link a friend will open.
 The whole presidency is defined by exactly four things — **seed, club, mode, and
 the ordered list of choices** — and everything else follows from that purity:
 
-- **The share link carries the entire game inside it** (~70 characters). Sharing
-  needs no server and no database; the recipient's browser reconstructs the run
-  with the same engine (`lib/share.ts`).
+- **The share link carries the entire game inside it** (typically 30–140
+  characters, depending on mode and how long the presidency lasted; the
+  400-decision technical cap has wide headroom to spare). Sharing needs no
+  server and no database; the recipient's browser reconstructs the run with the
+  same engine (`lib/share.ts`).
 - **The server never trusts the browser.** Every submitted score is verified by
   replaying the game with the same deterministic engine
   (`app/api/puntaje/route.ts`).
@@ -80,7 +82,10 @@ balance.
 - **Old share links must keep decoding to the same game.** The mode is packed
   into the club field via `MODOS_EN_LINK`, a wire ordering separate from the
   display ordering, so `normal` is index 0 and pre-mode links still decode. New
-  modes append to the end of that array, never the middle.
+  modes append to the end of that array, never the middle. Broken deliberately
+  once, before any public deploy or ranking row existed: `choices` no longer
+  records the acknowledgement-only "Continuar" screens, which frees roughly
+  half the decision budget a link can carry. Holds again from here on.
 - **Works with no database.** Without `DATABASE_URL` the ranking routes answer
   503 and the UI hides the table; without the SMTP variables the `/privacidad`
   contact form disappears and `/api/contacto` answers 503. Everything else plays.
@@ -91,10 +96,16 @@ balance.
   connection strings, provider tokens, private keys, and files over 5 MB.
 - **Content is data.** Events are typed declarative objects in `content/events/`;
   adding content is adding a file and listing it in the index — the engine is not
-  touched. Current catalogue: 167 cards across twelve fronts, 344 clubs in three
-  categories, 36 titles, 18 achievements. Every card needs at least two options
-  with no `requires` condition so a run can never stall; only unconditioned
-  "general" cards fix repetition in a long run.
+  touched. Current catalogue: 228 cards across twelve fronts (75 of them
+  unconditioned — the "general" pool that sustains a long run — up from 33),
+  344 clubs in three categories, 36 titles, 18 achievements. Every card needs
+  at least two options with no `requires` condition so a run can never stall.
+  Repetition across separate presidencies is also damped by a per-seed weight
+  rotation (`rotacionPorSemilla` in `lib/engine/engine.ts`) — the same card is
+  common under one seed and rare under another — and by multi-season arcs
+  (flag-gated follow-up cards, 4–8 seasons apart, weighted to appear reliably
+  once unlocked) that give returning players a throughline instead of
+  independent vignettes.
 - **Privacy.** The submission rate limiter stores a salted hash of the origin IP,
   never the IP itself (`RANKING_SALT`). No accounts, no analytics, no tracking
   beyond that hash.
@@ -130,17 +141,17 @@ balance.
 
 - **The game itself** is complete and playable end-to-end locally with no
   configuration.
-- **Content:** 167 cards, 344 clubs, 36 titles, 18 achievements — written and in
+- **Content:** 228 cards, 344 clubs, 36 titles, 18 achievements — written and in
   the repo.
-- **Balance data** (measured, `greedy` policy completion rates): Corta 78.8%,
-  Normal 62.7%, Larga 46.8%, En llamas 15.8%.
-- **Test suite:** 140 tests, no DOM, passing; typecheck, lint, and build green.
+- **Balance data** (measured, `greedy` policy completion rates): Corta 84.1%,
+  Normal 64.0%, Larga 45.6%, En llamas 15.2%.
+- **Test suite:** 182 tests, no DOM, passing; typecheck, lint, and build green.
 - **Docs:** `README.md`, `AGENTS.md`, `DESPLIEGUE.md` (Netlify deployment
   runbook), `.env.example`.
 - **Not yet real — must not be implied as done:** the ranking table is empty
-  (zero rows); the game has never been played through on a physical phone; 52 of
-  the long-run cards have never been seen on a screen; there is no public
-  deployment yet. No press, reviews, testimonials, or player numbers exist;
+  (zero rows); the game has never been played through on a physical phone;
+  there is no public deployment yet. No press, reviews, testimonials, or player
+  numbers exist;
   future work must not fabricate them.
 
 ## Product Principles

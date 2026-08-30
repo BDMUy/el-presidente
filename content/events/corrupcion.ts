@@ -633,4 +633,118 @@ export const CORRUPCION: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'cor-planilla-de-viaticos',
+    kind: 'dilema',
+    title: 'LA PLANILLA DE VIÁTICOS',
+    text: 'El tesorero te muestra una planilla de gastos de la última gira que no cierra. Sobrestimar los viáticos es una costumbre vieja en el club.',
+    options: [
+      {
+        label: 'Firmarla como viene',
+        hint: 'Es lo que se hizo siempre. Eso no la hace menos trucha.',
+        effects: { ...SUCIO, caja: 0.7, influencia: 2 },
+      },
+      {
+        label: 'Pedir los comprobantes reales',
+        hint: 'Cortás la costumbre. El tesorero no te lo va a agradecer.',
+        effects: { caja: -0.3, influencia: 3 },
+      },
+    ],
+  },
+  {
+    id: 'cor-entrada-de-cortesia',
+    kind: 'dilema',
+    title: 'LAS ENTRADAS DE CORTESÍA',
+    text: 'Alguien de la mesa chica revende sistemáticamente las entradas de cortesía que le corresponden por cargo. Nunca se habló del tema en voz alta.',
+    options: [
+      {
+        label: 'Mirar para otro lado',
+        hint: 'Todos los cargos las revenden un poco. O eso te dicen.',
+        effects: { ...SUCIO, caja: 0.4, influencia: -2 },
+      },
+      {
+        label: 'Cortarlo de raíz para todos, empezando por vos',
+        hint: 'Menos plata en el bolsillo de todos. Más autoridad moral.',
+        effects: { influencia: 4, hinchada: 2 },
+      },
+    ],
+  },
+  {
+    id: 'cor-el-representante-agradecido',
+    kind: 'dilema',
+    title: 'EL REPRESENTANTE AGRADECIDO',
+    text: 'Cerraste un fichaje importante y el representante del jugador te manda, "como agradecimiento personal", un sobre que no tiene nada que ver con la comisión pactada con el club.',
+    options: [
+      {
+        label: 'Aceptarlo',
+        hint: 'Nadie se va a enterar. Nunca es del todo cierto.',
+        effects: { ...SUCIO, caja: 1.2, influencia: -3 },
+      },
+      {
+        label: 'Devolverlo y avisar a la comisión',
+        hint: 'Incómodo hoy. Un antecedente limpio para siempre.',
+        effects: { influencia: 5 },
+      },
+    ],
+  },
+  {
+    id: 'cor-terreno-del-club',
+    kind: 'dilema',
+    title: 'EL TERRENO QUE SOBRA',
+    text: 'El club tiene un terreno lindero al predio que no usa hace años. Un conocido de la comisión ofrece comprarlo, bien por debajo del precio de mercado.',
+    weight: 2,
+    options: [
+      {
+        label: 'Vendérselo a ese precio',
+        hint: 'Entra plata rápido. Sale barato para el que lo compra.',
+        effects: { ...SUCIO, caja: 2.5, influencia: -5 },
+      },
+      {
+        label: 'Sacarlo a tasación pública',
+        hint: 'Tarda más. Entra lo que realmente vale.',
+        effects: { caja: 1.5, influencia: 3 },
+      },
+      {
+        label: 'No vender nada',
+        hint: 'El terreno sigue ahí, sin usarse, sin sumar.',
+        effects: { influencia: 1 },
+      },
+    ],
+  },
+  {
+    id: 'cor-el-arbitro-del-torneo-de-verano',
+    kind: 'dilema',
+    title: 'EL TORNEO AMISTOSO TIENE ÁRBITRO PROPIO',
+    text: 'Para el torneo amistoso de pretemporada, la organización deja que cada club "sugiera" un árbitro de su confianza. Es solo un amistoso, dicen todos.',
+    options: [
+      {
+        label: 'Sugerir uno que te debe un favor',
+        hint: 'Un torneo que no vale nada, ganado de una manera que sí importa.',
+        effects: { ...SUCIO, hinchada: 2 },
+      },
+      {
+        label: 'No sugerir a nadie',
+        hint: 'Que se arme el fixture como salga.',
+        effects: { influencia: 1 },
+      },
+    ],
+  },
+  {
+    id: 'cor-el-pase-que-nunca-se-jugo',
+    kind: 'dilema',
+    title: 'EL PASE QUE NUNCA SE JUGÓ',
+    text: 'Un representante te ofrece fichar a un jugador que nunca va a llegar a jugar un partido, solo para cobrar la comisión de la operación y repartirla después.',
+    options: [
+      {
+        label: 'Cerrar la operación',
+        hint: 'Un fichaje de papel. Cobra gente que no pisó la cancha.',
+        effects: { ...SUCIO, caja: -0.3, influencia: -1 },
+      },
+      {
+        label: 'Rechazarla',
+        hint: 'Ni jugador de papel, ni comisión repartida.',
+        effects: { influencia: 2 },
+      },
+    ],
+  },
 ];

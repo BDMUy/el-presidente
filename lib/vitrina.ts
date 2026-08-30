@@ -52,7 +52,7 @@ export interface Novedades {
   esRecord: boolean;
 }
 
-export function registrarPartida(state: GameState): Novedades {
+export function calcularNovedades(state: GameState): Novedades {
   const actual = leerVitrina();
   const marca = huella(state);
 
@@ -77,11 +77,10 @@ export function registrarPartida(state: GameState): Novedades {
     ultimaHuella: marca,
   };
 
-  guardarVitrina(vitrina);
   return { vitrina, titulosNuevos, logrosNuevos, esRecord };
 }
 
-function guardarVitrina(vitrina: Vitrina): void {
+export function guardarVitrina(vitrina: Vitrina): void {
   if (typeof window === 'undefined') return;
   try {
     window.localStorage.setItem(KEY, JSON.stringify(vitrina));

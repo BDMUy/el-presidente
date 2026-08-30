@@ -230,6 +230,8 @@ export function buildSeasonResult(
     titles.includes('libertadores') ||
     titles.includes('sudamericana');
 
+  const esperada = expectedPosition(club, league);
+
   return {
     position,
     teams: rules.teams,
@@ -239,7 +241,16 @@ export function buildSeasonResult(
     relegated,
     qualifiedContinental,
     titles,
-    summary: buildSummary(club, position, rules.teams, champion, promoted, relegated),
+    summary: buildSummary(
+      club,
+      position,
+      rules.teams,
+      champion,
+      promoted,
+      relegated,
+      esperada,
+      state.resources.hinchada,
+    ),
   };
 }
 
@@ -250,12 +261,20 @@ function buildSummary(
   champion: boolean,
   promoted: boolean,
   relegated: boolean,
+  esperada: number,
+  hinchada: number,
 ): string {
   if (champion) return `${club.name} dio la vuelta. La ciudad es una fiesta.`;
   if (promoted) return `${club.name} asciende. Once años de espera se terminaron en una tarde.`;
   if (relegated) return `${club.name} se fue al descenso. El silencio en el estadio fue peor que los insultos.`;
-  if (position <= 4) return `${club.name} terminó ${position}° y se metió arriba. La gente se ilusiona.`;
-  if (position <= teams / 2) return `Temporada correcta: ${position}° de ${teams}. Ni fiesta ni tragedia.`;
+
+  const diff = esperada - position;
+
+  if (diff >= 5) return `${club.name} terminó ${position}° y superó lo que se esperaba de este plantel. La gente se ilusiona.`;
+  if (diff >= 1) return `Temporada correcta: ${position}° de ${teams}. Cumplió con lo que se esperaba, ni más ni menos.`;
+  if (diff >= -4) return `${position}° de ${teams}. Ni fiesta ni tragedia.`;
+  if (hinchada >= 60) return `${position}° de ${teams}, bastante por debajo de lo que se esperaba. La hinchada no festeja, pero tampoco te suelta la mano.`;
+  if (hinchada >= 40) return `${position}° de ${teams}. La gente no putea todavía, pero la paciencia se está por terminar.`;
   return `${position}° de ${teams}. La platea empezó a pedir tu renuncia antes de la última fecha.`;
 }
 
@@ -335,7 +354,7 @@ export function resolveMood(
 }
 
 export function plantelDecay(league: LeagueId): number {
-  return LEAGUES[league].tier === 1 ? -2.5 : -2;
+  return LEAGUES[league].tier === 1 ? -9 : -7.25;
 }
 
 export function desgasteDelCargo(mandate: number): number {

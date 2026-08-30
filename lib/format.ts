@@ -6,7 +6,9 @@ export function plata(millones: number): string {
 
 export function plataCorta(millones: number): string {
   const signo = millones < 0 ? '−' : '';
-  return `${signo}${Math.abs(millones).toFixed(1).replace('.', ',')}M`;
+  const abs = Math.abs(millones);
+  if (abs >= 100) return `${signo}${Math.round(abs)}M`;
+  return `${signo}${abs.toFixed(1).replace('.', ',')}M`;
 }
 
 export function plataConSigno(millones: number): string {

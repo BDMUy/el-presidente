@@ -10,7 +10,7 @@ import {
 } from './election';
 import { assignmentCost, enumerateAssignments, resolveMesaChica } from './mesa-chica';
 import { generateOffers } from './mercado';
-import { Rand } from './rng';
+import { Rand, seedFromString } from './rng';
 import {
   buildSeasonResult,
   expectedPosition,
@@ -35,6 +35,7 @@ import type {
 import {
   EVENTS_PER_SEASON,
   LEAGUES,
+  MOVIMIENTOS_POR_VENTANA,
   START_YEAR,
   TEMPORADAS_POR_MODO,
 } from './types';
@@ -54,16 +55,16 @@ export function initialResources(club: Club): Resources {
 const DEUDA_EN_LLAMAS = -22;
 
 const BONUS_PLANTEL_LLAMAS: Record<LeagueId, number> = {
-  'ar-primera': 12, 'ar-nacional': 12, 'ar-b': 12,
-  'uy-primera': 7, 'uy-segunda': 12,
-  'pe-primera': 10, 'pe-segunda': 12,
-  'co-primera': 6, 'co-segunda': 12,
-  'cl-primera': 7, 'cl-segunda': 12,
-  'py-primera': 6, 'py-segunda': 12,
-  'bo-primera': 7, 'bo-segunda': 12,
-  'ec-primera': 6, 'ec-segunda': 12,
-  've-primera': 6, 've-segunda': 12,
-  'br-primera': -4, 'br-segunda': 12,
+  'ar-primera': 19, 'ar-nacional': 19, 'ar-b': 19,
+  'uy-primera': 14, 'uy-segunda': 19,
+  'pe-primera': 17, 'pe-segunda': 19,
+  'co-primera': 13, 'co-segunda': 19,
+  'cl-primera': 14, 'cl-segunda': 19,
+  'py-primera': 13, 'py-segunda': 19,
+  'bo-primera': 14, 'bo-segunda': 19,
+  'ec-primera': 13, 'ec-segunda': 19,
+  've-primera': 13, 've-segunda': 19,
+  'br-primera': 3, 'br-segunda': 19,
 };
 
 function recibirElClubEnLlamas(club: Club): Resources {
@@ -107,7 +108,7 @@ export function startRun({ seed, clubId, modo = 'normal' }: StartOptions): GameS
     bigMatch: null,
     pendingPosition: null,
     pendingTitle: null,
-    phase: { kind: 'mercado', offers: [], inhibido: false },
+    phase: { kind: 'mercado', offers: [], inhibido: false, restantes: 0 },
     status: 'jugando',
     ending: null,
     log: [],
@@ -122,25 +123,34 @@ export function startRun({ seed, clubId, modo = 'normal' }: StartOptions): GameS
 export function applyChoice(state: GameState, choice: number): GameState {
   if (state.status === 'terminado') return state;
 
-  const withChoice: GameState = { ...state, choices: [...state.choices, choice] };
+  const esDecisionReal = optionCount(state) > 1;
+  const conElegida: GameState = esDecisionReal
+    ? { ...state, choices: [...state.choices, choice] }
+    : state;
 
-  switch (state.phase.kind) {
+  switch (conElegida.phase.kind) {
     case 'mercado':
-      return resolveMercado(withChoice, state.phase.offers, choice);
+      return resolveMercado(
+        conElegida,
+        conElegida.phase.offers,
+        conElegida.phase.restantes,
+        conElegida.phase.inhibido,
+        choice,
+      );
     case 'evento':
-      return resolveEvento(withChoice, state.phase.event, state.phase.available, choice);
+      return resolveEvento(conElegida, conElegida.phase.event, conElegida.phase.available, choice);
     case 'resultado-evento':
-      return afterEvento(withChoice);
+      return afterEvento(conElegida);
     case 'mesa-chica':
-      return resolveMesa(withChoice, choice);
+      return resolveMesa(conElegida, choice);
     case 'resultado-final':
-      return openTemporada(withChoice);
+      return openTemporada(conElegida);
     case 'temporada':
-      return closeSeason(withChoice, state.phase.result);
+      return closeSeason(conElegida, conElegida.phase.result);
     case 'eleccion':
-      return afterElection(withChoice, state.phase.result.won);
+      return afterElection(conElegida, conElegida.phase.result.won);
     case 'fin':
-      return state;
+      return conElegida;
   }
 }
 
@@ -151,16 +161,34 @@ export function replayRun(
   modo: Modo = 'normal',
 ): GameState {
   let state = startRun({ seed, clubId, modo });
-  for (const choice of choices) {
+  let indice = 0;
+
+  while (indice < choices.length) {
     if (state.status === 'terminado') break;
+
+    if (optionCount(state) <= 1) {
+      state = applyChoice(state, 0);
+      continue;
+    }
+
+    const choice = choices[indice];
     const max = optionCount(state);
-    if (max === 0) break;
     if (choice < 0 || choice >= max) {
       throw new Error(`Decisión inválida ${choice} en la fase ${state.phase.kind}`);
     }
     state = applyChoice(state, choice);
+    indice++;
   }
+
   return state;
+}
+
+export function terminarRun(state: GameState): GameState {
+  let actual = state;
+  while (actual.status === 'jugando' && optionCount(actual) === 1) {
+    actual = applyChoice(actual, 0);
+  }
+  return actual;
 }
 
 export function optionCount(state: GameState): number {
@@ -189,7 +217,7 @@ function openMercado(state: GameState): GameState {
     state.season,
     state.seed,
   );
-  const offers = inhibido ? all.filter((o) => o.kind === 'venta') : all;
+  const offers = inhibido ? all.filter((o) => o.kind === 'venta' || o.kind === 'cesion') : all;
 
   const { state: matured, texts } = maturePending({ ...state, rng: rand.s });
   const log = texts.map((text) => ({ season: state.season, text }));
@@ -201,11 +229,17 @@ function openMercado(state: GameState): GameState {
     bigMatch: null,
     pendingPosition: null,
     pendingTitle: null,
-    phase: { kind: 'mercado', offers, inhibido },
+    phase: { kind: 'mercado', offers, inhibido, restantes: MOVIMIENTOS_POR_VENTANA },
   };
 }
 
-function resolveMercado(state: GameState, offers: PlayerOffer[], choice: number): GameState {
+function resolveMercado(
+  state: GameState,
+  offers: PlayerOffer[],
+  restantes: number,
+  inhibido: boolean,
+  choice: number,
+): GameState {
   if (choice >= offers.length) {
     return openEvento(state);
   }
@@ -215,24 +249,71 @@ function resolveMercado(state: GameState, offers: PlayerOffer[], choice: number)
 
   let plantelDelta = offer.plantelDelta;
   let text = '';
+  let deferred: Effects['deferred'];
 
-  if (offer.kind !== 'venta' && rand.chance(offer.risk)) {
+  const sePresta = offer.kind === 'prestamo';
+  const seCede = offer.kind === 'cesion';
+  const puedeLesionarse = offer.kind === 'compra' || offer.kind === 'libre' || sePresta;
+
+  if (puedeLesionarse && rand.chance(offer.risk)) {
     plantelDelta = Math.round(plantelDelta * 0.35);
-    text = `${offer.name} llegó y no funcionó: se lesionó en la pretemporada.`;
+    text =
+      offer.kind === 'compra'
+        ? `${offer.name} llegó y no funcionó: se lesionó en la pretemporada.`
+        : sePresta
+          ? `${offer.name} llegó a préstamo y no funcionó: se lesionó en la pretemporada.`
+          : `${offer.name} llegó gratis y se fue lesionado antes de debutar.`;
   } else if (offer.kind === 'venta') {
-    text = `Se vendió a ${offer.name}. La tribuna se enteró por Twitter.`;
+    text =
+      state.resources.hinchada < 40
+        ? `Se vendió a ${offer.name}. La gente, que ya venía caliente, no lo perdonó.`
+        : `Se vendió a ${offer.name}. La tribuna se enteró por Twitter.`;
+  } else if (seCede) {
+    text = `${offer.name} se va a préstamo. Vuelve en un par de temporadas.`;
+    deferred = [
+      {
+        inSeasons: rand.int(1, 2),
+        text: `Volvió del préstamo: ${offer.name} está de nuevo a disposición.`,
+        effects: { plantel: -offer.plantelDelta },
+      },
+    ];
+  } else if (sePresta) {
+    text = `Llegó ${offer.name} a préstamo: ${offer.archetype}.`;
+    deferred = [
+      {
+        inSeasons: rand.int(1, 2),
+        text: `Terminó el préstamo de ${offer.name} y volvió a su club.`,
+        effects: { plantel: -plantelDelta },
+      },
+    ];
   } else {
-    text = `Llegó ${offer.name}, ${offer.archetype}.`;
+    text =
+      offer.kind === 'compra'
+        ? `Llegó ${offer.name}, ${offer.archetype}.`
+        : `Firmó ${offer.name} a costo cero: ${offer.archetype}.`;
   }
 
   const effects: Effects = {
     caja: -offer.cost,
     plantel: plantelDelta,
     hinchada: offer.hinchadaDelta,
+    ...(deferred ? { deferred } : {}),
   };
 
   const next = applyEffects({ ...state, rng: rand.s }, effects);
-  return openEvento({ ...next, log: [...next.log, { season: state.season, text }] });
+  const conLog = { ...next, log: [...next.log, { season: state.season, text }] };
+
+  const ofertasRestantes = offers.filter((_, i) => i !== choice);
+  const movimientosRestantes = restantes - 1;
+
+  if (movimientosRestantes <= 0 || ofertasRestantes.length === 0) {
+    return openEvento(conLog);
+  }
+
+  return {
+    ...conLog,
+    phase: { kind: 'mercado', offers: ofertasRestantes, inhibido, restantes: movimientosRestantes },
+  };
 }
 
 export function eligibleEvents(state: GameState, club: Club): GameEvent[] {
@@ -241,6 +322,10 @@ export function eligibleEvents(state: GameState, club: Club): GameEvent[] {
     if (state.usedEvents.includes(event.id)) return false;
     return meetsCondition(event.requires, state, club.size);
   });
+}
+
+function rotacionPorSemilla(seed: number, id: string): number {
+  return 0.25 + ((seedFromString(`${seed}:${id}`) % 1000) / 1000) * 1.75;
 }
 
 function openEvento(state: GameState): GameState {
@@ -255,7 +340,7 @@ function openEvento(state: GameState): GameState {
     return openMesaChicaOrTemporada({ ...state, rng: rand.s });
   }
 
-  const event = rand.weighted(pool, (e) => e.weight ?? 1);
+  const event = rand.weighted(pool, (e) => (e.weight ?? 1) * rotacionPorSemilla(state.seed, e.id));
   const available = event.options
     .map((option, index) => ({ option, index }))
     .filter(({ option }) => meetsCondition(option.requires, state, club.size))
@@ -330,7 +415,7 @@ function resolveMesa(state: GameState, choice: number): GameState {
 
   const rand = new Rand(state.rng);
   const withCost = applyEffects(state, assignmentCost(assignment));
-  const outcome = resolveMesaChica(match, assignment, rand);
+  const outcome = resolveMesaChica(match, assignment, rand, state.resources.hinchada);
   const next = applyEffects({ ...withCost, rng: rand.s }, outcome.effects);
 
   return {

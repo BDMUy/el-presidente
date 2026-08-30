@@ -2,9 +2,9 @@
 
 import type { CSSProperties } from 'react';
 
-import { computeScore } from '@/lib/engine/election';
+import { computeScore, puntajePorTemporadas } from '@/lib/engine/election';
 import { TITLES, type Club, type Ending, type GameState, type TitleId } from '@/lib/engine/types';
-import { plataCorta, plural } from '@/lib/format';
+import { plataCorta } from '@/lib/format';
 import { useTintaClub } from '@/lib/tema';
 import { Ladillo, Volanta } from './ui';
 
@@ -19,6 +19,7 @@ export function ResumenPresidencia({
 }) {
   const tintaClub = useTintaClub(club);
   const score = computeScore(state);
+  const piso = puntajePorTemporadas(state);
   const porTitulo = new Map<TitleId, number>();
   for (const title of state.titles) {
     porTitulo.set(title.id, (porTitulo.get(title.id) ?? 0) + 1);
@@ -26,8 +27,6 @@ export function ResumenPresidencia({
 
   return (
     <div style={{ '--club': tintaClub } as CSSProperties}>
-      <div className="-mx-5 -mt-5 mb-5 h-1.5 bg-[var(--club)] sm:-mx-7 sm:-mt-7" aria-hidden />
-
       <Volanta>
         {club.name} · {state.history[0]?.year ?? state.year}–{state.year}
       </Volanta>
@@ -90,9 +89,18 @@ export function ResumenPresidencia({
         <p className="font-titular text-5xl leading-none font-black tabular-nums text-tinta">
           {score.toLocaleString('es-AR')}
         </p>
-        <p className="mt-2 font-cuerpo text-[14px] text-tinta-2">
-          {plural(state.season, 'temporada', 'temporadas')} al frente de {club.name}
-        </p>
+        {score === 0 ? (
+          <p className="mt-2 font-cuerpo text-[14px] leading-snug text-tinta-2">
+            Entre los descensos y la deuda no quedó puntaje para anotar.
+          </p>
+        ) : (
+          <p className="mt-2 font-cuerpo text-[14px] leading-snug text-tinta-2">
+            Del tiempo en el cargo salen {piso.toLocaleString('es-AR')} puntos.{' '}
+            {state.descensos > 0
+              ? 'El resto lo movieron los títulos, la hinchada, la caja y los descensos.'
+              : 'El resto sale de los títulos, la hinchada y la caja.'}
+          </p>
+        )}
       </div>
     </div>
   );

@@ -204,7 +204,7 @@ function Chip({
       type="button"
       onClick={onClick}
       aria-pressed={activo}
-      className={`px-2.5 py-1.5 font-tabla text-[10px] tracking-[0.08em] uppercase ${
+      className={`inline-flex min-h-11 items-center px-2.5 font-tabla text-[10px] tracking-[0.08em] uppercase ${
         activo ? 'bg-tinta text-fondo' : 'border border-corondel text-tinta-2'
       }`}
     >

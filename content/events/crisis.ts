@@ -290,4 +290,84 @@ export const CRISIS: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'cri-denuncia-anonima',
+    kind: 'golpe',
+    title: 'LLEGÓ UNA DENUNCIA ANÓNIMA',
+    text: 'Un programa de investigación recibe una denuncia anónima: dice que hay sobreprecios en una obra del club.',
+    requires: { minSeason: 2 },
+    weight: 2,
+    options: [
+      {
+        label: 'Abrir una auditoría interna',
+        hint: 'Cuesta y demuestra que no hay nada que esconder. O que sí hay.',
+        effects: { influencia: 4, caja: -1, flags: { arco_causa_a: true } },
+      },
+      {
+        label: 'Ignorar la denuncia',
+        hint: 'Una denuncia anónima más. O el principio de algo.',
+        effects: { influencia: -2, flags: { arco_causa_a: true } },
+      },
+    ],
+  },
+  {
+    id: 'cri-la-causa-avanza',
+    kind: 'golpe',
+    title: 'LA DENUNCIA SE HIZO CAUSA',
+    text: 'Lo que era una denuncia en un programa de televisión es ahora una causa judicial. Un juez pide que declares.',
+    requires: { flag: 'arco_causa_a', minSeason: 5 },
+    weight: 10,
+    options: [
+      {
+        label: 'Declarar y colaborar con todo',
+        hint: 'Más lento hoy, mejor parado mañana.',
+        effects: { influencia: 3, caja: -2, flags: { arco_causa_colaboro: true } },
+      },
+      {
+        label: 'Contratar al mejor estudio para frenarla',
+        hint: 'Sale caro. Compra tiempo, no compra inocencia.',
+        effects: { caja: -6, influencia: -1, flags: { arco_causa_freno: true } },
+      },
+    ],
+  },
+  {
+    id: 'cri-causa-sobreseido',
+    kind: 'color',
+    title: 'SOBRESEÍDO',
+    text: 'La causa se cerró: no hubo delito, solo desprolijidad administrativa. Salió en la tapa igual, el sobreseimiento no salió en ninguna.',
+    requires: { flag: 'arco_causa_colaboro', minSeason: 8 },
+    weight: 10,
+    options: [
+      {
+        label: 'Festejar el sobreseimiento en conferencia',
+        hint: 'Poca gente escucha las buenas noticias con el mismo volumen.',
+        effects: { influencia: 5, hinchada: 2 },
+      },
+      {
+        label: 'Pasar página en silencio',
+        hint: 'No revivís nada. Tampoco te reivindicás.',
+        effects: { influencia: 2 },
+      },
+    ],
+  },
+  {
+    id: 'cri-causa-eterna',
+    kind: 'golpe',
+    title: 'LA CAUSA SIGUE VIVA',
+    text: 'La causa pasó a una instancia superior. El abogado dice que puede durar, textual, "lo que dure tu mandato".',
+    requires: { flag: 'arco_causa_freno', minSeason: 8 },
+    weight: 10,
+    options: [
+      {
+        label: 'Seguir pagando la defensa',
+        hint: 'Cada temporada, un poco más de plata a los abogados.',
+        effects: { caja: -4, influencia: 1 },
+      },
+      {
+        label: 'Buscar un arreglo extrajudicial',
+        hint: 'Se cierra rápido. Y queda una firma que alguien puede leer distinto.',
+        effects: { caja: -3, influencia: -3, flagsSuma: { prontuario: 1 } },
+      },
+    ],
+  },
 ];

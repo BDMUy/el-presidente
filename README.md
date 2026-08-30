@@ -33,7 +33,7 @@ que corra Next: no hay nada propio del proveedor en el código.
 | | |
 |---|---|
 | `npm run dev` | servidor de desarrollo |
-| `npm test` | 140 tests, sin DOM |
+| `npm test` | 182 tests, sin DOM |
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm run lint` | eslint |
 | `npm run build` | build de producción |
@@ -70,7 +70,7 @@ la lista de decisiones**. Nada más. De ahí sale casi todo lo demás:
 Los eventos son objetos declarativos tipados. Sumar contenido es agregar un
 archivo en `content/events/` y listarlo en su índice: el motor no se toca.
 
-Hoy son **167 cartas** repartidas en doce frentes, **344 clubes** en tres
+Hoy son **228 cartas** repartidas en doce frentes, **344 clubes** en tres
 categorías, 36 títulos y 18 logros. La división entre cartas generales y
 condicionales no es estética y está explicada en
 [`content/events/index.ts`](content/events/index.ts): solo las generales
@@ -119,12 +119,13 @@ cuando pasó.
 |---|---|
 | `npm run simulate 3000 --modo=todos` | balance: finales, puntajes, cuántas completan |
 | `npm run cobertura -- --modo=larga` | qué cartas salen, cuáles nunca, cuáles se repiten |
+| `npm run coherencia 3000` | que el texto de cada pantalla no contradiga el estado que describe |
 | `npm run contraste` | contraste de la paleta contra WCAG |
 | `npm run cracks` | que los nombres de guiño no se repitan en una partida |
 | `npx tsx scripts/llamas.ts` | cuánto más difícil es el modo en llamas y dónde se muere |
 
 Y para leer el contenido con los ojos en vez de con números, `/cartas` —solo en
-desarrollo— muestra las 167 cartas renderizadas con el componente de verdad.
+desarrollo— muestra las 228 cartas renderizadas con el componente de verdad.
 Existe porque encontrar una carta puntual jugando es cuestión de suerte, y así
 había prosa comiteada que nunca había pasado por una pantalla.
 

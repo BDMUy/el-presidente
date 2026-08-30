@@ -176,4 +176,117 @@ export const FEMENINO: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'fem-nueva-dt',
+    kind: 'dilema',
+    title: 'HAY QUE ELEGIR UNA NUEVA DT',
+    text: 'La DT del plantel femenino renunció para dirigir en el exterior. Hay dos candidatas: una ex jugadora del club sin experiencia como técnica, y una DT con currículum pero de afuera.',
+    weight: 2,
+    options: [
+      {
+        label: 'La ex jugadora del club',
+        hint: 'Conoce la casa. Va a aprender el resto en el cargo.',
+        effects: { hinchada: 3, plantel: -1 },
+      },
+      {
+        label: 'La DT con experiencia, de afuera',
+        hint: 'Menos identidad, más pizarrón.',
+        effects: { plantel: 2, hinchada: -1 },
+      },
+    ],
+  },
+  {
+    id: 'fem-liga-profesional',
+    kind: 'dilema',
+    title: 'LA LIGA SE PROFESIONALIZA',
+    text: 'La liga femenina exige a partir de ahora contratos profesionales y un piso salarial para poder participar. El plantel hoy funciona a pura vocación.',
+    options: [
+      {
+        label: 'Profesionalizar el plantel completo',
+        hint: 'Se cumple la exigencia. Sale caro de un día para el otro.',
+        effects: { caja: -2, hinchada: 8, socios: 2 },
+      },
+      {
+        label: 'Profesionalizar solo a las titulares',
+        hint: 'Cumple lo mínimo. El resto del plantel sigue como estaba.',
+        effects: { caja: -0.8, hinchada: 2 },
+      },
+    ],
+  },
+  {
+    id: 'fem-gira-internacional',
+    kind: 'color',
+    title: 'INVITACIÓN A UNA GIRA',
+    text: 'Un torneo amistoso en el exterior invita al plantel femenino a participar, con los pasajes pagos pero sin premio en caso de no clasificar.',
+    requires: { minSeason: 2 },
+    options: [
+      {
+        label: 'Aceptar la gira',
+        hint: 'Experiencia internacional. Ninguna garantía de resultado.',
+        effects: { caja: -0.5, plantel: 2, hinchada: 3 },
+      },
+      {
+        label: 'Declinar la invitación',
+        hint: 'Se ahorra el gasto. También la experiencia.',
+        effects: { influencia: 1 },
+      },
+    ],
+  },
+  {
+    id: 'fem-reclamo-salarial',
+    kind: 'golpe',
+    title: 'RECLAMO SALARIAL DEL PLANTEL FEMENINO',
+    text: 'El plantel femenino hace público que cobra una fracción de lo que cobra el plantel masculino por el mismo trabajo. El reclamo llega a la prensa antes que a tu escritorio.',
+    weight: 2,
+    options: [
+      {
+        label: 'Anunciar una equiparación gradual',
+        hint: 'No resuelve todo hoy. Marca una dirección.',
+        effects: { caja: -1.5, hinchada: 6, influencia: 2 },
+      },
+      {
+        label: 'Defender la estructura salarial actual',
+        hint: 'La estructura no cambia. El reclamo tampoco se apaga.',
+        effects: { hinchada: -4, influencia: -2 },
+      },
+    ],
+  },
+  {
+    id: 'fem-la-primera-que-debuto',
+    kind: 'color',
+    title: 'HOMENAJE A LA PRIMERA QUE DEBUTÓ',
+    text: 'La primera jugadora que debutó con la camiseta del club, hace más de veinte años, sigue yendo a la cancha cada fin de semana como una socia más. Nadie la reconoce en la fila.',
+    requires: { minSeason: 2 },
+    options: [
+      {
+        label: 'Reconocerla en un acto oficial',
+        hint: 'Un lugar en la historia que hoy no tiene.',
+        effects: { hinchada: 4, socios: 1 },
+      },
+      {
+        label: 'Dejar que siga siendo una socia más, como ella prefiere',
+        hint: 'Respeta su anonimato. También lo perpetúa.',
+        effects: { hinchada: 1 },
+      },
+    ],
+  },
+  {
+    id: 'fem-sponsor-propio',
+    kind: 'dilema',
+    title: 'UN SPONSOR SOLO PARA EL FEMENINO',
+    text: 'Una marca deportiva ofrece ser sponsor exclusivo del plantel femenino, con su propio logo en una camiseta distinta a la del plantel masculino.',
+    weight: 2,
+    options: [
+      {
+        label: 'Aceptar el sponsor exclusivo',
+        hint: 'Entra plata que hoy no entra. También separa las dos camisetas.',
+        effects: { caja: 1.5, hinchada: 3 },
+      },
+      {
+        label: 'Insistir en un sponsor único para todo el club',
+        hint: 'Una sola camiseta, un solo logo. Y ningún sponsor nuevo por ahora.',
+        effects: { influencia: 1 },
+      },
+    ],
+  },
 ];

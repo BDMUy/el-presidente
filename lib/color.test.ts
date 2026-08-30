@@ -1,6 +1,15 @@
 import { describe, expect, it } from 'vitest';
 
-import { hex, ratio, tintaDeClub } from './color';
+import { CLUBS } from '@/content/clubs';
+import {
+  FONDO_CLARO,
+  FONDO_OSCURO,
+  hex,
+  ratio,
+  SUPERFICIE_CLARA,
+  SUPERFICIE_OSCURA,
+  tintaDeClub,
+} from './color';
 
 const OSCURO = '#23242A';
 const CLARO = '#F1EFE9';
@@ -25,5 +34,18 @@ describe('tintaDeClub', () => {
   it('no toca un color que ya cumple', () => {
     expect(tintaDeClub('#FFFFFF', OSCURO, 4.5)).toBe('#ffffff');
     expect(tintaDeClub('#111111', CLARO, 4.5)).toBe('#111111');
+  });
+
+  it('resuelto contra la superficie, cumple 4.5:1 sobre el fondo y sobre el bloque', () => {
+    for (const [fondo, superficie] of [
+      [FONDO_OSCURO, SUPERFICIE_OSCURA],
+      [FONDO_CLARO, SUPERFICIE_CLARA],
+    ]) {
+      for (const club of CLUBS) {
+        const acento = tintaDeClub(club.colors[0], superficie, 4.5);
+        expect(ratio(hex(acento), hex(superficie))).toBeGreaterThanOrEqual(4.49);
+        expect(ratio(hex(acento), hex(fondo))).toBeGreaterThanOrEqual(4.49);
+      }
+    }
   });
 });

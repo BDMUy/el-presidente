@@ -631,4 +631,152 @@ export const ECONOMIA: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'eco-aumento-de-luz',
+    kind: 'golpe',
+    title: 'LA TARIFA ELÉCTRICA SE DISPARÓ',
+    text: 'La factura de luz del estadio y el predio llegó triplicada este mes. El área de mantenimiento pide instrucciones antes de que se corte el servicio.',
+    weight: 2,
+    options: [
+      {
+        label: 'Pagarla completa',
+        hint: 'Se soluciona hoy. Sale caro.',
+        effects: { caja: -1.8 },
+      },
+      {
+        label: 'Apagar luces y reducir el consumo',
+        hint: 'Menos gasto. Menos comodidad en el día a día.',
+        effects: { caja: -0.6, plantel: -1 },
+      },
+    ],
+  },
+  {
+    id: 'eco-oferta-de-naming-rights',
+    kind: 'dilema',
+    title: 'QUIEREN COMPRAR EL NOMBRE DEL ESTADIO',
+    text: 'Una empresa de tecnología ofrece una cifra importante por veinte años de derechos de nombre sobre el estadio. El nombre de toda la vida pasaría a un paréntesis.',
+    weight: 2,
+    options: [
+      {
+        label: 'Aceptar la venta del nombre',
+        hint: 'Cambia la economía del club para siempre. También cambia cómo se llama la cancha.',
+        effects: { caja: 8, hinchada: -12, influencia: 3 },
+      },
+      {
+        label: 'Rechazarla',
+        hint: 'El nombre de siempre se queda. La plata, no.',
+        effects: { hinchada: 4 },
+      },
+    ],
+  },
+  {
+    id: 'eco-inversor-extranjero',
+    kind: 'dilema',
+    title: 'UN FONDO EXTRANJERO QUIERE ENTRAR',
+    text: 'Un fondo de inversión extranjero ofrece capital fresco a cambio de una participación en los derechos económicos de futuras ventas de jugadores.',
+    options: [
+      {
+        label: 'Aceptar el acuerdo',
+        hint: 'Entra plata ahora. Se comparte lo que entre después por cada venta.',
+        effects: { caja: 6, influencia: -5 },
+      },
+      {
+        label: 'Rechazarlo y seguir solos',
+        hint: 'Todo lo que se venda de acá en más, queda entero para el club.',
+        effects: { influencia: 2 },
+      },
+    ],
+  },
+  {
+    id: 'eco-remate-de-objetos',
+    kind: 'color',
+    title: 'REMATE DE OBJETOS HISTÓRICOS',
+    text: 'Alguien de museos propone subastar camisetas y trofeos duplicados del club, piezas que hoy juntan polvo en un depósito.',
+    options: [
+      {
+        label: 'Subastarlos',
+        hint: 'Entra plata. Sale historia del edificio, aunque sea la que sobraba.',
+        effects: { caja: 1.4, hinchada: -2 },
+      },
+      {
+        label: 'Dejarlos donde están',
+        hint: 'Siguen juntando polvo. Nadie se queja de eso tampoco.',
+        effects: { influencia: 1 },
+      },
+    ],
+  },
+  {
+    id: 'eco-convenio-bancario',
+    kind: 'dilema',
+    title: 'EL BANCO OFRECE REFINANCIAR TODO',
+    text: 'El banco con el que opera el club ofrece unificar toda la deuda en un solo crédito, a una tasa mejor pero a un plazo mucho más largo.',
+    requires: { maxCaja: 0 },
+    options: [
+      {
+        label: 'Aceptar la refinanciación',
+        hint: 'Respira la caja hoy. La deuda dura más años de los que dura tu mandato.',
+        effects: { caja: 4, influencia: -2 },
+      },
+      {
+        label: 'Seguir pagando como está',
+        hint: 'Más presión ahora. Sin comprometer al que venga después.',
+        effects: { influencia: 1 },
+      },
+    ],
+  },
+  {
+    id: 'eco-alquiler-del-predio',
+    kind: 'color',
+    title: 'ALQUILAR EL PREDIO LOS DÍAS LIBRES',
+    text: 'Una productora de eventos ofrece alquilar el predio de entrenamiento los días que el plantel no lo usa, para grabaciones y recitales chicos.',
+    options: [
+      {
+        label: 'Aceptar el alquiler',
+        hint: 'Ingreso extra, todos los meses, por algo que ya tenías.',
+        effects: { caja: 1, plantel: -1 },
+      },
+      {
+        label: 'Reservar el predio solo para el club',
+        hint: 'Cero roce, cero ingreso extra.',
+        effects: { plantel: 1 },
+      },
+    ],
+  },
+  {
+    id: 'eco-devolucion-de-impuestos',
+    kind: 'color',
+    title: 'UNA DEVOLUCIÓN INESPERADA',
+    text: 'Un trámite iniciado hace dos años por el tesorero anterior se resolvió: el club tiene una devolución de impuestos que nadie esperaba cobrar tan pronto.',
+    options: [
+      {
+        label: 'Usarla para saldar deuda',
+        hint: 'Menos vistoso. Duerme mejor a la larga.',
+        effects: { caja: 2.5 },
+      },
+      {
+        label: 'Usarla para un refuerzo',
+        hint: 'Plata que cae del cielo, directo al plantel.',
+        effects: { caja: 1.5, plantel: 2 },
+      },
+    ],
+  },
+  {
+    id: 'eco-seguro-del-plantel',
+    kind: 'dilema',
+    title: 'EL SEGURO DEL PLANTEL VENCE',
+    text: 'El seguro que cubre lesiones graves del plantel vence este mes. Renovarlo con más cobertura cuesta bastante más que el año pasado.',
+    weight: 2,
+    options: [
+      {
+        label: 'Renovar con cobertura ampliada',
+        hint: 'Más tranquilidad si pasa algo grave. Sale caro todos los años.',
+        effects: { caja: -1.2, influencia: 1 },
+      },
+      {
+        label: 'Renovar la cobertura mínima',
+        hint: 'Más barato. Cualquier lesión grave la paga el club de su bolsillo.',
+        effects: { caja: -0.4 },
+      },
+    ],
+  },
 ];

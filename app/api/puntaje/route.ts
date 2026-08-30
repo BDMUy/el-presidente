@@ -4,7 +4,7 @@ import { getClub } from '@/content/clubs';
 import { fechaDelDia, presidenciaDelDia } from '@/lib/daily';
 import { getDb } from '@/lib/db';
 import { computeScore } from '@/lib/engine/election';
-import { replayRun } from '@/lib/engine/engine';
+import { replayRun, terminarRun } from '@/lib/engine/engine';
 import type { Modo } from '@/lib/engine/types';
 import { MODOS } from '@/lib/engine/types';
 import { limpiarNombre } from '@/lib/nombre';
@@ -85,7 +85,7 @@ export async function POST(request: Request) {
 
   let estado;
   try {
-    estado = replayRun(seed, clubId, choices as number[], modo);
+    estado = terminarRun(replayRun(seed, clubId, choices as number[], modo));
   } catch {
     return malaPeticion('La partida no se puede reproducir.');
   }

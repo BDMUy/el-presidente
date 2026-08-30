@@ -217,6 +217,7 @@ function Pantalla({
         <FaseMercado
           offers={phase.offers}
           inhibido={phase.inhibido}
+          restantes={phase.restantes}
           season={state.season}
           caja={state.resources.caja}
           onElegir={onElegir}

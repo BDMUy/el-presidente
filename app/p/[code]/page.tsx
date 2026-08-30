@@ -5,8 +5,9 @@ import type { Metadata } from 'next';
 import { getClub } from '@/content/clubs';
 import { computeScore } from '@/lib/engine/election';
 import { reconstruirPresidencia } from '@/lib/share';
+import { BarraSuperior } from '@/components/barra-superior';
 import { ResumenPresidencia } from '@/components/resumen-presidencia';
-import { Recuadro, Volanta } from '@/components/ui';
+import { Bajada, Recuadro } from '@/components/ui';
 
 export async function generateMetadata({
   params,
@@ -44,12 +45,24 @@ export default async function PresidenciaCompartida({
   const club = getClub(state.clubId);
 
   return (
-    <main id="principal" tabIndex={-1} className="mx-auto w-full max-w-xl px-4 py-8 focus:outline-none">
-      <div className="mb-5 text-center">
-        <Volanta>Presidencia compartida</Volanta>
+    <main id="principal" tabIndex={-1} className="mx-auto w-full max-w-xl px-4 pb-10 focus:outline-none">
+      <div className="pt-3">
+        <BarraSuperior volverHref="/" />
       </div>
 
-      <Recuadro>
+      <div className="pt-8">
+        <p
+          className="border-t-4 border-b-2 border-tinta py-3 font-titular text-[clamp(2.75rem,11vw,4.5rem)] leading-[0.86] font-black tracking-[-0.03em] text-tinta uppercase"
+          style={{ fontStretch: '80%' }}
+        >
+          El Presidente
+        </p>
+        <Bajada className="mt-4">
+          Dirigí un club argentino cuatro mandatos. Después, la gente vota.
+        </Bajada>
+      </div>
+
+      <Recuadro className="mt-8">
         <ResumenPresidencia state={state} club={club} ending={state.ending} />
       </Recuadro>
 

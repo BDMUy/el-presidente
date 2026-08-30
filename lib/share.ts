@@ -1,5 +1,5 @@
 import { CLUBS } from '@/content/clubs';
-import { replayRun } from '@/lib/engine/engine';
+import { replayRun, terminarRun } from '@/lib/engine/engine';
 import type { GameState, Modo } from '@/lib/engine/types';
 
 const ALFABETO = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
@@ -103,7 +103,7 @@ export function reconstruirPresidencia(code: string): GameState | null {
   try {
     const datos = decodeRun(decodeURIComponent(code));
     if (!datos) return null;
-    const state = replayRun(datos.seed, datos.clubId, datos.choices, datos.modo);
+    const state = terminarRun(replayRun(datos.seed, datos.clubId, datos.choices, datos.modo));
     return state.status === 'terminado' && state.ending ? state : null;
   } catch {
     return null;

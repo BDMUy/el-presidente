@@ -271,4 +271,157 @@ export const DIRIGENCIA: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'dir-sponsor-ofrece-mas',
+    kind: 'dilema',
+    title: 'EL SPONSOR OFRECE EL TRIPLE',
+    text: 'La marca que viste la camiseta ofrece renovar por el triple. A cambio pide exclusividad total y "tener una silla" en las decisiones deportivas.',
+    weight: 2,
+    options: [
+      {
+        label: 'Firmar todo, condiciones incluidas',
+        hint: 'Entra la plata. También entra alguien que no elegiste.',
+        effects: { caja: 4, influencia: -6, flags: { arco_sponsor_a: true } },
+      },
+      {
+        label: 'Firmar solo la plata, no las condiciones',
+        hint: 'Menos guita, ninguna silla nueva en la mesa.',
+        effects: { caja: 1.5, flags: { arco_sponsor_a: true } },
+      },
+    ],
+  },
+  {
+    id: 'dir-sponsor-mete-mano',
+    kind: 'golpe',
+    title: 'EL SPONSOR SUGIERE UN FICHAJE',
+    text: 'El sponsor pide que fiches a un jugador que representa el agente de su propio dueño. Lo llaman "sugerencia". No suena a sugerencia.',
+    requires: { flag: 'arco_sponsor_a', minSeason: 3 },
+    weight: 10,
+    options: [
+      {
+        label: 'Ficharlo para no perder el contrato',
+        hint: 'El sponsor queda contento. El plantel, no tanto.',
+        effects: { caja: 3, plantel: -2, influencia: -8, flags: { arco_sponsor_b_cedio: true } },
+      },
+      {
+        label: 'Negarse y arriesgar el contrato',
+        hint: 'El plantel lo decidís vos. Puede salir caro.',
+        effects: { caja: -2, influencia: 6, flags: { arco_sponsor_b_planto: true } },
+      },
+    ],
+  },
+  {
+    id: 'dir-sponsor-se-va',
+    kind: 'color',
+    title: 'EL SPONSOR SE BAJÓ, COMO DIJO',
+    text: 'El sponsor cumplió la amenaza y no renovó. Conseguiste uno nuevo, más chico, sin condiciones raras.',
+    requires: { flag: 'arco_sponsor_b_planto', minSeason: 6 },
+    weight: 10,
+    options: [
+      {
+        label: 'Aceptar el nuevo trato tal cual viene',
+        hint: 'Menos plata, cero dolores de cabeza.',
+        effects: { caja: -1, influencia: 4 },
+      },
+      {
+        label: 'Salir a buscar uno más grande',
+        hint: 'Puede tardar. Puede no aparecer.',
+        effects: { caja: -2, influencia: 2, hinchada: 3 },
+      },
+    ],
+  },
+  {
+    id: 'dir-sponsor-explota',
+    kind: 'golpe',
+    title: 'EL FICHAJE DEL SPONSOR NUNCA FUNCIONÓ',
+    text: 'El jugador que te impuso el sponsor nunca jugó un partido bueno. Un cronista preguntó en conferencia quién decide los fichajes en este club.',
+    requires: { flag: 'arco_sponsor_b_cedio', minSeason: 6 },
+    weight: 10,
+    options: [
+      {
+        label: 'Cortar el vínculo con el sponsor',
+        hint: 'Se pierde la plata. Se recupera el club.',
+        effects: { caja: -3, influencia: 6 },
+      },
+      {
+        label: 'Aguantar hasta que termine el contrato',
+        hint: 'Menos ruido ahora. El jugador sigue sin rendir.',
+        effects: { influencia: -5, plantel: -1 },
+      },
+    ],
+  },
+  {
+    id: 'dir-vocal-que-renuncia',
+    kind: 'golpe',
+    title: 'UN VOCAL RENUNCIA EN PLENA REUNIÓN',
+    text: 'En medio de una reunión de comisión, un vocal se para, dice que "no puede seguir avalando esto" y se va dando un portazo. Nadie termina de entender a qué se refería.',
+    weight: 2,
+    options: [
+      {
+        label: 'Salir a explicar públicamente qué pasó',
+        hint: 'Controlás el relato. También lo alimentás.',
+        effects: { influencia: 2, hinchada: -2 },
+      },
+      {
+        label: 'No hacer declaraciones',
+        hint: 'El silencio deja que cada uno complete la historia como quiera.',
+        effects: { influencia: -3 },
+      },
+    ],
+  },
+  {
+    id: 'dir-invitacion-a-un-congreso',
+    kind: 'color',
+    title: 'TE INVITAN A UN CONGRESO DE DIRIGENTES',
+    text: 'Un congreso regional de dirigencia deportiva te invita como panelista. Es prestigio, es una foto, y son tres días fuera del club en plena temporada.',
+    options: [
+      {
+        label: 'Ir',
+        hint: 'Contactos que después sirven. Tres días sin estar encima de nada.',
+        effects: { influencia: 5, caja: -0.3 },
+      },
+      {
+        label: 'Mandar a alguien de tu confianza',
+        hint: 'Menos foto para vos. Alguien más gana peso propio.',
+        effects: { influencia: 1 },
+      },
+    ],
+  },
+  {
+    id: 'dir-pedido-de-informes',
+    kind: 'dilema',
+    title: 'PEDIDO DE INFORMES DE LA OPOSICIÓN',
+    text: 'La lista opositora presenta un pedido formal de informes: quiere el detalle completo de los últimos contratos firmados por la comisión.',
+    options: [
+      {
+        label: 'Entregar todo lo pedido',
+        hint: 'Transparencia total. También munición, si algo no cierra del todo.',
+        effects: { influencia: 4, caja: -0.2 },
+      },
+      {
+        label: 'Entregar lo mínimo que exige el estatuto',
+        hint: 'Cumplís la letra. La sospecha queda igual, o peor.',
+        effects: { influencia: -2 },
+      },
+    ],
+  },
+  {
+    id: 'dir-el-que-quiere-tu-lugar',
+    kind: 'dilema',
+    title: 'EL QUE YA SE VE COMO PRESIDENTE',
+    text: 'Un dirigente joven de tu propia lista empieza a moverse solo: reuniones que no te avisa, socios que dice representar. Todavía no dijo nada en público.',
+    requires: { minSeason: 3 },
+    options: [
+      {
+        label: 'Darle un rol de peso para tenerlo cerca',
+        hint: 'Lo sumás adentro. También le das más para mostrar.',
+        effects: { influencia: -3, plantel: 1 },
+      },
+      {
+        label: 'Marcarle la cancha en privado',
+        hint: 'Directo. Puede ordenarlo o puede acelerar la ruptura.',
+        effects: { influencia: 3, hinchada: -1 },
+      },
+    ],
+  },
 ];

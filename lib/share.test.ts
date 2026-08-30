@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { CLUBS } from '@/content/clubs';
 import { logrosDeLaPartida, LOGROS } from '@/content/logros';
-import { applyChoice, optionCount, replayRun, startRun } from '@/lib/engine/engine';
+import { applyChoice, optionCount, replayRun, startRun, terminarRun } from '@/lib/engine/engine';
 import { Rand } from '@/lib/engine/rng';
 import type { GameState, Modo } from '@/lib/engine/types';
 import { MODOS } from '@/lib/engine/types';
@@ -113,7 +113,7 @@ describe('codificación de partidas', () => {
         choices: original.choices,
       });
       const datos = decodeRun(code)!;
-      const reconstruida = replayRun(datos.seed, datos.clubId, datos.choices, datos.modo);
+      const reconstruida = terminarRun(replayRun(datos.seed, datos.clubId, datos.choices, datos.modo));
       expect(reconstruida).toEqual(original);
     }
   });

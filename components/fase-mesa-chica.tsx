@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 
+import { enLetras } from '@/lib/engine/election';
 import { assignmentCost, assignmentIndex, costoPorFicha, winProbability } from '@/lib/engine/mesa-chica';
 import {
   FICHAS_MESA_CHICA,
@@ -35,6 +36,7 @@ export function FaseMesaChica({
   onDefinir: (choice: number) => void;
 }) {
   const [reparto, setReparto] = useState<MesaChicaAssignment>(VACIO);
+  const [verCostos, setVerCostos] = useState(false);
 
   const usadas = useMemo(() => Object.values(reparto).reduce((s, n) => s + n, 0), [reparto]);
   const disponibles = FICHAS_MESA_CHICA - usadas;
@@ -94,7 +96,8 @@ export function FaseMesaChica({
       </div>
 
       <p className="sr-only" aria-live="polite">
-        {Math.round(probabilidad * 100)}% de ganar.{' '}
+        {Math.round(probabilidad * 100)}% de ganar
+        {ganado > 0 ? `, contra ${Math.round(base * 100)}% sin mover fichas` : ''}.{' '}
         {disponibles === 0
           ? 'Todas las fichas repartidas.'
           : `${disponibles} ${disponibles === 1 ? 'ficha' : 'fichas'} sin repartir.`}
@@ -119,13 +122,30 @@ export function FaseMesaChica({
         </span>
       </div>
 
-      <ul className="mt-5 space-y-2">
+      <div className="mt-6">
+        <p className="font-cuerpo text-[14px] leading-snug text-tinta-2">
+          Tenés {enLetras(FICHAS_MESA_CHICA)} fichas para repartir entre los frentes con los botones{' '}
+          <span className="font-tabla text-tinta">−</span> y{' '}
+          <span className="font-tabla text-tinta">+</span>. Cada una sube la probabilidad de ganar.
+        </p>
+        <button
+          type="button"
+          onClick={() => setVerCostos((v) => !v)}
+          aria-expanded={verCostos}
+          className="mt-1.5 min-h-11 font-tabla text-[11px] tracking-[0.1em] text-tinta-2 uppercase underline underline-offset-4 hover:text-tinta"
+        >
+          {verCostos ? 'Ocultar lo que cuesta cada frente' : 'Ver lo que cuesta cada frente'}
+        </button>
+      </div>
+
+      <ul className="mt-3 space-y-2">
         {EN_PANTALLA.map((frente) => (
           <FilaFrente
             key={frente.id}
             frente={frente}
             puestas={reparto[frente.id]}
             hayFichas={disponibles > 0}
+            verCostos={verCostos}
             onPoner={() => poner(frente.id)}
             onSacar={() => sacar(frente.id)}
           />
@@ -174,76 +194,81 @@ function FilaFrente({
   frente,
   puestas,
   hayFichas,
+  verCostos,
   onPoner,
   onSacar,
 }: {
   frente: FrenteDef;
   puestas: number;
   hayFichas: boolean;
+  verCostos: boolean;
   onPoner: () => void;
   onSacar: () => void;
 }) {
   const activo = puestas > 0;
+  const botonStepper =
+    'flex min-h-11 min-w-11 shrink-0 items-center justify-center border border-corondel font-titular text-[20px] leading-none font-black text-tinta transition-colors hover:border-tinta active:bg-tinta/15 disabled:opacity-40 disabled:hover:border-corondel';
 
   return (
     <li
-      className={`flex items-center gap-3 border px-3 py-2.5 transition-colors ${
+      className={`border px-3 py-2.5 transition-colors ${
         activo ? 'border-tinta/70 bg-tinta/12' : 'border-corondel bg-fondo-2/40'
       }`}
     >
-      <button
-        type="button"
-        onClick={onPoner}
-        disabled={!hayFichas}
-        className="min-w-0 flex-1 text-left disabled:cursor-not-allowed"
-        aria-label={`Poner una ficha en ${frente.label}. Lleva ${puestas}.`}
-      >
-        <span className="flex items-baseline gap-2">
-          <span className="font-titular text-[15px] leading-tight font-bold tracking-tight text-tinta">
-            {frente.label}
-          </span>
-          <span className="shrink-0 font-titular text-[13px] leading-none font-black tabular-nums text-tinta">
-            +{Math.round(frente.winPerFicha * 100)}%
-          </span>
-        </span>
+      <div className="flex items-start gap-3">
+        <div className="min-w-0 flex-1">
+          <p className="flex items-baseline gap-2">
+            <span className="font-titular text-[15px] leading-tight font-bold tracking-tight text-tinta">
+              {frente.label}
+            </span>
+            <span className="shrink-0 font-titular text-[13px] leading-none font-black tabular-nums text-tinta">
+              +{Math.round(frente.winPerFicha * 100)}%
+            </span>
+          </p>
 
-        <span className="mt-0.5 block font-cuerpo text-[14px] leading-snug text-tinta-2">
-          {frente.desc}
-        </span>
+          <p className="mt-0.5 font-cuerpo text-[14px] leading-snug text-tinta-2">{frente.desc}</p>
 
-        <span className="mt-1 flex flex-wrap items-baseline gap-x-2 font-tabla text-[11px] tracking-[0.04em] uppercase">
-          <span className="text-tinta-2">{etiquetaDeCosto(frente.id)}</span>
-          {frente.riesgo && <span className="text-alerta">· {frente.riesgo}</span>}
-        </span>
-      </button>
-
-      {puestas > 0 ? (
-        <button
-          type="button"
-          onClick={onSacar}
-          aria-label={`Sacar una ficha de ${frente.label}. Lleva ${puestas}.`}
-          className="-mr-2 flex min-h-11 shrink-0 items-center gap-1 px-2"
-        >
-          {Array.from({ length: FICHAS_MESA_CHICA }, (_, i) => (
-            <span
-              key={i}
-              className={`h-6 w-6 rounded-full ${
-                i < puestas ? 'bg-tinta' : 'border border-dashed border-corondel'
-              }`}
-              aria-hidden
-            />
-          ))}
-        </button>
-      ) : (
-        <div className="-mr-2 flex min-h-11 shrink-0 items-center gap-1 px-2" aria-hidden>
-          {Array.from({ length: FICHAS_MESA_CHICA }, (_, i) => (
-            <span
-              key={i}
-              className="h-6 w-6 rounded-full border border-dashed border-corondel"
-            />
-          ))}
+          {verCostos && (
+            <p className="entrar-nota mt-1.5 flex flex-wrap items-baseline gap-x-2 font-tabla text-[11px] tracking-[0.04em] uppercase">
+              <span className="text-tinta-2">{etiquetaDeCosto(frente.id)}</span>
+              {frente.riesgo && <span className="text-alerta">· {frente.riesgo}</span>}
+            </p>
+          )}
         </div>
-      )}
+
+        <div className="flex shrink-0 items-center gap-1.5">
+          <button
+            type="button"
+            onClick={onSacar}
+            disabled={puestas === 0}
+            aria-label={`Sacar una ficha de ${frente.label}. Lleva ${puestas} de ${FICHAS_MESA_CHICA}.`}
+            className={botonStepper}
+          >
+            −
+          </button>
+
+          <span className="flex w-10 items-center justify-center gap-1" aria-hidden>
+            {Array.from({ length: FICHAS_MESA_CHICA }, (_, i) => (
+              <span
+                key={i}
+                className={`h-2 w-2 rounded-full ${
+                  i < puestas ? 'bg-tinta' : 'border border-corondel'
+                }`}
+              />
+            ))}
+          </span>
+
+          <button
+            type="button"
+            onClick={onPoner}
+            disabled={!hayFichas}
+            aria-label={`Poner una ficha en ${frente.label}. Lleva ${puestas} de ${FICHAS_MESA_CHICA}.`}
+            className={botonStepper}
+          >
+            +
+          </button>
+        </div>
+      </div>
     </li>
   );
 }

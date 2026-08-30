@@ -1,9 +1,3 @@
-'use client';
-
-import { ThinkingOrb } from 'thinking-orbs';
-
-import { useTemaActual } from '@/lib/tema';
-
 export function Cargando({
   children,
   chico = false,
@@ -11,25 +5,26 @@ export function Cargando({
   children: React.ReactNode;
   chico?: boolean;
 }) {
-  const orbTheme = useTemaActual() === 'claro' ? 'light' : 'dark';
+  const linea = (
+    <>
+      {children}
+      <span
+        aria-hidden
+        className="cursor-parpadeo ml-1 inline-block h-[0.85em] w-[0.45em] bg-current align-[-0.1em]"
+      />
+    </>
+  );
 
   if (chico) {
     return (
-      <p className="flex items-center gap-2 font-tabla text-[11px] tracking-[0.06em] text-tinta-2 uppercase">
-        <ThinkingOrb state="searching" size={20} theme={orbTheme} aria-hidden />
-        {children}
-      </p>
+      <p className="font-tabla text-[11px] tracking-[0.06em] text-tinta-2 uppercase">{linea}</p>
     );
   }
 
   return (
-    <div
-      role="status"
-      className="flex min-h-dvh flex-col items-center justify-center gap-4 px-6"
-    >
-      <ThinkingOrb state="searching" size={64} theme={orbTheme} aria-hidden />
+    <div role="status" className="flex min-h-dvh flex-col items-center justify-center px-6">
       <p className="text-center font-tabla text-[11px] tracking-[0.2em] text-tinta-2 uppercase">
-        {children}
+        {linea}
       </p>
     </div>
   );

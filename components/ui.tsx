@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react';
 
+import type { Impacto } from '@/lib/impacto';
+
 export function Recuadro({
   children,
   acento = 'tinta',
@@ -103,9 +105,31 @@ export function Cuerpo({
   );
 }
 
+function signoRepetido(token: Impacto): string {
+  return token.signo === 'neutro' ? '' : token.signo.repeat(token.grado);
+}
+
+function TokenImpacto({ token, seleccionado }: { token: Impacto; seleccionado: boolean }) {
+  const color = seleccionado
+    ? 'text-fondo/70'
+    : token.signo === '+'
+      ? 'text-favorable'
+      : token.signo === '−'
+        ? 'text-alerta'
+        : 'text-tinta-2';
+
+  return (
+    <span className={`font-tabla text-[10px] font-bold tracking-[0.06em] uppercase ${color}`}>
+      {token.label}
+      {token.signo !== 'neutro' && <span className="ml-0.5">{signoRepetido(token)}</span>}
+    </span>
+  );
+}
+
 export function Renglon({
   label,
   hint,
+  impacto,
   azaroso = false,
   seleccionado = false,
   onClick,
@@ -114,6 +138,7 @@ export function Renglon({
 }: {
   label: string;
   hint: string;
+  impacto?: Impacto[] | null;
   azaroso?: boolean;
   seleccionado?: boolean;
   onClick: () => void;
@@ -154,6 +179,13 @@ export function Renglon({
       >
         {hint}
       </span>
+      {impacto && impacto.length > 0 && (
+        <span className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
+          {impacto.map((token) => (
+            <TokenImpacto key={token.id} token={token} seleccionado={seleccionado} />
+          ))}
+        </span>
+      )}
     </button>
   );
 }
@@ -250,7 +282,7 @@ export function Cifra({
       onClick={onToggle}
       aria-expanded={abierta}
       style={{ animationDelay: `${retraso}ms` }}
-      className={`entrar-nota min-h-11 min-w-0 border-b-2 px-1 pt-0.5 pb-1 text-left transition-colors ${
+      className={`entrar-nota min-h-11 min-w-0 border-b-2 px-0.5 pt-0.5 pb-1 text-left transition-colors ${
         abierta ? 'border-tinta' : 'border-dotted border-corondel-fuerte hover:border-tinta-2'
       }`}
     >
