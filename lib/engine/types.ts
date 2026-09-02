@@ -446,18 +446,13 @@ export type Phase =
   | { kind: 'mercado'; offers: PlayerOffer[]; inhibido: boolean; restantes: number }
   | { kind: 'evento'; event: GameEvent; available: number[] }
   | { kind: 'resultado-evento'; text: string; effects: Effects }
-  | { kind: 'mesa-chica'; match: BigMatch }
-  | { kind: 'resultado-final'; won: boolean; text: string; match: BigMatch }
+  | { kind: 'mesa-chica'; match: BigMatch; position: number }
+  | { kind: 'resultado-final'; won: boolean; text: string; match: BigMatch; position: number; title: TitleId | null }
   | { kind: 'temporada'; result: SeasonResult }
   | { kind: 'eleccion'; result: ElectionResult }
   | { kind: 'fin'; ending: Ending };
 
 export type RunStatus = 'jugando' | 'terminado';
-
-export interface LogEntry {
-  season: number;
-  text: string;
-}
 
 export interface GameState {
   seed: number;
@@ -475,13 +470,9 @@ export interface GameState {
   pending: PendingEffect[];
   usedEvents: string[];
   eventsThisSeason: number;
-  bigMatch: BigMatch | null;
-  pendingPosition: number | null;
-  pendingTitle: TitleId | null;
   phase: Phase;
   status: RunStatus;
   ending: Ending | null;
-  log: LogEntry[];
   choices: number[];
   descensos: number;
   ascensos: number;

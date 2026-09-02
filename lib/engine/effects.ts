@@ -65,16 +65,16 @@ function aplicarFlags(
   return next;
 }
 
-export function maturePending(state: GameState): { state: GameState; texts: string[] } {
+export function maturePending(state: GameState): GameState {
   const due = state.pending.filter((p) => p.dueSeason <= state.season);
-  if (due.length === 0) return { state, texts: [] };
+  if (due.length === 0) return state;
 
   let next: GameState = { ...state, pending: state.pending.filter((p) => p.dueSeason > state.season) };
   for (const effect of due) {
     next = applyEffects(next, effect.effects);
   }
 
-  return { state: next, texts: due.map((d) => d.text) };
+  return next;
 }
 
 export function estaInhibido(resources: Resources): boolean {
