@@ -131,7 +131,6 @@ function Ficha({ carta, verConsecuencias }: { carta: GameEvent; verConsecuencias
     <section className="mb-10">
       <div className="mb-2 flex flex-wrap items-center gap-x-2 gap-y-1 font-tabla text-[10px] tracking-[0.08em] text-tinta-2 uppercase">
         <span className="text-tinta">{carta.id}</span>
-        {carta.once && <span>· única</span>}
         {carta.weight !== undefined && <span>· peso {carta.weight}</span>}
         {carta.requires && <span>· {describirCondicion(carta.requires)}</span>}
       </div>
