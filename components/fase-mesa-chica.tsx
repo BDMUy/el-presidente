@@ -152,7 +152,10 @@ export function FaseMesaChica({
         ))}
       </ul>
 
-      <div className="sticky bottom-0 -mx-4 mt-5 border-t-4 border-tinta bg-fondo-2/97 px-4 py-3 backdrop-blur">
+      <div
+        className="sticky bottom-0 -mx-4 mt-5 border-t-4 border-tinta bg-fondo-2/97 px-4 pt-3 backdrop-blur"
+        style={{ paddingBottom: 'calc(0.75rem + var(--sae-bottom))' }}
+      >
         <div className="mx-auto flex max-w-xl items-center gap-3">
           <div className="min-w-0 flex-1">
             <p className="flex items-baseline gap-1.5 font-titular leading-none font-black tabular-nums">

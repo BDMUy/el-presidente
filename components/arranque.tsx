@@ -133,7 +133,7 @@ export function Arranque({
   };
 
   return (
-    <div className="mx-auto w-full max-w-[1280px] px-4 pb-10 lg:px-8">
+    <div className="mx-auto w-full max-w-[1280px] px-4 pb-10 pl-[max(1rem,var(--sae-left))] pr-[max(1rem,var(--sae-right))] lg:px-8">
       <div className="pt-3 lg:pt-4">
         <BarraSuperior />
       </div>

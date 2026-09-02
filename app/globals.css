@@ -28,6 +28,10 @@
   --corondel-fuerte: #6e7079;
   --alerta: #f07a6b;
   --favorable: #8fbf8a;
+  --sae-top: env(safe-area-inset-top);
+  --sae-right: env(safe-area-inset-right);
+  --sae-bottom: env(safe-area-inset-bottom);
+  --sae-left: env(safe-area-inset-left);
   color-scheme: dark;
 }
 
