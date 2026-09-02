@@ -386,4 +386,133 @@ export const HINCHADA: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'arco-estadio-1',
+    kind: 'dilema',
+    title: 'LA MAQUETA DEL ESTADIO NUEVO',
+    text: 'Un estudio trae la maqueta: la misma cancha, para el doble de gente y con todo a nuevo. La obra son cuatro años y una cifra que no entra en ningún presupuesto.',
+    weight: 2,
+    requires: { minSeason: 2 },
+    options: [
+      {
+        label: 'Anunciarla con acto y maqueta en el hall',
+        hint: 'La gente se ilusiona. El primer ladrillo todavía no está.',
+        effects: { hinchada: 8, influencia: 3, flags: { arco_estadio_1: true } },
+      },
+      {
+        label: 'Aprobarla en silencio y empezar por los cimientos',
+        hint: 'Sin foto y sin promesa. El pozo igual se ve desde la calle.',
+        effects: { caja: -3, influencia: 2, flags: { arco_estadio_1: true } },
+      },
+    ],
+  },
+  {
+    id: 'arco-estadio-2',
+    kind: 'golpe',
+    title: 'LA OBRA ESTÁ PARADA',
+    text: 'La platea nueva quedó por la mitad. Se terminó la plata que había para eso y la estructura sin cerrar junta agua abajo de una lona.',
+    requires: { flag: 'arco_estadio_1', minSeason: 6 },
+    weight: 10,
+    options: [
+      {
+        label: 'Frenar y cubrir el esqueleto hasta que haya fondos',
+        hint: 'Aguanta a la intemperie. La gente pregunta cada domingo.',
+        effects: { caja: -1, hinchada: -6, flags: { arco_estadio_2: true } },
+      },
+      {
+        label: 'Endeudarse para no parar la obra',
+        hint: 'El hormigón no espera. El crédito tampoco.',
+        effects: { caja: -6, hinchada: 3, flags: { arco_estadio_2: true } },
+      },
+      {
+        label: 'Vender palcos de la platea que todavía no existe',
+        hint: 'Plata por adelantado contra una fecha de entrega que ya moviste dos veces.',
+        effects: { caja: 4, hinchada: -3, flags: { arco_estadio_2: true } },
+      },
+    ],
+  },
+  {
+    id: 'arco-estadio-3',
+    kind: 'color',
+    title: 'SE INAUGURA LA PLATEA',
+    text: 'Ocho años después de la maqueta, la platea nueva abre un domingo. Entró el doble de gente y todavía huele a pintura.',
+    requires: { flag: 'arco_estadio_2', minSeason: 10 },
+    weight: 10,
+    options: [
+      {
+        label: 'Ponerle el nombre del socio que empujó la obra desde el día uno',
+        hint: 'El tuyo puede esperar. Este gesto no.',
+        effects: { hinchada: 12, socios: 4, influencia: 3 },
+      },
+      {
+        label: 'Abrirla sin nombre, con la tribuna llena y nada más',
+        hint: 'La obra habla sola. Vos también, pero más bajo.',
+        effects: { hinchada: 8, socios: 3, caja: 2 },
+      },
+    ],
+  },
+  {
+    id: 'arco-barra-1',
+    kind: 'color',
+    title: 'LA BARRA PIDE PARA EL DÍA DEL NIÑO',
+    text: 'Tres de la barra pasan por la sede con un pedido chico: juguetes y una tarde en el club para los pibes del barrio. Lo hacen con vos o sin vos, avisan de buen modo.',
+    weight: 2,
+    options: [
+      {
+        label: 'Poner el club y la plata de los juguetes',
+        hint: 'Sale poco y queda una foto buena. También queda un precedente.',
+        effects: { caja: -0.4, hinchada: 4, flags: { arco_barra_1: true } },
+      },
+      {
+        label: 'Prestar el predio y que los juguetes los pongan ellos',
+        hint: 'Colaborás sin abrir la caja. Toman nota igual.',
+        effects: { hinchada: 2, flags: { arco_barra_1: true } },
+      },
+    ],
+  },
+  {
+    id: 'arco-barra-2',
+    kind: 'dilema',
+    title: 'AHORA QUIEREN EL ESTACIONAMIENTO',
+    text: 'El mismo grupo vuelve, con menos sonrisa. Piden manejar el estacionamiento del estadio los días de partido: ellos cobran, ellos ordenan. Dicen que así no hay lío.',
+    requires: { flag: 'arco_barra_1', minSeason: 5 },
+    weight: 10,
+    options: [
+      {
+        label: 'Dárselo para tener la fiesta en paz',
+        hint: 'Se termina la discusión de hoy. Empieza la de dentro de dos años.',
+        effects: { caja: -1, influencia: -6, hinchada: 2, flags: { arco_barra_2: true }, flagsSuma: { prontuario: 1 } },
+      },
+      {
+        label: 'Ofrecerles un puesto de choripán y nada más',
+        hint: 'Les das algo, no el negocio. Se van midiendo la respuesta.',
+        effects: { hinchada: -2, influencia: 2, flags: { arco_barra_2: true } },
+      },
+      {
+        label: 'Decirles que no a todo',
+        hint: 'Plantado. El domingo se ve si alcanzaba con plantarse.',
+        effects: { influencia: 4, hinchada: -4, flags: { arco_barra_2: true } },
+      },
+    ],
+  },
+  {
+    id: 'arco-barra-3',
+    kind: 'golpe',
+    title: 'EL QUIEBRE CON LA BARRA',
+    text: 'El plantel se subió al micro para viajar y la barra lo frenó en la puerta del predio: no sale nadie hasta que se arregle lo del estacionamiento. Hay cámaras filmando desde la vereda.',
+    requires: { flag: 'arco_barra_2', minSeason: 9 },
+    weight: 10,
+    options: [
+      {
+        label: 'Denunciarlos y prohibirles la entrada al club',
+        hint: 'Se pudre del todo y salís en todos lados. Después hay que sostenerlo.',
+        effects: { hinchada: -6, influencia: 6, plantel: -1 },
+      },
+      {
+        label: 'Ceder ahora y ordenar el tema cuando bajen las cámaras',
+        hint: 'El micro sale. La deuda con ellos también sigue saliendo.',
+        effects: { influencia: -8, hinchada: 3, flagsSuma: { prontuario: 1 } },
+      },
+    ],
+  },
 ];
