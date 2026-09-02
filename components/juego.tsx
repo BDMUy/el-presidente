@@ -174,7 +174,7 @@ export function Juego() {
         onVolver={volverAlInicio}
       />
 
-      <div className="mx-auto w-full max-w-xl flex-1 px-4 py-6">
+      <div className="mx-auto w-full max-w-xl flex-1 px-4 py-6 pl-[max(1rem,var(--sae-left))] pr-[max(1rem,var(--sae-right))]">
         {mostrarActa ? (
           <ActaAsuncion
             club={club}

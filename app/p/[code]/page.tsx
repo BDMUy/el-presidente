@@ -45,7 +45,11 @@ export default async function PresidenciaCompartida({
   const club = getClub(state.clubId);
 
   return (
-    <main id="principal" tabIndex={-1} className="mx-auto w-full max-w-xl px-4 pb-10 focus:outline-none">
+    <main
+      id="principal"
+      tabIndex={-1}
+      className="mx-auto w-full max-w-xl px-4 pb-10 pl-[max(1rem,var(--sae-left))] pr-[max(1rem,var(--sae-right))] focus:outline-none"
+    >
       <div className="pt-3">
         <BarraSuperior volverHref="/" />
       </div>

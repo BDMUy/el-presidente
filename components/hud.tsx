@@ -41,7 +41,7 @@ export function Hud({
   return (
     <header
       className="sticky top-0 z-20 bg-fondo-2/97 backdrop-blur"
-      style={{ '--club': tintaClub } as CSSProperties}
+      style={{ '--club': tintaClub, paddingTop: 'var(--sae-top)' } as CSSProperties}
     >
       <div className="mx-auto max-w-xl">
         <div className="px-3 sm:px-4">

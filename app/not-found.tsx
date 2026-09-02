@@ -8,7 +8,7 @@ export default function NoEncontrado() {
     <main
       id="principal"
       tabIndex={-1}
-      className="mx-auto flex min-h-dvh w-full max-w-xl flex-col px-4 py-10 focus:outline-none"
+      className="mx-auto flex min-h-dvh w-full max-w-xl flex-col px-4 py-10 pl-[max(1rem,var(--sae-left))] pr-[max(1rem,var(--sae-right))] focus:outline-none"
     >
       <BarraSuperior volverHref="/" />
 
