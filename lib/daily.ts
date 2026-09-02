@@ -35,9 +35,8 @@ export function faltaParaLaProxima(ahora: Date = new Date()): number {
 }
 
 export function formatearEspera(ms: number): string {
-  const total = Math.max(0, Math.floor(ms / 1000));
-  const h = Math.floor(total / 3600);
-  const m = Math.floor((total % 3600) / 60);
-  const s = total % 60;
-  return [h, m, s].map((n) => String(n).padStart(2, '0')).join(':');
+  const totalMin = Math.max(0, Math.floor(ms / 60_000));
+  const h = Math.floor(totalMin / 60);
+  const m = totalMin % 60;
+  return [h, m].map((n) => String(n).padStart(2, '0')).join(':');
 }

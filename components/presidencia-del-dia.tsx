@@ -44,7 +44,7 @@ export function PresidenciaDelDia({ onJugar }: { onJugar: () => void }) {
 
     const arrancar = () => {
       tick();
-      id ??= setInterval(tick, 1000);
+      id ??= setInterval(tick, 60_000);
     };
     const frenar = () => {
       clearInterval(id);
