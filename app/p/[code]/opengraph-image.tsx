@@ -149,6 +149,11 @@ export default async function Image({ params }: { params: Promise<{ code: string
           EL PRESIDENTE
         </div>
 
+        <div style={{ display: 'flex', height: 6 }}>
+          <div style={{ flex: 1, backgroundColor: club.colors[0] }} />
+          <div style={{ flex: 1, backgroundColor: club.colors[1] }} />
+        </div>
+
         <div style={{ display: 'flex', flexDirection: 'column', marginTop: 28 }}>
           <div style={{ fontSize: 22, color: tintaClub, letterSpacing: 3, fontWeight: 700 }}>
             {`${club.name.toUpperCase()} · ${state.history[0]?.year ?? state.year}–${state.year}`}
