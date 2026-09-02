@@ -779,4 +779,74 @@ export const ECONOMIA: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'arco-tv-1',
+    kind: 'dilema',
+    title: 'LA PRODUCTORA NUEVA',
+    text: 'Una productora que arrancó hace dos años ofrece transmitir todos los partidos del club por su plataforma. Paga más que el reparto del pool, pero quiere exclusividad y elegir días y horarios.',
+    weight: 2,
+    requires: { minSeason: 2 },
+    options: [
+      {
+        label: 'Firmar exclusividad total por cinco años',
+        hint: 'El cheque más grande que firmó el club. Y el más largo.',
+        effects: { caja: 5, hinchada: -3, flags: { arco_tv_1: true } },
+      },
+      {
+        label: 'Firmar solo dos años, para probar',
+        hint: 'Menos plata y una puerta de salida a mano.',
+        effects: { caja: 2, flags: { arco_tv_1: true } },
+      },
+      {
+        label: 'Firmar pero dejando los clásicos fuera del trato',
+        hint: 'Los partidos grandes siguen en abierto. La productora lo firma a regañadientes.',
+        effects: { caja: 3, hinchada: 1, flags: { arco_tv_1: true } },
+      },
+    ],
+  },
+  {
+    id: 'arco-tv-2',
+    kind: 'golpe',
+    title: 'TE PONEN LOS PARTIDOS AL MEDIODÍA',
+    text: 'La productora empezó a programar al club los lunes al mediodía y los viernes temprano, cuando no hay nadie. La cancha se ve vacía en pantalla y la gente putea el abono.',
+    requires: { flag: 'arco_tv_1', minSeason: 6 },
+    weight: 10,
+    options: [
+      {
+        label: 'Reclamar formalmente y aguantar el contrato',
+        hint: 'La carta queda linda en el expediente. El horario no cambia.',
+        effects: { hinchada: -4, influencia: 2, flags: { arco_tv_2: true } },
+      },
+      {
+        label: 'Negociar una salida anticipada del contrato',
+        hint: 'Se puede cortar. Sale una multa que ya sabés quién paga.',
+        effects: { caja: -4, hinchada: 4, flags: { arco_tv_2: true } },
+      },
+      {
+        label: 'Bancar los horarios a cambio de un extra en el cheque',
+        hint: 'La platea vacía se cobra. En pantalla se sigue viendo vacía.',
+        effects: { caja: 3, hinchada: -6, flags: { arco_tv_2: true } },
+      },
+    ],
+  },
+  {
+    id: 'arco-tv-3',
+    kind: 'color',
+    title: 'LA PRODUCTORA QUE SE QUEDÓ CON TODO',
+    text: 'Años después, la productora que arrancó de cero maneja los derechos de medio torneo. Renueva con el club, y esta vez negocia sabiendo que ya no hay pool al que volver.',
+    requires: { flag: 'arco_tv_2', minSeason: 10 },
+    weight: 10,
+    options: [
+      {
+        label: 'Renovar con una cláusula de horarios protegidos',
+        hint: 'Aprendiste. Tardaste ocho años, pero aprendiste.',
+        effects: { caja: 2, hinchada: 4, influencia: 2 },
+      },
+      {
+        label: 'Renovar por la plata y nada más',
+        hint: 'El cheque alcanza para no discutir el resto.',
+        effects: { caja: 5, hinchada: -3 },
+      },
+    ],
+  },
 ];

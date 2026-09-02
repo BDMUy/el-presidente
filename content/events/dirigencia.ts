@@ -424,4 +424,74 @@ export const DIRIGENCIA: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'arco-promesa-1',
+    kind: 'color',
+    title: 'EL CIERRE DE CAMPAÑA',
+    text: 'Arranca la campaña por la reelección y armás el acto de cierre. Arriba del escenario vas a prometer algo concreto, para que quede grabado.',
+    weight: 2,
+    requires: { minSeason: 2, maxSeason: 6 },
+    options: [
+      {
+        label: 'Prometer que nunca se vende a un pibe de inferiores',
+        hint: 'Se aplaude fuerte. Y queda en video.',
+        effects: { hinchada: 6, flags: { arco_promesa_1: true } },
+      },
+      {
+        label: 'Prometer el club sin deudas en cuatro años',
+        hint: 'Suena a gestión seria. El que lo filma sabe contar.',
+        effects: { hinchada: 4, influencia: 2, flags: { arco_promesa_1: true } },
+      },
+      {
+        label: 'Prometer solo una gestión sin sorpresas',
+        hint: 'Lo más prudente que se puede decir con un micrófono en la mano. Quedó dicho igual.',
+        effects: { influencia: 3, flags: { arco_promesa_1: true } },
+      },
+    ],
+  },
+  {
+    id: 'arco-promesa-2',
+    kind: 'golpe',
+    title: 'DESENTERRARON EL VIDEO',
+    text: 'Dos mandatos después, una cuenta partidaria sube el video de aquel cierre con la promesa en primer plano y la fecha sobreimpresa. Tiene más vistas que cualquier gol del año.',
+    requires: { flag: 'arco_promesa_1', minSeason: 11 },
+    weight: 10,
+    options: [
+      {
+        label: 'Explicar en conferencia qué cambió y por qué',
+        hint: 'Argumento razonable contra un video de veinte segundos.',
+        effects: { hinchada: -4, influencia: 3 },
+      },
+      {
+        label: 'Ratificar la promesa y jurar cumplirla antes de irte',
+        hint: 'Volvés a atarte a algo. El reloj corre más rápido que vos.',
+        effects: { hinchada: 5, influencia: -3 },
+      },
+      {
+        label: 'No decir nada y dejar que pase',
+        hint: 'En una semana hay otro tema. La promesa queda flotando.',
+        effects: { hinchada: -2 },
+      },
+    ],
+  },
+  {
+    id: 'arco-promesa-3',
+    kind: 'dilema',
+    title: 'TE TOCA RENDIR CUENTAS DE LA PROMESA',
+    text: 'En tu último acto como presidente, alguien de la platea te grita la promesa de campaña, palabra por palabra. Todos esperan qué contestás.',
+    requires: { flag: 'arco_promesa_1', minSeason: 14 },
+    weight: 10,
+    options: [
+      {
+        label: 'Reconocer lo que no se cumplió, sin vueltas',
+        hint: 'Cierra mejor de lo que parece. Nadie esperaba que lo dijeras.',
+        effects: { hinchada: 6, influencia: 4 },
+      },
+      {
+        label: 'Enumerar todo lo otro que sí se hizo',
+        hint: 'Defensa sólida. También suena a que esquivaste la pregunta.',
+        effects: { hinchada: 1, influencia: 2 },
+      },
+    ],
+  },
 ];

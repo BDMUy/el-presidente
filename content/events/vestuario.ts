@@ -405,4 +405,149 @@ export const VESTUARIO: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'arco-dt-1',
+    kind: 'dilema',
+    title: 'EL DT QUE ELEGISTE VOS',
+    text: 'Trajiste a un técnico joven, sin nombre, con una idea. En la presentación te pusiste al lado y dijiste que el proyecto era a tres años, pase lo que pase.',
+    weight: 2,
+    requires: { minSeason: 2 },
+    options: [
+      {
+        label: 'Bancar en serio el discurso de los tres años',
+        hint: 'Si sale, la idea lleva tu firma. Si no, también.',
+        effects: { hinchada: 4, influencia: -2, flags: { arco_dt_1: true } },
+      },
+      {
+        label: 'Firmarle un año con opción y no atarte tanto',
+        hint: 'Menos épica en la presentación. Más margen en marzo.',
+        effects: { influencia: 2, flags: { arco_dt_1: true } },
+      },
+    ],
+  },
+  {
+    id: 'arco-dt-2',
+    kind: 'dilema',
+    title: 'LOS RESULTADOS NO ACOMPAÑAN',
+    text: 'El equipo juega parecido a lo que prometía el proyecto, pero los puntos no aparecen. La platea se va antes del final y en la radio ya cuentan los partidos que le quedan.',
+    requires: { flag: 'arco_dt_1', minSeason: 6 },
+    weight: 10,
+    options: [
+      {
+        label: 'Salir a bancarlo de nuevo, con la cara',
+        hint: 'Doblás la apuesta en público. No hay tercera conferencia para esto.',
+        effects: { hinchada: -3, influencia: -2, flags: { arco_dt_banco: true } },
+      },
+      {
+        label: 'Agradecerle y cerrar el proyecto',
+        hint: 'Pagás la indemnización y te comés el yo lo presenté.',
+        effects: { caja: -2, plantel: -2, hinchada: 3, flags: { arco_dt_ruptura: true } },
+      },
+    ],
+  },
+  {
+    id: 'arco-dt-3a',
+    kind: 'color',
+    title: 'EL PROYECTO DEL DT DIO VUELTA',
+    text: 'Al DT que bancaste dos veces se le acomodó el equipo justo cuando ya nadie daba nada. Terminó la temporada dando la vuelta y con la platea cantándole el nombre.',
+    requires: { flag: 'arco_dt_banco', minSeason: 10 },
+    weight: 10,
+    options: [
+      {
+        label: 'Renovarlo por tres años sin cláusulas raras',
+        hint: 'Se lo ganó. Los grandes ya preguntan por él.',
+        effects: { hinchada: 10, influencia: 6, caja: -1 },
+      },
+      {
+        label: 'Festejar el título y dejar la renovación para más adelante',
+        hint: 'Te ahorrás la charla incómoda. Alguno la lee como desconfianza.',
+        effects: { hinchada: 6, influencia: 2 },
+      },
+    ],
+  },
+  {
+    id: 'arco-dt-3b',
+    kind: 'color',
+    title: 'EL DT QUE SOLTASTE ANDA BIEN LEJOS',
+    text: 'El técnico que echaste agarró a otro club de la categoría y lo tiene arriba, jugando de memoria. Cada fecha, un periodista te pregunta si te arrepentís.',
+    requires: { flag: 'arco_dt_ruptura', minSeason: 10 },
+    weight: 10,
+    options: [
+      {
+        label: 'Admitir que la idea era buena y el momento malo',
+        hint: 'Honestidad que no cambia la tabla, pero se agradece.',
+        effects: { hinchada: 3, influencia: 2 },
+      },
+      {
+        label: 'Defender la decisión y mirar para adelante',
+        hint: 'Cada gol de ellos te lo van a poner en la cuenta igual.',
+        effects: { influencia: 1, hinchada: -2 },
+      },
+    ],
+  },
+  {
+    id: 'arco-figura-1',
+    kind: 'color',
+    title: 'EL GRANDE PREGUNTÓ POR TU FIGURA',
+    text: 'Un dirigente del club más grande del país se cruzó con el tuyo en un palco y, como al pasar, preguntó cuánto costaría tu mejor jugador. No hubo oferta. Todavía.',
+    weight: 2,
+    requires: { minSeason: 2 },
+    options: [
+      {
+        label: 'Contestar que no está en venta y cortar ahí',
+        hint: 'Corto y claro. Ellos tienen tiempo y vos un solo jugador así.',
+        effects: { influencia: 2, flags: { arco_figura_1: true } },
+      },
+      {
+        label: 'Escuchar hasta dónde llegan, sin comprometerse',
+        hint: 'Saber el número no cuesta nada. O cuesta, si se filtra.',
+        effects: { hinchada: -2, flags: { arco_figura_1: true } },
+      },
+    ],
+  },
+  {
+    id: 'arco-figura-2',
+    kind: 'dilema',
+    title: 'VUELVEN, Y AHORA CON UN NÚMERO',
+    text: 'El grande pone una oferta formal por tu figura. Es la venta más grande de la historia del club, y el jugador ya dijo por lo bajo que le gustaría el paso. Estás peleando cosas importantes esta temporada.',
+    requires: { flag: 'arco_figura_1', minSeason: 6 },
+    weight: 10,
+    options: [
+      {
+        label: 'Venderlo ahora, con la cifra en la mesa',
+        hint: 'La plata ordena el club por años. La platea tarda en entenderlo.',
+        effects: { caja: 10, plantel: -8, hinchada: -10, flags: { arco_figura_2: true } },
+      },
+      {
+        label: 'Rechazar y renovarle con una cláusula más alta',
+        hint: 'Se queda un año más, caro. El grande vuelve en junio.',
+        effects: { caja: -2, hinchada: 8, influencia: -3, flags: { arco_figura_2: true } },
+      },
+      {
+        label: 'Decirle que se queda esta temporada y después se habla',
+        hint: 'Ganás seis meses. El jugador juega pensando en otra cosa.',
+        effects: { plantel: -3, hinchada: 2, flags: { arco_figura_2: true } },
+      },
+    ],
+  },
+  {
+    id: 'arco-figura-3',
+    kind: 'dilema',
+    title: 'LA TERCERA VEZ POR TU FIGURA',
+    text: 'El grande vuelve por tercera vez. Al jugador le queda poco contrato y esta es la última ventana en la que el club puede sacar algo. La oferta bajó respecto de la de hace dos años.',
+    requires: { flag: 'arco_figura_2', minSeason: 10 },
+    weight: 10,
+    options: [
+      {
+        label: 'Venderlo por lo que haya',
+        hint: 'Menos de lo que valía. Más que cero, que es lo que entra si se va libre.',
+        effects: { caja: 5, plantel: -7, hinchada: -6 },
+      },
+      {
+        label: 'Retenerlo hasta que se le termine el contrato',
+        hint: 'La gente lo disfruta un año más. La caja no ve un peso.',
+        effects: { hinchada: 6, plantel: 1, deferred: [{ inSeasons: 2, text: 'Tu figura se fue libre al grande, sin dejar un peso. Estaba cantado.', effects: { plantel: -6, hinchada: -3 } }] },
+      },
+    ],
+  },
 ];
