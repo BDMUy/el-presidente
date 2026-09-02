@@ -33,6 +33,7 @@ import type {
   Resources,
 } from './types';
 import {
+  countryOf,
   EVENTS_PER_SEASON,
   LEAGUES,
   MOVIMIENTOS_POR_VENTANA,
@@ -323,8 +324,32 @@ function resolveMercado(
   };
 }
 
+let eventosPorLigaCache: Map<LeagueId, GameEvent[]> | undefined;
+
+function construirEventosPorLiga(): Map<LeagueId, GameEvent[]> {
+  const index = new Map<LeagueId, GameEvent[]>();
+  for (const league of Object.keys(LEAGUES) as LeagueId[]) {
+    const country = countryOf(league);
+    index.set(
+      league,
+      ALL_EVENTS.filter(({ requires }) => {
+        if (!requires) return true;
+        if (requires.league && !requires.league.includes(league)) return false;
+        if (requires.country && !requires.country.includes(country)) return false;
+        return true;
+      }),
+    );
+  }
+  return index;
+}
+
+function eventosPorLiga(league: LeagueId): GameEvent[] {
+  eventosPorLigaCache ??= construirEventosPorLiga();
+  return eventosPorLigaCache.get(league) ?? ALL_EVENTS;
+}
+
 export function eligibleEvents(state: GameState, club: Club): GameEvent[] {
-  return ALL_EVENTS.filter((event) => {
+  return eventosPorLiga(state.league).filter((event) => {
     if (state.usedEvents.includes(event.id)) return false;
     return meetsCondition(event.requires, state, club.size);
   });
@@ -339,7 +364,7 @@ function openEvento(state: GameState): GameState {
 
   let pool = eligibleEvents(state, club);
   if (pool.length === 0) {
-    pool = ALL_EVENTS.filter((e) => meetsCondition(e.requires, state, club.size));
+    pool = eventosPorLiga(state.league).filter((e) => meetsCondition(e.requires, state, club.size));
   }
   if (pool.length === 0) {
     return openMesaChicaOrTemporada(state);
