@@ -74,8 +74,15 @@ export function SelectorClub({
     const afuera = (e: PointerEvent) => {
       if (!contenedor.current?.contains(e.target as Node)) cerrar();
     };
+    const reubicar = () => setSitio(calcularSitio(contenedor.current));
     document.addEventListener('pointerdown', afuera);
-    return () => document.removeEventListener('pointerdown', afuera);
+    window.addEventListener('resize', reubicar);
+    window.addEventListener('scroll', reubicar, { passive: true });
+    return () => {
+      document.removeEventListener('pointerdown', afuera);
+      window.removeEventListener('resize', reubicar);
+      window.removeEventListener('scroll', reubicar);
+    };
   }, [abierto, cerrar]);
 
   useEffect(() => {
