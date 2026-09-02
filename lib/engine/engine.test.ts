@@ -224,7 +224,14 @@ describe('Mesa Chica', () => {
   });
 
   it('el orden es estable, así el log del jugador se puede reproducir', () => {
-    expect(enumerateAssignments()).toEqual(enumerateAssignments());
+    expect(enumerateAssignments()).toBe(enumerateAssignments());
+  });
+
+  it('los extremos del orden están fijados por valor: son formato de cable', () => {
+    const all = enumerateAssignments();
+    expect(all).toHaveLength(56);
+    expect(all[0]).toEqual({ plantel: 0, dt: 0, hinchada: 0, prensa: 0, gestion: 0 });
+    expect(all.at(-1)).toEqual({ plantel: 3, dt: 0, hinchada: 0, prensa: 0, gestion: 0 });
   });
 
   it('assignmentIndex encuentra todos los repartos', () => {

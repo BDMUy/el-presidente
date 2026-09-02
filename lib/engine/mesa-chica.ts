@@ -4,7 +4,7 @@ import { FICHAS_MESA_CHICA, FRENTES } from './types';
 
 const EMPTY: MesaChicaAssignment = { plantel: 0, dt: 0, hinchada: 0, prensa: 0, gestion: 0 };
 
-export function enumerateAssignments(): MesaChicaAssignment[] {
+function buildAssignments(): MesaChicaAssignment[] {
   const ids = FRENTES.map((f) => f.id);
   const out: MesaChicaAssignment[] = [];
 
@@ -22,6 +22,12 @@ export function enumerateAssignments(): MesaChicaAssignment[] {
     walk(0, total, { ...EMPTY });
   }
   return out;
+}
+
+let assignmentsCache: MesaChicaAssignment[] | undefined;
+
+export function enumerateAssignments(): MesaChicaAssignment[] {
+  return (assignmentsCache ??= buildAssignments());
 }
 
 export function assignmentIndex(assignment: MesaChicaAssignment): number {

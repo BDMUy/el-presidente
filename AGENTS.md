@@ -125,6 +125,11 @@ db/migrations/   SQL, applied with `npm run migrar`
   free; `lib/storage.ts` bumping `CONTENT_VERSION` invalidated saved games the
   same way it always does for a content change. The invariant holds again from
   here on.
+- **The order of `enumerateAssignments()` is a wire format.** It derives from
+  the `FRENTES` array in `types.ts` and the traversal in `mesa-chica.ts`, and
+  the assignment index rides in `choices` and the share link. Reordering it
+  breaks every old link that contains a board meeting. New fronts append to the
+  end of `FRENTES`, never the middle.
 - **`lib/db.ts` carries `import 'server-only'`.** The connection string must
   never be named `NEXT_PUBLIC_*` and must never reach the browser. If it could,
   server-side verification would be worthless.
