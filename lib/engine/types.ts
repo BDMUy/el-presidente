@@ -253,7 +253,6 @@ export interface GameEvent {
   options: EventOption[];
   weight?: number;
   requires?: Condition;
-  once?: boolean;
 }
 
 export type OfferKind = 'compra' | 'venta' | 'libre' | 'prestamo' | 'cesion';

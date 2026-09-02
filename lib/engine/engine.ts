@@ -318,7 +318,6 @@ function resolveMercado(
 
 export function eligibleEvents(state: GameState, club: Club): GameEvent[] {
   return ALL_EVENTS.filter((event) => {
-    if (event.once && state.usedEvents.includes(event.id)) return false;
     if (state.usedEvents.includes(event.id)) return false;
     return meetsCondition(event.requires, state, club.size);
   });
