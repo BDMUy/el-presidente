@@ -31,6 +31,7 @@ import type {
   Modo,
   PlayerOffer,
   Resources,
+  TitleId,
 } from './types';
 import {
   countryOf,
@@ -105,13 +106,9 @@ export function startRun({ seed, clubId, modo = 'normal' }: StartOptions): GameS
     pending: [],
     usedEvents: [],
     eventsThisSeason: 0,
-    bigMatch: null,
-    pendingPosition: null,
-    pendingTitle: null,
     phase: { kind: 'mercado', offers: [], inhibido: false, restantes: 0 },
     status: 'jugando',
     ending: null,
-    log: [],
     choices: [],
     descensos: 0,
     ascensos: 0,
@@ -144,7 +141,7 @@ export function applyChoice(state: GameState, choice: number): GameState {
     case 'mesa-chica':
       return resolveMesa(conElegida, choice);
     case 'resultado-final':
-      return openTemporada(conElegida);
+      return openTemporada(conElegida, conElegida.phase.position, conElegida.phase.title);
     case 'temporada':
       return closeSeason(conElegida, conElegida.phase.result);
     case 'eleccion':
@@ -225,16 +222,9 @@ function openMercado(state: GameState): GameState {
     );
     const offers = inhibido ? all.filter((o) => o.kind === 'venta' || o.kind === 'cesion') : all;
 
-    const { state: matured, texts } = maturePending(state);
-    const log = texts.map((text) => ({ season: state.season, text }));
-
     return {
-      ...matured,
-      log: [...matured.log, ...log],
+      ...maturePending(state),
       eventsThisSeason: 0,
-      bigMatch: null,
-      pendingPosition: null,
-      pendingTitle: null,
       phase: { kind: 'mercado', offers, inhibido, restantes: MOVIMIENTOS_POR_VENTANA },
     };
   });
@@ -253,9 +243,8 @@ function resolveMercado(
 
   const offer = offers[choice];
 
-  const conLog = conAzar(state, (rand) => {
+  const conMovimiento = conAzar(state, (rand) => {
     let plantelDelta = offer.plantelDelta;
-    let text = '';
     let deferred: Effects['deferred'];
 
     const sePresta = offer.kind === 'prestamo';
@@ -264,19 +253,7 @@ function resolveMercado(
 
     if (puedeLesionarse && rand.chance(offer.risk)) {
       plantelDelta = Math.round(plantelDelta * 0.35);
-      text =
-        offer.kind === 'compra'
-          ? `${offer.name} llegó y no funcionó: se lesionó en la pretemporada.`
-          : sePresta
-            ? `${offer.name} llegó a préstamo y no funcionó: se lesionó en la pretemporada.`
-            : `${offer.name} llegó gratis y se fue lesionado antes de debutar.`;
-    } else if (offer.kind === 'venta') {
-      text =
-        state.resources.hinchada < 40
-          ? `Se vendió a ${offer.name}. La gente, que ya venía caliente, no lo perdonó.`
-          : `Se vendió a ${offer.name}. La tribuna se enteró por Twitter.`;
     } else if (seCede) {
-      text = `${offer.name} se va a préstamo. Vuelve en un par de temporadas.`;
       deferred = [
         {
           inSeasons: rand.int(1, 2),
@@ -285,7 +262,6 @@ function resolveMercado(
         },
       ];
     } else if (sePresta) {
-      text = `Llegó ${offer.name} a préstamo: ${offer.archetype}.`;
       deferred = [
         {
           inSeasons: rand.int(1, 2),
@@ -293,11 +269,6 @@ function resolveMercado(
           effects: { plantel: -plantelDelta },
         },
       ];
-    } else {
-      text =
-        offer.kind === 'compra'
-          ? `Llegó ${offer.name}, ${offer.archetype}.`
-          : `Firmó ${offer.name} a costo cero: ${offer.archetype}.`;
     }
 
     const effects: Effects = {
@@ -307,19 +278,18 @@ function resolveMercado(
       ...(deferred ? { deferred } : {}),
     };
 
-    const next = applyEffects(state, effects);
-    return { ...next, log: [...next.log, { season: state.season, text }] };
+    return applyEffects(state, effects);
   });
 
   const ofertasRestantes = offers.filter((_, i) => i !== choice);
   const movimientosRestantes = restantes - 1;
 
   if (movimientosRestantes <= 0 || ofertasRestantes.length === 0) {
-    return openEvento(conLog);
+    return openEvento(conMovimiento);
   }
 
   return {
-    ...conLog,
+    ...conMovimiento,
     phase: { kind: 'mercado', offers: ofertasRestantes, inhibido, restantes: movimientosRestantes },
   };
 }
@@ -412,7 +382,6 @@ function resolveEvento(
 
     return {
       ...next,
-      log: [...next.log, { season: state.season, text }],
       phase: { kind: 'resultado-evento', text, effects },
     };
   });
@@ -432,16 +401,14 @@ function openMesaChicaOrTemporada(state: GameState): GameState {
     const position = resolvePosition(state.resources, state.league, rand);
     const bigMatch = rollBigMatch(state, club, position, rand);
 
-    const staged: GameState = { ...state, pendingPosition: position, bigMatch };
-
-    if (!bigMatch) return openTemporada(staged);
-    return { ...staged, phase: { kind: 'mesa-chica', match: bigMatch } };
+    if (!bigMatch) return openTemporada(state, position, null);
+    return { ...state, phase: { kind: 'mesa-chica', match: bigMatch, position } };
   });
 }
 
 function resolveMesa(state: GameState, choice: number): GameState {
-  const match = state.bigMatch;
-  if (!match) return openTemporada(state);
+  if (state.phase.kind !== 'mesa-chica') return state;
+  const { match, position } = state.phase;
 
   const assignments = enumerateAssignments();
   const assignment = assignments[Math.min(choice, assignments.length - 1)];
@@ -453,17 +420,21 @@ function resolveMesa(state: GameState, choice: number): GameState {
 
     return {
       ...next,
-      pendingTitle: outcome.won ? match.title : null,
-      log: [...next.log, { season: state.season, text: outcome.text }],
-      phase: { kind: 'resultado-final', won: outcome.won, text: outcome.text, match },
+      phase: {
+        kind: 'resultado-final',
+        won: outcome.won,
+        text: outcome.text,
+        match,
+        position,
+        title: outcome.won ? match.title : null,
+      },
     };
   });
 }
 
-function openTemporada(state: GameState): GameState {
+function openTemporada(state: GameState, position: number, pendingTitle: TitleId | null): GameState {
   const club = getClub(state.clubId);
-  const position = state.pendingPosition ?? 1;
-  const result = buildSeasonResult(state, club, position, state.pendingTitle);
+  const result = buildSeasonResult(state, club, position, pendingTitle);
 
   return { ...state, phase: { kind: 'temporada', result } };
 }
@@ -513,7 +484,6 @@ function closeSeason(state: GameState, result: import('./types').SeasonResult): 
       continental: result.qualifiedContinental,
       libertadores: result.champion || result.position <= 2,
     },
-    log: [...next.log, { season: state.season, text: result.summary }],
   };
 
   const early = checkEarlyExit(next);
@@ -528,7 +498,6 @@ function closeSeason(state: GameState, result: import('./types').SeasonResult): 
       const election = resolveElection(next, rand);
       return {
         ...next,
-        log: [...next.log, { season: next.season, text: election.summary }],
         phase: { kind: 'eleccion', result: election },
       };
     });
