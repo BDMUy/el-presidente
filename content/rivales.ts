@@ -42,3 +42,13 @@ export const RIVALES: Record<Country, string[]> = {
     'Internacional', 'Cruzeiro', 'Atlético-MG', 'Fluminense', 'Botafogo', 'Vasco',
   ],
 };
+
+export const RIVALES_CONTINENTALES: string[] = [
+  'River', 'Boca', 'Racing', 'Estudiantes', 'Independiente', 'San Lorenzo',
+  'Flamengo', 'Palmeiras', 'Fluminense', 'Botafogo', 'Internacional', 'Grêmio',
+  'Corinthians', 'São Paulo', 'Atlético Mineiro',
+  'Nacional', 'Peñarol', 'Olimpia', 'Cerro Porteño',
+  'Liga de Quito', 'Barcelona SC', 'Independiente del Valle',
+  'Bolívar', 'The Strongest', 'Colo-Colo',
+  'Alianza Lima', 'Atlético Nacional', 'Millonarios',
+];
