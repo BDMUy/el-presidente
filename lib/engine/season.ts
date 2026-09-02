@@ -1,4 +1,4 @@
-import { RIVALES } from '@/content/rivales';
+import { RIVALES, RIVALES_CONTINENTALES } from '@/content/rivales';
 import { Rand } from './rng';
 import type {
   BigMatch,
@@ -182,7 +182,7 @@ export function rollBigMatch(
       return {
         competition: 'continental',
         label: esLibertadores ? 'Final de la Copa Libertadores' : 'Final de la Copa Sudamericana',
-        rival: rand.pick(['Flamengo', 'Palmeiras', 'Peñarol', 'Nacional', 'Colo-Colo', 'Atlético Mineiro']),
+        rival: rand.pick(RIVALES_CONTINENTALES),
         baseWin: esLibertadores ? 0.34 + strength * 0.16 : 0.44 + strength * 0.16,
         title: esLibertadores ? 'libertadores' : 'sudamericana',
       };
