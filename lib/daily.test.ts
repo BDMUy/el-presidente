@@ -49,10 +49,10 @@ describe('Presidencia del Día', () => {
     expect(falta).toBeLessThanOrEqual(60_000);
   });
 
-  it('el contador se muestra siempre con dos dígitos', () => {
-    expect(formatearEspera(0)).toBe('00:00:00');
-    expect(formatearEspera(3661_000)).toBe('01:01:01');
-    expect(formatearEspera(-5)).toBe('00:00:00');
+  it('el contador se muestra siempre con dos dígitos, sin segundos', () => {
+    expect(formatearEspera(0)).toBe('00:00');
+    expect(formatearEspera(3661_000)).toBe('01:01');
+    expect(formatearEspera(-5)).toBe('00:00');
   });
 
   it('la partida del día es jugable de punta a punta', () => {
