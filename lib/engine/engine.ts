@@ -85,13 +85,12 @@ export interface StartOptions {
 
 export function startRun({ seed, clubId, modo = 'normal' }: StartOptions): GameState {
   const club = getClub(clubId);
-  const rand = new Rand(seed);
 
   const resources = modo === 'llamas' ? recibirElClubEnLlamas(club) : initialResources(club);
 
   const base: GameState = {
     seed,
-    rng: rand.s,
+    rng: seed,
     clubId,
     league: club.league,
     modo,
@@ -206,31 +205,38 @@ export function optionCount(state: GameState): number {
   }
 }
 
-function openMercado(state: GameState): GameState {
+function conAzar(state: GameState, fn: (rand: Rand) => GameState): GameState {
   const rand = new Rand(state.rng);
-  const inhibido = estaInhibido(state.resources);
+  const next = fn(rand);
+  return next.rng === rand.s ? next : { ...next, rng: rand.s };
+}
 
-  const all = generateOffers(
-    state.league,
-    state.resources.plantel,
-    rand,
-    state.season,
-    state.seed,
-  );
-  const offers = inhibido ? all.filter((o) => o.kind === 'venta' || o.kind === 'cesion') : all;
+function openMercado(state: GameState): GameState {
+  return conAzar(state, (rand) => {
+    const inhibido = estaInhibido(state.resources);
 
-  const { state: matured, texts } = maturePending({ ...state, rng: rand.s });
-  const log = texts.map((text) => ({ season: state.season, text }));
+    const all = generateOffers(
+      state.league,
+      state.resources.plantel,
+      rand,
+      state.season,
+      state.seed,
+    );
+    const offers = inhibido ? all.filter((o) => o.kind === 'venta' || o.kind === 'cesion') : all;
 
-  return {
-    ...matured,
-    log: [...matured.log, ...log],
-    eventsThisSeason: 0,
-    bigMatch: null,
-    pendingPosition: null,
-    pendingTitle: null,
-    phase: { kind: 'mercado', offers, inhibido, restantes: MOVIMIENTOS_POR_VENTANA },
-  };
+    const { state: matured, texts } = maturePending(state);
+    const log = texts.map((text) => ({ season: state.season, text }));
+
+    return {
+      ...matured,
+      log: [...matured.log, ...log],
+      eventsThisSeason: 0,
+      bigMatch: null,
+      pendingPosition: null,
+      pendingTitle: null,
+      phase: { kind: 'mercado', offers, inhibido, restantes: MOVIMIENTOS_POR_VENTANA },
+    };
+  });
 }
 
 function resolveMercado(
@@ -245,63 +251,64 @@ function resolveMercado(
   }
 
   const offer = offers[choice];
-  const rand = new Rand(state.rng);
 
-  let plantelDelta = offer.plantelDelta;
-  let text = '';
-  let deferred: Effects['deferred'];
+  const conLog = conAzar(state, (rand) => {
+    let plantelDelta = offer.plantelDelta;
+    let text = '';
+    let deferred: Effects['deferred'];
 
-  const sePresta = offer.kind === 'prestamo';
-  const seCede = offer.kind === 'cesion';
-  const puedeLesionarse = offer.kind === 'compra' || offer.kind === 'libre' || sePresta;
+    const sePresta = offer.kind === 'prestamo';
+    const seCede = offer.kind === 'cesion';
+    const puedeLesionarse = offer.kind === 'compra' || offer.kind === 'libre' || sePresta;
 
-  if (puedeLesionarse && rand.chance(offer.risk)) {
-    plantelDelta = Math.round(plantelDelta * 0.35);
-    text =
-      offer.kind === 'compra'
-        ? `${offer.name} llegó y no funcionó: se lesionó en la pretemporada.`
-        : sePresta
-          ? `${offer.name} llegó a préstamo y no funcionó: se lesionó en la pretemporada.`
-          : `${offer.name} llegó gratis y se fue lesionado antes de debutar.`;
-  } else if (offer.kind === 'venta') {
-    text =
-      state.resources.hinchada < 40
-        ? `Se vendió a ${offer.name}. La gente, que ya venía caliente, no lo perdonó.`
-        : `Se vendió a ${offer.name}. La tribuna se enteró por Twitter.`;
-  } else if (seCede) {
-    text = `${offer.name} se va a préstamo. Vuelve en un par de temporadas.`;
-    deferred = [
-      {
-        inSeasons: rand.int(1, 2),
-        text: `Volvió del préstamo: ${offer.name} está de nuevo a disposición.`,
-        effects: { plantel: -offer.plantelDelta },
-      },
-    ];
-  } else if (sePresta) {
-    text = `Llegó ${offer.name} a préstamo: ${offer.archetype}.`;
-    deferred = [
-      {
-        inSeasons: rand.int(1, 2),
-        text: `Terminó el préstamo de ${offer.name} y volvió a su club.`,
-        effects: { plantel: -plantelDelta },
-      },
-    ];
-  } else {
-    text =
-      offer.kind === 'compra'
-        ? `Llegó ${offer.name}, ${offer.archetype}.`
-        : `Firmó ${offer.name} a costo cero: ${offer.archetype}.`;
-  }
+    if (puedeLesionarse && rand.chance(offer.risk)) {
+      plantelDelta = Math.round(plantelDelta * 0.35);
+      text =
+        offer.kind === 'compra'
+          ? `${offer.name} llegó y no funcionó: se lesionó en la pretemporada.`
+          : sePresta
+            ? `${offer.name} llegó a préstamo y no funcionó: se lesionó en la pretemporada.`
+            : `${offer.name} llegó gratis y se fue lesionado antes de debutar.`;
+    } else if (offer.kind === 'venta') {
+      text =
+        state.resources.hinchada < 40
+          ? `Se vendió a ${offer.name}. La gente, que ya venía caliente, no lo perdonó.`
+          : `Se vendió a ${offer.name}. La tribuna se enteró por Twitter.`;
+    } else if (seCede) {
+      text = `${offer.name} se va a préstamo. Vuelve en un par de temporadas.`;
+      deferred = [
+        {
+          inSeasons: rand.int(1, 2),
+          text: `Volvió del préstamo: ${offer.name} está de nuevo a disposición.`,
+          effects: { plantel: -offer.plantelDelta },
+        },
+      ];
+    } else if (sePresta) {
+      text = `Llegó ${offer.name} a préstamo: ${offer.archetype}.`;
+      deferred = [
+        {
+          inSeasons: rand.int(1, 2),
+          text: `Terminó el préstamo de ${offer.name} y volvió a su club.`,
+          effects: { plantel: -plantelDelta },
+        },
+      ];
+    } else {
+      text =
+        offer.kind === 'compra'
+          ? `Llegó ${offer.name}, ${offer.archetype}.`
+          : `Firmó ${offer.name} a costo cero: ${offer.archetype}.`;
+    }
 
-  const effects: Effects = {
-    caja: -offer.cost,
-    plantel: plantelDelta,
-    hinchada: offer.hinchadaDelta,
-    ...(deferred ? { deferred } : {}),
-  };
+    const effects: Effects = {
+      caja: -offer.cost,
+      plantel: plantelDelta,
+      hinchada: offer.hinchadaDelta,
+      ...(deferred ? { deferred } : {}),
+    };
 
-  const next = applyEffects({ ...state, rng: rand.s }, effects);
-  const conLog = { ...next, log: [...next.log, { season: state.season, text }] };
+    const next = applyEffects(state, effects);
+    return { ...next, log: [...next.log, { season: state.season, text }] };
+  });
 
   const ofertasRestantes = offers.filter((_, i) => i !== choice);
   const movimientosRestantes = restantes - 1;
@@ -329,29 +336,29 @@ function rotacionPorSemilla(seed: number, id: string): number {
 
 function openEvento(state: GameState): GameState {
   const club = getClub(state.clubId);
-  const rand = new Rand(state.rng);
 
   let pool = eligibleEvents(state, club);
   if (pool.length === 0) {
     pool = ALL_EVENTS.filter((e) => meetsCondition(e.requires, state, club.size));
   }
   if (pool.length === 0) {
-    return openMesaChicaOrTemporada({ ...state, rng: rand.s });
+    return openMesaChicaOrTemporada(state);
   }
 
-  const event = rand.weighted(pool, (e) => (e.weight ?? 1) * rotacionPorSemilla(state.seed, e.id));
-  const available = event.options
-    .map((option, index) => ({ option, index }))
-    .filter(({ option }) => meetsCondition(option.requires, state, club.size))
-    .map(({ index }) => index);
+  return conAzar(state, (rand) => {
+    const event = rand.weighted(pool, (e) => (e.weight ?? 1) * rotacionPorSemilla(state.seed, e.id));
+    const available = event.options
+      .map((option, index) => ({ option, index }))
+      .filter(({ option }) => meetsCondition(option.requires, state, club.size))
+      .map(({ index }) => index);
 
-  return {
-    ...state,
-    rng: rand.s,
-    usedEvents: [...state.usedEvents, event.id],
-    eventsThisSeason: state.eventsThisSeason + 1,
-    phase: { kind: 'evento', event, available },
-  };
+    return {
+      ...state,
+      usedEvents: [...state.usedEvents, event.id],
+      eventsThisSeason: state.eventsThisSeason + 1,
+      phase: { kind: 'evento', event, available },
+    };
+  });
 }
 
 function resolveEvento(
@@ -362,27 +369,28 @@ function resolveEvento(
 ): GameState {
   const optionIndex = available[Math.min(choice, available.length - 1)];
   const option = event.options[optionIndex];
-  const rand = new Rand(state.rng);
 
-  let effects: Effects;
-  let text: string;
+  return conAzar(state, (rand) => {
+    let effects: Effects;
+    let text: string;
 
-  if (option.random && option.random.length > 0) {
-    const outcome = rand.weighted(option.random, (o) => o.weight);
-    effects = outcome.effects;
-    text = outcome.text;
-  } else {
-    effects = option.effects ?? {};
-    text = option.hint;
-  }
+    if (option.random && option.random.length > 0) {
+      const outcome = rand.weighted(option.random, (o) => o.weight);
+      effects = outcome.effects;
+      text = outcome.text;
+    } else {
+      effects = option.effects ?? {};
+      text = option.hint;
+    }
 
-  const next = applyEffects({ ...state, rng: rand.s }, effects);
+    const next = applyEffects(state, effects);
 
-  return {
-    ...next,
-    log: [...next.log, { season: state.season, text }],
-    phase: { kind: 'resultado-evento', text, effects },
-  };
+    return {
+      ...next,
+      log: [...next.log, { season: state.season, text }],
+      phase: { kind: 'resultado-evento', text, effects },
+    };
+  });
 }
 
 function afterEvento(state: GameState): GameState {
@@ -393,16 +401,17 @@ function afterEvento(state: GameState): GameState {
 }
 
 function openMesaChicaOrTemporada(state: GameState): GameState {
-  const rand = new Rand(state.rng);
-  const club = getClub(state.clubId);
+  return conAzar(state, (rand) => {
+    const club = getClub(state.clubId);
 
-  const position = resolvePosition(state.resources, state.league, rand);
-  const bigMatch = rollBigMatch(state, club, position, rand);
+    const position = resolvePosition(state.resources, state.league, rand);
+    const bigMatch = rollBigMatch(state, club, position, rand);
 
-  const staged: GameState = { ...state, rng: rand.s, pendingPosition: position, bigMatch };
+    const staged: GameState = { ...state, pendingPosition: position, bigMatch };
 
-  if (!bigMatch) return openTemporada(staged);
-  return { ...staged, phase: { kind: 'mesa-chica', match: bigMatch } };
+    if (!bigMatch) return openTemporada(staged);
+    return { ...staged, phase: { kind: 'mesa-chica', match: bigMatch } };
+  });
 }
 
 function resolveMesa(state: GameState, choice: number): GameState {
@@ -412,17 +421,18 @@ function resolveMesa(state: GameState, choice: number): GameState {
   const assignments = enumerateAssignments();
   const assignment = assignments[Math.min(choice, assignments.length - 1)];
 
-  const rand = new Rand(state.rng);
-  const withCost = applyEffects(state, assignmentCost(assignment));
-  const outcome = resolveMesaChica(match, assignment, rand, state.resources.hinchada);
-  const next = applyEffects({ ...withCost, rng: rand.s }, outcome.effects);
+  return conAzar(state, (rand) => {
+    const withCost = applyEffects(state, assignmentCost(assignment));
+    const outcome = resolveMesaChica(match, assignment, rand, state.resources.hinchada);
+    const next = applyEffects(withCost, outcome.effects);
 
-  return {
-    ...next,
-    pendingTitle: outcome.won ? match.title : null,
-    log: [...next.log, { season: state.season, text: outcome.text }],
-    phase: { kind: 'resultado-final', won: outcome.won, text: outcome.text, match },
-  };
+    return {
+      ...next,
+      pendingTitle: outcome.won ? match.title : null,
+      log: [...next.log, { season: state.season, text: outcome.text }],
+      phase: { kind: 'resultado-final', won: outcome.won, text: outcome.text, match },
+    };
+  });
 }
 
 function openTemporada(state: GameState): GameState {
@@ -435,12 +445,11 @@ function openTemporada(state: GameState): GameState {
 
 function closeSeason(state: GameState, result: import('./types').SeasonResult): GameState {
   const club = getClub(state.clubId);
-  const rand = new Rand(state.rng);
 
   const economy = resolveEconomy(state.resources, state.league, result);
   const mood = resolveMood(club, result);
 
-  let next = applyEffects({ ...state, rng: rand.s }, {
+  let next = applyEffects(state, {
     caja: economy.neto,
     hinchada: mood.hinchada + desgasteDelCargo(state.mandate),
     socios: mood.socios,
@@ -490,13 +499,14 @@ function closeSeason(state: GameState, result: import('./types').SeasonResult): 
   }
 
   if (isElectionSeason(next.season, next.modo)) {
-    const election = resolveElection(next, rand);
-    return {
-      ...next,
-      rng: rand.s,
-      log: [...next.log, { season: next.season, text: election.summary }],
-      phase: { kind: 'eleccion', result: election },
-    };
+    return conAzar(next, (rand) => {
+      const election = resolveElection(next, rand);
+      return {
+        ...next,
+        log: [...next.log, { season: next.season, text: election.summary }],
+        phase: { kind: 'eleccion', result: election },
+      };
+    });
   }
 
   return openMercado(advanceSeason(next));

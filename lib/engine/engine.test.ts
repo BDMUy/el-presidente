@@ -18,7 +18,7 @@ import { generateOffers } from './mercado';
 import { Rand, seedFromString } from './rng';
 import { expectedPosition, plantelForPosition, resolvePosition } from './season';
 import { RECURSOS_POR_ID } from '@/lib/recursos';
-import type { GameState, LeagueId } from './types';
+import type { GameState, LeagueId, Modo } from './types';
 import { FICHAS_MESA_CHICA, HINCHADA_ASAMBLEA, LEAGUES, TEMPORADAS_POR_MODO } from './types';
 
 function playThrough(seed: number, clubId: string, pick: (state: GameState) => number): GameState {
@@ -363,6 +363,70 @@ describe('determinismo', () => {
 
   it('replayRun rechaza una decisión fuera de rango', () => {
     expect(() => replayRun(1, 'boca', [999])).toThrow(/Decisión inválida/);
+  });
+
+  it('veinte semillas fijas reconstruyen el mismo estado final byte a byte', () => {
+    const casos: [number, string, Modo][] = [
+      [1000, 'boca', 'corta'],
+      [1097, 'canuelas', 'normal'],
+      [1194, 'utc', 'larga'],
+      [1291, 'realcundinamarca', 'llamas'],
+      [1388, 'fernandodelamora', 'corta'],
+      [1582, 'bragantino', 'larga'],
+      [1679, 'aldosivi', 'llamas'],
+      [1873, 'cali', 'normal'],
+      [2067, 'wilstermann', 'llamas'],
+      [2261, 'river', 'normal'],
+      [2649, 'carapegua', 'normal'],
+      [2843, 'vitoria', 'llamas'],
+      [7, 'colegiales', 'normal'],
+      [7, 'colegiales', 'larga'],
+      [8, 'sanmiguel', 'normal'],
+      [8, 'sanmiguel', 'larga'],
+      [18, 'usmp', 'normal'],
+      [28, 'cerroporteno', 'larga'],
+      [56, 'losandes', 'normal'],
+      [66, 'binacional', 'larga'],
+    ];
+
+    const huellas = casos.map(([seed, clubId, modo]) => {
+      const chooser = new Rand((seed ^ 0x9e3779b9) >>> 0);
+      let state = startRun({ seed, clubId, modo });
+      let guard = 0;
+      while (state.status === 'jugando' && guard++ < 5000) {
+        const n = optionCount(state);
+        if (n === 0) break;
+        state = applyChoice(state, chooser.int(0, n - 1));
+      }
+      const hash = seedFromString(JSON.stringify(state)).toString(16).padStart(8, '0');
+      return (
+        `${clubId}/${modo} ${state.ending?.id} s${state.season} m${state.mandate} ` +
+        `t${state.titles.length} d${state.descensos} a${state.ascensos} p${computeScore(state)} ${hash}`
+      );
+    });
+
+    expect(huellas).toEqual([
+      'boca/corta derrota-electoral s4 m1 t2 d0 a0 p645 87beb235',
+      'canuelas/normal asamblea s3 m1 t0 d2 a0 p0 4f262b31',
+      'utc/larga asamblea s2 m1 t0 d1 a0 p48 7e729288',
+      'realcundinamarca/llamas asamblea s1 m1 t0 d1 a0 p0 c4a514e9',
+      'fernandodelamora/corta derrota-electoral s4 m1 t2 d1 a1 p286 89dc785c',
+      'bragantino/larga asamblea s6 m2 t2 d2 a0 p112 801ba934',
+      'aldosivi/llamas asamblea s1 m1 t0 d1 a0 p0 fc129a59',
+      'cali/normal asamblea s2 m1 t0 d1 a0 p24 68f549f4',
+      'wilstermann/llamas asamblea s7 m2 t4 d2 a1 p233 88cba454',
+      'river/normal asamblea s4 m1 t0 d0 a0 p263 c81f4bbd',
+      'carapegua/normal derrota-electoral s4 m1 t0 d1 a0 p0 63c5c235',
+      'vitoria/llamas asamblea s1 m1 t0 d1 a0 p0 412d4847',
+      'colegiales/normal asamblea s8 m2 t2 d2 a1 p74 56d728e5',
+      'colegiales/larga asamblea s8 m2 t2 d2 a1 p74 3c10e81d',
+      'sanmiguel/normal derrota-electoral s8 m2 t1 d1 a1 p326 94b8982a',
+      'sanmiguel/larga derrota-electoral s8 m2 t1 d1 a1 p326 8fa15978',
+      'usmp/normal asamblea s7 m2 t3 d2 a1 p224 ae5e435a',
+      'cerroporteno/larga asamblea s8 m2 t3 d2 a0 p656 26d71628',
+      'losandes/normal asamblea s6 m2 t2 d2 a2 p212 f5b14d21',
+      'binacional/larga asamblea s6 m2 t2 d2 a1 p8 e64ef830',
+    ]);
   });
 });
 
