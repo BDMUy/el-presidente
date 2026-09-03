@@ -17,15 +17,15 @@ const ARQUETIPOS_COMPRA = [
   'extremo desequilibrante',
   'arquero de copa',
   'media punta que camina el partido y aparece en el 81',
-  'central veterano que ya no gira pero coloca',
-  'lateral de proyección que no sabe marcar',
+  'central de quite y salida corta',
+  'lateral que llega al fondo y no vuelve',
   'doble cinco de marca y relevo',
   'segundo punta que la baja y asiste',
   'carrilero que solo va para adelante',
   'líbero que sale jugando limpio',
   'volante mixto que llega siempre al área rival',
   'nueve de relevo que aguanta de espaldas y descarga',
-  'arquero joven de reflejo rápido y pies flojos',
+  'arquero de reflejo rápido y pies flojos',
   'cinco de contención que reparte corto y no arriesga',
   'goleador de área chica, cero despliegue',
   'zaguero brusco, siempre al borde de la amarilla',
@@ -45,16 +45,16 @@ const ARQUETIPOS_LIBRE = [
 ];
 
 const ARQUETIPOS_VENTA = [
-  { archetype: 'la joya del club', edad: [17, 21] },
-  { archetype: 'el goleador', edad: [23, 30] },
-  { archetype: 'el capitán', edad: [28, 34] },
-  { archetype: 'el juvenil que piden de afuera', edad: [18, 21] },
-  { archetype: 'el volante que sostiene el equipo', edad: [24, 30] },
-  { archetype: 'el lateral que mira Europa', edad: [19, 23] },
-  { archetype: 'el goleador veterano que todavía la mete', edad: [30, 35] },
-  { archetype: 'el zaguero titular indiscutido', edad: [25, 31] },
-  { archetype: 'el enganche que la rompe hace un año', edad: [20, 24] },
-  { archetype: 'el arquero que ataja todo', edad: [26, 32] },
+  { archetype: 'la joya del club', edad: [17, 21], perfil: 'joven' },
+  { archetype: 'el goleador', edad: [23, 30], perfil: 'consagrado' },
+  { archetype: 'el capitán', edad: [28, 34], perfil: 'veterano' },
+  { archetype: 'el juvenil que piden de afuera', edad: [18, 21], perfil: 'joven' },
+  { archetype: 'el volante que sostiene el equipo', edad: [24, 30], perfil: 'consagrado' },
+  { archetype: 'el lateral que mira Europa', edad: [19, 23], perfil: 'joven' },
+  { archetype: 'el goleador veterano que todavía la mete', edad: [30, 35], perfil: 'veterano' },
+  { archetype: 'el zaguero titular indiscutido', edad: [25, 31], perfil: 'consagrado' },
+  { archetype: 'el enganche que la rompe hace un año', edad: [20, 24], perfil: 'joven' },
+  { archetype: 'el arquero que ataja todo', edad: [26, 32], perfil: 'consagrado' },
 ] as const;
 
 const ARQUETIPOS_PRESTAMO = [
@@ -113,20 +113,30 @@ const NOTAS_LIBRE = [
   'No pide plata de entrada. Todo a fin de año.',
 ];
 
-const NOTAS_VENTA = [
-  'Salió de la pensión. La tribuna canta su nombre.',
-  'Mete la mitad de los goles del equipo.',
-  'Lleva la cinta desde hace cuatro años.',
-  'La oferta llega de afuera y paga en dólares.',
-  'Tiene cláusula y la van a pagar completa.',
-  'Pidió salir. Si se queda, juega de mala gana.',
-  'El club necesita la plata más que al jugador.',
-  'Renueva o se va libre en seis meses. Definí ahora.',
-  'La hinchada se va a enojar, pero el número cierra.',
-  'Lo quiere un rival directo. Eso pesa.',
-  'Es la venta que salva el balance del año.',
-  'Rinde hace un año largo. El precio no va a subir más.',
-];
+const NOTAS_VENTA = {
+  neutras: [
+    'Mete la mitad de los goles del equipo.',
+    'La oferta llega de afuera y paga en dólares.',
+    'Tiene cláusula y la van a pagar completa.',
+    'Pidió salir. Si se queda, juega de mala gana.',
+    'El club necesita la plata más que al jugador.',
+    'Renueva o se va libre en seis meses. Definí ahora.',
+    'La hinchada se va a enojar, pero el número cierra.',
+    'Lo quiere un rival directo. Eso pesa.',
+    'Es la venta que salva el balance del año.',
+    'Rinde hace un año largo. El precio no va a subir más.',
+  ],
+  joven: [
+    'Salió de la pensión. La tribuna canta su nombre.',
+    'Es hijo del club. Nadie lo vio llegar de otro lado.',
+    'Todavía no debutó en la selección, pero lo van a llamar.',
+  ],
+  veterano: [
+    'Lleva la cinta desde hace cuatro años.',
+    'Le queda una buena temporada, tal vez dos.',
+    'Es ídolo. Venderlo tiene un costo que no está en el balance.',
+  ],
+} as const;
 
 const NOTAS_PRESTAMO = [
   'Viene a sumar minutos. Si explota, después se habla la compra.',
@@ -242,6 +252,10 @@ export function generateOffers(
     const deltaVenta = rand.int(7, 13);
     const edad = rand.int(venta.edad[0], venta.edad[1]);
     const primaJuventud = edad < 22 ? 1.25 : edad < 28 ? 1 : 0.75;
+    const notasVenta =
+      venta.perfil === 'consagrado'
+        ? NOTAS_VENTA.neutras
+        : [...NOTAS_VENTA.neutras, ...NOTAS_VENTA[venta.perfil]];
     offers.push({
       kind: 'venta',
       name: nombreDe(indice++, apellidosUsados),
@@ -250,7 +264,7 @@ export function generateOffers(
       plantelDelta: -deltaVenta,
       cost: -round1(deltaVenta * rand.float(1, 1.6) * primaJuventud * scale),
       hinchadaDelta: -rand.int(9, 16),
-      note: notaPorSemilla(NOTAS_VENTA, seed, season, `venta-${i}`),
+      note: notaPorSemilla(notasVenta, seed, season, `venta-${i}`),
       risk: 0,
     });
   }
