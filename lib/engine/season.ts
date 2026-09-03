@@ -1,5 +1,5 @@
 import { RIVALES, RIVALES_CONTINENTALES } from '@/content/rivales';
-import { Rand } from './rng';
+import { Rand, seedFromString } from './rng';
 import type {
   BigMatch,
   Club,
@@ -250,8 +250,14 @@ export function buildSeasonResult(
       relegated,
       esperada,
       state.resources.hinchada,
+      state.seed,
+      state.season,
     ),
   };
+}
+
+export function varianteEstable(variantes: readonly string[], seed: number, clave: string): string {
+  return variantes[seedFromString(`${seed}:${clave}`) % variantes.length];
 }
 
 function buildSummary(
@@ -263,19 +269,111 @@ function buildSummary(
   relegated: boolean,
   esperada: number,
   hinchada: number,
+  seed: number,
+  season: number,
 ): string {
-  if (champion) return `${club.name} dio la vuelta. La ciudad es una fiesta.`;
-  if (promoted) return `${club.name} asciende. Once años de espera se terminaron en una tarde.`;
-  if (relegated) return `${club.name} se fue al descenso. El silencio en el estadio fue peor que los insultos.`;
+  const clave = `summary:${season}:${position}`;
+
+  if (champion) {
+    return varianteEstable(
+      [
+        `${club.name} dio la vuelta. La ciudad es una fiesta.`,
+        `${club.name} salió campeón. El barrio festejó hasta que se hizo de día.`,
+        `${club.name} campeón. En el club no se hablaba de otra cosa hacía semanas.`,
+      ],
+      seed,
+      clave,
+    );
+  }
+  if (promoted) {
+    return varianteEstable(
+      [
+        `${club.name} asciende. Once años de espera se terminaron en una tarde.`,
+        `${club.name} asciende. La categoría de arriba lo esperaba desde hacía rato.`,
+        `${club.name} se metió en el ascenso. La platea se quedó cantando media hora después del final.`,
+      ],
+      seed,
+      clave,
+    );
+  }
+  if (relegated) {
+    return varianteEstable(
+      [
+        `${club.name} se fue al descenso. El silencio en el estadio fue peor que los insultos.`,
+        `${club.name} se fue al descenso. La gente dejó la cancha sin cantar y sin putear.`,
+        `${club.name} bajó de categoría. En el vestuario no se escuchaba una palabra.`,
+      ],
+      seed,
+      clave,
+    );
+  }
 
   const diff = esperada - position;
 
-  if (diff >= 5) return `${club.name} terminó ${position}° y superó lo que se esperaba de este plantel. La gente se ilusiona.`;
-  if (diff >= 1) return `Temporada correcta: ${position}° de ${teams}. Cumplió con lo que se esperaba, ni más ni menos.`;
-  if (diff >= -4) return `${position}° de ${teams}. Ni fiesta ni tragedia.`;
-  if (hinchada >= 60) return `${position}° de ${teams}, bastante por debajo de lo que se esperaba. La hinchada no festeja, pero tampoco te suelta la mano.`;
-  if (hinchada >= 40) return `${position}° de ${teams}. La gente no putea todavía, pero la paciencia se está por terminar.`;
-  return `${position}° de ${teams}. La platea empezó a pedir tu renuncia antes de la última fecha.`;
+  if (diff >= 5) {
+    return varianteEstable(
+      [
+        `${club.name} terminó ${position}° y superó lo que se esperaba de este plantel. La gente se ilusiona.`,
+        `${club.name} cerró ${position}° y quedó bastante por encima de lo que daba el plantel. En la calle hay expectativa.`,
+        `${club.name} terminó ${position}°, mejor de lo que se pronosticaba para este plantel. La gente se entusiasma.`,
+      ],
+      seed,
+      clave,
+    );
+  }
+  if (diff >= 1) {
+    return varianteEstable(
+      [
+        `Temporada correcta: ${position}° de ${teams}. Cumplió con lo que se esperaba, ni más ni menos.`,
+        `${position}° de ${teams}. Terminó donde se esperaba, sin sobresaltos.`,
+        `Temporada sin nada para reprochar: ${position}° de ${teams}, justo lo que marcaba el plantel.`,
+      ],
+      seed,
+      clave,
+    );
+  }
+  if (diff >= -4) {
+    return varianteEstable(
+      [
+        `${position}° de ${teams}. Ni fiesta ni tragedia.`,
+        `${position}° de ${teams}. Alrededor de lo que se esperaba, sin fiesta y sin drama.`,
+        `${position}° de ${teams}. No alcanzó para ilusionarse ni para asustarse.`,
+      ],
+      seed,
+      clave,
+    );
+  }
+  if (hinchada >= 60) {
+    return varianteEstable(
+      [
+        `${position}° de ${teams}, bastante por debajo de lo que se esperaba. La hinchada no festeja, pero tampoco te suelta la mano.`,
+        `${position}° de ${teams}, bastante por debajo de lo que se esperaba. La gente está caliente, pero todavía te banca.`,
+        `${position}° de ${teams}, lejos de lo que se esperaba. Hay bronca en la tribuna, pero la gente todavía te banca.`,
+      ],
+      seed,
+      clave,
+    );
+  }
+  if (hinchada >= 40) {
+    return varianteEstable(
+      [
+        `${position}° de ${teams}. La gente no putea todavía, pero la paciencia se está por terminar.`,
+        `${position}° de ${teams}. Todavía no te silban, pero el clima está espeso.`,
+        `${position}° de ${teams}. La gente aguanta, aunque cada vez con menos ganas.`,
+      ],
+      seed,
+      clave,
+    );
+  }
+  return varianteEstable(
+    [
+      `${position}° de ${teams}. La platea empezó a pedir tu renuncia antes de la última fecha.`,
+      `${position}° de ${teams}. En la tribuna ya se cantaba abiertamente en tu contra.`,
+      `${position}° de ${teams}. Los últimos partidos los jugaste con la gente pidiendo elecciones.`,
+    ],
+    seed,
+    clave,
+  );
 }
 
 export interface Economy {
