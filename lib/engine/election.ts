@@ -1,4 +1,5 @@
 import { Rand } from './rng';
+import { varianteEstable } from './season';
 import type { Club, ElectionResult, Ending, EndingId, GameState, Modo } from './types';
 import {
   HINCHADA_ASAMBLEA,
@@ -19,7 +20,7 @@ const OPOSITORES = [
 export const DEUDA_QUIEBRA = -40;
 
 export function resolveElection(state: GameState, rand: Rand): ElectionResult {
-  const { resources, titles, season } = state;
+  const { resources, titles, season, seed } = state;
   const mandateStart = season - 4;
   const titlesThisMandate = titles.filter((t) => t.season > mandateStart).length;
 
@@ -41,28 +42,84 @@ export function resolveElection(state: GameState, rand: Rand): ElectionResult {
     won,
     votes,
     rival,
-    summary: resumenElectoral(won, votes, rival),
+    summary: resumenElectoral(won, votes, rival, seed, season),
   };
 }
 
-function resumenElectoral(won: boolean, votes: number, rival: string): string {
+function resumenElectoral(
+  won: boolean,
+  votes: number,
+  rival: string,
+  seed: number,
+  season: number,
+): string {
+  const clave = `eleccion:${season}:${votes}`;
+
   if (won) {
     if (votes >= 75) {
-      return `Ganaste con el ${votes}% de los votos, una diferencia que no dejó margen para el reclamo. ${capitalize(rival)} ni pidió el recuento.`;
+      return varianteEstable(
+        [
+          `Ganaste con el ${votes}% de los votos, una diferencia que no dejó margen para el reclamo. ${capitalize(rival)} ni pidió el recuento.`,
+          `Ganaste con el ${votes}% de los votos. ${capitalize(rival)} felicitó de mala gana y se fue temprano de la sede.`,
+          `Ganaste con el ${votes}% de los votos y no hubo nada para discutir. ${capitalize(rival)} no llegó ni a hablar con la prensa.`,
+        ],
+        seed,
+        clave,
+      );
     }
     if (votes >= 60) {
-      return `Ganaste con el ${votes}% de los votos. ${capitalize(rival)} pidió recuento y perdió también eso.`;
+      return varianteEstable(
+        [
+          `Ganaste con el ${votes}% de los votos. ${capitalize(rival)} pidió recuento y perdió también eso.`,
+          `Ganaste con el ${votes}% de los votos, una diferencia cómoda. ${capitalize(rival)} habló de fraude sin mostrar una sola prueba.`,
+          `Te quedaste con la elección por el ${votes}% de los votos. ${capitalize(rival)} pidió el recuento igual, para la tribuna.`,
+        ],
+        seed,
+        clave,
+      );
     }
-    return `Ganaste raspando, con el ${votes}% de los votos. ${capitalize(rival)} impugnó todo lo que pudo impugnar.`;
+    return varianteEstable(
+      [
+        `Ganaste raspando, con el ${votes}% de los votos. ${capitalize(rival)} impugnó todo lo que pudo impugnar.`,
+        `Ganaste por poco, con el ${votes}% de los votos. ${capitalize(rival)} no reconoció la derrota esa noche.`,
+        `Zafaste con el ${votes}% de los votos. ${capitalize(rival)} presentó una impugnación atrás de otra.`,
+      ],
+      seed,
+      clave,
+    );
   }
 
   if (votes <= 25) {
-    return `Perdiste feo. Sacaste el ${votes}% y ${rival} se queda con el club sin discusión posible.`;
+    return varianteEstable(
+      [
+        `Perdiste feo. Sacaste el ${votes}% y ${rival} se queda con el club sin discusión posible.`,
+        `Perdiste sin atenuantes. Sacaste el ${votes}% y ${rival} se queda con el club.`,
+        `Te pasaron por arriba. El ${votes}% no le alcanza a nadie y ${rival} agarra el club.`,
+      ],
+      seed,
+      clave,
+    );
   }
   if (votes <= 40) {
-    return `Perdiste. Sacaste el ${votes}% y ${rival} se queda con el club.`;
+    return varianteEstable(
+      [
+        `Perdiste. Sacaste el ${votes}% y ${rival} se queda con el club.`,
+        `Perdiste la elección. El ${votes}% te dejó afuera y ${rival} se queda con el club.`,
+        `No te alcanzó. Sacaste el ${votes}% y ${rival} pasa a manejar el club.`,
+      ],
+      seed,
+      clave,
+    );
   }
-  return `Perdiste por un puñado de votos: el ${votes}% contra ${rival}. Una asamblea distinta y esto termina distinto.`;
+  return varianteEstable(
+    [
+      `Perdiste por un puñado de votos: el ${votes}% contra ${rival}. Una asamblea distinta y esto termina distinto.`,
+      `Perdiste por muy poco: el ${votes}% contra ${rival}. Se definió por un par de sobres.`,
+      `Te quedaste a un paso: el ${votes}% contra ${rival}. Cualquier detalle cambiaba el resultado.`,
+    ],
+    seed,
+    clave,
+  );
 }
 
 export function isElectionSeason(season: number, modo: Modo = 'normal'): boolean {
