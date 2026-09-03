@@ -65,10 +65,7 @@ export function Hud({
           {inhibido && <span className="ml-2 text-alerta">· inhibido</span>}
         </p>
 
-        <div
-          className="mt-2 grid gap-1 divide-x divide-corondel border-t border-corondel px-2 py-2 sm:px-3"
-          style={{ gridTemplateColumns: 'minmax(76px, 1.1fr) 1fr 0.8fr 0.89fr 1.11fr' }}
-        >
+        <div className="mt-2 grid grid-cols-3 gap-1 border-t border-corondel px-2 py-2 divide-corondel min-[360px]:grid-cols-5 min-[360px]:divide-x sm:px-3">
           <Cifra
             label="Caja"
             valor={plataCorta(resources.caja)}
