@@ -1,4 +1,5 @@
 import { CLUBS } from '../content/clubs';
+import { ajustarBalance } from '../lib/engine/balance';
 import { computeScore } from '../lib/engine/election';
 import { applyChoice, optionCount, startRun } from '../lib/engine/engine';
 import { enumerateAssignments, winProbability } from '../lib/engine/mesa-chica';
@@ -19,6 +20,30 @@ for (const m of modos) {
     console.error(`Modo desconocido: "${m}". Son ${MODOS.join(', ')} o "todos".`);
     process.exit(1);
   }
+}
+
+const overrides = process.argv
+  .filter((a) => a.startsWith('--set='))
+  .map((a) => a.slice(6))
+  .reduce<Record<string, number>>((acc, par) => {
+    const i = par.indexOf('=');
+    if (i < 0) {
+      console.error(`--set espera clave=valor, no "${par}"`);
+      process.exit(1);
+    }
+    acc[par.slice(0, i)] = Number(par.slice(i + 1));
+    return acc;
+  }, {});
+if (Object.keys(overrides).length > 0) {
+  try {
+    ajustarBalance(overrides);
+  } catch (e) {
+    console.error(String(e instanceof Error ? e.message : e));
+    process.exit(1);
+  }
+  console.log(
+    `Balance ajustado: ${Object.entries(overrides).map(([k, v]) => `${k}=${v}`).join('  ')}`,
+  );
 }
 
 type Policy = 'random' | 'greedy';

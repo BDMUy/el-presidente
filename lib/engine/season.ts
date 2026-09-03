@@ -1,4 +1,5 @@
 import { RIVALES, RIVALES_CONTINENTALES } from '@/content/rivales';
+import { BALANCE } from './balance';
 import { Rand, seedFromString } from './rng';
 import type {
   BigMatch,
@@ -23,10 +24,6 @@ const LEAGUE_AVERAGE: Record<LeagueId, number> = {
   've-primera': 50, 've-segunda': 28,
   'br-primera': 55, 'br-segunda': 30,
 };
-
-const LEAGUE_SPREAD = 7;
-
-const SEASON_NOISE = 11;
 
 const TV_MONEY: Record<LeagueId, number> = {
   'ar-primera': 3.5, 'ar-nacional': 1, 'ar-b': 0.35,
@@ -66,8 +63,6 @@ const PRIZE_MAX: Record<LeagueId, number> = {
   've-primera': 1.73, 've-segunda': 0.4,
   'br-primera': 4.4, 'br-segunda': 0.6,
 };
-
-const SOCIO_INCOME = 0.045;
 
 const TITLE_INCOME: Partial<Record<TitleId, number>> = {
   'ar-liga-primera': 6,
@@ -136,7 +131,7 @@ export function plantelForPosition(position: number, league: LeagueId): number {
   const { teams } = LEAGUES[league];
   const p = 1 - (position - 1) / (teams - 1);
   const clamped = Math.min(0.985, Math.max(0.015, p));
-  return LEAGUE_AVERAGE[league] + LEAGUE_SPREAD * Math.log(clamped / (1 - clamped));
+  return LEAGUE_AVERAGE[league] + BALANCE.dispersionLiga * Math.log(clamped / (1 - clamped));
 }
 
 export function resolvePosition(
@@ -147,10 +142,10 @@ export function resolvePosition(
   const { teams } = LEAGUES[league];
   const perf =
     resources.plantel +
-    rand.normal() * SEASON_NOISE +
+    rand.normal() * BALANCE.ruidoTemporada +
     (resources.hinchada - 50) * 0.06;
 
-  const p = 1 / (1 + Math.exp(-(perf - LEAGUE_AVERAGE[league]) / LEAGUE_SPREAD));
+  const p = 1 / (1 + Math.exp(-(perf - LEAGUE_AVERAGE[league]) / BALANCE.dispersionLiga));
   return Math.min(teams, Math.max(1, 1 + Math.round((1 - p) * (teams - 1))));
 }
 
@@ -391,7 +386,7 @@ export function resolveEconomy(
   const rules = LEAGUES[league];
   const detalle: { label: string; amount: number }[] = [];
 
-  const socios = resources.socios * SOCIO_INCOME;
+  const socios = resources.socios * BALANCE.ingresoPorSocio;
   detalle.push({ label: 'Cuotas de socios', amount: socios });
 
   const tv = TV_MONEY[league];
@@ -452,11 +447,13 @@ export function resolveMood(
 }
 
 export function plantelDecay(league: LeagueId): number {
-  return LEAGUES[league].tier === 1 ? -9 : -7.25;
+  return LEAGUES[league].tier === 1
+    ? BALANCE.decaimientoPlantelTier1
+    : BALANCE.decaimientoPlantelTier2;
 }
 
 export function desgasteDelCargo(mandate: number): number {
-  return -(mandate * 0.8);
+  return -(mandate * BALANCE.desgasteCargoCoef);
 }
 
 export function titlePoints(id: TitleId): number {

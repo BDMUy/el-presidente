@@ -4,14 +4,9 @@ import { CLUBS, getClub } from '@/content/clubs';
 import { ALL_EVENTS, findDuplicateIds } from '@/content/events';
 import { APELLIDOS, NOMBRES } from '@/content/nombres';
 import { CRACKS } from '@/content/parodias';
+import { BALANCE } from './balance';
 import { applyEffects, applyResources, estaInhibido, meetsCondition } from './effects';
-import {
-  checkEarlyExit,
-  computeScore,
-  DEUDA_QUIEBRA,
-  puntajePorTemporadas,
-  resolveElection,
-} from './election';
+import { checkEarlyExit, computeScore, puntajePorTemporadas, resolveElection } from './election';
 import { applyChoice, initialResources, optionCount, replayRun, startRun, terminarRun } from './engine';
 import { assignmentIndex, enumerateAssignments, resolveMesaChica, winProbability } from './mesa-chica';
 import { generateOffers } from './mercado';
@@ -469,7 +464,7 @@ describe('finales', () => {
 
   it('la quiebra se dispara con la deuda descontrolada', () => {
     const state = startRun({ seed: 1, clubId: 'boca' });
-    const fundido = { ...state, resources: { ...state.resources, caja: DEUDA_QUIEBRA - 1 } };
+    const fundido = { ...state, resources: { ...state.resources, caja: BALANCE.deudaQuiebra - 1 } };
     expect(checkEarlyExit(fundido)).toBe('quiebra');
   });
 
