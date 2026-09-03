@@ -17,6 +17,8 @@ const newsreader = Newsreader({
 
 const SCRIPT_TEMA = `try{var t=localStorage.getItem('el-presidente:tema');if(!t){t=matchMedia('(prefers-color-scheme: light)').matches?'claro':'oscuro'}if(t==='claro'){document.documentElement.setAttribute('data-tema','claro')}}catch(e){}`;
 
+const SCRIPT_TEXTO = `try{var x=localStorage.getItem('el-presidente:texto');if(x==='grande'||x==='chico'){document.documentElement.setAttribute('data-texto',x)}}catch(e){}`;
+
 function baseDelSitio(): URL {
   const configurada = process.env.SITE_URL ?? process.env.URL;
   try {
@@ -50,6 +52,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: SCRIPT_TEMA }} />
+        <script dangerouslySetInnerHTML={{ __html: SCRIPT_TEXTO }} />
       </head>
       <body className="flex min-h-full flex-col">
         <a

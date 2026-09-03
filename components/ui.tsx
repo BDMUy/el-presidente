@@ -85,7 +85,7 @@ export function Bajada({
   className?: string;
 }) {
   return (
-    <p className={`max-w-[46ch] font-cuerpo text-[19px] leading-snug text-tinta-2 italic ${className}`}>
+    <p className={`max-w-[46ch] font-cuerpo text-[1.1875rem] leading-snug text-tinta-2 italic ${className}`}>
       {children}
     </p>
   );
@@ -99,7 +99,7 @@ export function Cuerpo({
   className?: string;
 }) {
   return (
-    <p className={`max-w-[66ch] font-cuerpo text-[17px] leading-relaxed text-tinta ${className}`}>
+    <p className={`max-w-[66ch] font-cuerpo text-[1.0625rem] leading-relaxed text-tinta ${className}`}>
       {children}
     </p>
   );
@@ -157,7 +157,7 @@ export function Renglon({
       }`}
     >
       <span
-        className={`flex items-baseline gap-2 font-titular text-[16px] leading-tight font-bold ${
+        className={`flex items-baseline gap-2 font-titular text-[1rem] leading-tight font-bold ${
           seleccionado ? 'text-fondo' : 'text-tinta'
         }`}
       >
@@ -173,7 +173,7 @@ export function Renglon({
         )}
       </span>
       <span
-        className={`mt-1 block font-cuerpo text-[14px] leading-snug ${
+        className={`mt-1 block font-cuerpo text-[0.875rem] leading-snug ${
           seleccionado ? 'text-fondo/80' : 'text-tinta-2'
         }`}
       >
