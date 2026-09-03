@@ -57,16 +57,16 @@ export function initialResources(club: Club): Resources {
 const DEUDA_EN_LLAMAS = -22;
 
 const BONUS_PLANTEL_LLAMAS: Record<LeagueId, number> = {
-  'ar-primera': 19, 'ar-nacional': 19, 'ar-b': 19,
-  'uy-primera': 14, 'uy-segunda': 19,
-  'pe-primera': 17, 'pe-segunda': 19,
-  'co-primera': 13, 'co-segunda': 19,
-  'cl-primera': 14, 'cl-segunda': 19,
-  'py-primera': 13, 'py-segunda': 19,
-  'bo-primera': 14, 'bo-segunda': 19,
-  'ec-primera': 13, 'ec-segunda': 19,
-  've-primera': 13, 've-segunda': 19,
-  'br-primera': 3, 'br-segunda': 19,
+  'ar-primera': 20, 'ar-nacional': 20, 'ar-b': 20,
+  'uy-primera': 15, 'uy-segunda': 20,
+  'pe-primera': 18, 'pe-segunda': 20,
+  'co-primera': 14, 'co-segunda': 20,
+  'cl-primera': 15, 'cl-segunda': 20,
+  'py-primera': 14, 'py-segunda': 20,
+  'bo-primera': 15, 'bo-segunda': 20,
+  'ec-primera': 14, 'ec-segunda': 20,
+  've-primera': 14, 've-segunda': 20,
+  'br-primera': 4, 'br-segunda': 20,
 };
 
 function recibirElClubEnLlamas(club: Club): Resources {
@@ -106,6 +106,7 @@ export function startRun({ seed, clubId, modo = 'normal' }: StartOptions): GameS
     pending: [],
     usedEvents: [],
     eventsThisSeason: 0,
+    bolsaEventos: [],
     phase: { kind: 'mercado', offers: [], inhibido: false, restantes: 0 },
     status: 'jugando',
     ending: null,
@@ -225,6 +226,7 @@ function openMercado(state: GameState): GameState {
     return {
       ...maturePending(state),
       eventsThisSeason: 0,
+      bolsaEventos: [],
       phase: { kind: 'mercado', offers, inhibido, restantes: MOVIMIENTOS_POR_VENTANA },
     };
   });
@@ -329,6 +331,21 @@ function rotacionPorSemilla(seed: number, id: string): number {
   return 0.25 + ((seedFromString(`${seed}:${id}`) % 1000) / 1000) * 1.75;
 }
 
+function pesoDeEvento(seed: number, e: GameEvent): number {
+  return (e.weight ?? 1) * rotacionPorSemilla(seed, e.id);
+}
+
+function muestrearBolsa(pool: GameEvent[], seed: number, rand: Rand): string[] {
+  const restante = pool.slice();
+  const salida: string[] = [];
+  for (let i = 0; i < EVENTS_PER_SEASON && restante.length > 0; i++) {
+    const elegido = rand.weighted(restante, (e) => pesoDeEvento(seed, e));
+    salida.push(elegido.id);
+    restante.splice(restante.indexOf(elegido), 1);
+  }
+  return salida;
+}
+
 function openEvento(state: GameState): GameState {
   const club = getClub(state.clubId);
 
@@ -341,7 +358,16 @@ function openEvento(state: GameState): GameState {
   }
 
   return conAzar(state, (rand) => {
-    const event = rand.weighted(pool, (e) => (e.weight ?? 1) * rotacionPorSemilla(state.seed, e.id));
+    const bolsa =
+      state.eventsThisSeason === 0 ? muestrearBolsa(pool, state.seed, rand) : state.bolsaEventos;
+
+    const idBolsa = bolsa[state.eventsThisSeason];
+    const deLaBolsa =
+      idBolsa && !state.usedEvents.includes(idBolsa)
+        ? pool.find((e) => e.id === idBolsa)
+        : undefined;
+    const event = deLaBolsa ?? rand.weighted(pool, (e) => pesoDeEvento(state.seed, e));
+
     const available = event.options
       .map((option, index) => ({ option, index }))
       .filter(({ option }) => meetsCondition(option.requires, state, club.size))
@@ -349,6 +375,7 @@ function openEvento(state: GameState): GameState {
 
     return {
       ...state,
+      bolsaEventos: bolsa,
       usedEvents: [...state.usedEvents, event.id],
       eventsThisSeason: state.eventsThisSeason + 1,
       phase: { kind: 'evento', event, available },

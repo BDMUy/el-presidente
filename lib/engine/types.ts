@@ -470,6 +470,7 @@ export interface GameState {
   pending: PendingEffect[];
   usedEvents: string[];
   eventsThisSeason: number;
+  bolsaEventos: string[];
   phase: Phase;
   status: RunStatus;
   ending: Ending | null;
