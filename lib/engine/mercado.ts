@@ -1,12 +1,9 @@
 import { CRACKS } from '@/content/parodias';
 import { APELLIDOS, NOMBRES } from '@/content/nombres';
+import { BALANCE } from './balance';
 import { Rand, seedFromString } from './rng';
 import type { Country, LeagueId, PlayerOffer } from './types';
 import { countryOf } from './types';
-
-const CHANCE_CRACK = 0.35;
-
-const CHANCE_MOVIMIENTO_EXTRA = 0.5;
 
 const ARQUETIPOS_COMPRA = [
   '9 de área',
@@ -209,7 +206,7 @@ export function generateOffers(
   const apellidosUsados = new Set<string>();
 
   const cracks = CRACKS[country];
-  const hayCrack = rand.chance(CHANCE_CRACK);
+  const hayCrack = rand.chance(BALANCE.chanceCrack);
   const slotCrack = rand.int(0, 5);
   const crack = cracks[(seed + season) % cracks.length];
   const nombreDe = (indice: number, usados: Set<string>): string =>
@@ -269,7 +266,7 @@ export function generateOffers(
     });
   }
 
-  if (rand.chance(CHANCE_MOVIMIENTO_EXTRA)) {
+  if (rand.chance(BALANCE.chanceMovimientoExtra)) {
     if (rand.chance(0.5)) {
       const prestamo = rand.pick(ARQUETIPOS_PRESTAMO);
       const deltaPrestamo = rand.int(4, 8);

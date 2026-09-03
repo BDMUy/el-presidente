@@ -1,3 +1,4 @@
+import { BALANCE } from './balance';
 import { Rand } from './rng';
 import { varianteEstable } from './season';
 import type { Club, ElectionResult, Ending, EndingId, GameState, Modo } from './types';
@@ -16,8 +17,6 @@ const OPOSITORES = [
   'la lista que arma el ex tesorero',
   'la agrupación de socios vitalicios',
 ];
-
-export const DEUDA_QUIEBRA = -40;
 
 export function resolveElection(state: GameState, rand: Rand): ElectionResult {
   const { resources, titles, season, seed } = state;
@@ -127,21 +126,14 @@ export function isElectionSeason(season: number, modo: Modo = 'normal'): boolean
 }
 
 export function checkEarlyExit(state: GameState): EndingId | null {
-  if (state.resources.caja <= DEUDA_QUIEBRA) return 'quiebra';
+  if (state.resources.caja <= BALANCE.deudaQuiebra) return 'quiebra';
   if (state.resources.hinchada <= HINCHADA_ASAMBLEA) return 'asamblea';
   if (state.descensos >= 3) return 'descenso-fatal';
   return null;
 }
 
-const PUNTOS_ESTATUA: Record<Modo, number> = {
-  corta: 200,
-  normal: 200,
-  larga: 400,
-  llamas: 200,
-};
-
 export function puntosParaEstatua(modo: Modo): number {
-  return PUNTOS_ESTATUA[modo];
+  return modo === 'larga' ? BALANCE.puntosEstatuaLarga : BALANCE.puntosEstatuaBase;
 }
 
 function prontuarioTolerado(modo: Modo): number {
@@ -286,10 +278,8 @@ export function buildEnding(id: EndingId, state: GameState, club: Club): Ending 
   return { ...base, text: `${base.text} ${matiz(state, club)}` };
 }
 
-const PUNTOS_POR_TEMPORADA = 18;
-
 export function puntajePorTemporadas(state: GameState): number {
-  return state.season * PUNTOS_POR_TEMPORADA;
+  return state.season * BALANCE.puntosPorTemporada;
 }
 
 export function computeScore(state: GameState): number {
@@ -298,11 +288,11 @@ export function computeScore(state: GameState): number {
   const score =
     puntosTitulos +
     puntajePorTemporadas(state) +
-    state.resources.hinchada * 4 +
-    Math.max(0, state.resources.caja) * 3 +
-    state.resources.socios * 1.2 +
-    state.ascensos * 60 -
-    state.descensos * 140;
+    state.resources.hinchada * BALANCE.puntajeHinchada +
+    Math.max(0, state.resources.caja) * BALANCE.puntajeCaja +
+    state.resources.socios * BALANCE.puntajeSocios +
+    state.ascensos * BALANCE.puntajeAscenso -
+    state.descensos * BALANCE.puntajeDescenso;
 
   return Math.max(0, Math.round(score));
 }

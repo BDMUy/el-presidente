@@ -1,5 +1,6 @@
 import { getClub } from '@/content/clubs';
 import { ALL_EVENTS } from '@/content/events';
+import { BALANCE } from './balance';
 import { applyEffects, estaInhibido, maturePending, meetsCondition } from './effects';
 import {
   buildEnding,
@@ -54,8 +55,6 @@ export function initialResources(club: Club): Resources {
   };
 }
 
-const DEUDA_EN_LLAMAS = -22;
-
 const BONUS_PLANTEL_LLAMAS: Record<LeagueId, number> = {
   'ar-primera': 20, 'ar-nacional': 20, 'ar-b': 20,
   'uy-primera': 15, 'uy-segunda': 20,
@@ -73,7 +72,7 @@ function recibirElClubEnLlamas(club: Club): Resources {
   const base = initialResources(club);
   return {
     ...base,
-    caja: DEUDA_EN_LLAMAS,
+    caja: BALANCE.deudaEnLlamas,
     plantel: base.plantel + BONUS_PLANTEL_LLAMAS[club.league],
     hinchada: 40,
   };

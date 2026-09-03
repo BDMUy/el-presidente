@@ -170,6 +170,12 @@ and the "en llamas" starting bonus (`BONUS_PLANTEL_LLAMAS` in
 bigger content pool both raise it, since `greedy` gets more chances per season to
 find a good option, and needs recalibrating there after either kind of change.
 
+The global tuning scalars live in `lib/engine/balance.ts` (`BALANCE`). `simulate`
+sweeps them without an edit: `npm run simulate 3000 --set=desgasteCargoCoef=1.2
+--set=ruidoTemporada=14`. The engine reads `BALANCE` by reference and its defaults
+are part of the determinism of `(seed, club, modo, choices)` — only `scripts/` may
+call `ajustarBalance`; a real run, a server replay or a test never mutates it.
+
 ## Interface
 
 Mobile first, and 375px is the real target, not an edge case. Interactive
