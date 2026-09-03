@@ -36,15 +36,21 @@ export function Juego() {
   const principalRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
+    if (cima === 'juego') return;
     const main = principalRef.current;
     if (!main) return;
+    const volver = main.querySelector<HTMLElement>('[data-volver]');
+    if (volver) {
+      volver.focus({ preventScroll: true });
+      return;
+    }
     const heading = main.querySelector('h1');
     if (heading) {
       heading.tabIndex = -1;
       heading.style.outline = 'none';
     }
     (heading ?? main).focus({ preventScroll: true });
-  }, [cima, resumen?.acta, resumen?.choices]);
+  }, [cima]);
 
   useEffect(() => {
     if (leer()) setInicio({ tipo: 'guardada' });

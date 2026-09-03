@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { getClub } from '@/content/clubs';
 import { applyChoice, replayRun, startRun } from '@/lib/engine/engine';
@@ -54,6 +54,7 @@ export function JuegoEnCurso({
 }) {
   const [partida, setPartida] = useState<Partida | null>(null);
   const [mostrarActa, setMostrarActa] = useState(false);
+  const faseRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (inicio.tipo === 'nueva') {
@@ -118,6 +119,26 @@ export function JuegoEnCurso({
     alTope();
   }, []);
 
+  useEffect(() => {
+    if (!activo || !partida) return;
+    const cont = faseRef.current;
+    if (!cont) return;
+    const kind = mostrarActa ? 'acta' : partida.state.phase.kind;
+    const acuse =
+      kind === 'acta' ||
+      kind === 'resultado-evento' ||
+      kind === 'temporada' ||
+      kind === 'eleccion' ||
+      kind === 'resultado-final' ||
+      kind === 'fin';
+    const objetivo = acuse
+      ? cont.querySelector<HTMLElement>('[data-continuar]')
+      : (cont.querySelector<HTMLElement>('[data-foco-fase]') ??
+        cont.querySelector<HTMLElement>('[role="radio"][tabindex="0"]') ??
+        cont.querySelector<HTMLElement>('button:not([disabled])'));
+    objetivo?.focus({ preventScroll: true });
+  }, [activo, partida, mostrarActa]);
+
   if (!activo || !partida) return null;
 
   const { state, diaria } = partida;
@@ -137,7 +158,10 @@ export function JuegoEnCurso({
         onAjustes={onAjustes}
       />
 
-      <div className="mx-auto w-full max-w-xl flex-1 px-4 py-6 pl-[max(1rem,var(--sae-left))] pr-[max(1rem,var(--sae-right))]">
+      <div
+        ref={faseRef}
+        className="mx-auto w-full max-w-xl flex-1 px-4 py-6 pl-[max(1rem,var(--sae-left))] pr-[max(1rem,var(--sae-right))]"
+      >
         {mostrarActa ? (
           <ActaAsuncion
             club={club}

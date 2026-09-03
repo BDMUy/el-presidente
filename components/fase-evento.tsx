@@ -7,6 +7,7 @@ import { EVENT_KIND_LABEL } from '@/lib/engine/types';
 import { plataConSigno } from '@/lib/format';
 import { impactoDeOpcion } from '@/lib/impacto';
 import { useTintaClub } from '@/lib/tema';
+import { GrupoOpciones } from './grupo-opciones';
 import {
   BarraDecision,
   Continuar,
@@ -43,6 +44,9 @@ export function FaseEvento({
   const tintaClub = useTintaClub(club);
   const [elegida, setElegida] = useState<number | null>(null);
   const opcion = elegida === null ? null : event.options[available[elegida]];
+  const confirmar = () => {
+    if (elegida !== null) onElegir(elegida);
+  };
 
   return (
     <div style={{ '--club': tintaClub } as CSSProperties}>
@@ -68,7 +72,11 @@ export function FaseEvento({
           </div>
           <div className="pt-4">
             <Volanta>La decisión</Volanta>
-            <div className="mt-2 border-t border-corondel">
+            <GrupoOpciones
+              etiqueta="La decisión"
+              onConfirmar={confirmar}
+              className="mt-2 border-t border-corondel"
+            >
               {available.map((optionIndex, displayIndex) => {
                 const option = event.options[optionIndex];
                 return (
@@ -79,12 +87,13 @@ export function FaseEvento({
                     impacto={impactoDeOpcion(option)}
                     azaroso={Boolean(option.random)}
                     seleccionado={elegida === displayIndex}
+                    foco={elegida === null ? displayIndex === 0 : elegida === displayIndex}
                     onClick={() => setElegida(displayIndex)}
                     retraso={displayIndex * 40}
                   />
                 );
               })}
-            </div>
+            </GrupoOpciones>
           </div>
         </div>
       </Recuadro>
@@ -94,7 +103,7 @@ export function FaseEvento({
         detalle={opcion?.random ? 'El resultado se sortea' : undefined}
         accion="Firmar"
         habilitada={elegida !== null}
-        onConfirmar={() => elegida !== null && onElegir(elegida)}
+        onConfirmar={confirmar}
       />
     </div>
   );

@@ -132,6 +132,7 @@ export function Renglon({
   impacto,
   azaroso = false,
   seleccionado = false,
+  foco = false,
   onClick,
   disabled = false,
   retraso = 0,
@@ -141,6 +142,7 @@ export function Renglon({
   impacto?: Impacto[] | null;
   azaroso?: boolean;
   seleccionado?: boolean;
+  foco?: boolean;
   onClick: () => void;
   disabled?: boolean;
   retraso?: number;
@@ -149,8 +151,13 @@ export function Renglon({
     <button
       type="button"
       onClick={onClick}
+      onKeyDown={(evento) => {
+        if (evento.key === 'Enter') evento.preventDefault();
+      }}
       disabled={disabled}
-      aria-pressed={seleccionado}
+      role="radio"
+      aria-checked={seleccionado}
+      tabIndex={foco ? 0 : -1}
       style={{ animationDelay: `${retraso}ms` }}
       className={`entrar-nota w-full border-b border-corondel px-3 py-3 text-left transition-colors disabled:opacity-40 ${
         seleccionado ? 'bg-tinta' : 'hover:bg-fondo/60'
@@ -257,6 +264,7 @@ export function Continuar({
     <button
       type="button"
       onClick={onClick}
+      data-continuar
       className="mt-6 w-full bg-tinta py-4 font-titular text-[14px] font-black tracking-[0.12em] text-fondo uppercase transition-colors active:bg-tinta-2"
     >
       {children}
