@@ -1,7 +1,7 @@
 # El Presidente
 
-Un roguelike de navegador donde dirigís un club de fútbol argentino. Ganás la
-elección y tenés cuatro mandatos para que no te echen: manejás la caja, la
+Un roguelike de navegador donde dirigís un club de fútbol latinoamericano. Ganás
+la elección y tenés cuatro mandatos para que no te echen: manejás la caja, la
 hinchada, los socios, el plantel y la influencia. Los partidos no los jugás
 vos —armás el plantel y el plantel responde— y cada cuatro temporadas la gente
 vota.
@@ -33,7 +33,7 @@ que corra Next: no hay nada propio del proveedor en el código.
 | | |
 |---|---|
 | `npm run dev` | servidor de desarrollo |
-| `npm test` | 182 tests, sin DOM |
+| `npm test` | 186 tests, sin DOM |
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm run lint` | eslint |
 | `npm run build` | build de producción |
@@ -93,10 +93,10 @@ juegos distintos.
 
 | | Temporadas | Completan* |
 |---|---|---|
-| Corta | 8 | 78,8% |
-| Normal | 16 | 62,7% |
-| Larga | 32 | 46,8% |
-| En llamas | 16 | 15,8% |
+| Corta | 8 | 82,5% |
+| Normal | 16 | 64,0% |
+| Larga | 32 | 49,6% |
+| En llamas | 16 | 15,5% |
 
 <sub>* Medido con la política `greedy` de `npm run simulate`, que representa a
 alguien que lee las consecuencias antes de elegir.</sub>
@@ -139,6 +139,11 @@ con una línea editorial explícita en
 [`content/parodias.ts`](content/parodias.ts): el chiste es fonético y nunca
 insinúa un delito de una persona real. Las cartas de corrupción le pasan al
 club de la partida, que es de ficción.
+
+El nombre con el que firmás la presidencia, si no ponés uno, sale de una parodia
+de dirigente. `DIRIGENTES` está organizado por país como `CRACKS`, así que el
+sorteo —el botón "Al azar" y el dado del campo "Tu nombre"— te da un nombre del
+país del club que estás por dirigir.
 
 ---
 

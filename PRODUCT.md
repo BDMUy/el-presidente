@@ -8,19 +8,21 @@ web
 
 ## Users
 
-Primary players are Argentine football fans (hinchas) on a phone, arriving from a
-link a friend shares — a finished presidency posted to WhatsApp or a social feed.
-The Rioplatense Spanish, the 344 real clubs, and the phonetic parody names
-(*Bantiago Sernabéu*, *Mavier Jascherano*) are the point of the game, not a theme
-layered on top: the player is expected to recognise the clubs, the archetypes,
-and the jokes. A typical session is about ten minutes, single-sitting, often
-one-handed. Appeal to roguelike fans or non-Argentine football audiences is
-welcome but is not a design goal and never justifies diluting the local
-specificity.
+Primary players are football fans (hinchas) across the ten Latin American leagues
+the game ships — Argentina, Uruguay, Chile, Paraguay, Bolivia, Peru, Colombia,
+Ecuador, Venezuela, Brazil — on a phone, arriving from a link a friend shares: a
+finished presidency posted to WhatsApp or a social feed. The real clubs of their
+own country, the archetypes, and the phonetic parody names (*Bantiago Sernabéu*,
+*Mavier Jascherano*) are the point of the game, not a theme layered on top: the
+player is expected to recognise the clubs and the jokes. A typical session is
+about ten minutes, single-sitting, often one-handed. Roguelike fans are welcome
+but are not the design target. **Open goal:** player-facing copy is still
+uniformly Rioplatense (voseo); making the in-game text read as local to each
+country — Chilean, Colombian, and so on — is an intended direction, not yet done.
 
 ## Product Purpose
 
-El Presidente is a browser roguelike about running an Argentine football club.
+El Presidente is a browser roguelike about running a Latin American football club.
 You win the election and then have four terms before they throw you out, managing
 five fronts — the cash (caja), the crowd (hinchada), the members (socios), the
 squad (plantel), and political influence. You never play the matches: you
@@ -123,14 +125,18 @@ balance.
 
 - **Name:** El Presidente. Tagline in use: "dirigí tu club".
 - **Language:** all player-facing copy, UI text, and commit messages are in
-  Rioplatense Spanish (`lang="es-AR"`, voseo). This file and the code are in
-  English.
+  Rioplatense Spanish (`lang="es-AR"`, voseo) today; an open, unmet goal is for
+  the in-game text to read as local to each of the ten countries. This file and
+  the code are in English.
 - **Voice:** dry, factual, newspaper-like; understated even at dramatic moments.
   No hype, no exclamation-driven UI.
 - **Parody editorial line** (`content/parodias.ts`): clubs are real; all proper
   names are fictional phonetic puns. The joke is always phonetic and never
   implies a real crime by a real person. Corruption cards happen to the fictional
-  club of the run, never to a real individual.
+  club of the run, never to a real individual. Both name pools — `CRACKS` (the
+  players the market surfaces) and `DIRIGENTES` (the parody signature a player
+  gets if they leave the name blank) — are keyed by country, so a Uruguayan club
+  draws Uruguayan names.
 - **License:** AGPL-3.0-only. Copyright © 2026 Bruno Martínez. Anyone may run
   their own version; none may be a closed box. When public, the footer must link
   to the source (`NEXT_PUBLIC_SOURCE_URL`) per AGPL §13.
@@ -144,16 +150,17 @@ balance.
   configuration.
 - **Content:** 280 cards, 344 clubs, 36 titles, 18 achievements — written and in
   the repo.
-- **Balance data** (measured, `greedy` policy completion rates): Corta 81.7%,
-  Normal 63.7%, Larga 49.3%, En llamas 15.6%.
-- **Test suite:** 182 tests, no DOM, passing; typecheck, lint, and build green.
+- **Balance data** (measured, `greedy` policy completion rates,
+  `npm run simulate 3000 --modo=todos`, 2026-09-03): Corta 82.5%, Normal 64.0%,
+  Larga 49.6%, En llamas 15.5%.
+- **Test suite:** 186 tests, no DOM, passing; typecheck, lint, and build green.
 - **Docs:** `README.md`, `AGENTS.md`, `DESPLIEGUE.md` (Netlify deployment
   runbook), `.env.example`.
-- **Not yet real — must not be implied as done:** the ranking table is empty
-  (zero rows); the game has never been played through on a physical phone;
-  there is no public deployment yet. No press, reviews, testimonials, or player
-  numbers exist;
-  future work must not fabricate them.
+- **Live:** the game has a public deployment (URL in the deploy environment, not
+  committed), has been played through on a physical phone, and the ranking table
+  holds real rows.
+- **Still not real — future work must not fabricate:** no press, reviews,
+  testimonials, or player-count numbers exist.
 
 ## Product Principles
 
@@ -168,8 +175,10 @@ balance.
    width. Building it blind has produced the worst screens.
 4. **Shareable without a server.** The link is the distribution channel; it must
    keep working with no backend, forever, decoding old runs identically.
-5. **Local specificity over broad reach.** The clubs, the slang, and the puns are
-   why it exists. Widening the audience never means sanding those down.
+5. **Local specificity, now per country.** The real clubs, the slang, and the
+   phonetic puns are why it exists; the audience is football fans across all ten
+   leagues, so "local" means local to each country. Widening reach never means
+   sanding that down — it means more of it, country by country.
 6. **Simpler, not more complex.** A fix that grows the system's surface area is
    suspect; prefer the version that shrinks it. Zero comments in the repo.
 7. **Free and ungated.** No accounts, no ads, no tracking beyond the anonymised
@@ -188,5 +197,9 @@ balance.
 - Decision text never silently truncates: it wraps or clamps so the player always
   sees what they are about to confirm.
 - `:focus-visible` outlines are provided globally.
+- First-run help is opt-in, not forced: a dismissible agate strip offers a
+  guided tour on the home screen and on the first in-game screen. The tour is a
+  spotlight overlay driven by keyboard (`Esc`, arrows, trapped `Tab`); its only
+  motion is the caption fade, and "seen" is remembered in `localStorage`.
 - No formal conformance level has been declared; the working bar is "passes
   `contraste` and is usable one-handed on a 375px phone."

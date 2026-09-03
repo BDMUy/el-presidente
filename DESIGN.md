@@ -338,7 +338,11 @@ elements are at least 44px tall (`min-h-11`).
   column-plus-rail: `grid-template-columns: 1fr minmax(300px, 360px)` with a
   vertical `corondel` rule between them (`lg:divide-x`). The rail holds the
   standings table and the trophy case; on mobile those collapse into `Plegable`
-  disclosures.
+  disclosures. The **"Presidencia del día"** panel sits full-width above the
+  split — a club-tinted `border`ed strip with the two-colour filete, the club
+  and its expected finish, a short explainer, an `alerta` left-rule reminder
+  that it is one attempt a day, and a club-scoped CTA. It is the first offer on
+  the page, ahead of the manual setup.
 - **Sticky furniture:** the HUD (`sticky top-0 z-20`) and the decision bars
   (`sticky bottom-0`) float on `fondo-2` at 97% opacity with `backdrop-blur`.
   This is the only place surfaces overlap.
@@ -422,6 +426,12 @@ software.** Sharp, ruled, solid, with a physical press on interaction.
   takes no outline. No glow, no colour change — just the rule going solid-bright.
   (Buttons and links instead show the global 2px `tinta` `:focus-visible` ring.)
 - **Select chevron:** a literal `▼` glyph in `font-titular`, not an SVG.
+- **Dice re-roll ("Tu nombre"):** a `44px` ghost-button beside the name input,
+  a sharp-cornered SVG die face (pips are the sanctioned `rounded-full`
+  micro-dots). Pressing it draws a fresh parody name — from the selected
+  country's `DIRIGENTES` list — into the field as its real value and spins the
+  icon once (`girar-dado`, 500ms `--ease-out`, `key`-retriggered; stopped under
+  `prefers-reduced-motion`).
 - **Disabled:** `opacity-45`.
 
 ### Tags / Chips (`Ladillo`)
@@ -501,7 +511,31 @@ themes runs a View Transitions circular wipe from the click point (520ms
 Bordered box on mobile with a `+` / `−` glyph in `font-titular` black and a
 truncated one-line `resumen` under the title while collapsed; on `lg` the border
 and toggle vanish and it becomes a static rail section headed by a plain
-`Volanta`.
+`Volanta`. Takes an optional `ancla` prop that lands as `data-recorrido` on the
+`<section>` so the coach mark can point at it.
+
+### Coach mark (`Recorrido` + `AvisoRecorrido`)
+The first-run guided tour, opt-in and never automatic. A thin agate strip
+(`AvisoRecorrido`: `border corondel`, "Primera vez acá" / "Primera vez
+dirigiendo", a "Ver recorrido" text button and a `×` to dismiss) appears once
+per surface while `localStorage` has no `el-presidente:recorrido-<id>` = `visto`
+key; taking or dismissing the tour writes it.
+
+`Recorrido` is a `createPortal` overlay (`z-50`, above the HUD's `z-20`). It
+walks a list of `{ sel, titulo, cuerpo }` steps, filtering out any whose anchor
+(`[data-recorrido="…"]`) is absent. Per step it jumps the target to viewport
+centre with an **instant** `window.scrollTo` (smooth loses the anchor when the
+tab is backgrounded), or pins its top near the edge when it is taller than
+`0.62 vh`. The scrim is a single `fixed inset-0 bg-fondo/80` div with a
+rectangular hole cut by `clip-path` — no `box-shadow`, per the Flat-Page Rule —
+and a `2px solid tinta` ring on the hole (the `:focus-visible` look). The
+caption is a `Recuadro`-style card (`border-t-4 tinta`, `bg-fondo-2`,
+`max-w-[22rem]`) docked top or bottom away from the target, with an agate
+"Paso N de M", a compressed `titular`, `cuerpo` text, and "Saltear" / "Anterior"
+/ "Siguiente" ("Listo" last). `Esc` closes, `←`/`→` move, `Tab` is trapped to
+the caption. Home tour: 5 steps (padrón, name dice, ajustes, la del día,
+asumir). In-game tour: 3 steps (HUD figures, the turn's screen, the decision
+bar). Motion is the caption's `entrar-nota` only; the scrim and ring snap.
 
 ### Loading (`Cargando`) — signature
 A line still being set. The message is agate (`font-tabla` `11px`, tracked,
@@ -553,8 +587,9 @@ printed for WhatsApp.
 - **Do** honour `prefers-reduced-motion` by reducing movement, not erasing
   feedback: `entrar-nota` drops to an opacity-only fade (`aparecer`),
   `filete-animado` / `revelar-titular` / the `cursor-parpadeo` blink / the
-  theme-icon morph are all stopped, the `button:active` `scale(0.97)` press keeps
-  its ease, and every other non-button transition snaps to ~0.
+  `girar-dado` name-dice spin / the theme-icon morph are all stopped, the
+  `button:active` `scale(0.97)` press keeps its ease, and every other non-button
+  transition snaps to ~0.
 - **Do** respect the reading measures (66ch body, 46ch deck) and `min-h-11` on
   anything tappable.
 
