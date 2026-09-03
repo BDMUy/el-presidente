@@ -289,11 +289,11 @@ export function Cifra({
         abierta ? 'border-tinta' : 'border-dotted border-corondel-fuerte hover:border-tinta-2'
       }`}
     >
-      <span className="block truncate font-tabla text-[11px] leading-none text-tinta-2 uppercase">
+      <span className="block font-tabla text-[11px] leading-[1.15] text-tinta-2 uppercase">
         {label}
       </span>
       <span
-        className={`mt-1.5 block truncate font-titular text-[17px] leading-none font-black tabular-nums ${
+        className={`mt-1.5 block font-titular text-[17px] leading-[1.1] font-black break-words tabular-nums ${
           alerta ? 'text-alerta' : 'text-tinta'
         }`}
       >
