@@ -19,10 +19,12 @@ import {
 } from '@/lib/engine/types';
 import { useTintaClub } from '@/lib/tema';
 import { Bajada, Ladillo, Volanta } from './ui';
+import { AvisoRecorrido } from './aviso-recorrido';
 import { BarraSuperior } from './barra-superior';
 import { CampoNombre } from './campo-nombre';
 import { CampoSelect } from './campo-select';
 import { Plegable } from './plegable';
+import type { PasoRecorrido } from './recorrido';
 import { PresidenciaDelDia } from './presidencia-del-dia';
 import { Ranking } from './ranking';
 import { SelectorClub } from './selector-club';
@@ -61,6 +63,38 @@ const MODO_LABEL: Record<Modo, string> = {
   larga: 'Larga',
   llamas: 'En llamas',
 };
+
+const PASOS_INICIO: PasoRecorrido[] = [
+  {
+    sel: '[data-recorrido="padron"]',
+    titulo: 'Elegí tu club',
+    cuerpo:
+      'Buscá en el padrón el club que vas a dirigir. El número al lado es la posición que su gente espera: contra eso te miden. "Al azar" te sortea uno.',
+  },
+  {
+    sel: '[data-recorrido="nombre"]',
+    titulo: 'Tu nombre',
+    cuerpo:
+      'Con este nombre firmás el acta y figurás en la tabla. Si lo dejás vacío firmás con el que te tocó; tocá el dado para sortear otro.',
+  },
+  {
+    sel: '[data-recorrido="ajustes"]',
+    titulo: 'Ajustes de la partida',
+    cuerpo:
+      'Acá elegís cuánto dura la presidencia —de 8 a 32 temporadas— y el país y la categoría del padrón.',
+  },
+  {
+    sel: '[data-recorrido="diaria"]',
+    titulo: 'La del día',
+    cuerpo:
+      'Una partida por día, la misma para todo el mundo, con su propio ranking. Se juega una sola vez: cuando la jugás, queda jugada hasta mañana.',
+  },
+  {
+    sel: '[data-recorrido="asumir"]',
+    titulo: 'Asumí el cargo',
+    cuerpo: 'Con el club elegido, desde acá arrancás la presidencia.',
+  },
+];
 
 export interface EnCurso {
   club: Club;
@@ -140,6 +174,8 @@ export function Arranque({
         <BarraSuperior onAjustes={onAjustes} />
       </div>
 
+      <AvisoRecorrido id="inicio" pasos={PASOS_INICIO} etiqueta="Primera vez acá" />
+
       <header className="pt-8 lg:pt-10">
         <p className="border-b border-corondel pb-1.5 font-tabla text-[11px] tracking-[0.14em] text-tinta-2 uppercase">
           {fecha || '···'} · Asamblea ordinaria de socios
@@ -162,9 +198,11 @@ export function Arranque({
         <PanelEnCurso enCurso={enCurso} onContinuar={onContinuar} onAbandonar={onAbandonar} />
       )}
 
+      <PresidenciaDelDia onJugar={onEmpezarDiaria} />
+
       <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_minmax(300px,360px)] lg:items-start lg:divide-x lg:divide-corondel">
         <div className="min-w-0 lg:pr-10">
-          <div className="flex items-center justify-between gap-3">
+          <div data-recorrido="padron" className="flex items-center justify-between gap-3">
             <Volanta as="h2">El padrón</Volanta>
             <button
               type="button"
@@ -179,7 +217,7 @@ export function Arranque({
             <SelectorClub clubes={deLaLiga} elegido={club} onElegir={setElegido} />
           </div>
 
-          <Plegable titulo="Ajustes de la partida" resumen={resumenAjustes}>
+          <Plegable titulo="Ajustes de la partida" resumen={resumenAjustes} ancla="ajustes">
             <CampoSelect etiqueta="Partida" valor={modo} onChange={(v) => setModo(v as Modo)}>
               {MODOS.map((m) => (
                 <option key={m} value={m}>
@@ -216,21 +254,14 @@ export function Arranque({
             </div>
           </Plegable>
 
-          <CampoNombre />
+          <CampoNombre pais={pais} />
 
-          <div className="mt-7">
+          <div data-recorrido="asumir" className="mt-7">
             {club ? (
               <PanelElegido club={club} modo={modo} onEmpezar={() => onEmpezar(club.id, modo)} />
             ) : (
               <PanelVacio modo={modo} />
             )}
-          </div>
-
-          <div className="mt-10">
-            <Volanta as="h2">Presidencia del día</Volanta>
-            <div className="mt-3">
-              <PresidenciaDelDia onJugar={onEmpezarDiaria} />
-            </div>
           </div>
         </div>
 

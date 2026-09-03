@@ -111,6 +111,19 @@ button:active {
   animation-delay: 120ms;
 }
 
+@keyframes girar-dado {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.girar-dado {
+  animation: girar-dado 500ms var(--ease-out);
+}
+
 @keyframes revelar-titular {
   from {
     clip-path: inset(0 100% 0 0);
@@ -199,7 +212,8 @@ button:active {
   }
   .filete-animado,
   .revelar-titular,
-  .cursor-parpadeo {
+  .cursor-parpadeo,
+  .girar-dado {
     animation: none;
   }
   .icono-tema .rayos line,

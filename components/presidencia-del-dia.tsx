@@ -7,6 +7,7 @@ import { faltaParaLaProxima, formatearEspera, presidenciaDelDia } from '@/lib/da
 import { LEAGUES } from '@/lib/engine/types';
 import { expectedPosition } from '@/lib/engine/season';
 import { useTintaClub } from '@/lib/tema';
+import { Volanta } from './ui';
 
 const KEY_JUGADA = 'el-presidente:diaria-jugada';
 
@@ -67,12 +68,18 @@ export function PresidenciaDelDia({ onJugar }: { onJugar: () => void }) {
   const tintaClub = useTintaClub(club);
 
   if (!datos || !club) {
-    return <div className="min-h-[193px] border border-corondel bg-fondo-2/60" aria-hidden />;
+    return (
+      <div
+        className="mt-8 min-h-[268px] border border-corondel bg-fondo-2/60 sm:min-h-[204px]"
+        aria-hidden
+      />
+    );
   }
 
   return (
-    <div
-      className="min-h-[193px] border border-[var(--club)]/50 bg-fondo-2/60"
+    <section
+      data-recorrido="diaria"
+      className="mt-8 border border-[var(--club)]/50 bg-fondo-2/60"
       style={{ '--club': tintaClub } as CSSProperties}
     >
       <div className="flex h-1" aria-hidden>
@@ -80,37 +87,50 @@ export function PresidenciaDelDia({ onJugar }: { onJugar: () => void }) {
         <div className="flex-1" style={{ backgroundColor: club.colors[1] }} />
       </div>
 
-      <div className="px-3 py-3">
-        <p className="text-right font-tabla text-[11px] tracking-[0.06em] text-tinta-2 tabular-nums uppercase">
-          cambia en {espera}
-        </p>
-
-        <p className="mt-1.5 font-titular text-[17px] leading-tight font-black text-tinta">
-          {club.name}
-        </p>
-        <p className="font-cuerpo text-[13px] text-tinta-2">
-          {LEAGUES[club.league].label} · te esperan{' '}
-          {expectedPosition(club, club.league)}° de {LEAGUES[club.league].teams}
-        </p>
-
-        <p className="mt-2 font-cuerpo text-[13px] leading-snug text-tinta-2">
-          Hoy todos juegan esta misma partida. Mismo club, misma suerte, mismos eventos.
-        </p>
-
-        {datos.yaJugada ? (
-          <p className="mt-3 border-t border-corondel pt-2.5 font-tabla text-[11px] tracking-[0.06em] text-tinta-2 uppercase">
-            Ya la jugaste. Volvé mañana.
+      <div className="px-4 py-4 sm:px-5 sm:py-5">
+        <div className="flex items-baseline justify-between gap-3">
+          <Volanta as="h2">Presidencia del día</Volanta>
+          <p className="shrink-0 font-tabla text-[11px] tracking-[0.06em] text-tinta-2 tabular-nums uppercase">
+            cambia en {espera}
           </p>
-        ) : (
-          <button
-            type="button"
-            onClick={onJugar}
-            className="mt-3 min-h-11 w-full border border-corondel py-2.5 font-titular text-[13px] font-black tracking-[0.1em] text-tinta uppercase transition-colors hover:border-tinta"
-          >
-            Jugar la del día
-          </button>
-        )}
+        </div>
+
+        <div className="mt-4 sm:flex sm:items-start sm:justify-between sm:gap-6">
+          <div className="min-w-0">
+            <p className="font-titular text-[22px] leading-tight font-black text-tinta sm:text-[24px]">
+              {club.name}
+            </p>
+            <p className="mt-0.5 font-cuerpo text-[14px] text-tinta-2">
+              {LEAGUES[club.league].label} · te esperan{' '}
+              {expectedPosition(club, club.league)}° de {LEAGUES[club.league].teams}
+            </p>
+
+            <p className="mt-3 max-w-[54ch] font-cuerpo text-[15px] leading-relaxed text-tinta">
+              Una partida por día, la misma para todo el mundo: el mismo club, la misma suerte y
+              los mismos eventos. Al terminar entrás en el ranking del día.
+            </p>
+            <p className="mt-2 max-w-[54ch] border-l-2 border-alerta pl-3 font-cuerpo text-[14px] leading-snug text-tinta-2">
+              Tenés una sola oportunidad: cuando la jugás, queda jugada hasta mañana.
+            </p>
+          </div>
+
+          <div className="mt-4 shrink-0 sm:mt-0 sm:w-48">
+            {datos.yaJugada ? (
+              <p className="border-t border-corondel pt-2.5 font-tabla text-[11px] tracking-[0.06em] text-tinta-2 uppercase sm:border-0 sm:pt-0">
+                Ya la jugaste. Volvé mañana.
+              </p>
+            ) : (
+              <button
+                type="button"
+                onClick={onJugar}
+                className="min-h-11 w-full bg-[var(--club)] px-4 py-3 font-titular text-[14px] font-black tracking-[0.1em] text-fondo uppercase transition-opacity active:opacity-90"
+              >
+                Jugar la del día
+              </button>
+            )}
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
   );
 }
