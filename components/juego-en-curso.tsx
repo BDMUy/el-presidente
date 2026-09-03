@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { getClub } from '@/content/clubs';
 import { applyChoice, replayRun, startRun } from '@/lib/engine/engine';
-import { EVENTS_PER_SEASON, type GameState, type Modo } from '@/lib/engine/types';
+import { EVENTS_PER_SEASON, type GameState, type Modo, type Phase } from '@/lib/engine/types';
 import { borrar, guardar, leer } from '@/lib/storage';
 import { ActaAsuncion } from './acta-asuncion';
 import { FaseEleccion, FaseTemporada } from './fase-cierre';
@@ -37,6 +37,8 @@ function alTope(): void {
   window.scrollTo({ top: 0, behavior: 'instant' });
 }
 
+const REMONTA: ReadonlySet<Phase['kind']> = new Set(['evento', 'mercado', 'mesa-chica']);
+
 export function JuegoEnCurso({
   inicio,
   activo,
@@ -54,6 +56,8 @@ export function JuegoEnCurso({
 }) {
   const [partida, setPartida] = useState<Partida | null>(null);
   const [mostrarActa, setMostrarActa] = useState(false);
+  const [claveFase, setClaveFase] = useState(0);
+  const [firmaFase, setFirmaFase] = useState<string | null>(null);
   const faseRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -139,6 +143,18 @@ export function JuegoEnCurso({
     objetivo?.focus({ preventScroll: true });
   }, [activo, partida, mostrarActa]);
 
+  const firmaActual = !partida
+    ? null
+    : mostrarActa
+      ? 'acta'
+      : `${partida.state.phase.kind}:${partida.state.choices.length}`;
+
+  if (firmaActual !== firmaFase) {
+    setFirmaFase(firmaActual);
+    const kind = partida && !mostrarActa ? partida.state.phase.kind : null;
+    if (kind && REMONTA.has(kind)) setClaveFase((k) => k + 1);
+  }
+
   if (!activo || !partida) return null;
 
   const { state, diaria } = partida;
@@ -172,7 +188,7 @@ export function JuegoEnCurso({
           />
         ) : (
           <Pantalla
-            key={state.choices.length}
+            key={claveFase}
             state={state}
             diaria={diaria}
             onElegir={elegir}
