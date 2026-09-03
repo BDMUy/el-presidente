@@ -52,6 +52,14 @@ html {
   background: var(--color-fondo);
 }
 
+:root[data-texto='grande'] {
+  font-size: 112.5%;
+}
+
+:root[data-texto='chico'] {
+  font-size: 90%;
+}
+
 body {
   min-height: 100dvh;
   background-color: var(--color-fondo);
