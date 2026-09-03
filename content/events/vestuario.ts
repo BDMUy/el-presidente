@@ -550,4 +550,120 @@ export const VESTUARIO: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'vest-cruce-con-el-dt',
+    kind: 'golpe',
+    title: 'SE LE PLANTÓ AL DT EN LA PRÁCTICA',
+    text: 'El titular más caro del plantel le contestó al DT delante de todos y se fue al vestuario antes de que terminara el entrenamiento. Los que estaban ahí ya lo contaron en tres radios.',
+    options: [
+      {
+        label: 'Respaldar al DT y multar al jugador',
+        hint: 'Ordena el vestuario. El jugador y su representante toman nota.',
+        effects: { plantel: -2, influencia: 3, hinchada: 1 },
+      },
+      {
+        label: 'Bajar un cambio y arreglarlo puertas adentro',
+        hint: 'Se apaga el incendio de hoy. Nadie queda del todo conforme.',
+        effects: { plantel: 1, influencia: -2 },
+      },
+      {
+        label: 'Ponerlo en la lista de transferibles',
+        hint: 'Mensaje claro. Y un titular menos si nadie lo compra.',
+        effects: { plantel: -3, hinchada: -2 },
+      },
+    ],
+  },
+  {
+    id: 'vest-refuerzo-no-se-adapta',
+    kind: 'dilema',
+    title: 'EL REFUERZO NO SE HALLA EN LA CIUDAD',
+    text: 'El extranjero que trajiste para ser figura no se acostumbra. La familia se volvió al país a los dos meses y él pide que le rescindan para irse con ellos. En la cancha se le nota.',
+    options: [
+      {
+        label: 'Rescindirle y cortar por lo sano',
+        hint: 'Se va un sueldo alto y una apuesta que no salió.',
+        effects: { caja: -1.5, plantel: -3, hinchada: -2 },
+      },
+      {
+        label: 'Pagarle el pasaje a la familia y darle tiempo',
+        hint: 'Un gasto chico contra la chance de recuperar la inversión.',
+        effects: { caja: -0.6, plantel: 2, hinchada: 1 },
+      },
+      {
+        label: 'Prestarlo a un club de su país',
+        hint: 'No cobrás el préstamo entero y te sacás el sueldo de encima.',
+        effects: { caja: -0.4, plantel: -2 },
+      },
+    ],
+  },
+  {
+    id: 'vest-posteo-desafortunado',
+    kind: 'color',
+    title: 'EL VIDEO DEL BOLICHE',
+    text: 'Se viralizó un video de dos titulares en un boliche a las cinco de la mañana, tres días antes del clásico y con el equipo sin ganar hace un mes. Ellos dicen que era el cumpleaños de un primo.',
+    options: [
+      {
+        label: 'Multarlos y hacerlo público',
+        hint: 'La gente pide un gesto. El vestuario se ordena por miedo.',
+        effects: { plantel: -1, hinchada: 3, influencia: 2 },
+      },
+      {
+        label: 'Resolverlo adentro sin comunicados',
+        hint: 'No le das aire al tema. Alguno lo lee como que no pasó nada.',
+        random: [
+          { weight: 55, text: 'En una semana nadie se acordaba. El clásico lo taparon con un buen partido.', effects: { plantel: 1, hinchada: 1 } },
+          { weight: 45, text: 'Perdieron el clásico y el video volvió a circular con otra intención.', effects: { hinchada: -6, plantel: -2 } },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'vest-fecha-fifa',
+    kind: 'dilema',
+    title: 'SE VAN TRES CON LA SELECCIÓN',
+    text: 'Fecha de eliminatorias: tres titulares se van con sus selecciones y vuelven cuarenta y ocho horas antes del partido, cruzando el continente. La liga no mueve la fecha para nadie.',
+    options: [
+      {
+        label: 'Jugar con los pibes de la reserva',
+        hint: 'Los titulares descansan. El resultado del fin de semana es una incógnita.',
+        effects: { plantel: -2, hinchada: -1 },
+      },
+      {
+        label: 'Ponerlos apenas bajan del avión',
+        hint: 'El once de siempre, fundido y con el cuerpo en otro huso horario.',
+        random: [
+          { weight: 50, text: 'Aguantaron con lo justo y sacaron un empate que servía.', effects: { plantel: -1 } },
+          { weight: 50, text: 'Se quedaron sin piernas a los sesenta y lo perdieron sobre la hora.', effects: { plantel: -3, hinchada: -4 } },
+        ],
+      },
+      {
+        label: 'Pedir la postergación con informe médico',
+        hint: 'Cuesta gestión y buena voluntad ajena.',
+        effects: { influencia: -6, plantel: 1 },
+      },
+    ],
+  },
+  {
+    id: 'vest-el-que-no-quiere-volar',
+    kind: 'dilema',
+    title: 'EL LATERAL LE TIENE MIEDO AL AVIÓN',
+    text: 'Después de un vuelo con turbulencia, uno de los titulares avisa que no se sube más a un avión. A los partidos del norte se llega en avión o no se llega.',
+    options: [
+      {
+        label: 'Bancarle el micro veinte horas cada viaje',
+        hint: 'Llega molido a la mitad de los partidos de visitante.',
+        effects: { caja: -0.5, plantel: -1 },
+      },
+      {
+        label: 'Pagarle sesiones con un especialista',
+        hint: 'Puede resolverse. Lleva su tiempo.',
+        effects: { caja: -0.4, plantel: 1 },
+      },
+      {
+        label: 'Decirle que viaja como todos o no juega',
+        hint: 'Autoridad. Y un titular que capaz no está el domingo.',
+        effects: { plantel: -2, influencia: 2 },
+      },
+    ],
+  },
 ];

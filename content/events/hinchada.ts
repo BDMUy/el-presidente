@@ -515,4 +515,108 @@ export const HINCHADA: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'hin-entradas-truchas',
+    kind: 'golpe',
+    title: 'ENTRADAS FALSAS EN LA PUERTA',
+    text: 'Aparecieron cientos de entradas falsificadas para el partido más caro del año. En los molinetes hay gente con ticket pago que se queda afuera y no lo entiende. Falta media hora para que empiece.',
+    options: [
+      {
+        label: 'Dejar entrar a todos y contar el lío después',
+        hint: 'Nadie se pierde el partido. La caja no cierra por ningún lado.',
+        effects: { caja: -1.2, hinchada: 4 },
+      },
+      {
+        label: 'Cortar el ingreso y filtrar uno por uno',
+        hint: 'Se cuida la recaudación. Media popular empieza el partido en la calle.',
+        random: [
+          { weight: 50, text: 'Se ordenó la fila y entró casi todo el mundo antes del segundo tiempo.', effects: { hinchada: -3 } },
+          { weight: 50, text: 'Se armó un tumulto en la puerta, forzaron un molinete y salió en todos lados.', effects: { hinchada: -9, influencia: -4 } },
+        ],
+      },
+      {
+        label: 'Denunciar la maniobra y poner control digital para la próxima',
+        hint: 'Se corta el negocio para adelante. Cuesta y no resuelve el hoy.',
+        effects: { caja: -0.8, influencia: 3, hinchada: -1 },
+      },
+    ],
+  },
+  {
+    id: 'hin-interna-de-la-barra',
+    kind: 'golpe',
+    title: 'LA BARRA SE PARTIÓ EN DOS',
+    text: 'Dos facciones de la barra se pelearon por el manejo de los bombos y del sector de la popular. Vinieron los dos grupos a la sede, por separado, a pedirte que reconozcas a uno y no al otro.',
+    options: [
+      {
+        label: 'No reconocer a ninguno y hablar solo con socios',
+        hint: 'Te sacás el problema de encima. Los dos grupos quedan enojados con vos.',
+        effects: { hinchada: -3, influencia: 4 },
+      },
+      {
+        label: 'Mediar para que se repartan sin sangre',
+        hint: 'Cuesta reuniones y desgaste. Baja un poco el ruido.',
+        effects: { influencia: -4, hinchada: 2 },
+      },
+      {
+        label: 'Dejar que lo arreglen entre ellos',
+        hint: 'No gastás nada. El domingo se ve cómo salió.',
+        random: [
+          { weight: 45, text: 'Se acomodaron solos y la popular volvió a cantar como si nada.', effects: { hinchada: 2 } },
+          { weight: 55, text: 'Se agarraron a la salida y la imagen la levantaron todos los canales.', effects: { hinchada: -7, influencia: -3 } },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'hin-el-natatorio',
+    kind: 'dilema',
+    title: 'SE LLUEVE EL NATATORIO',
+    text: 'La pileta cubierta tiene más socios que la platea un domingo cualquiera, y el techo hace dos años que pierde. Refaccionarla entera sale una fortuna; cerrarla es perder a las familias que van solo a eso.',
+    options: [
+      {
+        label: 'Refaccionar todo el natatorio',
+        hint: 'Un gasto grande hoy por algo que el fútbol no ve.',
+        effects: {
+          caja: -3,
+          socios: 2,
+          deferred: [
+            { inSeasons: 2, text: 'El natatorio nuevo funciona a full todo el año y entran socios que nunca pisaron la cancha.', effects: { socios: 6, caja: 1.5 } },
+          ],
+        },
+      },
+      {
+        label: 'Poner un parche en el techo y seguir',
+        hint: 'Barato. Aguanta hasta que no aguante.',
+        effects: { caja: -0.6, socios: -1 },
+      },
+      {
+        label: 'Cerrarlo hasta que haya plata',
+        hint: 'Se ahorra el mantenimiento. Se van las familias que iban por la pileta.',
+        effects: { socios: -5, hinchada: -2 },
+      },
+    ],
+  },
+  {
+    id: 'hin-aniversario-redondo',
+    kind: 'color',
+    title: 'EL CLUB CUMPLE CIEN AÑOS',
+    text: 'Se viene el centenario y hay que decidir cómo se festeja. Marketing quiere una gala con cubiertos caros y mesas vendidas a empresas. La subcomisión del hincha quiere una jornada a puertas abiertas para el barrio.',
+    options: [
+      {
+        label: 'La gala con mesas para sponsors',
+        hint: 'Deja plata y una foto elegante. La popular no se siente parte.',
+        effects: { caja: 1.5, hinchada: -3, socios: 1 },
+      },
+      {
+        label: 'La jornada a puertas abiertas',
+        hint: 'No entra un peso. Se llena de gente que lo va a contar por años.',
+        effects: { caja: -0.6, hinchada: 7, socios: 2 },
+      },
+      {
+        label: 'Las dos cosas, en un fin de semana partido',
+        hint: 'Contentás a todos y organizás el doble.',
+        effects: { caja: 0.4, hinchada: 3, influencia: -1 },
+      },
+    ],
+  },
 ];

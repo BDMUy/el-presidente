@@ -509,4 +509,112 @@ export const COLOR: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'col-veraneo',
+    kind: 'dilema',
+    title: 'TORNEO DE VERANO EN LA COSTA',
+    text: 'Un empresario arma un cuadrangular de verano en la costa y ofrece un cachet importante por llevar al equipo. Son cuatro días con hotel frente al mar, dos partidos y mucha cámara.',
+    options: [
+      {
+        label: 'Ir a jugar el veraneo',
+        hint: 'Plata fresca y prensa liviana. La pretemporada seria queda a medias.',
+        random: [
+          { weight: 55, text: 'Se llevaron el cuadrangular y volvieron enchufados. Salió redondo.', effects: { caja: 2, plantel: 1, hinchada: 3 } },
+          { weight: 45, text: 'Cuatro días de playa y asado. Arrancaron el torneo pesados.', effects: { caja: 2, plantel: -3 } },
+        ],
+      },
+      {
+        label: 'Quedarse a hacer pretemporada de verdad',
+        hint: 'Sin cachet, con doble turno y sin distracciones.',
+        effects: { plantel: 3, caja: -0.3 },
+      },
+    ],
+  },
+  {
+    id: 'col-ola-de-calor',
+    kind: 'color',
+    title: 'CUARENTA GRADOS Y PARTIDO AL MEDIODÍA',
+    text: 'Ola de calor histórica y el fixture pone el partido a las dos de la tarde, con la popular sin una sombra. La liga contesta que el horario lo pone la televisión y que no se cambia.',
+    options: [
+      {
+        label: 'Repartir agua y armar puestos de hidratación gratis',
+        hint: 'Un gasto chico que la gente agradece con el termómetro así.',
+        effects: { caja: -0.4, hinchada: 4 },
+      },
+      {
+        label: 'Sumarse al reclamo del resto de los clubes por los horarios',
+        hint: 'Juntos pesan más. La tele igual no mueve nada este fin de semana.',
+        effects: { influencia: -2, hinchada: 2 },
+      },
+    ],
+  },
+  {
+    id: 'col-exjugador-en-la-mala',
+    kind: 'color',
+    title: 'UN ÍDOLO DE LOS NOVENTA PIDE UNA MANO',
+    text: 'Uno de los referentes del último equipo campeón de aquella década está enfermo y sin obra social. No salió a pedir nada en público: mandó un mensaje a un dirigente viejo preguntando si el club podía ayudarlo.',
+    options: [
+      {
+        label: 'Cubrirle el tratamiento en silencio',
+        hint: 'No sale en ningún lado. Es lo que corresponde y punto.',
+        effects: { caja: -1, hinchada: 3, influencia: 2 },
+      },
+      {
+        label: 'Organizarle un partido homenaje a beneficio',
+        hint: 'Junta plata y lo pone otra vez en la cancha. También lo expone.',
+        effects: { caja: 0.4, hinchada: 6, socios: 2 },
+      },
+      {
+        label: 'Darle un puesto de trabajo en el club',
+        hint: 'Una solución de fondo, no un parche. Hay que hacerle lugar.',
+        effects: { caja: -0.5, hinchada: 4, influencia: 1 },
+      },
+    ],
+  },
+  {
+    id: 'col-streamer-del-club',
+    kind: 'color',
+    title: 'EL STREAMER QUE LLENA ESTADIOS VIRTUALES',
+    text: 'Un streamer con más público que muchos partidos de primera contó que es hincha del club de toda la vida. Ofrece transmitir contenido desde adentro a cambio de acceso al vestuario y a los entrenamientos.',
+    options: [
+      {
+        label: 'Abrirle la puerta con reglas claras',
+        hint: 'Llega a un público que el club no toca. El vestuario no lo pidió.',
+        effects: { socios: 3, hinchada: 1, plantel: -1 },
+      },
+      {
+        label: 'Darle acceso solo a zonas comunes, no al vestuario',
+        hint: 'Menos ruido puertas adentro. Menos material para él también.',
+        effects: { socios: 1, hinchada: 1 },
+      },
+      {
+        label: 'Agradecer y dejarlo afuera',
+        hint: 'El vestuario es el vestuario. Se pierde una vidriera enorme.',
+        effects: { plantel: 1, socios: -1 },
+      },
+    ],
+  },
+  {
+    id: 'col-escudo-inspirado',
+    kind: 'color',
+    title: 'UNA MARCA COPIA EL ESCUDO',
+    text: 'Una cadena de ropa sacó una línea entera con un escudo "inspirado" en el del club: los mismos colores, la misma forma, una letra cambiada. Se vende en todo el país y el club no ve un peso.',
+    options: [
+      {
+        label: 'Mandar cartas documento y salir a la carga',
+        hint: 'Podés hacerlos parar. Lleva abogados y tiempo.',
+        effects: { caja: -0.5, influencia: 2 },
+      },
+      {
+        label: 'Ofrecerles una licencia oficial y cobrar por cada prenda',
+        hint: 'Si ya lo usan, que lo paguen. Algunos socios lo van a ver como venderse.',
+        effects: { caja: 1.6, hinchada: -3 },
+      },
+      {
+        label: 'Sacar la línea oficial más barata y competirles',
+        hint: 'El club pone su propia versión en la calle. Hay que producirla.',
+        effects: { caja: 0.4, hinchada: 2 },
+      },
+    ],
+  },
 ];

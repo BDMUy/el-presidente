@@ -494,4 +494,145 @@ export const DIRIGENCIA: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'dir-multa-de-la-federacion',
+    kind: 'golpe',
+    title: 'MULTA DEL TRIBUNAL DE DISCIPLINA',
+    text: 'La federación multó al club por una suma de cosas chicas: bengalas en la popular, el equipo visitante demorado en la puerta y un cartel de un sponsor sin autorizar. La cifra, sumada, no es chica.',
+    options: [
+      {
+        label: 'Pagarla y no hacer ruido',
+        hint: 'Se termina rápido. Duele en la caja.',
+        effects: { caja: -1.6 },
+      },
+      {
+        label: 'Apelar punto por punto',
+        hint: 'Se puede bajar. También se puede quedar peor por insistir.',
+        random: [
+          { weight: 50, text: 'Bajaron la multa a la mitad y quedó un antecedente a favor.', effects: { caja: -0.7, influencia: 2 } },
+          { weight: 50, text: 'Ratificaron todo y sumaron costas por hacerles perder el tiempo.', effects: { caja: -2.3, influencia: -3 } },
+        ],
+      },
+      {
+        label: 'Pagar y salir a cruzar a la federación en los medios',
+        hint: 'La gente te acompaña. Arriba te lo anotan.',
+        effects: { caja: -1.6, hinchada: 4, influencia: -5 },
+      },
+    ],
+  },
+  {
+    id: 'dir-acto-politico-en-la-sede',
+    kind: 'dilema',
+    title: 'QUIEREN LA SEDE PARA UN ACTO',
+    text: 'En plena campaña, el espacio de un candidato pide alquilar el salón de actos del club para una presentación. Pagan bien y por adelantado. La mitad de la comisión dice que el club no se mete en política.',
+    options: [
+      {
+        label: 'Alquilar el salón como a cualquiera',
+        hint: 'Entra plata. Al club lo van a asociar con ese cartel igual.',
+        effects: { caja: 1.4, hinchada: -4, influencia: -2 },
+      },
+      {
+        label: 'Decir que no y aclararlo por escrito',
+        hint: 'El club queda afuera del barro. El que pidió se acuerda.',
+        effects: { influencia: -3, hinchada: 3 },
+      },
+      {
+        label: 'Ofrecer el salón a todos los espacios por igual',
+        hint: 'Prolijo y trabajoso. Nadie queda afuera, nadie del todo contento.',
+        effects: { caja: 0.6, influencia: 2 },
+      },
+    ],
+  },
+  {
+    id: 'dir-audio-filtrado',
+    kind: 'golpe',
+    title: 'SE FILTRÓ UN AUDIO DE COMISIÓN',
+    text: 'Un audio de una reunión de comisión llegó a un programa partidario. No hay nada ilegal, pero se escucha a un dirigente hablar mal de un referente del plantel y a otro reírse. Editado, suena peor.',
+    options: [
+      {
+        label: 'Poner el audio completo en contexto',
+        hint: 'La versión entera es menos jugosa. No todos van a escucharla.',
+        effects: { influencia: 1, hinchada: -2 },
+      },
+      {
+        label: 'Buscar puertas adentro quién grabó',
+        hint: 'Podés encontrar al que filtró. Mientras tanto, la reunión se enfría.',
+        effects: { influencia: -2, plantel: -1 },
+      },
+      {
+        label: 'No decir nada y que pase',
+        hint: 'En una semana hay otro tema. Puede que este no.',
+        effects: { hinchada: -3 },
+      },
+    ],
+  },
+  {
+    id: 'dir-voto-electronico',
+    kind: 'dilema',
+    title: 'LA ASAMBLEA POR VOTO ELECTRÓNICO',
+    text: 'Un sector propone modernizar la asamblea con voto electrónico y padrón digital. Ahorra una jornada entera de conteo a mano. La oposición ya salió a decir que es un mecanismo para dibujar el resultado.',
+    options: [
+      {
+        label: 'Implementarlo para la próxima asamblea',
+        hint: 'Más ágil y prolijo. La sospecha va a estar igual en la sala.',
+        effects: { caja: -0.6, influencia: 3, hinchada: -2 },
+      },
+      {
+        label: 'Dejar el sistema de siempre',
+        hint: 'Nadie puede acusarte de nada. Y son doce horas de conteo.',
+        effects: { influencia: -1 },
+      },
+      {
+        label: 'Probarlo con auditoría de las dos listas',
+        hint: 'Cuesta más y baja el ruido. La oposición firma o queda expuesta.',
+        effects: { caja: -1, influencia: 4 },
+      },
+    ],
+  },
+  {
+    id: 'dir-rumor-de-venta',
+    kind: 'dilema',
+    title: 'EL MERCADO YA LOS DA POR VENDIDOS',
+    text: 'Media docena de portales publican que el club está por vender a tres titulares para tapar un agujero. No hay ninguna oferta sobre la mesa, pero los representantes llaman todos los días y el vestuario lee todo.',
+    options: [
+      {
+        label: 'Salir a desmentir con un comunicado firme',
+        hint: 'Calma al vestuario esta semana. Si después vendés a alguno, quedás pegado.',
+        effects: { hinchada: 3, plantel: 2, influencia: -2 },
+      },
+      {
+        label: 'No confirmar ni desmentir nada',
+        hint: 'No te atás a nada. El rumor sigue creciendo solo.',
+        effects: { plantel: -3, hinchada: -2 },
+      },
+      {
+        label: 'Bajar al vestuario a mostrar los números',
+        hint: 'La transparencia los calma. También los deja ver que el club está corto.',
+        effects: { plantel: 3, hinchada: -1, influencia: -1 },
+      },
+    ],
+  },
+  {
+    id: 'dir-paro-de-empleados',
+    kind: 'golpe',
+    title: 'PARAN LOS EMPLEADOS DEL CLUB',
+    text: 'Boleteros, maestranza y la gente del predio hacen asamblea y amenazan con no abrir el estadio el domingo. Hace meses que el sueldo les llega tarde y devaluado.',
+    options: [
+      {
+        label: 'Sentarse a negociar una recomposición',
+        hint: 'Se destraba el domingo. Es más plata fija todos los meses.',
+        effects: { caja: -1.4, influencia: 2 },
+      },
+      {
+        label: 'Contratar una empresa tercerizada para el partido',
+        hint: 'El domingo se juega. Adentro queda un clima que no se arregla con eso.',
+        effects: { caja: -0.8, influencia: -4, hinchada: -2 },
+      },
+      {
+        label: 'Pedirles que aguanten una fecha más',
+        hint: 'Ganás una semana. Y algo de bronca acumulada.',
+        effects: { influencia: -2, hinchada: -2 },
+      },
+    ],
+  },
 ];

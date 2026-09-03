@@ -219,4 +219,30 @@ export const COPAS: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'copa-nacional-cruce-incomodo',
+    kind: 'dilema',
+    title: 'COPA DEL PAÍS: CONTRA UN EQUIPO DE ASCENSO',
+    text: 'En la copa nacional, el sorteo cruzó al club con un equipo de la tercera categoría, a novecientos kilómetros, en una cancha de tierra y con la localía para ellos. Si perdés, es el papelón del año.',
+    options: [
+      {
+        label: 'Viajar con los titulares y un charter',
+        hint: 'Se toma en serio. El gasto no estaba en ningún presupuesto.',
+        effects: { caja: -1.5, plantel: 1 },
+      },
+      {
+        label: 'Ir en micro con un equipo alternativo',
+        hint: 'Barato. Si sale mal, la semana es larga.',
+        random: [
+          { weight: 55, text: 'Los suplentes lo resolvieron con un gol de pelota parada y a otra cosa.', effects: { hinchada: 2 } },
+          { weight: 45, text: 'Eliminados por un equipo de tercera. Los memes no perdonaron.', effects: { hinchada: -8, plantel: -1, influencia: -2 } },
+        ],
+      },
+      {
+        label: 'Mandar a la reserva completa y avisar que la prioridad es la liga',
+        hint: 'Sincero y polémico. La copa se juega sola.',
+        effects: { plantel: 2, hinchada: -4 },
+      },
+    ],
+  },
 ];
