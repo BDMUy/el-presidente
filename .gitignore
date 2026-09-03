@@ -97,6 +97,14 @@ DESPLIEGUE.md
 skills-lock.json
 .neon
 
+# Análisis y planes de implementación
+#
+# Documentos de trabajo: análisis generados por skills, planes de implementación,
+# notas de una sesión. Sirven para decidir qué hacer, no para explicar el
+# proyecto a quien lo clone —eso vive en AGENTS.md, PRODUCT.md y DESIGN.md—, y
+# quedan desactualizados apenas se ejecuta lo que proponen.
+notas/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
