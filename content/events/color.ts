@@ -519,8 +519,8 @@ export const COLOR: GameEvent[] = [
         label: 'Ir a jugar el veraneo',
         hint: 'Plata fresca y prensa liviana. La pretemporada seria queda a medias.',
         random: [
-          { weight: 55, text: 'Se llevaron el cuadrangular y volvieron enchufados. Salió redondo.', effects: { caja: 2, plantel: 1, hinchada: 3 } },
-          { weight: 45, text: 'Cuatro días de playa y asado. Arrancaron el torneo pesados.', effects: { caja: 2, plantel: -3 } },
+          { weight: 55, text: 'Se llevaron el cuadrangular y volvieron enchufados. Salió redondo.', effects: { caja: 1.2, plantel: 1, hinchada: 3 } },
+          { weight: 45, text: 'Cuatro días de playa y asado. Arrancaron el torneo pesados.', effects: { caja: 1.2, plantel: -3 } },
         ],
       },
       {

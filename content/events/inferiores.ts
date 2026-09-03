@@ -359,7 +359,7 @@ export const INFERIORES: GameEvent[] = [
     id: 'inf-lesion-en-la-seleccion',
     kind: 'golpe',
     title: 'SE ROMPIÓ CON LA SUB-17',
-    text: 'La joya de inferiores se rompió los ligamentos jugando un Sudamericano con la selección juvenil. Seis meses afuera, la rehabilitación la paga el club y el pibe vuelve al país con la pierna enyesada y la cabeza hecha un lío.',
+    text: 'La joya de inferiores se rompió los ligamentos jugando un Sudamericano con la selección juvenil. Seis meses afuera, la rehabilitación la paga el club y el pibe vuelve al país con la rodilla operada y la cabeza hecha un lío.',
     options: [
       {
         label: 'Ponerle el mejor equipo médico y acompañarlo de cerca',

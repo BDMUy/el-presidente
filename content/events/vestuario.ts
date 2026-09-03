@@ -639,7 +639,7 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Pedir la postergación con informe médico',
         hint: 'Cuesta gestión y buena voluntad ajena.',
-        effects: { influencia: -6, plantel: 1 },
+        effects: { influencia: -4, plantel: 1 },
       },
     ],
   },

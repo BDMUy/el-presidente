@@ -885,7 +885,7 @@ export const ECONOMIA: GameEvent[] = [
         label: 'Recambio completo del campo de juego',
         hint: 'Caro y lento. Después queda una alfombra.',
         effects: {
-          caja: -2.5,
+          caja: -2,
           plantel: -1,
           deferred: [
             { inSeasons: 1, text: 'El campo nuevo quedó impecable y el equipo lo aprovecha de local.', effects: { plantel: 3, hinchada: 2 } },
