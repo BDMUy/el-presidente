@@ -849,4 +849,129 @@ export const ECONOMIA: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'eco-camiseta-atrasada',
+    kind: 'golpe',
+    title: 'LA CAMISETA NUEVA NO LLEGA',
+    text: 'La marca de indumentaria tenía que entregar la camiseta de la temporada para el primer partido. Avisó con una semana de anticipación que el contenedor está demorado en la aduana. Hay treinta mil pedidos de la web sin despachar.',
+    options: [
+      {
+        label: 'Arrancar el torneo con la camiseta del año pasado',
+        hint: 'Se juega igual. La gente que ya pagó la nueva putea.',
+        effects: { hinchada: -3, caja: -0.4 },
+      },
+      {
+        label: 'Exigirle a la marca una compensación por el incumplimiento',
+        hint: 'Está en el contrato. Cobrarlo es otra historia.',
+        random: [
+          { weight: 55, text: 'La marca reconoció la demora y puso una partida extra de merchandising gratis.', effects: { caja: 1.2, hinchada: 2 } },
+          { weight: 45, text: 'La marca dijo que fue fuerza mayor y no puso un peso.', effects: { influencia: -2 } },
+        ],
+      },
+      {
+        label: 'Sacar una camiseta de transición con un proveedor local',
+        hint: 'Rápida y con identidad de barrio. La marca oficial no lo toma bien.',
+        effects: { caja: -0.5, hinchada: 5, influencia: -2 },
+      },
+    ],
+  },
+  {
+    id: 'eco-cesped-enfermo',
+    kind: 'golpe',
+    title: 'UN HONGO SE COME EL CAMPO DE JUEGO',
+    text: 'El agrónomo lo dijo sin vueltas: un hongo se está comiendo el césped y en un mes la cancha va a ser un barrial. O se hace un recambio completo del piso, o se juega de local en otro lado mientras tanto.',
+    options: [
+      {
+        label: 'Recambio completo del campo de juego',
+        hint: 'Caro y lento. Después queda una alfombra.',
+        effects: {
+          caja: -2.5,
+          plantel: -1,
+          deferred: [
+            { inSeasons: 1, text: 'El campo nuevo quedó impecable y el equipo lo aprovecha de local.', effects: { plantel: 3, hinchada: 2 } },
+          ],
+        },
+      },
+      {
+        label: 'Tratarlo por partes sin parar de jugar',
+        hint: 'Más barato. Se juega dos meses sobre un potrero.',
+        effects: { caja: -0.7, plantel: -3, hinchada: -2 },
+      },
+      {
+        label: 'Mudar la localía a la cancha de un club vecino',
+        hint: 'Se cuida el equipo. Se pierde el factor cancha y parte del público.',
+        effects: { caja: -1, hinchada: -4 },
+      },
+    ],
+  },
+  {
+    id: 'eco-socio-mecenas-dona',
+    kind: 'dilema',
+    title: 'UN SOCIO DONA EL GIMNASIO',
+    text: 'Un socio empresario ofrece pagar de su bolsillo el gimnasio nuevo del predio, completo. A cambio pide que lleve su apellido, un palco de por vida y poder llevar amigos al vestuario los días de partido.',
+    options: [
+      {
+        label: 'Aceptar con todas las condiciones',
+        hint: 'Gimnasio gratis. Y alguien que entra y sale del vestuario cuando quiere.',
+        effects: { caja: 3, plantel: 3, influencia: -6, hinchada: -2 },
+      },
+      {
+        label: 'Aceptar solo con una placa de agradecimiento',
+        hint: 'Se lo bancás como gesto, no como negocio. Puede tomarlo bien o bajarse.',
+        effects: { caja: 2.2, plantel: 3, hinchada: 1 },
+      },
+      {
+        label: 'Agradecer y hacerlo con plata del club, sin condiciones',
+        hint: 'El predio no le debe nada a nadie. La caja lo siente.',
+        effects: { caja: -3, plantel: 3, influencia: 2 },
+      },
+    ],
+  },
+  {
+    id: 'eco-robo-en-el-predio',
+    kind: 'golpe',
+    title: 'ENTRARON A ROBAR AL PREDIO',
+    text: 'Un fin de semana largo forzaron el depósito y la sala de trofeos del predio. Se llevaron equipamiento, dos aires acondicionados y una vitrina con medallas viejas que no tienen precio de reventa pero sí de recuerdo.',
+    options: [
+      {
+        label: 'Reponer todo y poner seguridad las veinticuatro horas',
+        hint: 'No vuelve a pasar. Es un gasto fijo nuevo para siempre.',
+        effects: { caja: -1.8, hinchada: 1 },
+      },
+      {
+        label: 'Hacer el reclamo al seguro y esperar',
+        hint: 'Cubre parte y con demora. El resto lo pone el club igual.',
+        effects: { caja: -0.9 },
+      },
+      {
+        label: 'Pedir a los socios que ayuden a recuperar lo del museo',
+        hint: 'La gente responde con lo que tiene. Y se entera de todo.',
+        effects: { hinchada: -2, socios: 1, caja: -0.6 },
+      },
+    ],
+  },
+  {
+    id: 'eco-preventa-de-abonos',
+    kind: 'dilema',
+    title: 'PREVENTA DE ABONOS CON DESCUENTO',
+    text: 'El área comercial propone lanzar la preventa de abonos de todo el año con un descuento fuerte, cobrado ahora en un pago. Entra una montaña de plata en enero. El resto del año la boletería recauda mucho menos.',
+    options: [
+      {
+        label: 'Lanzar la preventa agresiva',
+        hint: 'Caja llena hoy. Los domingos del año que viene la boletería está floja.',
+        effects: {
+          caja: 5,
+          socios: 3,
+          deferred: [
+            { inSeasons: 1, text: 'Con casi todos los abonos vendidos por adelantado, la recaudación de local del año cayó fuerte.', effects: { caja: -4 } },
+          ],
+        },
+      },
+      {
+        label: 'Abono a precio normal, sin descuento',
+        hint: 'Menos plata de golpe. El flujo del año queda sano.',
+        effects: { caja: 1.5, socios: 1 },
+      },
+    ],
+  },
 ];

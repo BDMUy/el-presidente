@@ -289,4 +289,60 @@ export const FEMENINO: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'fem-primer-partido-por-tv',
+    kind: 'color',
+    title: 'LA TELE QUIERE EL PARTIDO DEL FEMENINO',
+    text: 'Un canal ofrece transmitir por primera vez un partido del plantel femenino. El horario que proponen es un martes al mediodía, cuando no va nadie a la cancha y las jugadoras trabajan o estudian.',
+    options: [
+      {
+        label: 'Aceptar el horario con tal de salir en pantalla',
+        hint: 'Es un precedente. En la tele se va a ver una tribuna vacía.',
+        effects: { hinchada: 2, socios: 1, plantel: -1 },
+      },
+      {
+        label: 'Negociar un horario que le sirva a la gente',
+        hint: 'Puede caerse la transmisión. O puede sentar un estándar.',
+        effects: { hinchada: 3, socios: 1 },
+      },
+      {
+        label: 'Transmitirlo el club por su propio canal',
+        hint: 'Sin plata de la tele y con la producción a cargo del club.',
+        effects: { caja: -0.4, hinchada: 3, socios: 1 },
+      },
+    ],
+  },
+  {
+    id: 'fem-refuerzo-rompe-el-techo',
+    kind: 'dilema',
+    title: 'SE PUEDE FICHAR A UNA DE LA SELECCIÓN',
+    text: 'Una jugadora de la selección quedó libre porque su club dejó de pagar. Está al alcance del plantel femenino, pero pide un contrato que es el doble del más alto que se paga hoy en el plantel.',
+    options: [
+      {
+        label: 'Ficharla y romper el techo salarial',
+        hint: 'Sube el equipo de golpe. El resto del plantel se va a enterar de lo que cobra.',
+        effects: {
+          caja: -1.5,
+          plantel: 4,
+          hinchada: 5,
+          deferred: [
+            { inSeasons: 1, text: 'El resto del plantel femenino se enteró del número que cobra la que llegó y presentó un reclamo conjunto.', effects: { caja: -1, plantel: -3 } },
+          ],
+        },
+      },
+      {
+        label: 'Ofrecerle lo mismo que a las titulares',
+        hint: 'O acepta por el proyecto, o firma en otro lado.',
+        random: [
+          { weight: 35, text: 'Aceptó: quería un lugar donde le paguen en fecha. Salió en todos lados.', effects: { plantel: 3, hinchada: 6, socios: 2 } },
+          { weight: 65, text: 'Agradeció y firmó en un club que sí le pagaba lo que pedía.', effects: { hinchada: -1 } },
+        ],
+      },
+      {
+        label: 'Dejarla pasar',
+        hint: 'El plantel sigue como está y la estructura de sueldos no se toca.',
+        effects: { plantel: -1 },
+      },
+    ],
+  },
 ];

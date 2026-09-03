@@ -747,4 +747,50 @@ export const CORRUPCION: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'cor-regalo-de-fin-de-ano',
+    kind: 'dilema',
+    title: 'LOS REGALOS DE DICIEMBRE',
+    text: 'Un proveedor del club manda, todos los diciembres, una camioneta cargada de electrodomésticos "para la comisión". Este año llegó igual, sin que nadie lo pidiera, y está en el hall esperando que alguien diga qué se hace.',
+    options: [
+      {
+        label: 'Repartirlo entre los dirigentes, como siempre',
+        hint: 'Nadie lo va a mirar. Queda como una costumbre más de la casa.',
+        effects: { ...SUCIO, influencia: 1 },
+      },
+      {
+        label: 'Devolverlo con una nota agradeciendo',
+        hint: 'Corta una práctica de años. Un par de dirigentes te lo van a hacer notar.',
+        effects: { influencia: -4 },
+      },
+      {
+        label: 'Rifarlo entre los socios y donar lo recaudado',
+        hint: 'El gesto queda para afuera. El proveedor entiende el mensaje.',
+        effects: { hinchada: 4, influencia: -2, caja: 0.3 },
+      },
+    ],
+  },
+  {
+    id: 'cor-la-rifa-que-no-se-controla',
+    kind: 'dilema',
+    title: 'LA RIFA ANUAL DEL CLUB',
+    text: 'El que organiza la rifa del club desde hace años te explica, con naturalidad, que hay premios que figuran en el pozo y "en la práctica no se entregan", y que esa diferencia siempre ayudó a cerrar el mes.',
+    options: [
+      {
+        label: 'Que la rifa siga como venía',
+        hint: 'Entra una plata que no está en ningún lado. Como el año pasado y el anterior.',
+        effects: { ...SUCIO, caja: 0.8 },
+      },
+      {
+        label: 'Rifa con escribano y todos los premios entregados',
+        hint: 'Impecable y más flaca. El que la manejaba pierde su changa.',
+        effects: { caja: -0.6, influencia: 3, hinchada: 2 },
+      },
+      {
+        label: 'No hacer más rifa',
+        hint: 'Se termina el problema y también el ingreso.',
+        effects: { hinchada: -2 },
+      },
+    ],
+  },
 ];

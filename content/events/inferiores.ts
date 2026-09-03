@@ -329,4 +329,83 @@ export const INFERIORES: GameEvent[] = [
       },
     ],
   },
+  {
+    id: 'inf-precontrato',
+    kind: 'dilema',
+    title: 'EL DIEZ DE LA CUARTA PIDE CONTRATO',
+    text: 'Dieciséis años, es distinto y todo el mundo lo sabe. El representante llega con un precontrato de un club del exterior firmado para cuando cumpla la mayoría de edad, y pide contrato profesional ya, con un número de primera.',
+    options: [
+      {
+        label: 'Firmarle el contrato profesional que pide',
+        hint: 'Lo atás y frenás la fuga. Rompés la escala de sueldos de inferiores.',
+        effects: { caja: -1.2, plantel: 3, hinchada: 4 },
+      },
+      {
+        label: 'Ofrecerle el contrato que le toca por edad',
+        hint: 'Lo correcto según el reglamento interno. El representante ya tiene el otro papel firmado.',
+        random: [
+          { weight: 40, text: 'Aceptó igual: quería debutar acá antes de irse. Ganó el club.', effects: { plantel: 2, hinchada: 3 } },
+          { weight: 60, text: 'Esperó la mayoría de edad y se fue con lo puesto. Queda el reclamo por formación.', effects: { hinchada: -4, plantel: -1 } },
+        ],
+      },
+      {
+        label: 'Venderle un porcentaje del pase a un fondo ahora',
+        hint: 'Entra algo de plata hoy y el club se asegura una parte del futuro.',
+        effects: { caja: 2, plantel: -1, hinchada: -2 },
+      },
+    ],
+  },
+  {
+    id: 'inf-lesion-en-la-seleccion',
+    kind: 'golpe',
+    title: 'SE ROMPIÓ CON LA SUB-17',
+    text: 'La joya de inferiores se rompió los ligamentos jugando un Sudamericano con la selección juvenil. Seis meses afuera, la rehabilitación la paga el club y el pibe vuelve al país con la pierna enyesada y la cabeza hecha un lío.',
+    options: [
+      {
+        label: 'Ponerle el mejor equipo médico y acompañarlo de cerca',
+        hint: 'Caro y bien hecho. Vuelve entero y agradecido.',
+        effects: { caja: -1, plantel: -1 },
+      },
+      {
+        label: 'Rehabilitación estándar en el club',
+        hint: 'Sale menos. Con una rodilla así, el margen de error es fino.',
+        effects: { caja: -0.3, plantel: -2 },
+      },
+      {
+        label: 'Reclamar a la federación que cubra la rehabilitación',
+        hint: 'Le corresponde a quien lo convocó. Cobrarlo es otra pelea.',
+        effects: { influencia: -2, caja: 0.8 },
+      },
+    ],
+  },
+  {
+    id: 'inf-terreno-del-municipio',
+    kind: 'dilema',
+    title: 'EL MUNICIPIO OFRECE EL TERRENO DE AL LADO',
+    text: 'El terreno lindero al predio de inferiores es municipal y está sin uso. El intendente ofrece cederlo a precio simbólico, con dos condiciones: escuelas deportivas gratuitas para el barrio y su nombre en una de las canchas.',
+    options: [
+      {
+        label: 'Aceptar con las dos condiciones',
+        hint: 'El predio se duplica casi gratis. Y una cancha lleva un apellido de la política.',
+        effects: {
+          caja: -0.8,
+          socios: 3,
+          influencia: -3,
+          deferred: [
+            { inSeasons: 3, text: 'Las canchas nuevas del predio ampliado ya producen: hay más pibes y mejores.', effects: { plantel: 5, hinchada: 3 } },
+          ],
+        },
+      },
+      {
+        label: 'Aceptar el terreno, pelear lo del nombre',
+        hint: 'Las escuelitas sí, el cartel no. Puede caerse todo el acuerdo.',
+        effects: { caja: -1, socios: 2, plantel: 1, influencia: -1 },
+      },
+      {
+        label: 'Dejarlo pasar',
+        hint: 'El club no le debe nada a nadie. El predio sigue siendo el que es.',
+        effects: { influencia: 1 },
+      },
+    ],
+  },
 ];
