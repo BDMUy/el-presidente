@@ -18,6 +18,7 @@ export interface HudProps {
   league: Club['league'];
   inhibido: boolean;
   onVolver: () => void;
+  onAjustes: () => void;
 }
 
 export function Hud({
@@ -29,6 +30,7 @@ export function Hud({
   league,
   inhibido,
   onVolver,
+  onAjustes,
 }: HudProps) {
   const [abierto, setAbierto] = useState<keyof Resources | null>(null);
   const tintaClub = useTintaClub(club);
@@ -45,7 +47,7 @@ export function Hud({
     >
       <div className="mx-auto max-w-xl">
         <div className="px-3 sm:px-4">
-          <BarraSuperior onVolver={onVolver} />
+          <BarraSuperior onVolver={onVolver} onAjustes={onAjustes} />
         </div>
 
         <div className="flex items-baseline justify-between gap-3 px-3 pt-2.5 sm:px-4">

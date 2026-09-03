@@ -43,12 +43,14 @@ export function JuegoEnCurso({
   onResumen,
   onVolver,
   onReiniciar,
+  onAjustes,
 }: {
   inicio: Inicio;
   activo: boolean;
   onResumen: (resumen: Resumen) => void;
   onVolver: () => void;
   onReiniciar: () => void;
+  onAjustes: () => void;
 }) {
   const [partida, setPartida] = useState<Partida | null>(null);
   const [mostrarActa, setMostrarActa] = useState(false);
@@ -132,6 +134,7 @@ export function JuegoEnCurso({
         league={state.league}
         inhibido={state.phase.kind === 'mercado' && state.phase.inhibido}
         onVolver={onVolver}
+        onAjustes={onAjustes}
       />
 
       <div className="mx-auto w-full max-w-xl flex-1 px-4 py-6 pl-[max(1rem,var(--sae-left))] pr-[max(1rem,var(--sae-right))]">

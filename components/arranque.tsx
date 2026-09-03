@@ -76,12 +76,14 @@ export function Arranque({
   enCurso = null,
   onContinuar,
   onAbandonar,
+  onAjustes,
 }: {
   onEmpezar: (clubId: string, modo: Modo) => void;
   onEmpezarDiaria: () => void;
   enCurso?: EnCurso | null;
   onContinuar?: () => void;
   onAbandonar?: () => void;
+  onAjustes?: () => void;
 }) {
   const [elegido, setElegido] = useState<string | null>(null);
   const [pais, setPais] = useState<Country>('argentina');
@@ -135,7 +137,7 @@ export function Arranque({
   return (
     <div className="mx-auto w-full max-w-[1280px] px-4 pb-10 pl-[max(1rem,var(--sae-left))] pr-[max(1rem,var(--sae-right))] lg:px-8">
       <div className="pt-3 lg:pt-4">
-        <BarraSuperior />
+        <BarraSuperior onAjustes={onAjustes} />
       </div>
 
       <header className="pt-8 lg:pt-10">
@@ -308,6 +310,12 @@ function PanelEnCurso({
         <p className="mt-0.5 font-tabla text-[11px] tracking-[0.06em] text-tinta-2 uppercase tabular-nums">
           Temporada {season} · {year}
         </p>
+
+        {!terminada && (
+          <p className="mt-2 font-cuerpo text-[13px] leading-snug text-tinta-2">
+            Tu presidencia queda guardada.
+          </p>
+        )}
 
         <button
           type="button"

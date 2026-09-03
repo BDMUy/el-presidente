@@ -8,10 +8,54 @@ import { elegirTema, leerTema, temaDelSistema, useTemaActual, type Tema } from '
 export function BarraSuperior({
   onVolver,
   volverHref,
+  volverLabel = '← Volver al inicio',
+  onAjustes,
 }: {
   onVolver?: () => void;
   volverHref?: string;
+  volverLabel?: string;
+  onAjustes?: () => void;
 }) {
+  return (
+    <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-b border-corondel py-2">
+      {onVolver ? (
+        <button
+          type="button"
+          onClick={onVolver}
+          data-volver
+          className="-mx-2 min-h-11 px-2 font-tabla text-[11px] tracking-[0.1em] text-tinta-2 uppercase transition-colors hover:text-tinta"
+        >
+          {volverLabel}
+        </button>
+      ) : volverHref ? (
+        <Link
+          href={volverHref}
+          data-volver
+          className="-mx-2 inline-flex min-h-11 items-center px-2 font-tabla text-[11px] tracking-[0.1em] text-tinta-2 uppercase transition-colors hover:text-tinta"
+        >
+          {volverLabel}
+        </Link>
+      ) : (
+        <span aria-hidden />
+      )}
+
+      <div className="flex items-center gap-3">
+        {onAjustes && (
+          <button
+            type="button"
+            onClick={onAjustes}
+            className="-mx-1 min-h-11 px-1 font-tabla text-[11px] tracking-[0.1em] text-tinta-2 uppercase transition-colors hover:text-tinta"
+          >
+            Ajustes
+          </button>
+        )}
+        <ToggleTema />
+      </div>
+    </div>
+  );
+}
+
+export function ToggleTema() {
   const tema = useTemaActual();
 
   const cambiarTema = (evento: MouseEvent<HTMLButtonElement>) => {
@@ -46,34 +90,14 @@ export function BarraSuperior({
   };
 
   return (
-    <div className="flex items-center justify-between gap-3 border-b border-corondel py-2">
-      {onVolver ? (
-        <button
-          type="button"
-          onClick={onVolver}
-          className="-mx-2 min-h-11 px-2 font-tabla text-[11px] tracking-[0.1em] text-tinta-2 uppercase transition-colors hover:text-tinta"
-        >
-          ← Volver al inicio
-        </button>
-      ) : volverHref ? (
-        <Link
-          href={volverHref}
-          className="-mx-2 inline-flex min-h-11 items-center px-2 font-tabla text-[11px] tracking-[0.1em] text-tinta-2 uppercase transition-colors hover:text-tinta"
-        >
-          ← Volver al inicio
-        </Link>
-      ) : (
-        <span aria-hidden />
-      )}
-      <button
-        type="button"
-        onClick={cambiarTema}
-        className="-mx-2 flex min-h-11 items-center gap-1.5 px-2 font-tabla text-[11px] tracking-[0.1em] text-tinta-2 uppercase transition-colors hover:text-tinta"
-      >
-        <IconoTema />
-        {tema === 'claro' ? 'Edición nocturna' : 'Edición de día'}
-      </button>
-    </div>
+    <button
+      type="button"
+      onClick={cambiarTema}
+      className="-mx-2 flex min-h-11 items-center gap-1.5 px-2 font-tabla text-[11px] tracking-[0.1em] text-tinta-2 uppercase transition-colors hover:text-tinta"
+    >
+      <IconoTema />
+      {tema === 'claro' ? 'Edición nocturna' : 'Edición de día'}
+    </button>
   );
 }
 
