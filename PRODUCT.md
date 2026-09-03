@@ -83,9 +83,10 @@ balance.
   into the club field via `MODOS_EN_LINK`, a wire ordering separate from the
   display ordering, so `normal` is index 0 and pre-mode links still decode. New
   modes append to the end of that array, never the middle. Broken deliberately
-  once, before any public deploy or ranking row existed: `choices` no longer
-  records the acknowledgement-only "Continuar" screens, which frees roughly
-  half the decision budget a link can carry. Holds again from here on.
+  twice, before any public deploy or ranking row existed: in `CONTENT_VERSION` 6
+  `choices` stopped recording the acknowledgement-only "Continuar" screens, and
+  in `CONTENT_VERSION` 7 the content expansion, weighted event bag and balance
+  recalibration shifted the RNG stream. Holds again from here on.
 - **Works with no database.** Without `DATABASE_URL` the ranking routes answer
   503 and the UI hides the table; without the SMTP variables the `/privacidad`
   contact form disappears and `/api/contacto` answers 503. Everything else plays.
@@ -96,7 +97,7 @@ balance.
   connection strings, provider tokens, private keys, and files over 5 MB.
 - **Content is data.** Events are typed declarative objects in `content/events/`;
   adding content is adding a file and listing it in the index — the engine is not
-  touched. Current catalogue: 228 cards across twelve fronts (75 of them
+  touched. Current catalogue: 280 cards across twelve fronts (109 of them
   unconditioned — the "general" pool that sustains a long run — up from 33),
   344 clubs in three categories, 36 titles, 18 achievements. Every card needs
   at least two options with no `requires` condition so a run can never stall.
@@ -141,10 +142,10 @@ balance.
 
 - **The game itself** is complete and playable end-to-end locally with no
   configuration.
-- **Content:** 228 cards, 344 clubs, 36 titles, 18 achievements — written and in
+- **Content:** 280 cards, 344 clubs, 36 titles, 18 achievements — written and in
   the repo.
-- **Balance data** (measured, `greedy` policy completion rates): Corta 84.1%,
-  Normal 64.0%, Larga 45.6%, En llamas 15.2%.
+- **Balance data** (measured, `greedy` policy completion rates): Corta 81.7%,
+  Normal 63.7%, Larga 49.3%, En llamas 15.6%.
 - **Test suite:** 182 tests, no DOM, passing; typecheck, lint, and build green.
 - **Docs:** `README.md`, `AGENTS.md`, `DESPLIEGUE.md` (Netlify deployment
   runbook), `.env.example`.

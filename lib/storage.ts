@@ -1,7 +1,7 @@
 import type { Modo } from '@/lib/engine/types';
 import { MODOS } from '@/lib/engine/types';
 
-export const CONTENT_VERSION = 6;
+export const CONTENT_VERSION = 7;
 
 const KEY = 'el-presidente:partida';
 

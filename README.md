@@ -70,7 +70,7 @@ la lista de decisiones**. Nada más. De ahí sale casi todo lo demás:
 Los eventos son objetos declarativos tipados. Sumar contenido es agregar un
 archivo en `content/events/` y listarlo en su índice: el motor no se toca.
 
-Hoy son **228 cartas** repartidas en doce frentes, **344 clubes** en tres
+Hoy son **280 cartas** repartidas en doce frentes, **344 clubes** en tres
 categorías, 36 títulos y 18 logros. La división entre cartas generales y
 condicionales no es estética y está explicada en
 [`content/events/index.ts`](content/events/index.ts): solo las generales
@@ -125,7 +125,7 @@ cuando pasó.
 | `npx tsx scripts/llamas.ts` | cuánto más difícil es el modo en llamas y dónde se muere |
 
 Y para leer el contenido con los ojos en vez de con números, `/cartas` —solo en
-desarrollo— muestra las 228 cartas renderizadas con el componente de verdad.
+desarrollo— muestra las 280 cartas renderizadas con el componente de verdad.
 Existe porque encontrar una carta puntual jugando es cuestión de suerte, y así
 había prosa comiteada que nunca había pasado por una pantalla.
 

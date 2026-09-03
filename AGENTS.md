@@ -68,14 +68,14 @@ Consequences to respect:
 
 Events are typed declarative objects in `content/events/`. Adding content means
 adding a file and listing it in `content/events/index.ts`. The engine is not
-touched. The catalogue is 228 cards across twelve fronts, plus 344 clubs, 36
+touched. The catalogue is 280 cards across twelve fronts, plus 344 clubs, 36
 titles and 18 achievements.
 
-Cards without a `requires` condition are the general pool (75 of the 228);
+Cards without a `requires` condition are the general pool (109 of the 280);
 conditioned cards give texture to a specific situation. The general pool is
 what a healthy presidency spends almost all its time drawing from, so it is
-the one that has to be large — grown from 33 to 75 specifically to cut
-between-presidency repetition (see below).
+the one that has to be large — grown from 33 to 75 and then to 109 specifically
+to cut between-presidency repetition (see below).
 
 Repetition across separate presidencies (not within one — the engine never
 repeats a card in the same run) is damped two ways:
@@ -86,7 +86,7 @@ repeats a card in the same run) is damped two ways:
   stream consumption, fully deterministic. The same card that is common under
   one seed is rare under another, so the early cards of a run stop feeling
   identical every time.
-- **Multi-season arcs.** A handful of cards form 3-stage storylines: an
+- **Multi-season arcs.** Thirteen families of cards form 3-stage storylines: an
   unconditioned opener sets an `arco_<nombre>_<etapa>` flag, and 1-2 follow-up
   cards gated on `requires.flag` (plus a `minSeason` floor several seasons
   later) pay it off — `weight: 10` so the payoff is near-certain once
@@ -123,8 +123,13 @@ db/migrations/   SQL, applied with `npm run migrar`
   budget the transfer-window and content work needed. There was no public
   deploy and no ranking rows yet, so it was the one moment breaking it was
   free; `lib/storage.ts` bumping `CONTENT_VERSION` invalidated saved games the
-  same way it always does for a content change. The invariant holds again from
-  here on.
+  same way it always does for a content change. Broken a second time, in
+  `CONTENT_VERSION` 7, for the same reason and in the same still-free window:
+  the market archetype pools grew (`lib/engine/mercado.ts`), the catalogue went
+  from 228 to 280 cards, event selection moved to a per-season weighted bag
+  (`bolsaEventos` in `GameState`), and `desgasteDelCargo` / `BONUS_PLANTEL_LLAMAS`
+  were recalibrated — any of which shifts the RNG stream, so a pre-7 link
+  replays to a different final state. The invariant holds again from here on.
 - **The order of `enumerateAssignments()` is a wire format.** It derives from
   the `FRENTES` array in `types.ts` and the traversal in `mesa-chica.ts`, and
   the assignment index rides in `choices` and the share link. Reordering it
@@ -158,12 +163,12 @@ buttons — and must end badly almost always. `greedy` reads consequences and
 picks what suits it short term; it is the calibrated number. If the two curves
 look alike, decisions do not matter and the game is broken.
 
-Current completion rates under `greedy`: corta 84.1%, normal 64.0%, larga
-45.6%, llamas 15.2%. `plantelDecay` (`lib/engine/season.ts`) and the "en
-llamas" starting bonus (`BONUS_PLANTEL_LLAMAS` in `lib/engine/engine.ts`) are
-the levers that hold this band — a larger market or a bigger content pool
-both raise it, since `greedy` gets more chances per season to find a good
-option, and needs recalibrating there after either kind of change.
+Current completion rates under `greedy`: corta 81.7%, normal 63.7%, larga
+49.3%, llamas 15.6%. `desgasteDelCargo` and `plantelDecay` (`lib/engine/season.ts`)
+and the "en llamas" starting bonus (`BONUS_PLANTEL_LLAMAS` in
+`lib/engine/engine.ts`) are the levers that hold this band — a larger market or a
+bigger content pool both raise it, since `greedy` gets more chances per season to
+find a good option, and needs recalibrating there after either kind of change.
 
 ## Interface
 
@@ -171,7 +176,7 @@ Mobile first, and 375px is the real target, not an edge case. Interactive
 elements get `min-h-11`. Text that can be long must wrap or clamp, never
 silently truncate a decision the player is about to confirm.
 
-`/cartas` renders all 228 cards using the real `FaseEvento` component. It is
+`/cartas` renders all 280 cards using the real `FaseEvento` component. It is
 disabled in production via `notFound()`. Use it to read content at the width it
 will be read at; a gallery that draws cards its own way lies about exactly what
 you want to check.
