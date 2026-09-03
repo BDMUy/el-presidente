@@ -279,6 +279,8 @@ export function Cifra({
   abierta = false,
   onToggle,
   retraso = 0,
+  delta,
+  deltaTono = 'favorable',
 }: {
   label: string;
   valor: string;
@@ -286,6 +288,8 @@ export function Cifra({
   abierta?: boolean;
   onToggle?: () => void;
   retraso?: number;
+  delta?: string;
+  deltaTono?: 'favorable' | 'alerta';
 }) {
   return (
     <button
@@ -297,7 +301,7 @@ export function Cifra({
         abierta ? 'border-tinta' : 'border-dotted border-corondel-fuerte hover:border-tinta-2'
       }`}
     >
-      <span className="block font-tabla text-[11px] leading-[1.15] text-tinta-2 uppercase">
+      <span className="block truncate font-tabla text-[11px] leading-[1.15] text-tinta-2 uppercase">
         {label}
       </span>
       <span
@@ -306,6 +310,16 @@ export function Cifra({
         }`}
       >
         {valor}
+        {delta && (
+          <span
+            key={delta}
+            className={`entrar-nota ml-1 align-top text-[10px] leading-none font-bold tabular-nums ${
+              deltaTono === 'alerta' ? 'text-alerta' : 'text-favorable'
+            }`}
+          >
+            {delta}
+          </span>
+        )}
       </span>
     </button>
   );
