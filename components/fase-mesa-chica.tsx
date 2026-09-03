@@ -139,13 +139,14 @@ export function FaseMesaChica({
       </div>
 
       <ul className="mt-3 space-y-2">
-        {EN_PANTALLA.map((frente) => (
+        {EN_PANTALLA.map((frente, indice) => (
           <FilaFrente
             key={frente.id}
             frente={frente}
             puestas={reparto[frente.id]}
             hayFichas={disponibles > 0}
             verCostos={verCostos}
+            primera={indice === 0}
             onPoner={() => poner(frente.id)}
             onSacar={() => sacar(frente.id)}
           />
@@ -198,6 +199,7 @@ function FilaFrente({
   puestas,
   hayFichas,
   verCostos,
+  primera,
   onPoner,
   onSacar,
 }: {
@@ -205,6 +207,7 @@ function FilaFrente({
   puestas: number;
   hayFichas: boolean;
   verCostos: boolean;
+  primera: boolean;
   onPoner: () => void;
   onSacar: () => void;
 }) {
@@ -265,6 +268,7 @@ function FilaFrente({
             type="button"
             onClick={onPoner}
             disabled={!hayFichas}
+            data-foco-fase={primera ? '' : undefined}
             aria-label={`Poner una ficha en ${frente.label}. Lleva ${puestas} de ${FICHAS_MESA_CHICA}.`}
             className={botonStepper}
           >

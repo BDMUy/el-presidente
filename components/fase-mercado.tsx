@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import { MOVIMIENTOS_POR_VENTANA, type PlayerOffer } from '@/lib/engine/types';
 import { plata, plataCorta } from '@/lib/format';
+import { GrupoOpciones } from './grupo-opciones';
 import { BarraDecision, Ladillo, Puntos, Recuadro, Titular, Volanta } from './ui';
 
 const ETIQUETA: Record<PlayerOffer['kind'], string> = {
@@ -32,6 +33,9 @@ export function FaseMercado({
   const [elegida, setElegida] = useState<number | null>(null);
   const oferta = elegida !== null && elegida < offers.length ? offers[elegida] : null;
   const primerMovimiento = restantes >= MOVIMIENTOS_POR_VENTANA;
+  const confirmar = () => {
+    if (elegida !== null) onElegir(elegida);
+  };
 
   return (
     <>
@@ -61,13 +65,14 @@ export function FaseMercado({
 
         <div className="mt-6">
           <Volanta>Operaciones</Volanta>
-          <div className="mt-2 space-y-2">
+          <GrupoOpciones etiqueta="Operaciones" onConfirmar={confirmar} className="mt-2 space-y-2">
             {offers.map((offer, index) => (
               <FilaOferta
                 key={`${offer.name}-${index}`}
                 offer={offer}
                 caja={caja}
                 seleccionada={elegida === index}
+                foco={elegida === null ? index === 0 : elegida === index}
                 onClick={() => setElegida(index)}
               />
             ))}
@@ -75,7 +80,14 @@ export function FaseMercado({
             <button
               type="button"
               onClick={() => setElegida(offers.length)}
-              aria-pressed={elegida === offers.length}
+              onKeyDown={(evento) => {
+                if (evento.key === 'Enter') evento.preventDefault();
+              }}
+              role="radio"
+              aria-checked={elegida === offers.length}
+              tabIndex={
+                (elegida === null ? offers.length === 0 : elegida === offers.length) ? 0 : -1
+              }
               className={`w-full border px-3 py-3 text-left transition-colors ${
                 elegida === offers.length
                   ? 'border-tinta bg-tinta/10'
@@ -91,7 +103,7 @@ export function FaseMercado({
                   : 'No hace falta usar todos los movimientos.'}
               </span>
             </button>
-          </div>
+          </GrupoOpciones>
         </div>
       </Recuadro>
 
@@ -111,7 +123,7 @@ export function FaseMercado({
         }
         accion={elegida === null ? 'Firmar' : oferta ? 'Firmar' : 'Cerrar la ventana'}
         habilitada={elegida !== null}
-        onConfirmar={() => elegida !== null && onElegir(elegida)}
+        onConfirmar={confirmar}
       />
     </>
   );
@@ -121,11 +133,13 @@ function FilaOferta({
   offer,
   caja,
   seleccionada,
+  foco,
   onClick,
 }: {
   offer: PlayerOffer;
   caja: number;
   seleccionada: boolean;
+  foco: boolean;
   onClick: () => void;
 }) {
   const esSalida = offer.kind === 'venta' || offer.kind === 'cesion';
@@ -142,7 +156,12 @@ function FilaOferta({
     <button
       type="button"
       onClick={onClick}
-      aria-pressed={seleccionada}
+      onKeyDown={(evento) => {
+        if (evento.key === 'Enter') evento.preventDefault();
+      }}
+      role="radio"
+      aria-checked={seleccionada}
+      tabIndex={foco ? 0 : -1}
       className={`w-full border px-3 py-3 text-left transition-colors ${marco}`}
     >
       <span className="flex items-baseline justify-between gap-2">
