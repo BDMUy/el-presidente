@@ -280,7 +280,7 @@ describe('arranque', () => {
 
     expect(llamas.resources.caja).toBe(-22);
     expect(estaInhibido(llamas.resources)).toBe(true);
-    expect(llamas.resources.plantel).toBe(normal.resources.plantel + 19);
+    expect(llamas.resources.plantel).toBe(normal.resources.plantel + 20);
     expect(llamas.resources.hinchada).toBe(40);
     expect(llamas.resources.hinchada).toBeLessThan(45);
 
@@ -406,26 +406,26 @@ describe('determinismo', () => {
     });
 
     expect(huellas).toEqual([
-      'boca/corta asamblea s6 m2 t3 d1 a0 p572 1646a3e1',
-      'canuelas/normal asamblea s4 m1 t0 d1 a0 p0 d69c3307',
-      'utc/larga asamblea s2 m1 t0 d1 a0 p50 deb312a7',
-      'realcundinamarca/llamas asamblea s1 m1 t0 d1 a0 p0 7f461ec9',
-      'fernandodelamora/corta asamblea s5 m2 t2 d2 a1 p82 f5edb417',
-      'bragantino/larga asamblea s6 m2 t1 d2 a0 p59 62bf48bc',
-      'aldosivi/llamas asamblea s1 m1 t0 d1 a0 p0 c59277f1',
-      'cali/normal asamblea s3 m1 t0 d1 a0 p70 17c15655',
-      'wilstermann/llamas derrota-electoral s4 m1 t3 d1 a1 p299 f78de35a',
-      'river/normal asamblea s3 m1 t0 d1 a0 p217 e77f6635',
-      'carapegua/normal derrota-electoral s4 m1 t0 d1 a0 p0 6c9953f7',
-      'vitoria/llamas asamblea s1 m1 t0 d1 a0 p0 c93b4c79',
-      'colegiales/normal derrota-electoral s4 m1 t1 d1 a0 p48 3cbf8918',
-      'colegiales/larga derrota-electoral s4 m1 t1 d1 a0 p48 14559c52',
-      'sanmiguel/normal asamblea s7 m2 t2 d1 a0 p169 e07296ec',
-      'sanmiguel/larga asamblea s7 m2 t2 d1 a0 p169 f926cae2',
-      'usmp/normal asamblea s7 m2 t4 d2 a1 p232 b11f9962',
-      'cerroporteno/larga asamblea s8 m2 t2 d1 a0 p609 d7645d8b',
-      'losandes/normal asamblea s6 m2 t2 d2 a2 p224 3bc654e0',
-      'binacional/larga asamblea s6 m2 t2 d2 a1 p24 a3f8789b',
+      'boca/corta asamblea s4 m1 t1 d1 a0 p312 3acaee10',
+      'canuelas/normal asamblea s3 m1 t0 d1 a0 p0 124ce501',
+      'utc/larga asamblea s2 m1 t0 d1 a0 p48 c649f1c9',
+      'realcundinamarca/llamas asamblea s1 m1 t0 d1 a0 p0 db4ef525',
+      'fernandodelamora/corta asamblea s5 m2 t2 d2 a1 p59 d89cde80',
+      'bragantino/larga derrota-electoral s4 m1 t1 d0 a0 p436 b8b339d8',
+      'aldosivi/llamas asamblea s1 m1 t0 d1 a0 p0 27f15751',
+      'cali/normal asamblea s3 m1 t0 d0 a0 p188 a6e37f3e',
+      'wilstermann/llamas derrota-electoral s8 m2 t2 d1 a1 p253 5a01f7a1',
+      'river/normal asamblea s3 m1 t0 d1 a0 p222 10589e0f',
+      'carapegua/normal asamblea s4 m1 t0 d2 a0 p0 d1143de8',
+      'vitoria/llamas asamblea s1 m1 t0 d1 a0 p0 71b6b5e6',
+      'colegiales/normal asamblea s2 m1 t0 d1 a0 p0 1e8ba7b6',
+      'colegiales/larga asamblea s2 m1 t0 d1 a0 p0 95493ce6',
+      'sanmiguel/normal asamblea s7 m2 t3 d2 a1 p147 553b64ec',
+      'sanmiguel/larga asamblea s7 m2 t3 d2 a1 p147 c9a9f624',
+      'usmp/normal asamblea s7 m2 t1 d2 a1 p0 8c4e09a7',
+      'cerroporteno/larga derrota-electoral s12 m3 t14 d1 a0 p2451 846adf8f',
+      'losandes/normal asamblea s4 m1 t2 d2 a2 p179 a192620f',
+      'binacional/larga asamblea s6 m2 t2 d2 a1 p49 f9e67bed',
     ]);
   });
 });

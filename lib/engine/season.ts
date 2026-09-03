@@ -358,7 +358,7 @@ export function plantelDecay(league: LeagueId): number {
 }
 
 export function desgasteDelCargo(mandate: number): number {
-  return -(1 + mandate * 0.6);
+  return -(mandate * 0.8);
 }
 
 export function titlePoints(id: TitleId): number {
