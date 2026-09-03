@@ -81,7 +81,10 @@ export function Hud({
           {inhibido && <span className="ml-2 text-alerta">· inhibido</span>}
         </p>
 
-        <div className="mt-2 grid grid-cols-3 gap-1 border-t border-corondel px-2 py-2 divide-corondel min-[360px]:grid-cols-5 min-[360px]:divide-x sm:px-3">
+        <div
+          data-recorrido="hud-recursos"
+          className="mt-2 grid grid-cols-3 gap-1 border-t border-corondel px-2 py-2 divide-corondel min-[360px]:grid-cols-5 min-[360px]:divide-x sm:px-3"
+        >
           <Cifra
             label="Caja"
             valor={plataCorta(resources.caja)}

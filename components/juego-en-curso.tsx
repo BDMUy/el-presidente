@@ -7,6 +7,8 @@ import { applyChoice, replayRun, startRun } from '@/lib/engine/engine';
 import { EVENTS_PER_SEASON, type GameState, type Modo, type Phase } from '@/lib/engine/types';
 import { borrar, guardar, leer } from '@/lib/storage';
 import { ActaAsuncion } from './acta-asuncion';
+import { AvisoRecorrido } from './aviso-recorrido';
+import type { PasoRecorrido } from './recorrido';
 import { FaseEleccion, FaseTemporada } from './fase-cierre';
 import { FaseEvento, FaseResultadoEvento } from './fase-evento';
 import { FaseFin } from './fase-fin';
@@ -38,6 +40,27 @@ function alTope(): void {
 }
 
 const REMONTA: ReadonlySet<Phase['kind']> = new Set(['evento', 'mercado', 'mesa-chica']);
+
+const PASOS_JUEGO: PasoRecorrido[] = [
+  {
+    sel: '[data-recorrido="hud-recursos"]',
+    titulo: 'Tus cinco frentes',
+    cuerpo:
+      'Caja, hinchada, socios, plantel e influencia. Casi ninguna decisión los mueve a todos para el mismo lado. Tocá cada cifra para ver qué es.',
+  },
+  {
+    sel: '[data-recorrido="carta"]',
+    titulo: 'Lo que te toca resolver',
+    cuerpo:
+      'Cada turno es una situación: una nota, el mercado de pases o una mesa chica. Leés y elegís; cada opción avisa a qué frente pega.',
+  },
+  {
+    sel: '[data-recorrido="decision"]',
+    titulo: 'Firmá la decisión',
+    cuerpo:
+      'Elegí una opción y confirmá acá abajo. No se vuelve atrás: la presidencia es la lista de todo lo que firmaste.',
+  },
+];
 
 export function JuegoEnCurso({
   inicio,
@@ -187,13 +210,18 @@ export function JuegoEnCurso({
             onAsumir={cerrarActa}
           />
         ) : (
-          <Pantalla
-            key={claveFase}
-            state={state}
-            diaria={diaria}
-            onElegir={elegir}
-            onReiniciar={onReiniciar}
-          />
+          <>
+            <AvisoRecorrido id="juego" pasos={PASOS_JUEGO} etiqueta="Primera vez dirigiendo" />
+            <div data-recorrido="carta">
+              <Pantalla
+                key={claveFase}
+                state={state}
+                diaria={diaria}
+                onElegir={elegir}
+                onReiniciar={onReiniciar}
+              />
+            </div>
+          </>
         )}
       </div>
     </>

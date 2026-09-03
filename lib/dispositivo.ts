@@ -1,4 +1,5 @@
-import { DIRIGENTES } from '@/content/parodias';
+import { DIRIGENTES, TODOS_LOS_DIRIGENTES } from '@/content/parodias';
+import type { Country } from '@/lib/engine/types';
 
 const KEY_ID = 'el-presidente:dispositivo';
 const KEY_NOMBRE = 'el-presidente:nombre';
@@ -47,19 +48,20 @@ export function guardarNombre(nombre: string): void {
 }
 
 export function nombreAsignado(): string {
-  if (typeof window === 'undefined') return DIRIGENTES[0];
+  if (typeof window === 'undefined') return TODOS_LOS_DIRIGENTES[0];
   try {
     const guardado = window.localStorage.getItem(KEY_ASIGNADO);
     if (guardado) return guardado;
     return reasignarNombre();
   } catch {
-    return DIRIGENTES[0];
+    return TODOS_LOS_DIRIGENTES[0];
   }
 }
 
-export function reasignarNombre(): string {
-  if (typeof window === 'undefined') return DIRIGENTES[0];
-  const sorteado = DIRIGENTES[Math.floor(Math.random() * DIRIGENTES.length)];
+export function reasignarNombre(pais?: Country): string {
+  if (typeof window === 'undefined') return TODOS_LOS_DIRIGENTES[0];
+  const bolsa = pais ? DIRIGENTES[pais] : TODOS_LOS_DIRIGENTES;
+  const sorteado = bolsa[Math.floor(Math.random() * bolsa.length)];
   try {
     window.localStorage.setItem(KEY_ASIGNADO, sorteado);
   } catch {

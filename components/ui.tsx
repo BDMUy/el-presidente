@@ -212,6 +212,7 @@ export function BarraDecision({
 }) {
   return (
     <div
+      data-recorrido="decision"
       className="sticky bottom-0 -mx-4 mt-5 border-t-4 border-tinta bg-fondo-2/97 px-4 pt-3 backdrop-blur"
       style={{ paddingBottom: 'calc(0.75rem + var(--sae-bottom))' }}
     >

@@ -8,18 +8,20 @@ export function Plegable({
   titulo,
   resumen,
   abiertoPorDefecto = false,
+  ancla,
   children,
 }: {
   titulo: string;
   resumen?: string;
   abiertoPorDefecto?: boolean;
+  ancla?: string;
   children: React.ReactNode;
 }) {
   const [abierto, setAbierto] = useState(abiertoPorDefecto);
   const id = useId();
 
   return (
-    <section className="mt-6 border border-corondel lg:border-0">
+    <section data-recorrido={ancla} className="mt-6 border border-corondel lg:border-0">
       <button
         type="button"
         onClick={() => setAbierto((a) => !a)}
