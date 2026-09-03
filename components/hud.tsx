@@ -40,6 +40,20 @@ export function Hud({
 
   const detalle = abierto ? RECURSOS_POR_ID[abierto] : null;
 
+  const [vistos, setVistos] = useState(resources);
+  const [previo, setPrevio] = useState<Resources | null>(null);
+  if (vistos !== resources) {
+    setPrevio(vistos);
+    setVistos(resources);
+  }
+
+  const cambio = (campo: keyof Resources) => {
+    const texto = previo && formatearDelta(campo, resources[campo] - previo[campo]);
+    return texto
+      ? { delta: texto, deltaTono: texto.startsWith('−') ? ('alerta' as const) : ('favorable' as const) }
+      : undefined;
+  };
+
   return (
     <header
       className="sticky top-0 z-20"
@@ -75,6 +89,7 @@ export function Hud({
             abierta={abierto === 'caja'}
             onToggle={() => alternar('caja')}
             retraso={0}
+            {...cambio('caja')}
           />
           <Cifra
             label="Hinchada"
@@ -83,6 +98,7 @@ export function Hud({
             abierta={abierto === 'hinchada'}
             onToggle={() => alternar('hinchada')}
             retraso={40}
+            {...cambio('hinchada')}
           />
           <Cifra
             label="Socios"
@@ -90,6 +106,7 @@ export function Hud({
             abierta={abierto === 'socios'}
             onToggle={() => alternar('socios')}
             retraso={80}
+            {...cambio('socios')}
           />
           <Cifra
             label="Plantel"
@@ -97,6 +114,7 @@ export function Hud({
             abierta={abierto === 'plantel'}
             onToggle={() => alternar('plantel')}
             retraso={120}
+            {...cambio('plantel')}
           />
           <Cifra
             label="Influencia"
@@ -104,6 +122,7 @@ export function Hud({
             abierta={abierto === 'influencia'}
             onToggle={() => alternar('influencia')}
             retraso={160}
+            {...cambio('influencia')}
           />
         </div>
 
@@ -135,4 +154,17 @@ export function Hud({
       </div>
     </header>
   );
+}
+
+function formatearDelta(campo: keyof Resources, d: number): string | null {
+  if (campo === 'caja') {
+    if (Math.abs(d) < 0.05) return null;
+    const abs = Math.abs(d);
+    const num = abs < 10 ? abs.toFixed(1).replace('.', ',') : String(Math.round(abs));
+    return `${d > 0 ? '+' : '−'}${num}M`;
+  }
+  const r = Math.round(d);
+  if (r === 0) return null;
+  const unidad = campo === 'socios' ? 'k' : '';
+  return `${r > 0 ? '+' : '−'}${Math.abs(r)}${unidad}`;
 }
