@@ -2,7 +2,7 @@ import { ImageResponse } from 'next/og';
 
 import { getClub } from '@/content/clubs';
 import { computeScore } from '@/lib/engine/election';
-import { FONDO_OSCURO, tintaDeClub } from '@/lib/color';
+import { CORONDEL_OSCURO, FONDO_OSCURO, TINTA_2_OSCURA, TINTA_OSCURA, tintaDeClub } from '@/lib/color';
 import { TITLES } from '@/lib/engine/types';
 import { reconstruirPresidencia } from '@/lib/share';
 
@@ -23,9 +23,9 @@ export async function generateImageMetadata({
 }
 
 const FONDO = FONDO_OSCURO;
-const TINTA = '#e6e3db';
-const TINTA_2 = '#a3a09a';
-const CORONDEL = '#45474e';
+const TINTA = TINTA_OSCURA;
+const TINTA_2 = TINTA_2_OSCURA;
+const CORONDEL = CORONDEL_OSCURO;
 
 const UA_ESTATICA =
   'Mozilla/5.0 (Windows NT 6.1; rv:6.0) Gecko/20110814 Firefox/6.0';

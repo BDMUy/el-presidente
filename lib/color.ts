@@ -5,6 +5,10 @@ export const FONDO_CLARO = '#f1ebdd';
 export const SUPERFICIE_OSCURA = '#193733';
 export const SUPERFICIE_CLARA = '#e7decd';
 
+export const TINTA_OSCURA = '#f3ebdd';
+export const TINTA_2_OSCURA = '#bbc9bf';
+export const CORONDEL_OSCURO = '#76978b';
+
 export function superficieDelTema(tema: 'oscuro' | 'claro'): string {
   return tema === 'claro' ? SUPERFICIE_CLARA : SUPERFICIE_OSCURA;
 }

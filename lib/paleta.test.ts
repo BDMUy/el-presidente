@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { FONDO_CLARO, FONDO_OSCURO, SUPERFICIE_CLARA, SUPERFICIE_OSCURA, hex, mezclar, ratio } from './color';
+import { CORONDEL_OSCURO, FONDO_CLARO, FONDO_OSCURO, SUPERFICIE_CLARA, SUPERFICIE_OSCURA, TINTA_2_OSCURA, TINTA_OSCURA, hex, mezclar, ratio } from './color';
 
 const css = readFileSync(new URL('../app/globals.css', import.meta.url), 'utf8');
 
@@ -20,6 +20,14 @@ describe('Paleta editorial', () => {
       expect(token('fondo')).toBe(fondo);
       expect(token('fondo-2')).toBe(superficie);
     });
+
+    if (selector === ':root') {
+      it('la tarjeta para compartir usa las mismas tintas que el tema oscuro', () => {
+        expect(token('tinta')).toBe(TINTA_OSCURA);
+        expect(token('tinta-2')).toBe(TINTA_2_OSCURA);
+        expect(token('corondel')).toBe(CORONDEL_OSCURO);
+      });
+    }
 
     it(`${selector}: texto, acciones y bordes cumplen en ambas superficies`, () => {
       for (const base of [fondo, superficie]) {
