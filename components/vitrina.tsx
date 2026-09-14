@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useId, useState } from 'react';
+import Image from 'next/image';
 
 import { LOGROS } from '@/content/logros';
 import { getClub } from '@/content/clubs';
@@ -15,58 +16,74 @@ export function VitrinaPanel() {
 
   useEffect(() => {
     const leida = leerVitrina();
-    if (leida.partidas > 0) setVitrina(leida);
+    setVitrina(leida);
   }, []);
 
   if (!vitrina) return null;
+
+  if (vitrina.partidas === 0) {
+    return (
+      <details className="mt-6 border-t border-corondel py-3">
+        <summary className="flex min-h-11 cursor-pointer items-center justify-between font-titular font-bold">Tu vitrina <span className="indicador-mas" aria-hidden>+</span></summary>
+        <Image src="/ilustraciones/vitrina-vacia.webp" alt="" width={1264} height={848} sizes="(max-width: 600px) 85vw, 400px" className="mt-2 h-24 w-full object-cover object-center" />
+        <div className="py-3">
+          <h2 className="font-titular text-[0.9375rem] font-bold">Esta vitrina te espera</h2>
+          <p className="mt-1 font-cuerpo text-[0.875rem] text-tinta-2">Las copas y los logros que consigas van a quedar acá.</p>
+        </div>
+      </details>
+    );
+  }
 
   const club = vitrina.mejorClub ? getClub(vitrina.mejorClub) : null;
   const conseguidos = new Set(vitrina.logros);
 
   return (
-    <div className="mt-6 border border-corondel">
+    <div className="mt-6 border-t border-corondel pt-3">
       <button
         type="button"
         onClick={() => setAbierta((v) => !v)}
         aria-expanded={abierta}
         aria-controls={panelId}
-        className="flex w-full items-center gap-3 px-3 py-2.5 text-left transition-colors hover:bg-tinta/6"
+        className="flex min-h-11 w-full items-center gap-3 py-2.5 text-left transition-colors hover:bg-tinta/6"
       >
         <span className="min-w-0 flex-1">
-          <span className="block font-tabla text-[11px] tracking-[0.06em] text-tinta-2 uppercase">
+          <span className="block font-tabla text-[0.75rem] tracking-[0.06em] text-tinta-2 uppercase">
             Tu vitrina · {vitrina.partidas}{' '}
             {vitrina.partidas === 1 ? 'presidencia' : 'presidencias'}
           </span>
-          <span className="mt-0.5 block font-titular text-[15px] leading-tight font-bold text-tinta">
+          <span className="mt-0.5 block font-titular text-[0.9375rem] leading-tight font-bold text-tinta">
             Mejor puntaje {vitrina.mejorPuntaje.toLocaleString('es-AR')}
             {club && <span className="font-cuerpo font-normal text-tinta-2"> con {club.short}</span>}
           </span>
         </span>
-        <span className="shrink-0 font-tabla text-[11px] tracking-[0.06em] text-tinta-2 uppercase">
-          {abierta ? 'Cerrar' : 'Ver'}
+        <span
+          aria-hidden
+          className="indicador-mas shrink-0 font-titular text-[1.125rem] leading-none font-black text-tinta-2"
+        >
+          +
         </span>
       </button>
 
       {abierta && (
-        <div id={panelId} className="border-t border-corondel px-3 py-3">
-          <p className="font-tabla text-[11px] tracking-[0.06em] text-tinta-2 uppercase">
+        <div id={panelId} className="entrar-nota border-t border-corondel py-3">
+          <p className="font-tabla text-[0.75rem] tracking-[0.06em] text-tinta-2 uppercase">
             Copas ganadas ({vitrina.titulos.length} de {Object.keys(TITLES).length})
           </p>
           {vitrina.titulos.length > 0 ? (
             <ul className="mt-2 flex flex-wrap gap-1.5">
               {vitrina.titulos.map((id) => (
                 <li key={id}>
-                  <Ladillo tono="tinta">
+                  <Ladillo tono="acento">
                     {TITLES[id].label}
                   </Ladillo>
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="mt-1.5 font-cuerpo text-[14px] text-tinta-2">Todavía ninguna.</p>
+            <p className="mt-1.5 font-cuerpo text-[0.875rem] text-tinta-2">Todavía ninguna.</p>
           )}
 
-          <p className="mt-4 font-tabla text-[11px] tracking-[0.06em] text-tinta-2 uppercase">
+          <p className="mt-4 font-tabla text-[0.75rem] tracking-[0.06em] text-tinta-2 uppercase">
             Logros ({conseguidos.size} de {LOGROS.length})
           </p>
           <ul className="mt-2 space-y-1.5">
@@ -74,7 +91,7 @@ export function VitrinaPanel() {
               const hecho = conseguidos.has(logro.id);
               if (logro.oculto && !hecho) {
                 return (
-                  <li key={logro.id} className="font-cuerpo text-[13px] text-tinta-2 italic">
+                  <li key={logro.id} className="font-cuerpo text-[0.8125rem] text-tinta-2 italic">
                     Logro oculto
                   </li>
                 );
@@ -89,7 +106,7 @@ export function VitrinaPanel() {
                   />
                   <span className="min-w-0">
                     <span
-                      className={`block font-titular text-[14px] leading-tight font-bold ${
+                      className={`block font-titular text-[0.875rem] leading-tight font-bold ${
                         hecho ? 'text-tinta' : 'text-tinta-2'
                       }`}
                     >
@@ -99,7 +116,7 @@ export function VitrinaPanel() {
                       {logro.label}
                     </span>
                     {!hecho && (
-                      <span className="block font-cuerpo text-[13px] leading-snug text-tinta-2">
+                      <span className="block font-cuerpo text-[0.8125rem] leading-snug text-tinta-2">
                         {logro.pista}
                       </span>
                     )}

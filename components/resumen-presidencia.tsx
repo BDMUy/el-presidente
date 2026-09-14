@@ -38,7 +38,7 @@ export function ResumenPresidencia({
         {ending.title}
       </h1>
 
-      <p className="mt-4 font-cuerpo text-[16px] leading-relaxed text-tinta">{ending.text}</p>
+      <p className="mt-4 font-cuerpo text-[1rem] leading-relaxed text-tinta">{ending.text}</p>
 
       <div className="mt-7 border-y border-corondel py-4">
         <dl className="grid grid-cols-3 divide-x divide-corondel">
@@ -59,7 +59,7 @@ export function ResumenPresidencia({
           <ul className="mt-2 flex flex-wrap gap-2">
             {[...porTitulo].map(([id, veces]) => (
               <li key={id}>
-                <Ladillo tono="club">
+                <Ladillo tono="acento">
                   {TITLES[id].label}
                   {veces > 1 && ` ×${veces}`}
                 </Ladillo>
@@ -68,13 +68,13 @@ export function ResumenPresidencia({
           </ul>
         </div>
       ) : (
-        <p className="mt-5 font-tabla text-[12px] tracking-[0.08em] text-tinta-2 uppercase">
+        <p className="mt-5 font-tabla text-[0.75rem] tracking-[0.08em] text-tinta-2 uppercase">
           Vitrina vacía. No todas las presidencias dejan una copa.
         </p>
       )}
 
       {state.modo === 'llamas' && (
-        <p className="mt-5 border-l-2 border-alerta pl-3 font-tabla text-[12px] leading-relaxed tracking-wide text-alerta uppercase">
+        <p className="mt-5 border-l-2 border-alerta pl-3 font-tabla text-[0.75rem] leading-relaxed tracking-wide text-alerta uppercase">
           Club en llamas · veintidós millones de deuda y la gente en contra
         </p>
       )}
@@ -83,18 +83,18 @@ export function ResumenPresidencia({
         className="entrar-nota mt-7 border-t-2 border-[var(--club)] pt-4 text-center"
         style={{ animationDelay: '420ms' }}
       >
-        <p className="font-tabla text-[11px] tracking-[0.16em] text-tinta-2 uppercase">
+        <p className="font-tabla text-[0.75rem] tracking-[0.16em] text-tinta-2 uppercase">
           Puntaje de la presidencia
         </p>
         <p className="font-titular text-5xl leading-none font-black tabular-nums text-tinta">
           {score.toLocaleString('es-AR')}
         </p>
         {score === 0 ? (
-          <p className="mt-2 font-cuerpo text-[14px] leading-snug text-tinta-2">
+          <p className="mt-2 font-cuerpo text-[0.875rem] leading-snug text-tinta-2">
             Entre los descensos y la deuda no quedó puntaje para anotar.
           </p>
         ) : (
-          <p className="mt-2 font-cuerpo text-[14px] leading-snug text-tinta-2">
+          <p className="mt-2 font-cuerpo text-[0.875rem] leading-snug text-tinta-2">
             Del tiempo en el cargo salen {piso.toLocaleString('es-AR')} puntos.{' '}
             {state.descensos > 0
               ? 'El resto lo movieron los títulos, la hinchada, la caja y los descensos.'
@@ -109,7 +109,7 @@ export function ResumenPresidencia({
 function Dato({ label, valor }: { label: string; valor: string }) {
   return (
     <div className="pl-3 first:pl-0">
-      <dt className="font-tabla text-[11px] tracking-[0.08em] text-tinta-2 uppercase">{label}</dt>
+      <dt className="font-tabla text-[0.75rem] tracking-[0.08em] text-tinta-2 uppercase">{label}</dt>
       <dd className="mt-0.5 font-titular text-lg leading-none font-black tabular-nums text-tinta">
         {valor}
       </dd>

@@ -59,31 +59,31 @@ export function Hud({
       className="sticky top-0 z-20"
       style={{ '--club': tintaClub } as CSSProperties}
     >
-      <div className="mx-auto max-w-xl bg-fondo-2/97 backdrop-blur" style={{ paddingTop: 'var(--sae-top)' }}>
-        <div className="px-3 sm:px-4">
-          <BarraSuperior onVolver={onVolver} onAjustes={onAjustes} />
+      <div className="mx-auto max-w-[40rem] border-b border-corondel bg-fondo" style={{ paddingTop: 'var(--sae-top)' }}>
+        <div className="px-4">
+          <BarraSuperior onVolver={onVolver} volverLabel="← Inicio" onAjustes={onAjustes} />
         </div>
 
         <div className="flex items-baseline justify-between gap-3 px-3 pt-2.5 sm:px-4">
           <p
-            className="truncate font-titular text-[15px] leading-none font-black tracking-tight text-tinta"
+            className="break-words font-titular text-[0.9375rem] leading-tight font-black tracking-tight text-tinta"
             style={{ fontStretch: '75%' }}
           >
             {club.name}
           </p>
-          <p className="shrink-0 font-tabla text-[11px] font-bold tracking-[0.06em] text-tinta-2 uppercase tabular-nums">
+          <p className="shrink-0 font-tabla text-[0.75rem] font-bold tracking-[0.06em] text-tinta-2 uppercase tabular-nums">
             T{season} · {year}
           </p>
         </div>
 
-        <p className="mt-1 px-3 font-tabla text-[11px] font-bold tracking-[0.06em] text-[var(--club)] uppercase sm:px-4">
+        <p className="mt-1 px-3 font-tabla text-[0.75rem] font-bold tracking-[0.06em] text-[var(--club)] uppercase sm:px-4">
           {LEAGUES[league].label} · Mandato {mandate}
           {inhibido && <span className="ml-2 text-alerta">· inhibido</span>}
         </p>
 
         <div
           data-recorrido="hud-recursos"
-          className="mt-2 grid grid-cols-3 gap-1 border-t border-corondel px-2 py-2 divide-corondel min-[360px]:grid-cols-5 min-[360px]:divide-x sm:px-3"
+          className="mt-2 grid grid-cols-3 gap-1 border-t border-corondel px-2 py-2 divide-corondel min-[360px]:grid-cols-5 min-[360px]:divide-x min-[400px]:gap-1 sm:px-3"
         >
           <Cifra
             label="Caja"
@@ -131,19 +131,19 @@ export function Hud({
 
         {detalle && (
           <div className="entrar-nota border-t border-corondel bg-fondo/60 px-3 py-3 sm:px-4">
-            <p className="font-tabla text-[11px] font-bold tracking-[0.1em] text-[var(--club)] uppercase">
+            <p className="font-tabla text-[0.75rem] font-bold tracking-[0.1em] text-[var(--club)] uppercase">
               {detalle.label}
             </p>
-            <p className="mt-1.5 font-cuerpo text-[14px] leading-snug text-tinta">{detalle.texto}</p>
+            <p className="mt-1.5 font-cuerpo text-[0.875rem] leading-snug text-tinta">{detalle.texto}</p>
             {detalle.limite && (
-              <p className="mt-2 border-l-2 border-alerta pl-2.5 font-cuerpo text-[13px] leading-snug text-tinta-2">
+              <p className="mt-2 border-l-2 border-alerta pl-2.5 font-cuerpo text-[0.8125rem] leading-snug text-tinta-2">
                 {detalle.limite}
               </p>
             )}
             <button
               type="button"
               onClick={() => setAbierto(null)}
-              className="mt-2.5 font-tabla text-[11px] font-bold tracking-[0.1em] text-tinta-2 uppercase underline underline-offset-4 hover:text-tinta"
+              className="mt-2.5 min-h-11 font-tabla text-[0.75rem] font-bold tracking-[0.1em] text-tinta-2 uppercase underline underline-offset-4 hover:text-tinta"
             >
               Cerrar
             </button>

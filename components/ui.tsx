@@ -5,16 +5,17 @@ import type { Impacto } from '@/lib/impacto';
 export function Recuadro({
   children,
   acento = 'tinta',
+  denso = false,
   className = '',
 }: {
   children: ReactNode;
   acento?: 'tinta' | 'club';
+  denso?: boolean;
   className?: string;
 }) {
-  const borde = acento === 'club' ? 'border-[var(--club)]' : 'border-tinta';
   return (
-    <div className={`entrar-nota border-t-4 bg-fondo-2 ${borde} ${className}`}>
-      <div className="p-5 sm:p-7">{children}</div>
+    <div data-acento={acento} className={`entrar-nota ${className}`}>
+      <div className={denso ? 'py-3' : 'py-4'}>{children}</div>
     </div>
   );
 }
@@ -26,21 +27,23 @@ export function Ladillo({
   className = '',
 }: {
   children: ReactNode;
-  tono?: 'tinta' | 'alerta' | 'favorable' | 'club';
+  tono?: 'tinta' | 'alerta' | 'favorable' | 'club' | 'acento';
   animado?: boolean;
   className?: string;
 }) {
-  const fondo =
+  const paleta =
     tono === 'club'
-      ? 'bg-[var(--club)]'
+      ? 'bg-[var(--club)] text-fondo'
       : tono === 'alerta'
-        ? 'bg-alerta'
+        ? 'bg-alerta text-fondo'
         : tono === 'favorable'
-          ? 'bg-favorable'
-          : 'bg-tinta';
+          ? 'bg-favorable text-fondo'
+          : tono === 'acento'
+            ? 'bg-acento text-sobre-acento'
+            : 'bg-tinta text-fondo';
   return (
     <span
-      className={`inline-block px-2 py-0.5 font-tabla text-[11px] tracking-[0.1em] text-fondo uppercase ${fondo} ${
+      className={`inline-block px-2 py-0.5 font-tabla text-[0.75rem] tracking-[0.1em] uppercase ${paleta} ${
         animado ? 'entrar-nota' : ''
       } ${className}`}
     >
@@ -58,7 +61,7 @@ export function Volanta({
 }) {
   return (
     <Tag
-      className="border-b border-corondel pb-1 font-titular text-[12px] font-bold tracking-[0.14em] text-tinta-2 uppercase"
+      className="border-b border-corondel pb-1 font-titular text-[0.75rem] font-bold tracking-[0.14em] text-tinta-2 uppercase"
       style={{ fontStretch: '75%' }}
     >
       {children}
@@ -119,7 +122,7 @@ function TokenImpacto({ token, seleccionado }: { token: Impacto; seleccionado: b
         : 'text-tinta-2';
 
   return (
-    <span className={`font-tabla text-[10px] font-bold tracking-[0.06em] uppercase ${color}`}>
+    <span className={`font-tabla text-[0.75rem] font-bold tracking-[0.06em] uppercase ${color}`}>
       {token.label}
       {token.signo !== 'neutro' && <span className="ml-0.5">{signoRepetido(token)}</span>}
     </span>
@@ -159,7 +162,7 @@ export function Renglon({
       aria-checked={seleccionado}
       tabIndex={foco ? 0 : -1}
       style={{ animationDelay: `${retraso}ms` }}
-      className={`entrar-nota w-full border-b border-corondel px-3 py-3 text-left transition-colors disabled:opacity-40 ${
+      className={`entrar-nota min-h-11 w-full border-b border-corondel px-3 py-3 text-left transition-colors disabled:opacity-40 ${
         seleccionado ? 'bg-tinta' : 'hover:bg-fondo/60'
       }`}
     >
@@ -171,7 +174,7 @@ export function Renglon({
         <span className="min-w-0">{label}</span>
         {azaroso && (
           <span
-            className={`ml-auto shrink-0 border px-1.5 py-0.5 font-tabla text-[10px] font-bold tracking-wider uppercase ${
+            className={`ml-auto shrink-0 border px-1.5 py-0.5 font-tabla text-[0.75rem] font-bold tracking-wider uppercase ${
               seleccionado ? 'border-fondo text-fondo' : 'border-tinta-2 text-tinta-2'
             }`}
           >
@@ -179,13 +182,11 @@ export function Renglon({
           </span>
         )}
       </span>
-      <span
-        className={`mt-1 block font-cuerpo text-[0.875rem] leading-snug ${
-          seleccionado ? 'text-fondo/80' : 'text-tinta-2'
-        }`}
-      >
-        {hint}
-      </span>
+      {seleccionado && (
+        <span className="mt-1 block font-cuerpo text-[0.875rem] leading-snug text-fondo/80">
+          {hint}
+        </span>
+      )}
       {impacto && impacto.length > 0 && (
         <span className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
           {impacto.map((token) => (
@@ -203,26 +204,37 @@ export function BarraDecision({
   accion,
   onConfirmar,
   habilitada = true,
+  tono = 'firma',
+  children,
 }: {
   resumen: string;
   detalle?: string;
   accion: string;
   onConfirmar: () => void;
   habilitada?: boolean;
+  tono?: 'firma' | 'neutra';
+  children?: ReactNode;
 }) {
+  const estilo = !habilitada
+    ? 'cursor-not-allowed border border-corondel text-tinta-3'
+    : tono === 'neutra'
+      ? 'border border-tinta text-tinta hover:bg-tinta/10'
+      : 'boton-jugar';
+
   return (
     <div
       data-recorrido="decision"
-      className="sticky bottom-0 -mx-4 mt-5 border-t-4 border-tinta bg-fondo-2/97 px-4 pt-3 backdrop-blur"
+      className="barra-decision sticky bottom-0 -mx-4 mt-6 border-t border-corondel bg-fondo px-4 pt-3"
       style={{ paddingBottom: 'calc(0.75rem + var(--sae-bottom))' }}
     >
-      <div className="mx-auto flex max-w-xl items-center gap-3">
+      {children}
+      <div className="barra-decision-fila mx-auto flex max-w-[40rem] items-center gap-3">
         <div className="min-w-0 flex-1">
-          <p className="line-clamp-2 font-titular text-[15px] leading-tight font-bold text-tinta">
+          <p className="font-titular text-[0.9375rem] leading-tight font-bold break-words text-tinta">
             {resumen}
           </p>
           {detalle && (
-            <p className="mt-0.5 truncate font-tabla text-[11px] tracking-[0.06em] text-tinta-2 uppercase">
+            <p className="mt-0.5 font-tabla text-[0.75rem] tracking-[0.06em] text-tinta-2 uppercase">
               {detalle}
             </p>
           )}
@@ -232,11 +244,7 @@ export function BarraDecision({
           type="button"
           onClick={onConfirmar}
           disabled={!habilitada}
-          className={`shrink-0 px-5 py-3.5 font-titular text-[13px] font-black tracking-[0.1em] uppercase transition-colors ${
-            habilitada
-              ? 'bg-tinta text-fondo active:bg-tinta-2'
-              : 'cursor-not-allowed border border-corondel text-tinta-3'
-          }`}
+          className={`min-h-11 shrink-0 px-5 py-3.5 font-titular text-[0.8125rem] font-black tracking-[0.1em] uppercase transition-colors ${estilo}`}
         >
           {accion}
         </button>
@@ -266,7 +274,7 @@ export function Continuar({
       type="button"
       onClick={onClick}
       data-continuar
-      className="mt-6 w-full bg-tinta py-4 font-titular text-[14px] font-black tracking-[0.12em] text-fondo uppercase transition-colors active:bg-tinta-2"
+      className="mt-6 w-full bg-tinta py-4 font-titular text-[0.875rem] font-black tracking-[0.12em] text-fondo uppercase transition-colors hover:bg-tinta-2 active:bg-tinta-2"
     >
       {children}
     </button>
@@ -302,19 +310,19 @@ export function Cifra({
         abierta ? 'border-tinta' : 'border-dotted border-corondel-fuerte hover:border-tinta-2'
       }`}
     >
-      <span className="block truncate font-tabla text-[11px] leading-[1.15] text-tinta-2 uppercase">
+      <span className="block font-tabla text-[0.75rem] leading-[1.15] break-words text-tinta-2 [font-stretch:75%]">
         {label}
       </span>
       <span
-        className={`mt-1.5 block font-titular text-[17px] leading-[1.1] font-black break-words tabular-nums ${
+        className={`mt-1.5 flex flex-wrap items-baseline gap-x-1 font-titular text-[1.0625rem] leading-[1.1] font-black tabular-nums [font-stretch:75%] ${
           alerta ? 'text-alerta' : 'text-tinta'
         }`}
       >
-        {valor}
+        <span className="whitespace-nowrap">{valor}</span>
         {delta && (
           <span
             key={delta}
-            className={`entrar-nota ml-1 align-top text-[10px] leading-none font-bold tabular-nums ${
+            className={`entrar-nota text-[0.75rem] leading-none font-bold whitespace-nowrap tabular-nums ${
               deltaTono === 'alerta' ? 'text-alerta' : 'text-favorable'
             }`}
           >

@@ -83,14 +83,14 @@ export function EnvioAlRanking({ state, diaria }: { state: GameState; diaria: st
     return (
       <div className="entrar-nota mt-7 border-t border-corondel pt-4">
         <Volanta>{diaria ? 'Ranking del día' : 'Ranking global'}</Volanta>
-        <p className="mt-2 font-cuerpo text-[15px] leading-relaxed text-tinta">
+        <p className="mt-2 font-cuerpo text-[0.9375rem] leading-relaxed text-tinta">
           Tu presidencia quedó anotada con{' '}
           <span className="font-semibold">{estado.puntaje.toLocaleString('es-AR')}</span> puntos
           {estado.puntaje > 0 && piso <= estado.puntaje
             ? `: ${piso.toLocaleString('es-AR')} por ${plural(state.season, 'temporada', 'temporadas')} en el cargo.`
             : '.'}
         </p>
-        <p className="mt-2 font-tabla text-[11px] tracking-[0.08em] text-tinta-2 uppercase">
+        <p className="mt-2 font-tabla text-[0.75rem] tracking-[0.08em] text-tinta-2 uppercase">
           {diaria
             ? 'Sos de las primeras en el ranking de hoy.'
             : 'Sos de las primeras presidencias en esta tabla.'}
@@ -103,13 +103,13 @@ export function EnvioAlRanking({ state, diaria }: { state: GameState; diaria: st
     <div className="entrar-nota mt-7 border-t border-corondel pt-4">
       <Volanta>{diaria ? 'Ranking del día' : 'Ranking global'}</Volanta>
 
-      <p className="mt-2 font-cuerpo text-[14px] leading-snug text-tinta-2">
+      <p className="mt-2 font-cuerpo text-[0.875rem] leading-snug text-tinta-2">
         {diaria
           ? 'Hoy todos jugaron esta misma partida. Compará tu presidencia con la del resto.'
           : 'Entrá en la tabla histórica con esta presidencia.'}
       </p>
 
-      <p className="mt-2 font-cuerpo text-[12px] leading-snug text-tinta-2">
+      <p className="mt-2 font-cuerpo text-[0.75rem] leading-snug text-tinta-2">
         Al enviar guardamos tu nombre y tu partida para el ranking.{' '}
         <Link href="/privacidad" className="underline underline-offset-2 hover:text-tinta">
           Política de privacidad
@@ -138,20 +138,20 @@ export function EnvioAlRanking({ state, diaria }: { state: GameState; diaria: st
             aria-invalid={estado.fase === 'error'}
             aria-describedby={estado.fase === 'error' ? 'ranking-error' : undefined}
             placeholder="Tu nombre"
-            className="w-full border border-corondel bg-fondo-2 px-3 py-2.5 font-cuerpo text-[15px] text-tinta placeholder:text-tinta-2 focus:border-tinta focus:outline-none"
+            className="w-full border border-corondel bg-fondo-2 px-3 py-2.5 font-cuerpo text-[0.9375rem] text-tinta placeholder:text-tinta-2 focus:border-tinta focus:outline-none"
           />
         </label>
         <button
           type="submit"
           disabled={estado.fase === 'enviando'}
-          className="shrink-0 bg-tinta px-5 py-2.5 font-titular text-[13px] font-black tracking-[0.1em] text-fondo uppercase transition-colors active:bg-tinta-2 disabled:opacity-50"
+          className="shrink-0 bg-tinta px-5 py-2.5 font-titular text-[0.8125rem] font-black tracking-[0.1em] text-fondo uppercase transition-colors active:bg-tinta-2 disabled:opacity-50"
         >
           {estado.fase === 'enviando' ? 'Enviando' : 'Enviar'}
         </button>
       </form>
 
       {estado.fase === 'error' && (
-        <p id="ranking-error" role="alert" className="mt-2 font-cuerpo text-[14px] text-alerta">
+        <p id="ranking-error" role="alert" className="mt-2 font-cuerpo text-[0.875rem] text-alerta">
           {estado.mensaje}
         </p>
       )}

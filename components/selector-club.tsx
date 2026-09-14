@@ -160,7 +160,7 @@ export function SelectorClub({
     <div className="min-w-0" ref={contenedor}>
       <span
         id={`${id}-etiqueta`}
-        className="block font-tabla text-[11px] font-bold tracking-[0.1em] text-tinta-2 uppercase"
+        className="block font-tabla text-[0.75rem] font-bold tracking-[0.1em] text-tinta-2 uppercase"
       >
         Club
       </span>
@@ -180,28 +180,31 @@ export function SelectorClub({
           {elegido ? (
             <>
               <Banda club={elegido} />
-              <span className="min-w-0 flex-1 truncate font-titular text-[15px] font-bold text-tinta">
+              <span className="min-w-0 flex-1 font-titular text-[0.9375rem] leading-tight font-bold break-words text-tinta">
                 {elegido.name}
               </span>
             </>
           ) : (
-            <span className="min-w-0 flex-1 truncate font-titular text-[15px] font-bold text-tinta-2">
+            <span className="min-w-0 flex-1 truncate font-titular text-[0.9375rem] font-bold text-tinta-2">
               Elegí tu club…
             </span>
           )}
-          <span aria-hidden className="shrink-0 font-titular text-[10px] text-tinta-2">
+          <span aria-hidden className="indicador-desplegable shrink-0 font-titular text-[0.75rem] text-tinta-2">
             ▼
           </span>
         </button>
 
-        {abierto && (
           <ul
             ref={lista}
             id={`${id}-lista`}
             role="listbox"
+            inert={!abierto}
+            aria-hidden={!abierto}
+            data-abierta={abierto}
+            data-arriba={sitio.haciaArriba}
             aria-labelledby={`${id}-etiqueta`}
             style={{ maxHeight: sitio.alto }}
-            className={`absolute inset-x-0 z-40 overflow-y-auto overscroll-contain border-2 border-tinta bg-fondo-2 ${
+            className={`selector-lista absolute inset-x-0 z-40 overflow-y-auto overscroll-contain border-2 border-tinta bg-fondo-2 ${
               sitio.haciaArriba ? 'bottom-full mb-1' : 'top-full mt-1'
             }`}
           >
@@ -223,23 +226,22 @@ export function SelectorClub({
                 >
                   <Banda club={c} />
                   <span className="min-w-0 flex-1">
-                    <span className="block truncate font-titular text-[15px] leading-tight font-bold text-tinta">
+                    <span className="block font-titular text-[0.9375rem] leading-tight font-bold break-words text-tinta">
                       {c.name}
                     </span>
                     {c.nickname && (
-                      <span className="block truncate font-cuerpo text-[12px] text-tinta-2">
+                      <span className="block truncate font-cuerpo text-[0.75rem] text-tinta-2">
                         {c.nickname}
                       </span>
                     )}
                   </span>
-                  <span className="shrink-0 font-tabla text-[11px] text-tinta-2 tabular-nums">
+                  <span className="shrink-0 font-tabla text-[0.75rem] text-tinta-2 tabular-nums">
                     {expectedPosition(c, c.league)}° de {LEAGUES[c.league].teams}
                   </span>
                 </li>
               );
             })}
           </ul>
-        )}
       </div>
     </div>
   );

@@ -125,6 +125,7 @@ export function Juego() {
       ref={principalRef}
       id="principal"
       tabIndex={-1}
+      data-pantalla={cima}
       className={enJuego ? 'flex min-h-dvh flex-col focus:outline-none' : 'focus:outline-none'}
     >
       {enJuego && !resumen && <Cargando>Abriendo el expediente…</Cargando>}

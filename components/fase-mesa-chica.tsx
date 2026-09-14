@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+
 import { useMemo, useState } from 'react';
 
 import { enLetras } from '@/lib/engine/election';
@@ -7,13 +9,15 @@ import { assignmentCost, assignmentIndex, costoPorFicha, winProbability } from '
 import {
   FICHAS_MESA_CHICA,
   FRENTES,
+  TITLES,
   type BigMatch,
   type Frente,
   type FrenteDef,
   type MesaChicaAssignment,
 } from '@/lib/engine/types';
 import { plata } from '@/lib/format';
-import { Continuar, Ladillo, Recuadro, Titular, Volanta } from './ui';
+import { BarraDecision, Continuar, Ladillo, Recuadro, Titular, Volanta } from './ui';
+import { Festejo } from './festejo';
 
 const VACIO: MesaChicaAssignment = { plantel: 0, dt: 0, hinchada: 0, prensa: 0, gestion: 0 };
 
@@ -59,10 +63,11 @@ export function FaseMesaChica({
     <div>
       <div className="text-center">
         <Volanta>La mesa chica</Volanta>
+        <Image src="/ilustraciones/mesa-chica.webp" alt="" width={1264} height={848} sizes="(max-width: 600px) 90vw, 520px" className="mt-3 h-24 w-full object-cover object-[center_65%] sm:h-32" />
         <h1 className="mt-2 text-balance font-titular text-[clamp(1.5rem,7vw,2rem)] leading-[1.05] font-black tracking-tight text-tinta uppercase">
           {match.label}
         </h1>
-        <p className="mt-1.5 font-cuerpo text-[15px] text-tinta-2">contra {match.rival}</p>
+        <p className="mt-1.5 font-cuerpo text-[0.9375rem] text-tinta-2">contra {match.rival}</p>
       </div>
 
       <div className="mt-6">
@@ -72,23 +77,23 @@ export function FaseMesaChica({
             <span className="text-2xl">%</span>
           </p>
           {ganado > 0 && (
-            <p className="pb-2 font-titular text-[20px] leading-none font-black tabular-nums text-tinta">
+            <p className="pb-2 font-titular text-[20px] leading-none font-black tabular-nums text-favorable">
               +{Math.round(ganado * 100)}
             </p>
           )}
         </div>
 
-        <div className="mt-3 flex h-2.5 w-full overflow-hidden border border-corondel" aria-hidden>
+        <div className="relative mt-3 h-2.5 w-full overflow-hidden border border-corondel" aria-hidden>
           <div
-            className="bg-tinta-2 transition-[width] duration-300 ease-out"
-            style={{ width: `${base * 100}%` }}
+            className="absolute inset-0 origin-left bg-favorable transition-transform duration-200 ease-out"
+            style={{ transform: `scaleX(${probabilidad})` }}
           />
           <div
-            className="bg-tinta transition-[width] duration-300 ease-out"
-            style={{ width: `${ganado * 100}%` }}
+            className="absolute inset-0 origin-left bg-tinta-2"
+            style={{ transform: `scaleX(${base})` }}
           />
         </div>
-        <p className="mt-1.5 text-center font-tabla text-[11px] tracking-[0.06em] text-tinta-2 uppercase">
+        <p className="mt-1.5 text-center font-tabla text-[0.75rem] tracking-[0.06em] text-tinta-2 uppercase">
           {usadas === 0
             ? 'de ganarla si no movés un dedo'
             : `de ganarla · ${Math.round(base * 100)}% ya eran tuyos`}
@@ -107,15 +112,15 @@ export function FaseMesaChica({
         {Array.from({ length: FICHAS_MESA_CHICA }, (_, i) => (
           <span
             key={i}
-            className={`h-8 w-8 rounded-full border-2 transition-all duration-200 ${
+            className={`h-8 w-8 rounded-full border-2 transition-[transform,background-color,border-color] duration-200 ${
               i < disponibles
-                ? 'border-tinta bg-tinta/30'
+                ? 'border-acento bg-acento/20'
                 : 'scale-90 border-dashed border-corondel'
             }`}
             aria-hidden
           />
         ))}
-        <span className="ml-1 font-tabla text-[11px] tracking-[0.06em] text-tinta-2 uppercase">
+        <span className="ml-1 font-tabla text-[0.75rem] tracking-[0.06em] text-tinta-2 uppercase">
           {disponibles === 0
             ? 'todo repartido'
             : `${disponibles} ${disponibles === 1 ? 'ficha' : 'fichas'} por repartir`}
@@ -123,7 +128,7 @@ export function FaseMesaChica({
       </div>
 
       <div className="mt-6">
-        <p className="font-cuerpo text-[14px] leading-snug text-tinta-2">
+        <p className="font-cuerpo text-[0.875rem] leading-snug text-tinta-2">
           Tenés {enLetras(FICHAS_MESA_CHICA)} fichas para repartir entre los frentes con los botones{' '}
           <span className="font-tabla text-tinta">−</span> y{' '}
           <span className="font-tabla text-tinta">+</span>. Cada una sube la probabilidad de ganar.
@@ -132,7 +137,7 @@ export function FaseMesaChica({
           type="button"
           onClick={() => setVerCostos((v) => !v)}
           aria-expanded={verCostos}
-          className="mt-1.5 min-h-11 font-tabla text-[11px] tracking-[0.1em] text-tinta-2 uppercase underline underline-offset-4 hover:text-tinta"
+          className="mt-1.5 min-h-11 font-tabla text-[0.75rem] tracking-[0.1em] text-tinta-2 uppercase underline underline-offset-4 hover:text-tinta"
         >
           {verCostos ? 'Ocultar lo que cuesta cada frente' : 'Ver lo que cuesta cada frente'}
         </button>
@@ -153,43 +158,18 @@ export function FaseMesaChica({
         ))}
       </ul>
 
-      <div
-        className="sticky bottom-0 -mx-4 mt-5 border-t-4 border-tinta bg-fondo-2/97 px-4 pt-3 backdrop-blur"
-        style={{ paddingBottom: 'calc(0.75rem + var(--sae-bottom))' }}
-      >
-        <div className="mx-auto flex max-w-xl items-center gap-3">
-          <div className="min-w-0 flex-1">
-            <p className="flex items-baseline gap-1.5 font-titular leading-none font-black tabular-nums">
-              <span className="text-[26px] text-tinta">{Math.round(probabilidad * 100)}%</span>
-              {ganado > 0 && (
-                <span className="text-[15px] text-tinta">
-                  +{Math.round(ganado * 100)}
-                </span>
-              )}
-            </p>
-            <p className="mt-1 font-tabla text-[11px] leading-tight tracking-[0.02em] text-tinta-2 uppercase">
-              {usadas === 0
-                ? `${FICHAS_MESA_CHICA} fichas sin usar`
-                : [
-                    costo.caja ? plata(Math.abs(costo.caja)) : null,
-                    costo.influencia ? `${Math.abs(costo.influencia)} de influencia` : null,
-                  ]
-                    .filter(Boolean)
-                    .join(' · ')}
-            </p>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => onDefinir(assignmentIndex(reparto))}
-            className={`shrink-0 px-5 py-3.5 font-titular text-[13px] font-black tracking-[0.1em] uppercase transition-colors ${
-              usadas > 0 ? 'bg-tinta text-fondo active:bg-tinta-2' : 'border-2 border-corondel text-tinta-2'
-            }`}
-          >
-            {usadas === 0 ? 'No mover nada' : 'Que se juegue'}
-          </button>
-        </div>
-      </div>
+      <BarraDecision
+        resumen={`${Math.round(probabilidad * 100)}% de ganar`}
+        detalle={usadas === 0
+          ? `${FICHAS_MESA_CHICA} fichas sin usar`
+          : [
+              costo.caja ? plata(Math.abs(costo.caja)) : null,
+              costo.influencia ? `${Math.abs(costo.influencia)} de influencia` : null,
+            ].filter(Boolean).join(' · ') || 'Sin costo'}
+        accion={usadas === 0 ? 'No mover nada' : 'Que se juegue'}
+        tono={usadas === 0 ? 'neutra' : 'firma'}
+        onConfirmar={() => onDefinir(assignmentIndex(reparto))}
+      />
     </div>
   );
 }
@@ -223,19 +203,19 @@ function FilaFrente({
     >
       <div className="flex items-start gap-3">
         <div className="min-w-0 flex-1">
-          <p className="flex items-baseline gap-2">
-            <span className="font-titular text-[15px] leading-tight font-bold tracking-tight text-tinta">
+          <p className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+            <span className="font-titular text-[0.9375rem] leading-tight font-bold tracking-tight text-tinta">
               {frente.label}
             </span>
-            <span className="shrink-0 font-titular text-[13px] leading-none font-black tabular-nums text-tinta">
+            <span className="shrink-0 font-titular text-[0.8125rem] leading-none font-black tabular-nums text-tinta">
               +{Math.round(frente.winPerFicha * 100)}%
             </span>
           </p>
 
-          <p className="mt-0.5 font-cuerpo text-[14px] leading-snug text-tinta-2">{frente.desc}</p>
+          <p className="mt-0.5 font-cuerpo text-[0.875rem] leading-snug text-tinta-2">{frente.desc}</p>
 
           {verCostos && (
-            <p className="entrar-nota mt-1.5 flex flex-wrap items-baseline gap-x-2 font-tabla text-[11px] tracking-[0.04em] uppercase">
+            <p className="entrar-nota mt-1.5 flex flex-wrap items-baseline gap-x-2 font-tabla text-[0.75rem] tracking-[0.04em] uppercase">
               <span className="text-tinta-2">{etiquetaDeCosto(frente.id)}</span>
               {frente.riesgo && <span className="text-alerta">· {frente.riesgo}</span>}
             </p>
@@ -258,7 +238,7 @@ function FilaFrente({
               <span
                 key={i}
                 className={`h-2 w-2 rounded-full ${
-                  i < puestas ? 'bg-tinta' : 'border border-corondel'
+                  i < puestas ? 'bg-acento' : 'border border-corondel'
                 }`}
               />
             ))}
@@ -296,13 +276,15 @@ export function FaseResultadoFinal({
       <div className="flex items-start justify-between gap-4">
         <Volanta>{match.label}</Volanta>
         <Ladillo tono={won ? 'favorable' : 'alerta'} animado className="shrink-0">
-          {won ? 'Campeón' : 'Perdida'}
+          {won ? (match.competition === 'playoff' ? 'Ascenso' : 'Campeón') : 'Perdida'}
         </Ladillo>
       </div>
 
       <div className="mt-5">
-        <Titular>{won ? 'Se dio' : 'No se dio'}</Titular>
-        <p className="mt-3 font-cuerpo text-[16px] leading-relaxed text-tinta">{text}</p>
+        {won
+          ? <Festejo titulo={match.competition === 'playoff' ? '¡Ascendimos!' : '¡Campeones!'} detalle={TITLES[match.title].label} />
+          : <Titular>No se dio</Titular>}
+        <p className="mt-3 font-cuerpo text-[1rem] leading-relaxed text-tinta">{text}</p>
       </div>
 
       <Continuar onClick={onContinuar}>Ver la temporada</Continuar>

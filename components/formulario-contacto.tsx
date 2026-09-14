@@ -76,7 +76,7 @@ export function FormularioContacto() {
 
   if (estado.fase === 'no-disponible') {
     return (
-      <p className="mt-3 font-cuerpo text-[14px] leading-snug text-tinta-2">
+      <p className="mt-3 font-cuerpo text-[0.875rem] leading-snug text-tinta-2">
         El formulario todavía no está disponible. Volvé a intentar más tarde.
       </p>
     );
@@ -84,7 +84,7 @@ export function FormularioContacto() {
 
   if (estado.fase === 'enviado') {
     return (
-      <p className="mt-3 font-cuerpo text-[15px] leading-relaxed text-tinta">
+      <p className="mt-3 font-cuerpo text-[0.9375rem] leading-relaxed text-tinta">
         Recibimos tu mensaje. Te respondemos al email que dejaste.
       </p>
     );
@@ -103,7 +103,7 @@ export function FormularioContacto() {
       className="mt-3 space-y-3"
     >
       <label className="block">
-        <span className="font-tabla text-[11px] font-bold tracking-[0.1em] text-tinta-2 uppercase">
+        <span className="font-tabla text-[0.75rem] font-bold tracking-[0.1em] text-tinta-2 uppercase">
           Tu nombre (opcional)
         </span>
         <input
@@ -112,12 +112,12 @@ export function FormularioContacto() {
           onChange={(e) => setNombre(e.target.value)}
           maxLength={24}
           autoComplete="name"
-          className="mt-1.5 w-full border border-corondel bg-fondo-2 px-3 py-2.5 font-cuerpo text-[15px] text-tinta focus:border-tinta focus:outline-none"
+          className="mt-1.5 w-full border border-corondel bg-fondo-2 px-3 py-2.5 font-cuerpo text-[0.9375rem] text-tinta focus:border-tinta focus:outline-none"
         />
       </label>
 
       <label className="block">
-        <span className="font-tabla text-[11px] font-bold tracking-[0.1em] text-tinta-2 uppercase">
+        <span className="font-tabla text-[0.75rem] font-bold tracking-[0.1em] text-tinta-2 uppercase">
           Tu email (obligatorio)
         </span>
         <input
@@ -132,7 +132,7 @@ export function FormularioContacto() {
           aria-describedby={estado.fase === 'error' ? 'contacto-error' : undefined}
           autoComplete="email"
           placeholder="para poder responderte"
-          className="mt-1.5 w-full border border-corondel bg-fondo-2 px-3 py-2.5 font-cuerpo text-[15px] text-tinta placeholder:text-tinta-2 focus:border-tinta focus:outline-none"
+          className="mt-1.5 w-full border border-corondel bg-fondo-2 px-3 py-2.5 font-cuerpo text-[0.9375rem] text-tinta placeholder:text-tinta-2 focus:border-tinta focus:outline-none"
         />
       </label>
 
@@ -145,7 +145,7 @@ export function FormularioContacto() {
       </CampoSelect>
 
       <label className="block">
-        <span className="font-tabla text-[11px] font-bold tracking-[0.1em] text-tinta-2 uppercase">
+        <span className="font-tabla text-[0.75rem] font-bold tracking-[0.1em] text-tinta-2 uppercase">
           Mensaje (obligatorio)
         </span>
         <textarea
@@ -158,20 +158,20 @@ export function FormularioContacto() {
           aria-required
           aria-invalid={faltaMensaje}
           aria-describedby={estado.fase === 'error' ? 'contacto-error' : undefined}
-          className="mt-1.5 w-full border border-corondel bg-fondo-2 px-3 py-2.5 font-cuerpo text-[15px] text-tinta focus:border-tinta focus:outline-none"
+          className="mt-1.5 w-full border border-corondel bg-fondo-2 px-3 py-2.5 font-cuerpo text-[0.9375rem] text-tinta focus:border-tinta focus:outline-none"
         />
       </label>
 
       <button
         type="submit"
         disabled={estado.fase === 'enviando'}
-        className="min-h-11 w-full bg-tinta py-2.5 font-titular text-[13px] font-black tracking-[0.1em] text-fondo uppercase transition-colors active:bg-tinta-2 disabled:opacity-50"
+        className="min-h-11 w-full bg-tinta py-2.5 font-titular text-[0.8125rem] font-black tracking-[0.1em] text-fondo uppercase transition-colors active:bg-tinta-2 disabled:opacity-50"
       >
         {estado.fase === 'enviando' ? 'Enviando' : 'Enviar'}
       </button>
 
       {estado.fase === 'error' && (
-        <p id="contacto-error" role="alert" className="font-cuerpo text-[14px] text-alerta">
+        <p id="contacto-error" role="alert" className="font-cuerpo text-[0.875rem] text-alerta">
           {estado.mensaje}
         </p>
       )}

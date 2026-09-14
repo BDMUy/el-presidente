@@ -19,11 +19,11 @@ function Seccion({ titulo, children }: { titulo: string; children: React.ReactNo
 
 export default function Privacidad() {
   return (
-    <main id="principal" tabIndex={-1} className="mx-auto w-full max-w-xl px-4 py-10 focus:outline-none">
+    <main id="principal" tabIndex={-1} className="superficie-palco mx-auto min-h-dvh w-full max-w-[40rem] px-4 py-8 focus:outline-none">
       <BarraSuperior volverHref="/" />
 
       <h1
-        className="mt-4 border-t-4 border-b-2 border-tinta py-3 font-titular text-[clamp(2rem,8vw,3rem)] leading-[0.9] font-black tracking-[-0.02em] text-tinta uppercase"
+        className="mt-4 border-b border-corondel py-3 font-titular text-[clamp(2rem,8vw,3rem)] leading-[0.9] font-black tracking-[-0.02em] text-tinta uppercase"
         style={{ fontStretch: '80%' }}
       >
         Privacidad
@@ -84,7 +84,7 @@ export default function Privacidad() {
 
       <Seccion titulo="Cambios">
         <Cuerpo>Si algo de esto cambia, se actualiza en esta misma página.</Cuerpo>
-        <p className="font-tabla text-[11px] tracking-[0.1em] text-tinta-2 uppercase">
+        <p className="font-tabla text-[0.75rem] tracking-[0.1em] text-tinta-2 uppercase">
           Última actualización: 29 de agosto de 2026
         </p>
       </Seccion>

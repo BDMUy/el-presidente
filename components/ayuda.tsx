@@ -5,7 +5,7 @@ import { Cuerpo, Recuadro, Titular, Volanta } from './ui';
 
 export function Ayuda({ onVolver }: { onVolver: () => void }) {
   return (
-    <div className="mx-auto w-full max-w-xl px-4 pb-10 pl-[max(1rem,var(--sae-left))] pr-[max(1rem,var(--sae-right))]">
+    <div className="mx-auto w-full max-w-[40rem] px-4 pb-10 pl-[max(1rem,var(--sae-left))] pr-[max(1rem,var(--sae-right))]">
       <div className="pt-3">
         <BarraSuperior onVolver={onVolver} volverLabel="← Volver" />
       </div>

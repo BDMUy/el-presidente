@@ -48,7 +48,7 @@ export default async function PresidenciaCompartida({
     <main
       id="principal"
       tabIndex={-1}
-      className="mx-auto w-full max-w-xl px-4 pb-10 pl-[max(1rem,var(--sae-left))] pr-[max(1rem,var(--sae-right))] focus:outline-none"
+      className="superficie-palco mx-auto min-h-dvh w-full max-w-[40rem] px-4 pb-8 pl-[max(1rem,var(--sae-left))] pr-[max(1rem,var(--sae-right))] focus:outline-none"
     >
       <div className="pt-3">
         <BarraSuperior volverHref="/" />
@@ -56,7 +56,7 @@ export default async function PresidenciaCompartida({
 
       <div className="pt-8">
         <p
-          className="border-t-4 border-b-2 border-tinta py-3 font-titular text-[clamp(2.75rem,11vw,4.5rem)] leading-[0.86] font-black tracking-[-0.03em] text-tinta uppercase"
+          className="border-b border-corondel py-3 font-titular text-[clamp(2.75rem,11vw,4.5rem)] leading-[0.86] font-black tracking-[-0.03em] text-tinta uppercase"
           style={{ fontStretch: '80%' }}
         >
           El Presidente
@@ -71,12 +71,12 @@ export default async function PresidenciaCompartida({
       </Recuadro>
 
       <div className="mt-8 text-center">
-        <p className="font-cuerpo text-[15px] text-tinta-2">
+        <p className="font-cuerpo text-base text-tinta-2">
           ¿Te animás a hacerlo mejor con tu club?
         </p>
         <Link
           href="/"
-          className="mt-3 inline-block bg-tinta px-8 py-3.5 font-titular text-[14px] font-black tracking-[0.12em] text-fondo uppercase transition-[color,background-color,transform] active:scale-[0.97] active:bg-tinta-2"
+          className="mt-3 inline-block boton-jugar px-8 py-3.5 font-titular text-sm font-black tracking-[0.12em] uppercase transition-[color,background-color,transform] active:scale-[0.97]"
         >
           Jugar El Presidente
         </Link>

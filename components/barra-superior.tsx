@@ -1,9 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { useId, type MouseEvent } from 'react';
+import { useId } from 'react';
 
 import { elegirTema, leerTema, temaDelSistema, useTemaActual, type Tema } from '@/lib/tema';
+import { IconoAjustes } from './iconos';
 
 export function BarraSuperior({
   onVolver,
@@ -23,7 +24,7 @@ export function BarraSuperior({
           type="button"
           onClick={onVolver}
           data-volver
-          className="-mx-2 min-h-11 px-2 font-tabla text-[11px] tracking-[0.1em] text-tinta-2 uppercase transition-colors hover:text-tinta"
+          className="-mx-2 min-h-11 px-2 font-tabla text-[0.75rem] tracking-[0.1em] text-tinta-2 uppercase transition-colors hover:text-tinta"
         >
           {volverLabel}
         </button>
@@ -31,7 +32,7 @@ export function BarraSuperior({
         <Link
           href={volverHref}
           data-volver
-          className="-mx-2 inline-flex min-h-11 items-center px-2 font-tabla text-[11px] tracking-[0.1em] text-tinta-2 uppercase transition-colors hover:text-tinta"
+          className="-mx-2 inline-flex min-h-11 items-center px-2 font-tabla text-[0.75rem] tracking-[0.1em] text-tinta-2 uppercase transition-colors hover:text-tinta"
         >
           {volverLabel}
         </Link>
@@ -39,13 +40,14 @@ export function BarraSuperior({
         <span aria-hidden />
       )}
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2">
         {onAjustes && (
           <button
             type="button"
             onClick={onAjustes}
-            className="-mx-1 min-h-11 px-1 font-tabla text-[11px] tracking-[0.1em] text-tinta-2 uppercase transition-colors hover:text-tinta"
+            className="control-edicion min-h-11 px-2 font-tabla text-[0.75rem] tracking-[0.06em] uppercase"
           >
+            <IconoAjustes />
             Ajustes
           </button>
         )}
@@ -58,7 +60,7 @@ export function BarraSuperior({
 export function ToggleTema() {
   const tema = useTemaActual();
 
-  const cambiarTema = (evento: MouseEvent<HTMLButtonElement>) => {
+  const cambiarTema = () => {
     const actual = leerTema() ?? temaDelSistema();
     const siguiente: Tema = actual === 'claro' ? 'oscuro' : 'claro';
 
@@ -68,13 +70,6 @@ export function ToggleTema() {
       return;
     }
 
-    const x = evento.clientX;
-    const y = evento.clientY;
-    const radio = Math.hypot(
-      Math.max(x, window.innerWidth - x),
-      Math.max(y, window.innerHeight - y),
-    );
-
     const transicion = document.startViewTransition(() => elegirTema(siguiente));
     const ignorar = () => {};
     transicion.finished.catch(ignorar);
@@ -82,8 +77,8 @@ export function ToggleTema() {
     transicion.ready
       .then(() => {
         document.documentElement.animate(
-          { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radio}px at ${x}px ${y}px)`] },
-          { duration: 520, easing: 'cubic-bezier(0.65, 0, 0.35, 1)', pseudoElement: '::view-transition-new(root)' },
+          { opacity: [0, 1] },
+          { duration: 240, easing: 'cubic-bezier(0.65, 0, 0.35, 1)', pseudoElement: '::view-transition-new(root)' },
         );
       })
       .catch(ignorar);
@@ -93,10 +88,12 @@ export function ToggleTema() {
     <button
       type="button"
       onClick={cambiarTema}
-      className="-mx-2 flex min-h-11 items-center gap-1.5 px-2 font-tabla text-[11px] tracking-[0.1em] text-tinta-2 uppercase transition-colors hover:text-tinta"
+      aria-label={tema === 'claro' ? 'Cambiar a edición nocturna' : 'Cambiar a edición de día'}
+      title={tema === 'claro' ? 'Cambiar a edición nocturna' : 'Cambiar a edición de día'}
+      className="control-edicion control-tema min-h-11 px-2 font-tabla text-[0.75rem] tracking-[0.06em] uppercase"
     >
       <IconoTema />
-      {tema === 'claro' ? 'Edición nocturna' : 'Edición de día'}
+      {tema === 'claro' ? 'Día' : 'Noche'}
     </button>
   );
 }
@@ -104,7 +101,7 @@ export function ToggleTema() {
 function IconoTema() {
   const id = useId();
   return (
-    <svg viewBox="0 0 24 24" width="14" height="14" className="icono-tema shrink-0" aria-hidden focusable="false">
+    <svg viewBox="0 0 24 24" width="22" height="22" className="icono-tema shrink-0" aria-hidden focusable="false">
       <g className="rayos" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
         <line x1="12" y1="1.5" x2="12" y2="4" />
         <line x1="12" y1="20" x2="12" y2="22.5" />

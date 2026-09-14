@@ -30,12 +30,12 @@ export function AvisoRecorrido({
   if (!pendiente || oculto) return null;
 
   return (
-    <div className="my-4 flex items-center gap-3 border border-corondel px-3 py-2">
-      <p className="font-tabla text-[11px] tracking-[0.1em] text-tinta-2 uppercase">{etiqueta}</p>
+    <div className="mt-2 flex items-center gap-3 px-1">
+      <p className="font-tabla text-[0.75rem] tracking-[0.1em] text-tinta-2 uppercase">{etiqueta}</p>
       <button
         type="button"
         onClick={() => setAbierto(true)}
-        className="min-h-11 font-tabla text-[11px] tracking-[0.1em] text-tinta uppercase underline underline-offset-4 transition-colors hover:text-tinta-2"
+        className="min-h-11 font-tabla text-[0.75rem] tracking-[0.1em] text-tinta uppercase underline underline-offset-4 transition-colors hover:text-tinta-2"
       >
         Ver recorrido
       </button>
@@ -46,7 +46,7 @@ export function AvisoRecorrido({
           setOculto(true);
         }}
         aria-label="No mostrar el recorrido"
-        className="ml-auto min-h-11 px-2 font-titular text-[15px] leading-none text-tinta-2 transition-colors hover:text-tinta"
+        className="ml-auto min-h-11 px-2 font-titular text-[0.9375rem] leading-none text-tinta-2 transition-colors hover:text-tinta"
       >
         ×
       </button>

@@ -43,7 +43,7 @@ export function ActaAsuncion({
   return (
     <div style={{ '--club': tintaClub } as CSSProperties}>
       <Recuadro acento="club">
-        <div className="flex h-1.5 -mx-5 -mt-5 mb-5 sm:-mx-7 sm:-mt-7" aria-hidden>
+        <div className="mb-4 flex h-1" aria-hidden>
           <div className="flex-1" style={{ backgroundColor: club.colors[0] }} />
           <div className="flex-1" style={{ backgroundColor: club.colors[1] }} />
         </div>
@@ -60,7 +60,7 @@ export function ActaAsuncion({
             <Titular>Recibís el club</Titular>
 
             {nombre && (
-              <p className="mt-2 flex items-baseline font-tabla text-[12px] tracking-[0.06em] uppercase">
+              <p className="mt-2 flex items-baseline font-tabla text-[0.75rem] tracking-[0.06em] uppercase">
                 <span className="text-tinta-2">Presidente</span>
                 <Puntos />
                 <span
@@ -86,24 +86,29 @@ export function ActaAsuncion({
           )}
         </div>
 
-        <p className="mt-3 font-cuerpo text-[16px] leading-relaxed text-tinta">
+        <p className="mt-3 font-cuerpo text-[1rem] leading-relaxed text-tinta">
           {modo === 'llamas'
             ? 'Ganaste la elección porque no se presentó nadie más.'
             : 'Ganaste la elección.'}{' '}
-          Tenés {enLetras(mandatos)} {mandatos === 1 ? 'mandato' : 'mandatos'} de cuatro
-          temporadas para que no te echen, y esto es todo con lo que contás. Los partidos no los
-          jugás vos: armás el plantel y el plantel responde.
+          Tenés {enLetras(mandatos)} mandatos para hacer historia.
+          Vos armás el plantel; los partidos los juega el equipo.
         </p>
 
         {modo === 'llamas' && (
-          <p className="mt-3 border-l-2 border-alerta pl-3 font-cuerpo text-[16px] leading-relaxed text-tinta">
+          <p className="mt-3 border-l-2 border-alerta pl-3 font-cuerpo text-[1rem] leading-relaxed text-tinta">
             La gestión anterior dejó la deuda y se fue. Lo único que el club tiene para vender es
             el plantel, que es lo único que el club tiene para ganar.
           </p>
         )}
 
-        <div className="mt-6">
-          <Volanta>Inventario</Volanta>
+        <Continuar onClick={onAsumir}>
+          Abrir el mercado <span className="flecha-accion" aria-hidden>→</span>
+        </Continuar>
+
+        <details className="mt-4 border-t border-corondel">
+          <summary className="min-h-11 cursor-pointer py-3 font-tabla text-[0.75rem] text-tinta-2 uppercase">
+            Cómo está el club al asumir <span className="indicador-mas" aria-hidden>+</span>
+          </summary>
           <ul className="mt-1">
             {RECURSOS.map((recurso) => {
               const abiertoAca = abierto === recurso.id;
@@ -115,16 +120,16 @@ export function ActaAsuncion({
                     aria-expanded={abiertoAca}
                     className="flex min-h-11 w-full items-baseline gap-2 py-2.5 text-left"
                   >
-                    <span className="font-tabla text-[13px] font-bold text-tinta uppercase">
+                    <span className="font-tabla text-[0.8125rem] font-bold text-tinta uppercase">
                       {recurso.label}
                     </span>
                     <Puntos />
-                    <span className="font-tabla text-[13px] font-bold text-tinta tabular-nums">
+                    <span className="font-tabla text-[0.8125rem] font-bold text-tinta tabular-nums">
                       {valor(recurso.id)}
                     </span>
                     <span
                       aria-hidden
-                      className={`shrink-0 self-center font-titular text-[10px] text-tinta-3 transition-transform duration-200 ${
+                      className={`shrink-0 self-center font-titular text-[0.75rem] text-tinta-3 transition-transform duration-200 ${
                         abiertoAca ? 'rotate-180' : ''
                       }`}
                     >
@@ -134,11 +139,11 @@ export function ActaAsuncion({
 
                   {abiertoAca && (
                     <div className="entrar-nota pb-3">
-                      <p className="font-cuerpo text-[14px] leading-snug text-tinta-2">
+                      <p className="font-cuerpo text-[0.875rem] leading-snug text-tinta-2">
                         {recurso.texto}
                       </p>
                       {recurso.limite && (
-                        <p className="mt-1.5 border-l-2 border-alerta pl-2.5 font-cuerpo text-[13px] leading-snug text-tinta-2">
+                        <p className="mt-1.5 border-l-2 border-alerta pl-2.5 font-cuerpo text-[0.8125rem] leading-snug text-tinta-2">
                           {recurso.limite}
                         </p>
                       )}
@@ -148,13 +153,11 @@ export function ActaAsuncion({
               );
             })}
           </ul>
-        </div>
+        </details>
 
-        <p className="mt-6 border-t border-corondel pt-4 font-tabla text-[12px] leading-relaxed tracking-wide text-tinta-2 uppercase">
-          Podés volver a leer cualquiera de estos tocándolo en la barra de arriba.
+        <p className="mt-2 font-cuerpo text-[0.875rem] leading-snug text-tinta-2">
+          Tocá las cifras de arriba cuando quieras entender cada recurso.
         </p>
-
-        <Continuar onClick={onAsumir}>Asumir el cargo</Continuar>
       </Recuadro>
     </div>
   );

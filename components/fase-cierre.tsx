@@ -1,9 +1,12 @@
 'use client';
 
+import Image from 'next/image';
+
 import { LEAGUES, TITLES, type ElectionResult, type GameState, type SeasonResult } from '@/lib/engine/types';
 import { resolveEconomy } from '@/lib/engine/season';
 import { ordinal, plataConSigno } from '@/lib/format';
 import { Continuar, Ladillo, Puntos, Recuadro, Titular, Volanta } from './ui';
+import { Festejo } from './festejo';
 
 export function FaseTemporada({
   state,
@@ -37,14 +40,23 @@ export function FaseTemporada({
         )}
       </div>
 
+      {(result.champion || result.promoted) && (
+        <Festejo
+          titulo={result.champion ? '¡Campeones!' : '¡Ascendimos!'}
+          detalle={result.champion ? TITLES[LEAGUES[result.league].championTitle].label : 'Nos espera otra categoría.'}
+        />
+      )}
+
+      {result.champion && <Image src="/ilustraciones/copa.png" alt="" width={1024} height={1024} sizes="64px" className="float-right ml-3 h-16 w-16 object-contain" />}
+
       <div className="mt-4">
         <Titular>Temporada {state.season}</Titular>
-        <p className="mt-3 font-cuerpo text-[16px] leading-relaxed text-tinta">{result.summary}</p>
+        <p className="mt-3 font-cuerpo text-[1rem] leading-relaxed text-tinta">{result.summary}</p>
       </div>
 
       <dl className="mt-6 grid grid-cols-2 gap-4 border-t border-corondel pt-4">
         <div>
-          <dt className="font-tabla text-[11px] tracking-[0.14em] text-tinta-2 uppercase">
+          <dt className="font-tabla text-[0.75rem] tracking-[0.14em] text-tinta-2 uppercase">
             Posición
           </dt>
           <dd className="font-titular text-2xl font-black tabular-nums text-tinta">
@@ -55,10 +67,10 @@ export function FaseTemporada({
           </dd>
         </div>
         <div>
-          <dt className="font-tabla text-[11px] tracking-[0.14em] text-tinta-2 uppercase">
+          <dt className="font-tabla text-[0.75rem] tracking-[0.14em] text-tinta-2 uppercase">
             Categoría
           </dt>
-          <dd className="font-titular text-[15px] font-bold text-tinta uppercase">
+          <dd className="font-titular text-[0.9375rem] font-bold text-tinta uppercase">
             {LEAGUES[result.league].label}
           </dd>
         </div>
@@ -70,20 +82,23 @@ export function FaseTemporada({
           <ul className="mt-2 flex flex-wrap gap-2">
             {result.titles.map((id) => (
               <li key={id}>
-                <Ladillo tono="tinta">{TITLES[id].label}</Ladillo>
+                <Ladillo tono="acento">{TITLES[id].label}</Ladillo>
               </li>
             ))}
           </ul>
         </div>
       )}
 
-      <div className="mt-6">
-        <Volanta>Ejercicio económico</Volanta>
+      <details className="mt-5 border-t border-corondel">
+        <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-3 py-2 font-tabla text-[0.8125rem]">
+          <span className="text-tinta-2">Balance de caja <span className="indicador-mas" aria-hidden>+</span></span>
+          <span className={economia.neto < 0 ? 'text-alerta' : 'text-favorable'}>{plataConSigno(economia.neto)}</span>
+        </summary>
         <ul className="mt-2">
           {economia.detalle.map((linea) => (
             <li
               key={linea.label}
-              className="flex items-baseline border-t border-corondel py-1.5 font-tabla text-[13px]"
+              className="flex items-baseline border-t border-corondel py-1.5 font-tabla text-[0.8125rem]"
             >
               <span className="text-tinta-2">{linea.label}</span>
               <Puntos />
@@ -92,7 +107,7 @@ export function FaseTemporada({
               </span>
             </li>
           ))}
-          <li className="flex items-baseline border-t-2 border-tinta py-2.5 font-tabla text-[13px] font-bold uppercase">
+          <li className="flex items-baseline border-t-2 border-tinta py-2.5 font-tabla text-[0.8125rem] font-bold uppercase">
             <span className="text-tinta">Resultado</span>
             <Puntos />
             <span className={economia.neto < 0 ? 'text-alerta' : 'text-tinta'}>
@@ -100,7 +115,7 @@ export function FaseTemporada({
             </span>
           </li>
         </ul>
-      </div>
+      </details>
 
       <Continuar onClick={onContinuar}>Elevar a la asamblea</Continuar>
     </Recuadro>
@@ -125,17 +140,20 @@ export function FaseEleccion({
         </Ladillo>
       </div>
 
+      {result.won && <Festejo titulo="¡Reelecto!" detalle="La gente te dio otro mandato." />}
+
       <div className="mt-5 text-center">
+        <Image src="/ilustraciones/urna-elecciones.png" alt="" width={1024} height={1024} sizes="80px" className="mx-auto mb-3 h-20 w-20 object-contain" />
         <p className="font-titular text-[4rem] leading-none font-black tabular-nums text-tinta">
           {result.votes}
           <span className="text-2xl">%</span>
         </p>
-        <p className="mt-1 font-tabla text-[11px] tracking-[0.16em] text-tinta-2 uppercase">
+        <p className="mt-1 font-tabla text-[0.75rem] tracking-[0.16em] text-tinta-2 uppercase">
           de los votos de socios
         </p>
       </div>
 
-      <p className="mt-6 border-t border-corondel pt-4 font-cuerpo text-[16px] leading-relaxed text-tinta">
+      <p className="mt-6 border-t border-corondel pt-4 font-cuerpo text-[1rem] leading-relaxed text-tinta">
         {result.summary}
       </p>
 

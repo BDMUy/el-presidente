@@ -1,208 +1,71 @@
+import { readFileSync } from 'node:fs';
 import { CLUBS } from '../content/clubs';
-import { aHex, FONDO_CLARO, FONDO_OSCURO, hex, mezclar, ratio, resolver, tintaDeClub, type RGB } from '../lib/color';
+import { aHex, hex, ratio, resolver, tintaDeClub } from '../lib/color';
 
-const T = {
-  pano: '#14342a',
-  panoAlto: '#1c463a',
-  linea: '#465d52',
-  papel: '#e8e2d4',
-  papel2: '#a8b2a5',
-  hoja: '#e8e2d4',
-  hojaLinea: '#a29982',
-  tinta: '#1a1815',
-  tinta2: '#4e483e',
-  sello: '#b3261e',
-  selloClaro: '#e89f98',
-  bronce: '#7a5f24',
-  bronceClaro: '#c1a66e',
-  verde800: '#065f46',
-  blanco: '#ffffff',
-};
+const css = readFileSync(new URL('../app/globals.css', import.meta.url), 'utf8');
 
-const TEMAS = {
-  oscuro: {
-    nombre: 'oscuro',
-    fondo: FONDO_OSCURO,
-    bloque: '#2B2C33',
-    tinta: '#E6E3DB',
-    tinta2: '#A3A09A',
-    tinta3: '#85827C',
-    alerta: '#F07A6B',
-    favorable: '#8FBF8A',
-  },
-  claro: {
-    nombre: 'claro',
-    fondo: FONDO_CLARO,
-    bloque: '#E4E1D8',
-    tinta: '#1C1B20',
-    tinta2: '#57545C',
-    tinta3: '#7C7982',
-    alerta: '#B3261E',
-    favorable: '#2C6A4C',
-  },
-} as const;
+function tema(nombre: string, selector: RegExp) {
+  const bloque = css.match(selector)?.[1];
+  if (!bloque) throw new Error(`No se encontró el tema ${nombre}`);
+  const tokens = Object.fromEntries(
+    Array.from(bloque.matchAll(/--([a-z0-9-]+):\s*(#[a-f0-9]{6});/gi), ([, token, color]) => [token, color]),
+  );
+  return { nombre, tokens };
+}
+
+const TEMAS = [
+  tema('oscuro', /:root\s*{([^}]+)}/),
+  tema('claro', /\[data-tema='claro'\]\s*{([^}]+)}/),
+];
+
+let fallas = 0;
+
+function verificar(frente: string, fondo: string, minimo: number, donde: string) {
+  const contraste = ratio(hex(frente), hex(fondo));
+  const pasa = contraste >= minimo;
+  if (!pasa) fallas++;
+  console.log(`  ${pasa ? 'OK   ' : 'FALLA'} ${contraste.toFixed(2).padStart(6)}:1 (mín ${minimo}) ${donde}`);
+}
 
 if (process.argv[2] === 'resolver') {
-  console.log('\nTOKENS DERIVADOS PARA FONDO OSCURO\n');
-  console.log('  Objetivo 4.5:1 para texto chico, 3:1 para texto grande y bordes.\n');
-
-  const pano = hex(T.pano);
-  const panoAlto = hex(T.panoAlto);
-
-  const pedidos: { nombre: string; desde: string; hacia: string; fondo: RGB; objetivo: number }[] = [
-    { nombre: 'papel-2 (secundario sobre paño)', desde: T.pano, hacia: T.papel, fondo: pano, objetivo: 4.5 },
-    { nombre: 'papel-2 (secundario sobre paño alto)', desde: T.panoAlto, hacia: T.papel, fondo: panoAlto, objetivo: 4.5 },
-    { nombre: 'papel-3 (terciario, texto grande)', desde: T.pano, hacia: T.papel, fondo: pano, objetivo: 3 },
-    { nombre: 'bronce claro sobre paño', desde: T.bronce, hacia: T.blanco, fondo: pano, objetivo: 4.5 },
-    { nombre: 'bronce claro sobre paño alto', desde: T.bronce, hacia: T.blanco, fondo: panoAlto, objetivo: 4.5 },
-    { nombre: 'sello claro sobre paño', desde: T.sello, hacia: T.blanco, fondo: pano, objetivo: 4.5 },
-    { nombre: 'sello claro sobre paño alto', desde: T.sello, hacia: T.blanco, fondo: panoAlto, objetivo: 4.5 },
-    { nombre: 'borde visible sobre paño', desde: T.pano, hacia: T.papel, fondo: pano, objetivo: 1.9 },
-  ];
-
-  for (const p of pedidos) {
-    const { color, r } = resolver(hex(p.desde), hex(p.hacia), p.fondo, p.objetivo);
-    console.log(`  ${aHex(color)}  ${r.toFixed(2).padStart(5)}:1   ${p.nombre}`);
+  for (const { nombre, tokens } of TEMAS) {
+    for (const superficie of ['fondo', 'fondo-2']) {
+      for (const [token, objetivo] of [['tinta-2', 4.5], ['corondel', 3]] as const) {
+        const { color, r } = resolver(hex(tokens[superficie]), hex(tokens.tinta), hex(tokens[superficie]), objetivo);
+        console.log(`  ${aHex(color)} ${r.toFixed(2)}:1 [${nombre}] ${token} sobre ${superficie}`);
+      }
+    }
   }
-
-  console.log('\nTOKENS DERIVADOS PARA EL PAPEL\n');
-  const papel = hex(T.papel);
-  for (const p of [
-    { nombre: 'tinta-2 (secundario)', desde: T.hoja, hacia: T.tinta, objetivo: 7 },
-    { nombre: 'renglón punteado visible', desde: T.hoja, hacia: T.tinta, objetivo: 2.2 },
-  ]) {
-    const { color, r } = resolver(hex(p.desde), hex(p.hacia), papel, p.objetivo);
-    console.log(`  ${aHex(color)}  ${r.toFixed(2).padStart(5)}:1   ${p.nombre}`);
-  }
-  console.log('');
   process.exit(0);
 }
 
-if (process.argv[2] === 'clubes') {
-  console.log('\nTINTA DE CLUB — AUDITORÍA DE CONTRASTE\n');
-  console.log(`  ${CLUBS.length} clubes, objetivo 4.5:1, contra los dos temas.\n`);
+console.log('\nAUDITORÍA DE CONTRASTE — PALETA DEL PALCO\n');
 
-  let fallas = 0;
-  for (const tema of Object.values(TEMAS)) {
-    console.log(`--- tema ${tema.nombre} (fondo ${tema.fondo}) ---\n`);
-    for (const club of CLUBS) {
-      const original = club.colors[0];
-      const ajustado = tintaDeClub(original, tema.fondo, 4.5);
-      const r = ratio(hex(ajustado), hex(tema.fondo));
-      const pasa = r >= 4.5;
-      if (!pasa) fallas++;
-      const movido = ajustado.toLowerCase() !== original.toLowerCase();
-      console.log(
-        `  ${pasa ? 'OK   ' : 'FALLA'} ${r.toFixed(2).padStart(6)}:1  ${original} -> ${ajustado}${movido ? '' : '  (sin cambios)'}  ${club.name}`,
-      );
+for (const { nombre, tokens } of TEMAS) {
+  for (const superficie of ['fondo', 'fondo-2']) {
+    for (const token of ['tinta', 'tinta-2', 'tinta-3', 'alerta', 'favorable', 'acento']) {
+      verificar(tokens[token], tokens[superficie], 4.5, `[${nombre}] ${token} sobre ${superficie}`);
     }
-    console.log('');
+    verificar(tokens.corondel, tokens[superficie], 3, `[${nombre}] borde funcional sobre ${superficie}`);
+    verificar(tokens.tinta, tokens[superficie], 3, `[${nombre}] foco sobre ${superficie}`);
   }
-
-  console.log(fallas === 0 ? 'Todo pasa.\n' : `${fallas} pares club/tema fallan.\n`);
-  process.exit(fallas === 0 ? 0 : 1);
+  verificar(tokens['sobre-acento'], tokens.acento, 4.5, `[${nombre}] texto de acción principal`);
 }
 
-interface Caso {
-  donde: string;
-  frente: string;
-  fondo: string;
-  alfa?: number;
-  grande?: boolean;
-  minimo?: number;
-}
+console.log(`\nACENTOS DE ${CLUBS.length} CLUBES — DOS TEMAS, DOS SUPERFICIES\n`);
 
-const CASOS: Caso[] = [
-  { donde: 'Prosa del acta', frente: T.tinta, fondo: T.hoja },
-  { donde: 'Título del acta', frente: T.tinta, fondo: T.hoja, grande: true },
-  { donde: 'Membrete, hint y balance', frente: T.tinta2, fondo: T.hoja },
-  { donde: 'Sello rojo sobre papel', frente: T.sello, fondo: T.hoja },
-  { donde: 'Sello bronce sobre papel', frente: T.bronce, fondo: T.hoja },
-  { donde: 'Delta positivo sobre papel', frente: T.verde800, fondo: T.hoja },
-  { donde: 'Renglón punteado (decorativo)', frente: T.hojaLinea, fondo: T.hoja, minimo: 2 },
-  { donde: 'Botón Continuar (hoja sobre tinta)', frente: T.hoja, fondo: T.tinta },
-
-  { donde: 'Texto primario sobre paño', frente: T.papel, fondo: T.pano },
-  { donde: 'Secundario sobre paño', frente: T.papel2, fondo: T.pano },
-  { donde: 'Secundario sobre paño alto (carnet)', frente: T.papel2, fondo: T.panoAlto },
-  { donde: 'Bronce claro sobre paño alto', frente: T.bronceClaro, fondo: T.panoAlto },
-  { donde: 'Sello claro sobre paño alto', frente: T.selloClaro, fondo: T.panoAlto },
-  { donde: 'Sello claro sobre paño', frente: T.selloClaro, fondo: T.pano },
-  { donde: 'Borde sobre paño', frente: T.linea, fondo: T.pano, grande: true, minimo: 1.5 },
-  { donde: 'Botón Asumir (tinta sobre papel)', frente: T.tinta, fondo: T.papel },
-];
-
-console.log('\nAUDITORÍA DE CONTRASTE (WCAG 2.1) — TOKENS ACTUALES\n');
-let fallas = 0;
-for (const caso of CASOS) {
-  const fondo = hex(caso.fondo);
-  const frente = caso.alfa ? mezclar(hex(caso.frente), fondo, caso.alfa) : hex(caso.frente);
-  const r = ratio(frente, fondo);
-  const minimo = caso.minimo ?? (caso.grande ? 3 : 4.5);
-  const pasa = r >= minimo;
-  if (!pasa) fallas++;
-  console.log(
-    `  ${pasa ? (r >= 7 ? 'AAA ' : 'AA  ') : 'FALLA'} ${r.toFixed(2).padStart(6)}:1  (mín ${minimo})  ${caso.donde}`,
-  );
-}
-
-console.log('\nAUDITORÍA DE CONTRASTE (WCAG 2.1) — TEMAS NUEVOS\n');
-for (const tema of Object.values(TEMAS)) {
-  const filas: Caso[] = [
-    { donde: `[${tema.nombre}] tinta sobre fondo`, frente: tema.tinta, fondo: tema.fondo },
-    { donde: `[${tema.nombre}] tinta-2 sobre fondo`, frente: tema.tinta2, fondo: tema.fondo },
-    { donde: `[${tema.nombre}] tinta-3 sobre fondo (grande)`, frente: tema.tinta3, fondo: tema.fondo, grande: true },
-    { donde: `[${tema.nombre}] tinta sobre bloque`, frente: tema.tinta, fondo: tema.bloque },
-    { donde: `[${tema.nombre}] tinta-2 sobre bloque`, frente: tema.tinta2, fondo: tema.bloque },
-    { donde: `[${tema.nombre}] alerta sobre fondo`, frente: tema.alerta, fondo: tema.fondo },
-    { donde: `[${tema.nombre}] favorable sobre fondo`, frente: tema.favorable, fondo: tema.fondo },
-    { donde: `[${tema.nombre}] separación fondo/bloque`, frente: tema.bloque, fondo: tema.fondo, minimo: 1 },
-  ];
-  for (const caso of filas) {
-    const f = hex(caso.frente);
-    const b = hex(caso.fondo);
-    const r = ratio(f, b);
-    const minimo = caso.minimo ?? (caso.grande ? 3 : 4.5);
-    const pasa = r >= minimo;
-    if (!pasa) fallas++;
-    console.log(
-      `  ${pasa ? (r >= 7 ? 'AAA ' : 'AA  ') : 'FALLA'} ${r.toFixed(2).padStart(6)}:1  (mín ${minimo})  ${caso.donde}`,
-    );
-  }
-}
-
-function fila(r: number, minimo: number, donde: string): boolean {
-  const pasa = r >= minimo;
-  console.log(
-    `  ${pasa ? (r >= 7 ? 'AAA ' : 'AA  ') : 'FALLA'} ${r.toFixed(2).padStart(6)}:1  (mín ${minimo})  ${donde}`,
-  );
-  return pasa;
-}
-
-const SUPERFICIES = [
-  ['fondo', (t: (typeof TEMAS)[keyof typeof TEMAS]) => t.fondo],
-  ['bloque', (t: (typeof TEMAS)[keyof typeof TEMAS]) => t.bloque],
-] as const;
-
-console.log('\nAUDITORÍA DE CONTRASTE (WCAG 2.1) — ACENTO DE CLUB EN VIVO\n');
-console.log(`  tintaDeClub() resuelto contra la superficie, medido sobre ${CLUBS.length} clubes reales.\n`);
-for (const tema of Object.values(TEMAS)) {
-  for (const [nombre, sacar] of SUPERFICIES) {
-    let peor = { r: Infinity, club: '' };
+for (const { nombre, tokens } of TEMAS) {
+  for (const superficie of ['fondo', 'fondo-2']) {
+    let peor = { contraste: Infinity, club: '', color: '' };
     for (const club of CLUBS) {
-      const acento = tintaDeClub(club.colors[0], tema.bloque, 4.5);
-      const r = ratio(hex(acento), hex(sacar(tema)));
-      if (r < peor.r) peor = { r, club: club.name };
+      const color = tintaDeClub(club.colors[0], tokens['fondo-2'], 4.5);
+      const contraste = ratio(hex(color), hex(tokens[superficie]));
+      if (contraste < peor.contraste) peor = { contraste, club: club.name, color };
+      if (process.argv[2] === 'clubes') {
+        verificar(color, tokens[superficie], 4.5, `[${nombre}] ${club.name} sobre ${superficie}`);
+      }
     }
-    if (!fila(peor.r, 4.5, `[${tema.nombre}] acento de club sobre ${nombre} (peor: ${peor.club})`)) fallas++;
-  }
-}
-
-console.log('\nAUDITORÍA DE CONTRASTE (WCAG 2.1) — CONTORNO DE FOCO\n');
-for (const tema of Object.values(TEMAS)) {
-  for (const [nombre, sacar] of SUPERFICIES) {
-    const r = ratio(hex(tema.tinta), hex(sacar(tema)));
-    if (!fila(r, 3, `[${tema.nombre}] contorno :focus-visible sobre ${nombre}`)) fallas++;
+    verificar(peor.color, tokens[superficie], 4.5, `[${nombre}] peor acento sobre ${superficie}: ${peor.club}`);
   }
 }
 

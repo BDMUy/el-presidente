@@ -1,9 +1,9 @@
 export type RGB = [number, number, number];
 
-export const FONDO_OSCURO = '#23242a';
-export const FONDO_CLARO = '#f1efe9';
-export const SUPERFICIE_OSCURA = '#2b2c33';
-export const SUPERFICIE_CLARA = '#e4e1d8';
+export const FONDO_OSCURO = '#102a27';
+export const FONDO_CLARO = '#f1ebdd';
+export const SUPERFICIE_OSCURA = '#193733';
+export const SUPERFICIE_CLARA = '#e7decd';
 
 export function superficieDelTema(tema: 'oscuro' | 'claro'): string {
   return tema === 'claro' ? SUPERFICIE_CLARA : SUPERFICIE_OSCURA;

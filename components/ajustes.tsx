@@ -13,13 +13,13 @@ const TAMANOS: { id: Texto; label: string }[] = [
 export function Ajustes({ onVolver, onAyuda }: { onVolver: () => void; onAyuda: () => void }) {
   const texto = useTextoActual();
   return (
-    <div className="mx-auto w-full max-w-xl px-4 pb-10 pl-[max(1rem,var(--sae-left))] pr-[max(1rem,var(--sae-right))]">
+    <div className="mx-auto w-full max-w-[40rem] px-4 pb-10 pl-[max(1rem,var(--sae-left))] pr-[max(1rem,var(--sae-right))]">
       <div className="pt-3">
         <BarraSuperior onVolver={onVolver} volverLabel="← Volver" />
       </div>
 
       <header className="pt-8">
-        <p className="border-b border-corondel pb-1.5 font-tabla text-[11px] tracking-[0.14em] text-tinta-2 uppercase">
+        <p className="border-b border-corondel pb-1.5 font-tabla text-[0.75rem] tracking-[0.14em] text-tinta-2 uppercase">
           Ajustes
         </p>
         <h1
@@ -48,7 +48,7 @@ export function Ajustes({ onVolver, onAyuda }: { onVolver: () => void; onAyuda: 
                 type="button"
                 aria-pressed={activo}
                 onClick={() => elegirTexto(opcion.id)}
-                className={`min-h-11 flex-1 border px-3 font-tabla text-[11px] tracking-[0.1em] uppercase transition-colors ${
+                className={`min-h-11 flex-1 border px-3 font-tabla text-[0.75rem] tracking-[0.1em] uppercase transition-colors ${
                   activo
                     ? 'border-tinta bg-tinta text-fondo'
                     : 'border-corondel text-tinta-2 hover:border-tinta hover:text-tinta'
@@ -68,7 +68,7 @@ export function Ajustes({ onVolver, onAyuda }: { onVolver: () => void; onAyuda: 
         <button
           type="button"
           onClick={onAyuda}
-          className="min-h-11 font-tabla text-[11px] tracking-[0.1em] text-tinta-2 uppercase underline underline-offset-4 transition-colors hover:text-tinta"
+          className="min-h-11 font-tabla text-[0.75rem] tracking-[0.1em] text-tinta-2 uppercase underline underline-offset-4 transition-colors hover:text-tinta"
         >
           Cómo se juega y cómo se gana →
         </button>

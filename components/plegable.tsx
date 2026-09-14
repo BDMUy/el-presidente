@@ -21,29 +21,29 @@ export function Plegable({
   const id = useId();
 
   return (
-    <section data-recorrido={ancla} className="mt-6 border border-corondel lg:border-0">
+    <section data-recorrido={ancla} className="mt-6">
       <button
         type="button"
         onClick={() => setAbierto((a) => !a)}
         aria-expanded={abierto}
         aria-controls={id}
-        className="flex min-h-11 w-full items-center gap-3 px-3 text-left lg:hidden"
+        className="flex min-h-11 w-full items-center gap-3 border-b border-corondel text-left lg:hidden"
       >
         <span className="min-w-0 flex-1">
-          <span className="block font-tabla text-[12px] font-bold tracking-[0.1em] text-tinta-2 uppercase">
+          <span className="block font-tabla text-[0.75rem] font-bold tracking-[0.1em] text-tinta-2 uppercase">
             {titulo}
           </span>
           {resumen && !abierto && (
-            <span className="mt-0.5 block truncate font-cuerpo text-[13px] text-tinta-2">
+            <span className="mt-0.5 block truncate font-cuerpo text-[0.8125rem] text-tinta-2">
               {resumen}
             </span>
           )}
         </span>
         <span
           aria-hidden
-          className="shrink-0 font-titular text-[18px] leading-none font-black text-tinta"
+          className="indicador-mas shrink-0 font-titular text-[1.125rem] leading-none font-black text-tinta"
         >
-          {abierto ? '−' : '+'}
+          +
         </span>
       </button>
 
@@ -53,7 +53,7 @@ export function Plegable({
 
       <div
         id={id}
-        className={`px-3 pb-3 lg:px-0 lg:pb-0 ${abierto ? 'block' : 'hidden'} lg:block`}
+        className={`pb-3 lg:pb-0 ${abierto ? 'entrar-nota block' : 'hidden'} lg:block`}
       >
         {children}
       </div>

@@ -46,19 +46,19 @@ const PASOS_JUEGO: PasoRecorrido[] = [
     sel: '[data-recorrido="hud-recursos"]',
     titulo: 'Tus cinco frentes',
     cuerpo:
-      'Caja, hinchada, socios, plantel e influencia. Casi ninguna decisión los mueve a todos para el mismo lado. Tocá cada cifra para ver qué es.',
+      'Tocá una cifra para entender qué significa. Cuando decidas, el cambio aparece al lado: lo verde suma y lo rojo resta.',
   },
   {
     sel: '[data-recorrido="carta"]',
     titulo: 'Lo que te toca resolver',
     cuerpo:
-      'Cada turno es una situación: una nota, el mercado de pases o una mesa chica. Leés y elegís; cada opción avisa a qué frente pega.',
+      'En el mercado, tocá un pase para ver el detalle. En las cartas, cada opción te cuenta qué puede pasar.',
   },
   {
     sel: '[data-recorrido="decision"]',
     titulo: 'Firmá la decisión',
     cuerpo:
-      'Elegí una opción y confirmá acá abajo. No se vuelve atrás: la presidencia es la lista de todo lo que firmaste.',
+      'Primero elegís, después firmás acá abajo. Podés cambiar de opción hasta confirmar.',
   },
 ];
 
@@ -199,7 +199,7 @@ export function JuegoEnCurso({
 
       <div
         ref={faseRef}
-        className="mx-auto w-full max-w-xl flex-1 px-4 py-6 pl-[max(1rem,var(--sae-left))] pr-[max(1rem,var(--sae-right))]"
+        className="superficie-palco mx-auto w-full max-w-[40rem] flex-1 px-4 py-4 pl-[max(1rem,var(--sae-left))] pr-[max(1rem,var(--sae-right))]"
       >
         {mostrarActa ? (
           <ActaAsuncion
@@ -211,7 +211,7 @@ export function JuegoEnCurso({
           />
         ) : (
           <>
-            <AvisoRecorrido id="juego" pasos={PASOS_JUEGO} etiqueta="Primera vez dirigiendo" />
+            <AvisoRecorrido id="juego" pasos={PASOS_JUEGO} etiqueta="¿Cómo se juega?" />
             <div data-recorrido="carta">
               <Pantalla
                 key={claveFase}

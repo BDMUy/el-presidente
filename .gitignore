@@ -96,6 +96,7 @@ DESPLIEGUE.md
 .agents/
 skills-lock.json
 .neon
+.playwright-mcp/
 
 # Análisis y planes de implementación
 #

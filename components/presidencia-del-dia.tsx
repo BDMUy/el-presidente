@@ -4,8 +4,6 @@ import { useEffect, useState, type CSSProperties } from 'react';
 
 import { getClub } from '@/content/clubs';
 import { faltaParaLaProxima, formatearEspera, presidenciaDelDia } from '@/lib/daily';
-import { LEAGUES } from '@/lib/engine/types';
-import { expectedPosition } from '@/lib/engine/season';
 import { useTintaClub } from '@/lib/tema';
 import { Volanta } from './ui';
 
@@ -70,7 +68,7 @@ export function PresidenciaDelDia({ onJugar }: { onJugar: () => void }) {
   if (!datos || !club) {
     return (
       <div
-        className="mt-8 min-h-[268px] border border-corondel bg-fondo-2/60 sm:min-h-[204px]"
+        className="min-h-[120px] bg-fondo-2"
         aria-hidden
       />
     );
@@ -79,7 +77,7 @@ export function PresidenciaDelDia({ onJugar }: { onJugar: () => void }) {
   return (
     <section
       data-recorrido="diaria"
-      className="mt-8 border border-[var(--club)]/50 bg-fondo-2/60"
+      className="pb-6 border-b border-corondel"
       style={{ '--club': tintaClub } as CSSProperties}
     >
       <div className="flex h-1" aria-hidden>
@@ -87,43 +85,34 @@ export function PresidenciaDelDia({ onJugar }: { onJugar: () => void }) {
         <div className="flex-1" style={{ backgroundColor: club.colors[1] }} />
       </div>
 
-      <div className="px-4 py-4 sm:px-5 sm:py-5">
-        <div className="flex items-baseline justify-between gap-3">
+      <div className="pt-3">
+        <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
           <Volanta as="h2">Presidencia del día</Volanta>
-          <p className="shrink-0 font-tabla text-[11px] tracking-[0.06em] text-tinta-2 tabular-nums uppercase">
-            cambia en {espera}
+          <p className="shrink-0 font-tabla text-[0.75rem] tracking-[0.06em] text-tinta-2 tabular-nums uppercase">
+            {espera} para otra
           </p>
         </div>
 
-        <div className="mt-4 sm:flex sm:items-start sm:justify-between sm:gap-6">
+        <div className="mt-3 grid grid-cols-1 items-center gap-3">
           <div className="min-w-0">
-            <p className="font-titular text-[22px] leading-tight font-black text-tinta sm:text-[24px]">
+            <p className="font-titular text-[20px] leading-tight font-black break-words text-tinta">
               {club.name}
             </p>
-            <p className="mt-0.5 font-cuerpo text-[14px] text-tinta-2">
-              {LEAGUES[club.league].label} · te esperan{' '}
-              {expectedPosition(club, club.league)}° de {LEAGUES[club.league].teams}
-            </p>
-
-            <p className="mt-3 max-w-[54ch] font-cuerpo text-[15px] leading-relaxed text-tinta">
-              Una partida por día, la misma para todo el mundo: el mismo club, la misma suerte y
-              los mismos eventos. Al terminar entrás en el ranking del día.
-            </p>
-            <p className="mt-2 max-w-[54ch] border-l-2 border-alerta pl-3 font-cuerpo text-[14px] leading-snug text-tinta-2">
-              Tenés una sola oportunidad: cuando la jugás, queda jugada hasta mañana.
+            <p className="mt-1 font-cuerpo text-[0.875rem] leading-snug text-tinta-2">
+              El mismo desafío para todos. Un intento por día.
             </p>
           </div>
 
-          <div className="mt-4 shrink-0 sm:mt-0 sm:w-48">
+          <div className="">
             {datos.yaJugada ? (
-              <p className="border-t border-corondel pt-2.5 font-tabla text-[11px] tracking-[0.06em] text-tinta-2 uppercase sm:border-0 sm:pt-0">
+              <p className="border-t border-corondel pt-2.5 font-tabla text-[0.75rem] tracking-[0.06em] text-tinta-2 uppercase sm:border-0 sm:pt-0">
                 Ya la jugaste. Volvé mañana.
               </p>
             ) : (
               <button
                 type="button"
                 onClick={onJugar}
-                className="min-h-11 w-full bg-[var(--club)] px-4 py-3 font-titular text-[14px] font-black tracking-[0.1em] text-fondo uppercase transition-opacity active:opacity-90"
+                className="min-h-11 w-full border border-corondel px-3 py-3 font-titular text-[0.75rem] font-black tracking-[0.06em] text-tinta uppercase transition-colors hover:bg-[var(--club)]/10"
               >
                 Jugar la del día
               </button>

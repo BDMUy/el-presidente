@@ -62,10 +62,10 @@ export function GaleriaCartas() {
   const total = visibles.reduce((n, f) => n + f.cartas.length, 0);
 
   return (
-    <main id="principal" tabIndex={-1} className="flex min-h-dvh flex-col focus:outline-none">
-      <div className="sticky top-0 z-20 border-b border-tinta bg-fondo-2/97 backdrop-blur">
-        <div className="mx-auto w-full max-w-xl px-4 py-3">
-          <h1 className="font-tabla text-[11px] tracking-[0.14em] text-tinta-2 uppercase">
+    <main id="principal" tabIndex={-1} className="superficie-palco mx-auto flex min-h-dvh w-full max-w-[40rem] flex-col focus:outline-none">
+      <div className="sticky top-0 z-20 border-b border-tinta bg-fondo">
+        <div className="mx-auto w-full max-w-[40rem] px-4 py-3">
+          <h1 className="font-tabla text-[0.75rem] tracking-[0.14em] text-tinta-2 uppercase">
             Galería de actas · {total} {total === 1 ? 'carta' : 'cartas'}
           </h1>
 
@@ -75,7 +75,7 @@ export function GaleriaCartas() {
             onChange={(e) => setBusqueda(e.target.value)}
             placeholder="Buscar en el texto de las cartas"
             aria-label="Buscar en el texto de las cartas"
-            className="mt-2 min-h-11 w-full border border-corondel bg-fondo px-3 font-cuerpo text-[15px] text-tinta placeholder:text-tinta-2"
+            className="mt-2 min-h-11 w-full border border-corondel bg-fondo px-3 font-cuerpo text-[0.9375rem] text-tinta placeholder:text-tinta-2"
           />
 
           <div className="mt-2 flex flex-wrap gap-1.5">
@@ -89,7 +89,7 @@ export function GaleriaCartas() {
             ))}
           </div>
 
-          <label className="mt-2 flex min-h-11 items-center gap-2 font-tabla text-[11px] tracking-[0.1em] text-tinta-2 uppercase">
+          <label className="mt-2 flex min-h-11 items-center gap-2 font-tabla text-[0.75rem] tracking-[0.1em] text-tinta-2 uppercase">
             <input
               type="checkbox"
               checked={verConsecuencias}
@@ -101,10 +101,10 @@ export function GaleriaCartas() {
         </div>
       </div>
 
-      <div className="mx-auto w-full max-w-xl flex-1 px-4 py-6">
+      <div className="mx-auto w-full max-w-[40rem] flex-1 px-4 py-6">
         {visibles.map((f) => (
           <section key={f.archivo}>
-            <h2 className="mt-8 mb-3 font-titular text-[13px] font-black tracking-[0.14em] text-tinta uppercase first:mt-0">
+            <h2 className="mt-8 mb-3 font-titular text-[0.8125rem] font-black tracking-[0.14em] text-tinta uppercase first:mt-0">
               {f.archivo} · {f.cartas.length}
             </h2>
 
@@ -115,7 +115,7 @@ export function GaleriaCartas() {
         ))}
 
         {total === 0 && (
-          <p className="font-cuerpo text-[15px] text-tinta-2">
+          <p className="font-cuerpo text-[0.9375rem] text-tinta-2">
             Ninguna carta dice eso.
           </p>
         )}
@@ -129,7 +129,7 @@ function Ficha({ carta, verConsecuencias }: { carta: GameEvent; verConsecuencias
 
   return (
     <section className="mb-10">
-      <div className="mb-2 flex flex-wrap items-center gap-x-2 gap-y-1 font-tabla text-[10px] tracking-[0.08em] text-tinta-2 uppercase">
+      <div className="mb-2 flex flex-wrap items-center gap-x-2 gap-y-1 font-tabla text-[0.75rem] tracking-[0.08em] text-tinta-2 uppercase">
         <span className="text-tinta">{carta.id}</span>
         {carta.weight !== undefined && <span>· peso {carta.weight}</span>}
         {carta.requires && <span>· {describirCondicion(carta.requires)}</span>}
@@ -154,7 +154,7 @@ function Consecuencias({ carta }: { carta: GameEvent }) {
     <div className="mt-3 border-l-2 border-tinta pl-3">
       {carta.options.map((option, i) => (
         <div key={i} className="mt-2 first:mt-0">
-          <p className="font-tabla text-[10px] tracking-[0.08em] text-tinta-2 uppercase">
+          <p className="font-tabla text-[0.75rem] tracking-[0.08em] text-tinta-2 uppercase">
             {option.label}
             {option.requires && ` · ${describirCondicion(option.requires)}`}
           </p>
@@ -162,8 +162,8 @@ function Consecuencias({ carta }: { carta: GameEvent }) {
           {option.random ? (
             <ul>
               {option.random.map((salida, j) => (
-                <li key={j} className="mt-1 font-cuerpo text-[14px] leading-snug text-tinta">
-                  <span className="font-tabla text-[11px] text-tinta-2">
+                <li key={j} className="mt-1 font-cuerpo text-[0.875rem] leading-snug text-tinta">
+                  <span className="font-tabla text-[0.75rem] text-tinta-2">
                     {Math.round((salida.weight / pesoTotal(option.random!)) * 100)}%{' '}
                   </span>
                   {salida.text}
@@ -171,11 +171,11 @@ function Consecuencias({ carta }: { carta: GameEvent }) {
               ))}
             </ul>
           ) : (
-            <p className="mt-1 font-cuerpo text-[14px] leading-snug text-tinta">{option.hint}</p>
+            <p className="mt-1 font-cuerpo text-[0.875rem] leading-snug text-tinta">{option.hint}</p>
           )}
 
           {(option.effects?.deferred ?? []).map((d, j) => (
-            <p key={j} className="mt-1 font-cuerpo text-[14px] leading-snug text-tinta-2">
+            <p key={j} className="mt-1 font-cuerpo text-[0.875rem] leading-snug text-tinta-2">
               en {d.inSeasons} {d.inSeasons === 1 ? 'temporada' : 'temporadas'}: {d.text}
             </p>
           ))}
@@ -203,7 +203,7 @@ function Chip({
       type="button"
       onClick={onClick}
       aria-pressed={activo}
-      className={`inline-flex min-h-11 items-center px-2.5 font-tabla text-[10px] tracking-[0.08em] uppercase ${
+      className={`inline-flex min-h-11 items-center px-2.5 font-tabla text-[0.75rem] tracking-[0.08em] uppercase ${
         activo ? 'bg-tinta text-fondo' : 'border border-corondel text-tinta-2'
       }`}
     >

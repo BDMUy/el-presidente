@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useSyncExternalStore } from 'react';
 
 import { superficieDelTema, tintaDeClub } from './color';
 import type { Club } from './engine/types';
@@ -48,17 +48,17 @@ function temaActivo(): Tema {
   return document.documentElement.getAttribute('data-tema') === 'claro' ? 'claro' : 'oscuro';
 }
 
+function suscribirTema(alCambiar: () => void): () => void {
+  window.addEventListener(EVENTO_CAMBIO, alCambiar);
+  return () => window.removeEventListener(EVENTO_CAMBIO, alCambiar);
+}
+
+function temaDelServidor(): Tema {
+  return 'oscuro';
+}
+
 export function useTemaActual(): Tema {
-  const [tema, setTema] = useState<Tema>(temaActivo);
-
-  useEffect(() => {
-    setTema(temaActivo());
-    const alCambiar = (evento: Event) => setTema((evento as CustomEvent<Tema>).detail);
-    window.addEventListener(EVENTO_CAMBIO, alCambiar);
-    return () => window.removeEventListener(EVENTO_CAMBIO, alCambiar);
-  }, []);
-
-  return tema;
+  return useSyncExternalStore(suscribirTema, temaActivo, temaDelServidor);
 }
 
 export function useTintaClub(club: Club | null): string | null {

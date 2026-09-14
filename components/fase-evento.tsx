@@ -142,7 +142,7 @@ export function FaseResultadoEvento({
               <li
                 key={cambio.label}
                 style={{ animationDelay: `${indice * 60}ms` }}
-                className="entrar-nota flex items-baseline py-1.5 font-tabla text-[13px] uppercase"
+                className="entrar-nota flex items-baseline py-1.5 font-tabla text-[0.8125rem] uppercase"
               >
                 <span className="text-tinta-2">{cambio.label}</span>
                 <Puntos />
@@ -155,7 +155,7 @@ export function FaseResultadoEvento({
         )}
 
         {diferidos.length > 0 && (
-          <p className="mt-4 border-l-2 border-[var(--club)] pl-3 font-tabla text-[12px] leading-relaxed tracking-wide text-tinta-2 uppercase">
+          <p className="mt-4 border-l-2 border-[var(--club)] pl-3 font-tabla text-[0.75rem] leading-relaxed tracking-wide text-tinta-2 uppercase">
             Queda asentado en el libro de actas. Esto vuelve.
           </p>
         )}

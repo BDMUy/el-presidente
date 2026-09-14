@@ -186,22 +186,22 @@ export function Recorrido({
             : { top: 'calc(1rem + var(--sae-top))' }
         }
       >
-        <p className="font-tabla text-[11px] tracking-[0.1em] text-tinta-2 uppercase tabular-nums">
+        <p className="font-tabla text-[0.75rem] tracking-[0.1em] text-tinta-2 uppercase tabular-nums">
           Paso {indice + 1} de {visibles.length}
         </p>
         <p
-          className="mt-2 font-titular text-[18px] leading-tight font-black text-tinta uppercase"
+          className="mt-2 font-titular text-[1.125rem] leading-tight font-black text-tinta uppercase"
           style={{ fontStretch: '75%' }}
         >
           {paso.titulo}
         </p>
-        <p className="mt-1.5 font-cuerpo text-[14px] leading-snug text-tinta-2">{paso.cuerpo}</p>
+        <p className="mt-1.5 font-cuerpo text-[0.875rem] leading-snug text-tinta-2">{paso.cuerpo}</p>
 
         <div className="mt-4 flex items-center gap-2">
           <button
             type="button"
             onClick={cerrar}
-            className="min-h-11 font-tabla text-[11px] tracking-[0.1em] text-tinta-2 uppercase underline underline-offset-4 transition-colors hover:text-tinta"
+            className="min-h-11 font-tabla text-[0.75rem] tracking-[0.1em] text-tinta-2 uppercase underline underline-offset-4 transition-colors hover:text-tinta"
           >
             Saltear
           </button>
@@ -210,7 +210,7 @@ export function Recorrido({
               <button
                 type="button"
                 onClick={anterior}
-                className="min-h-11 border border-corondel px-3 font-tabla text-[11px] tracking-[0.1em] text-tinta-2 uppercase transition-colors hover:border-tinta hover:text-tinta"
+                className="min-h-11 border border-corondel px-3 font-tabla text-[0.75rem] tracking-[0.1em] text-tinta-2 uppercase transition-colors hover:border-tinta hover:text-tinta"
               >
                 Anterior
               </button>
@@ -219,7 +219,7 @@ export function Recorrido({
               type="button"
               data-primario
               onClick={siguiente}
-              className="min-h-11 bg-tinta px-4 font-titular text-[12px] font-black tracking-[0.1em] text-fondo uppercase transition-colors active:bg-tinta-2"
+              className="min-h-11 bg-tinta px-4 font-titular text-[0.75rem] font-black tracking-[0.1em] text-fondo uppercase transition-colors active:bg-tinta-2"
             >
               {ultimo ? 'Listo' : 'Siguiente'}
             </button>

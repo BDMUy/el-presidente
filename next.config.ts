@@ -28,7 +28,7 @@ const CABECERAS = [
 ];
 
 const nextConfig: NextConfig = {
-  allowedDevOrigins: ['192.168.0.*', '192.168.1.*', '10.0.0.*'],
+  allowedDevOrigins: ['127.0.0.1', '192.168.0.*', '192.168.1.*', '10.0.0.*'],
 
   async headers() {
     return [{ source: '/:path*', headers: CABECERAS }];
