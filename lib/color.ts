@@ -1,13 +1,13 @@
 export type RGB = [number, number, number];
 
-export const FONDO_OSCURO = '#102a27';
-export const FONDO_CLARO = '#f1ebdd';
-export const SUPERFICIE_OSCURA = '#193733';
-export const SUPERFICIE_CLARA = '#e7decd';
+export const FONDO_OSCURO = '#0e2418';
+export const FONDO_CLARO = '#eef1e4';
+export const SUPERFICIE_OSCURA = '#163220';
+export const SUPERFICIE_CLARA = '#e0e6d3';
 
-export const TINTA_OSCURA = '#f3ebdd';
-export const TINTA_2_OSCURA = '#bbc9bf';
-export const CORONDEL_OSCURO = '#76978b';
+export const TINTA_OSCURA = '#eef0e4';
+export const TINTA_2_OSCURA = '#8a9889';
+export const CORONDEL_OSCURO = '#6a7c6c';
 
 export function superficieDelTema(tema: 'oscuro' | 'claro'): string {
   return tema === 'claro' ? SUPERFICIE_CLARA : SUPERFICIE_OSCURA;

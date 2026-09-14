@@ -11,23 +11,25 @@ No es un dashboard de tarjetas ni una simulación literal de escritorio.
 
 | Token | Noche | Día |
 |---|---|---|
-| fondo | #102a27 | #f1ebdd |
-| fondo-2 | #193733 | #e7decd |
-| tinta | #f3ebdd | #18332e |
-| tinta-2 | #bbc9bf | #4c6054 |
-| tinta-3 | #a0b5a9 | #556454 |
-| corondel | #76978b | #70806e |
-| corondel-fuerte | #9db8ac | #657661 |
-| acento | #f6c453 | #80500c |
-| sobre-acento | #262019 | #fff8e7 |
+| fondo | #0e2418 | #eef1e4 |
+| fondo-2 | #163220 | #e0e6d3 |
+| tinta | #eef0e4 | #14251a |
+| tinta-2 | #8a9889 | #5b685a |
+| tinta-3 | #99a596 | #505e50 |
+| corondel | #6a7c6c | #788374 |
+| corondel-fuerte | #829182 | #616e60 |
+| acento | #7ec8e3 | #0d5f7c |
+| sobre-acento | #05202b | #f3f6ec |
 | alerta | #f07a6b | #b3261e |
-| favorable | #8fbf8a | #2c6a4c |
+| favorable | #9fd48f | #2c6a4c |
 
 Los tokens CSS y las superficies exportadas en lib/color.ts deben coincidir.
 lib/paleta.test.ts verifica esa correspondencia, texto a 4.5:1 y bordes a 3:1.
 El color de cada club se adapta con tintaDeClub contra la superficie del tema;
 los colores originales se reservan para bandas decorativas sin texto encima.
 No usar rojo para acciones normales ni recolorear la aplicación según el club.
+El acento es celeste: el único color frío de la pantalla, para que la acción no se
+confunda con el verde del fondo ni con el rojo de alerta.
 
 ## Tres niveles
 

@@ -22,17 +22,17 @@
   --estadio: url('/estadio/palco-noche.webp');
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
-  --fondo: #102a27;
-  --fondo-2: #193733;
-  --tinta: #f3ebdd;
-  --tinta-2: #bbc9bf;
-  --tinta-3: #a0b5a9;
-  --corondel: #76978b;
-  --corondel-fuerte: #9db8ac;
+  --fondo: #0e2418;
+  --fondo-2: #163220;
+  --tinta: #eef0e4;
+  --tinta-2: #8a9889;
+  --tinta-3: #99a596;
+  --corondel: #6a7c6c;
+  --corondel-fuerte: #829182;
   --alerta: #f07a6b;
-  --favorable: #8fbf8a;
-  --acento: #f6c453;
-  --sobre-acento: #262019;
+  --favorable: #9fd48f;
+  --acento: #7ec8e3;
+  --sobre-acento: #05202b;
   --sae-top: env(safe-area-inset-top);
   --sae-right: env(safe-area-inset-right);
   --sae-bottom: env(safe-area-inset-bottom);
@@ -42,17 +42,17 @@
 
 [data-tema='claro'] {
   --estadio: url('/estadio/palco-dia.webp');
-  --fondo: #f1ebdd;
-  --fondo-2: #e7decd;
-  --tinta: #18332e;
-  --tinta-2: #4c6054;
-  --tinta-3: #556454;
-  --corondel: #70806e;
-  --corondel-fuerte: #657661;
+  --fondo: #eef1e4;
+  --fondo-2: #e0e6d3;
+  --tinta: #14251a;
+  --tinta-2: #5b685a;
+  --tinta-3: #505e50;
+  --corondel: #788374;
+  --corondel-fuerte: #616e60;
   --alerta: #b3261e;
   --favorable: #2c6a4c;
-  --acento: #80500c;
-  --sobre-acento: #fff8e7;
+  --acento: #0d5f7c;
+  --sobre-acento: #f3f6ec;
   color-scheme: light;
 }
 
