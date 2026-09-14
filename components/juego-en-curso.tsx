@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { getClub } from '@/content/clubs';
 import { applyChoice, replayRun, startRun } from '@/lib/engine/engine';
-import { EVENTS_PER_SEASON, type GameState, type Modo, type Phase } from '@/lib/engine/types';
+import { EVENTS_PER_SEASON, type GameState, type Modo, type Phase, type PlayerOffer } from '@/lib/engine/types';
 import { borrar, guardar, leer } from '@/lib/storage';
 import { ActaAsuncion } from './acta-asuncion';
 import { AvisoRecorrido } from './aviso-recorrido';
@@ -146,6 +146,28 @@ export function JuegoEnCurso({
     alTope();
   }, []);
 
+  const firmarVarias = useCallback((elegidas: PlayerOffer[]) => {
+    setPartida((actual) => {
+      if (!actual) return actual;
+      let siguiente = actual.state;
+      for (const oferta of elegidas) {
+        if (siguiente.phase.kind !== 'mercado') break;
+        const indice = siguiente.phase.offers.indexOf(oferta);
+        if (indice < 0) break;
+        siguiente = applyChoice(siguiente, indice);
+      }
+      guardar({
+        seed: siguiente.seed,
+        clubId: siguiente.clubId,
+        modo: siguiente.modo,
+        choices: siguiente.choices,
+        diaria: actual.diaria,
+      });
+      return { state: siguiente, diaria: actual.diaria };
+    });
+    alTope();
+  }, []);
+
   useEffect(() => {
     if (!activo || !partida) return;
     const cont = faseRef.current;
@@ -218,6 +240,7 @@ export function JuegoEnCurso({
                 state={state}
                 diaria={diaria}
                 onElegir={elegir}
+                onFirmar={firmarVarias}
                 onReiniciar={onReiniciar}
               />
             </div>
@@ -232,11 +255,13 @@ function Pantalla({
   state,
   diaria,
   onElegir,
+  onFirmar,
   onReiniciar,
 }: {
   state: GameState;
   diaria: string | null;
   onElegir: (choice: number) => void;
+  onFirmar: (elegidas: PlayerOffer[]) => void;
   onReiniciar: () => void;
 }) {
   const { phase } = state;
@@ -252,6 +277,7 @@ function Pantalla({
           season={state.season}
           caja={state.resources.caja}
           onElegir={onElegir}
+          onFirmar={onFirmar}
         />
       );
 

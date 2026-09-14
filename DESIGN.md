@@ -89,6 +89,11 @@ No duplicar debajo el destino ya mostrado en los controles.
 
 Las opciones narrativas muestran consecuencias graduadas, como HINCHADA ++.
 Las operaciones de mercado y mesa chica muestran cifras exactas antes de firmar.
+En el mercado se marcan varias operaciones y se firman juntas, hasta el tope de
+la ventana; la barra muestra el neto de caja, plantel y hinchada de todo lo
+marcado. Queda bloqueado lo que dejaría la caja en el umbral de inhibición, con
+el motivo escrito en la tarjeta; una venta en la misma tanda vuelve a habilitar
+la compra.
 Nunca sustituir cifras contractuales por señales vagas.
 
 Las ilustraciones marcan contexto: objetos pequeños junto a encabezados,
