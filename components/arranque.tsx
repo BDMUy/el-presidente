@@ -17,7 +17,7 @@ import {
 import { useTintaClub } from '@/lib/tema';
 import { Volanta } from './ui';
 import { AvisoRecorrido } from './aviso-recorrido';
-import { Bandera } from './bandera';
+import { Bandera, fondoDeBandera } from './bandera';
 import { BarraSuperior } from './barra-superior';
 import { CampoNombre } from './campo-nombre';
 import { CampoSelect } from './campo-select';
@@ -30,6 +30,8 @@ import { VitrinaPanel } from './vitrina';
 import { IconoAjustes, IconoDado } from './iconos';
 
 const PAISES: Country[] = ['argentina', 'uruguay', 'peru', 'colombia', 'chile', 'paraguay', 'bolivia', 'ecuador', 'venezuela', 'brasil'];
+
+type ItemRodillo = { texto: string; pais?: Country };
 
 const PAIS_LABEL: Record<Country, string> = {
   argentina: 'Argentina', uruguay: 'Uruguay', peru: 'Perú', colombia: 'Colombia', chile: 'Chile',
@@ -115,7 +117,7 @@ export function Arranque({
   const [pais, setPais] = useState<Country>('argentina');
   const [liga, setLiga] = useState<LeagueId>('ar-primera');
   const [modo, setModo] = useState<Modo>('normal');
-  const [sorteo, setSorteo] = useState<{ paso: number; rodillos: string[][] } | null>(null);
+  const [sorteo, setSorteo] = useState<{ paso: number; rodillos: ItemRodillo[][] } | null>(null);
 
   useEffect(() => {
     if (!sorteo) return;
@@ -167,14 +169,14 @@ export function Arranque({
     }
     const destino = sortearClubPorDestino(Math.random);
     if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      const rodillo = (opciones: string[], final: string) => [
+      const rodillo = (opciones: ItemRodillo[], final: ItemRodillo) => [
         ...Array.from({ length: 11 }, () => opciones[Math.floor(Math.random() * opciones.length)]),
         final,
       ];
       setSorteo({ paso: 0, rodillos: [
-        rodillo(PAISES.map((id) => PAIS_LABEL[id]), PAIS_LABEL[destino.pais]),
-        rodillo(LIGAS_POR_PAIS[destino.pais].map((id) => LEAGUES[id].label), LEAGUES[destino.liga].label),
-        rodillo(CLUBS.filter((c) => c.league === destino.liga).map((c) => c.name), destino.club.name),
+        rodillo(PAISES.map((id) => ({ texto: PAIS_LABEL[id], pais: id })), { texto: PAIS_LABEL[destino.pais], pais: destino.pais }),
+        rodillo(LIGAS_POR_PAIS[destino.pais].map((id) => ({ texto: LEAGUES[id].label })), { texto: LEAGUES[destino.liga].label }),
+        rodillo(CLUBS.filter((c) => c.league === destino.liga).map((c) => ({ texto: c.name })), { texto: destino.club.name }),
       ] });
     }
     setPais(destino.pais);
@@ -227,7 +229,7 @@ export function Arranque({
               <div className="grid gap-3">
                 <CampoSorteo etiqueta="País" paso={0} sorteo={sorteo}>
                   <CampoSelect etiqueta="País" valor={pais} onChange={cambiarPais} icono={<Bandera pais={pais} />}>
-                    {PAISES.map((id) => <option key={id} value={id}>{PAIS_LABEL[id]}</option>)}
+                    {PAISES.map((id) => <option key={id} value={id} style={{ '--bandera': fondoDeBandera(id) } as CSSProperties}>{PAIS_LABEL[id]}</option>)}
                   </CampoSelect>
                 </CampoSorteo>
                 <CampoSorteo etiqueta="Liga" paso={1} sorteo={sorteo}>
@@ -309,7 +311,7 @@ export function Arranque({
 function CampoSorteo({ etiqueta, paso, sorteo, children }: {
   etiqueta: string;
   paso: number;
-  sorteo: { paso: number; rodillos: string[][] } | null;
+  sorteo: { paso: number; rodillos: ItemRodillo[][] } | null;
   children: ReactNode;
 }) {
   const pendiente = sorteo !== null && sorteo.paso <= paso;
@@ -323,7 +325,12 @@ function CampoSorteo({ etiqueta, paso, sorteo, children }: {
           <div className="sorteo-ventana">
             {girando ? (
               <div className="sorteo-rodillo">
-                {sorteo.rodillos[paso].map((texto, i) => <div className="sorteo-club" key={i}><span>{texto}</span></div>)}
+                {sorteo.rodillos[paso].map((item, i) => (
+                  <div className="sorteo-club" key={i}>
+                    {item.pais && <Bandera pais={item.pais} />}
+                    <span>{item.texto}</span>
+                  </div>
+                ))}
               </div>
             ) : <div className="sorteo-club text-tinta-2">{paso === 1 ? 'Esperando país…' : 'Esperando liga…'}</div>}
           </div>

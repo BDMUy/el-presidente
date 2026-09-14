@@ -77,8 +77,10 @@ expansión entre separadores, sin otra tarjeta dorada.
 
 País, liga y club permanecen visibles en secuencia vertical.
 El campo de país lleva a la izquierda la bandera del país elegido, con borde
-propio para que las bandas blancas no se pierdan contra la superficie; la lista
-desplegada es solo texto, porque un option nativo no admite imágenes.
+propio para que las bandas blancas no se pierdan contra la superficie, y el
+rodillo del sorteo gira con la bandera de cada país. Donde el navegador soporta
+appearance: base-select, la lista desplegada repite la bandera por fila como
+fondo del option; donde no, cae al desplegable del sistema, solo con texto.
 Sorteo jerárquico con rodillos de 750ms y pasos de 800ms.
 Revelar saltea el efecto sin cambiar el resultado.
 No duplicar debajo el destino ya mostrado en los controles.

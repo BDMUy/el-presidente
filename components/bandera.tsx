@@ -8,6 +8,7 @@ import PE from 'country-flag-icons/react/3x2/PE';
 import PY from 'country-flag-icons/react/3x2/PY';
 import UY from 'country-flag-icons/react/3x2/UY';
 import VE from 'country-flag-icons/react/3x2/VE';
+import { AR as svgAR, BO as svgBO, BR as svgBR, CL as svgCL, CO as svgCO, EC as svgEC, PE as svgPE, PY as svgPY, UY as svgUY, VE as svgVE } from 'country-flag-icons/string/3x2';
 
 import type { Country } from '@/lib/engine/types';
 
@@ -27,4 +28,21 @@ const BANDERAS: Record<Country, typeof AR> = {
 export function Bandera({ pais }: { pais: Country }) {
   const Flag = BANDERAS[pais];
   return <Flag aria-hidden className="w-5 shrink-0 border border-corondel" />;
+}
+
+const FUENTES: Record<Country, string> = {
+  argentina: svgAR,
+  bolivia: svgBO,
+  brasil: svgBR,
+  chile: svgCL,
+  colombia: svgCO,
+  ecuador: svgEC,
+  paraguay: svgPY,
+  peru: svgPE,
+  uruguay: svgUY,
+  venezuela: svgVE,
+};
+
+export function fondoDeBandera(pais: Country): string {
+  return `url("data:image/svg+xml,${encodeURIComponent(FUENTES[pais])}")`;
 }

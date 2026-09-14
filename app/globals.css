@@ -644,6 +644,54 @@ button:focus-visible:not(:disabled) .flecha-accion {
   outline-offset: 2px;
 }
 
+@supports (appearance: base-select) {
+  .campo-select,
+  .campo-select::picker(select) {
+    appearance: base-select;
+  }
+
+  .campo-select::picker-icon {
+    display: none;
+  }
+
+  .campo-select::picker(select) {
+    max-height: 60vh;
+    border: 1px solid var(--corondel);
+    background: var(--fondo-2);
+  }
+
+  .campo-select option {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding-inline: 0.75rem;
+    font: 700 0.9375rem var(--font-titular), sans-serif;
+    color: var(--tinta);
+  }
+
+  .campo-select option[style*='--bandera'] {
+    padding-left: 2.5rem;
+    background-image: var(--bandera);
+    background-repeat: no-repeat;
+    background-position: 0.75rem center;
+    background-size: 1.25rem auto;
+  }
+
+  .campo-select option::checkmark {
+    order: 1;
+    margin-left: auto;
+    color: var(--acento);
+  }
+
+  .campo-select option:hover {
+    background: color-mix(in srgb, var(--tinta) 10%, transparent);
+  }
+
+  .campo-select option:checked {
+    background: color-mix(in srgb, var(--acento) 18%, transparent);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .sorteo-rodillo,
   [data-sorteando='true'] .icono-dado,
