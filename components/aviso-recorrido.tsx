@@ -46,7 +46,7 @@ export function AvisoRecorrido({
           setOculto(true);
         }}
         aria-label="No mostrar el recorrido"
-        className="ml-auto min-h-11 px-2 font-titular text-[0.9375rem] leading-none text-tinta-2 transition-colors hover:text-tinta"
+        className="ml-auto min-h-11 w-11 shrink-0 font-titular text-[0.9375rem] leading-none text-tinta-2 transition-colors hover:text-tinta"
       >
         ×
       </button>

@@ -54,7 +54,14 @@ export function Ranking() {
     };
   }, [tipo, modo]);
 
-  if (disponible === false || disponible === null) return null;
+  if (disponible === null) return null;
+
+  if (disponible === false)
+    return (
+      <p className="mt-2 font-cuerpo text-[0.875rem] leading-snug text-tinta-2">
+        La tabla no está disponible ahora. Probá más tarde.
+      </p>
+    );
 
   return (
     <div className="mt-2">
