@@ -1,0 +1,168 @@
+{
+  "schema_version": 1,
+  "art_direction_brief": "DESIGN.md",
+  "source": {
+    "kind": "user-provided generated assets",
+    "received_at": "2026-09-13",
+    "url_or_tool": "Nano Banana (Gemini Image, Google)",
+    "license": "Google Gemini terms of service: the user owns the generated output.",
+    "rights_status": "Generated with Nano Banana (Gemini Image); Google grants the output to the user, commercial use included.",
+    "edits": "Originals preserved; illustrations optimized at runtime by next/image."
+  },
+  "assets": [
+    {
+      "id": "palco-dia",
+      "path": "public/estadio/palco-dia.webp",
+      "role": "day desktop",
+      "technical": {
+        "dimensions": [
+          1376,
+          768
+        ],
+        "alpha": false,
+        "frames": 1,
+        "filtering": "smooth"
+      },
+      "status": "integrated"
+    },
+    {
+      "id": "palco-noche",
+      "path": "public/estadio/palco-noche.webp",
+      "role": "night desktop",
+      "technical": {
+        "dimensions": [
+          1376,
+          768
+        ],
+        "alpha": false,
+        "frames": 1,
+        "filtering": "smooth"
+      },
+      "status": "integrated"
+    },
+    {
+      "id": "palco-dia-mobile",
+      "path": "public/estadio/palco-dia-mobile.webp",
+      "role": "day mobile",
+      "technical": {
+        "dimensions": [
+          768,
+          1376
+        ],
+        "alpha": false,
+        "frames": 1,
+        "filtering": "smooth"
+      },
+      "status": "integrated"
+    },
+    {
+      "id": "palco-noche-mobile",
+      "path": "public/estadio/palco-noche-mobile.webp",
+      "role": "night mobile",
+      "technical": {
+        "dimensions": [
+          768,
+          1376
+        ],
+        "alpha": false,
+        "frames": 1,
+        "filtering": "smooth"
+      },
+      "status": "integrated"
+    },
+    {
+      "id": "copa",
+      "path": "public/ilustraciones/copa.png",
+      "role": "champion",
+      "technical": {
+        "dimensions": [
+          1024,
+          1024
+        ],
+        "alpha": true,
+        "frames": 1,
+        "filtering": "smooth"
+      },
+      "status": "integrated"
+    },
+    {
+      "id": "urna-elecciones",
+      "path": "public/ilustraciones/urna-elecciones.png",
+      "role": "election",
+      "technical": {
+        "dimensions": [
+          1024,
+          1024
+        ],
+        "alpha": true,
+        "frames": 1,
+        "filtering": "smooth"
+      },
+      "status": "integrated"
+    },
+    {
+      "id": "mercado-pases",
+      "path": "public/ilustraciones/mercado-pases.png",
+      "role": "transfer window",
+      "technical": {
+        "dimensions": [
+          1024,
+          1024
+        ],
+        "alpha": true,
+        "frames": 1,
+        "filtering": "smooth"
+      },
+      "status": "integrated"
+    },
+    {
+      "id": "mesa-chica",
+      "path": "public/ilustraciones/mesa-chica.webp",
+      "role": "board meeting",
+      "technical": {
+        "dimensions": [
+          1264,
+          848
+        ],
+        "alpha": false,
+        "frames": 1,
+        "filtering": "smooth"
+      },
+      "status": "integrated"
+    },
+    {
+      "id": "vitrina-vacia",
+      "path": "public/ilustraciones/vitrina-vacia.webp",
+      "role": "empty trophy cabinet",
+      "technical": {
+        "dimensions": [
+          1264,
+          848
+        ],
+        "alpha": false,
+        "frames": 1,
+        "filtering": "smooth"
+      },
+      "status": "integrated"
+    },
+    {
+      "id": "fin-presidencia",
+      "path": "public/ilustraciones/fin-presidencia.webp",
+      "role": "ending",
+      "technical": {
+        "dimensions": [
+          1180,
+          787
+        ],
+        "alpha": false,
+        "frames": 1,
+        "filtering": "smooth"
+      },
+      "status": "integrated"
+    }
+  ],
+  "alternatives": [
+    "public/estadio/palco-dia-v1.webp",
+    "public/estadio/palco-noche-v1.webp"
+  ]
+}
