@@ -76,6 +76,9 @@ usan borde y texto de acento. Personalizar conserva icono, descripción y
 expansión entre separadores, sin otra tarjeta dorada.
 
 País, liga y club permanecen visibles en secuencia vertical.
+El campo de país lleva a la izquierda la bandera del país elegido, con borde
+propio para que las bandas blancas no se pierdan contra la superficie; la lista
+desplegada es solo texto, porque un option nativo no admite imágenes.
 Sorteo jerárquico con rodillos de 750ms y pasos de 800ms.
 Revelar saltea el efecto sin cambiar el resultado.
 No duplicar debajo el destino ya mostrado en los controles.

@@ -17,6 +17,7 @@ import {
 import { useTintaClub } from '@/lib/tema';
 import { Volanta } from './ui';
 import { AvisoRecorrido } from './aviso-recorrido';
+import { Bandera } from './bandera';
 import { BarraSuperior } from './barra-superior';
 import { CampoNombre } from './campo-nombre';
 import { CampoSelect } from './campo-select';
@@ -225,7 +226,7 @@ export function Arranque({
             <div data-recorrido="padron" className="mt-3 space-y-3" aria-busy={!!sorteo}>
               <div className="grid gap-3">
                 <CampoSorteo etiqueta="País" paso={0} sorteo={sorteo}>
-                  <CampoSelect etiqueta="País" valor={pais} onChange={cambiarPais}>
+                  <CampoSelect etiqueta="País" valor={pais} onChange={cambiarPais} icono={<Bandera pais={pais} />}>
                     {PAISES.map((id) => <option key={id} value={id}>{PAIS_LABEL[id]}</option>)}
                   </CampoSelect>
                 </CampoSorteo>

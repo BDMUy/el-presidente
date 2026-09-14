@@ -7,12 +7,14 @@ export function CampoSelect({
   valor,
   onChange,
   disabled = false,
+  icono,
   children,
 }: {
   etiqueta: string;
   valor: string;
   onChange: (valor: string) => void;
   disabled?: boolean;
+  icono?: ReactNode;
   children: ReactNode;
 }) {
   const id = useId();
@@ -23,12 +25,21 @@ export function CampoSelect({
       </label>
 
       <span className="relative mt-1.5 block">
+        {icono && (
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-y-0 left-3 flex items-center"
+          >
+            {icono}
+          </span>
+        )}
+
         <select
           id={id}
           value={valor}
           onChange={(e) => onChange(e.target.value)}
           disabled={disabled}
-          className="min-h-11 w-full appearance-none border border-corondel bg-fondo-2 py-2.5 pr-9 pl-3 font-titular text-[0.9375rem] font-bold text-tinta focus:border-tinta focus:outline-none disabled:opacity-45"
+          className={`min-h-11 w-full appearance-none border border-corondel bg-fondo-2 py-2.5 pr-9 font-titular text-[0.9375rem] font-bold text-tinta focus:border-tinta focus:outline-none disabled:opacity-45 ${icono ? 'pl-10' : 'pl-3'}`}
         >
           {children}
         </select>
