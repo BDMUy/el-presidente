@@ -110,6 +110,7 @@ export function startRun({ seed, clubId, modo = 'normal' }: StartOptions): GameS
     status: 'jugando',
     ending: null,
     choices: [],
+    novedades: [],
     descensos: 0,
     ascensos: 0,
   };
@@ -121,9 +122,10 @@ export function applyChoice(state: GameState, choice: number): GameState {
   if (state.status === 'terminado') return state;
 
   const esDecisionReal = optionCount(state) > 1;
+  const limpio: GameState = state.novedades.length > 0 ? { ...state, novedades: [] } : state;
   const conElegida: GameState = esDecisionReal
-    ? { ...state, choices: [...state.choices, choice] }
-    : state;
+    ? { ...limpio, choices: [...limpio.choices, choice] }
+    : limpio;
 
   switch (conElegida.phase.kind) {
     case 'mercado':
@@ -246,6 +248,7 @@ function resolveMercado(
 
   const conMovimiento = conAzar(state, (rand) => {
     let plantelDelta = offer.plantelDelta;
+    let lesionado: number | null = null;
     let deferred: Effects['deferred'];
 
     const sePresta = offer.kind === 'prestamo';
@@ -254,6 +257,7 @@ function resolveMercado(
 
     if (puedeLesionarse && rand.chance(offer.risk)) {
       plantelDelta = Math.round(plantelDelta * 0.35);
+      lesionado = plantelDelta;
     } else if (seCede) {
       deferred = [
         {
@@ -279,7 +283,16 @@ function resolveMercado(
       ...(deferred ? { deferred } : {}),
     };
 
-    return applyEffects(state, effects);
+    const conEfectos = applyEffects(state, effects);
+    if (lesionado === null) return conEfectos;
+
+    return {
+      ...conEfectos,
+      novedades: [
+        ...conEfectos.novedades,
+        `${offer.name} llegó tocado: suma ${lesionado} al plantel en vez de ${offer.plantelDelta}.`,
+      ],
+    };
   });
 
   const ofertasRestantes = offers.filter((_, i) => i !== choice);

@@ -95,6 +95,9 @@ marcado. Queda bloqueado lo que dejaría la caja en el umbral de inhibición, co
 el motivo escrito en la tarjeta; una venta en la misma tanda vuelve a habilitar
 la compra.
 Nunca sustituir cifras contractuales por señales vagas.
+El riesgo de un pase dice qué pasa si sale: cuánto suma el jugador lesionado
+frente a lo prometido. Cuando ocurre, el juego lo avisa con nombre en la
+pantalla siguiente, junto a los avisos de préstamos que vuelven.
 
 Las ilustraciones marcan contexto: objetos pequeños junto a encabezados,
 escenas panorámicas compactas. Son decorativas, con alt vacío y dimensiones

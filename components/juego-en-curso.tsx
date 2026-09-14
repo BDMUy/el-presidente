@@ -234,6 +234,15 @@ export function JuegoEnCurso({
         ) : (
           <>
             <AvisoRecorrido id="juego" pasos={PASOS_JUEGO} etiqueta="¿Cómo se juega?" />
+            {state.novedades.length > 0 && (
+              <ul className="entrar-nota mt-2 space-y-1 border-l-2 border-alerta pl-3" role="status">
+                {state.novedades.map((novedad) => (
+                  <li key={novedad} className="font-cuerpo text-[0.875rem] leading-snug text-tinta">
+                    {novedad}
+                  </li>
+                ))}
+              </ul>
+            )}
             <div data-recorrido="carta">
               <Pantalla
                 key={claveFase}

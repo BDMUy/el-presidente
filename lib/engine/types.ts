@@ -475,6 +475,7 @@ export interface GameState {
   status: RunStatus;
   ending: Ending | null;
   choices: number[];
+  novedades: string[];
   descensos: number;
   ascensos: number;
 }

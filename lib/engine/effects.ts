@@ -74,7 +74,7 @@ export function maturePending(state: GameState): GameState {
     next = applyEffects(next, effect.effects);
   }
 
-  return next;
+  return { ...next, novedades: [...next.novedades, ...due.map((p) => p.text)] };
 }
 
 export function estaInhibido(resources: Resources): boolean {

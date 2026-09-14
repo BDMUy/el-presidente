@@ -162,7 +162,8 @@ export function FaseMercado({
             </p>
             {unica.risk > 0 && (
               <p className="mt-1 font-tabla text-[0.75rem] text-alerta">
-                Riesgo de lesión: {Math.round(unica.risk * 100)}%. Puede rendir menos.
+                Riesgo de lesión: {Math.round(unica.risk * 100)}%. Si se lesiona, suma{' '}
+                {Math.round(unica.plantelDelta * 0.35)} al plantel en vez de {unica.plantelDelta}.
               </p>
             )}
           </div>
