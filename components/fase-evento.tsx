@@ -2,9 +2,11 @@
 
 import { useState, type CSSProperties } from 'react';
 
+import { expedienteDe } from '@/content/expedientes';
 import type { Club, Effects, EventKind, GameEvent } from '@/lib/engine/types';
 import { EVENT_KIND_LABEL, TONO_LABEL } from '@/lib/engine/types';
 import { plataConSigno } from '@/lib/format';
+import { marcarTerminos } from '@/lib/resaltado';
 import { useTintaClub } from '@/lib/tema';
 import { GrupoOpciones } from './grupo-opciones';
 import {
@@ -41,6 +43,7 @@ export function FaseEvento({
   onElegir: (choice: number) => void;
 }) {
   const tintaClub = useTintaClub(club);
+  const { lugar, hora } = expedienteDe(event.id);
   const [elegida, setElegida] = useState<number | null>(null);
   const opcion = elegida === null ? null : event.options[available[elegida]];
   const confirmar = () => {
@@ -52,7 +55,7 @@ export function FaseEvento({
       <Recuadro acento="club">
         <div className="flex items-start justify-between gap-4">
           <Volanta>
-            Sección · {enLaTemporada} de {porTemporada}
+            Expediente {enLaTemporada} de {porTemporada}
           </Volanta>
           <Ladillo tono={TONO_EVENTO[event.kind]} className="shrink-0">
             {EVENT_KIND_LABEL[event.kind]}
@@ -61,7 +64,20 @@ export function FaseEvento({
 
         <div className="mt-4">
           <Titular>{event.title}</Titular>
-          <Cuerpo className="mt-3">{event.text}</Cuerpo>
+          <p className="mt-2 font-tabla text-[0.75rem] tracking-[0.06em] text-tinta-2 uppercase">
+            {lugar} · {hora}
+          </p>
+          <Cuerpo className="mt-3">
+            {marcarTerminos(event.text).map((tramo, i) =>
+              tramo.clave ? (
+                <span key={i} className="termino-clave">
+                  {tramo.texto}
+                </span>
+              ) : (
+                tramo.texto
+              ),
+            )}
+          </Cuerpo>
         </div>
 
         <div className="mt-6">

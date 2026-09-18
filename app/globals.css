@@ -225,6 +225,13 @@ a {
   background: var(--fondo-3);
 }
 
+/* Los montos y lo dicho entre comillas se marcan con peso y filete, nunca
+   con color: el acento es la firma de la presidencia. */
+.termino-clave {
+  font-weight: 600;
+  border-bottom: 1px solid var(--corondel-fuerte);
+}
+
 /* `rotate` y no `transform`: .entrar-nota deja fijado el transform al terminar. */
 .sello-acta {
   rotate: -5deg;

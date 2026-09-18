@@ -127,6 +127,15 @@ volanta, sello de asumido (`.sello-acta`, rotado con `rotate` porque
 mercado. Las declaraciones salen de `content/declaraciones.ts` por semilla y
 modo, como el nombre y el retrato.
 
+El evento se lee como expediente: volanta con su número, lugar y hora de
+entrada bajo el titular —de `content/expedientes.ts`, por id de carta— y los
+montos y las frases textuales del relato marcados con peso y filete
+(`.termino-clave`), nunca con color, hasta tres por relato.
+
+Cada opción declara su carácter con una etiqueta de un vocabulario cerrado de
+seis tonos (`TONO_LABEL`), en Chivo sobre el título de la opción. Los tonos se
+distinguen por la palabra, nunca por color.
+
 Las opciones narrativas se presentan como tarjetas seleccionables con
 marca de radio (`.fila-opcion` / `.marca-radio`). La asimetría es deliberada:
 la opción narrativa no anticipa números, solo su pista en prosa al
