@@ -11,11 +11,13 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Alquilar otro de urgencia',
         hint: 'Sale caro un domingo a la noche.',
+        tono: 'mano-dura',
         effects: { caja: -0.4, plantel: 1 },
       },
       {
         label: 'Que viajen en combis',
         hint: 'Llegan. De mal humor, pero llegan.',
+        tono: 'patear-para-adelante',
         effects: { plantel: -2, hinchada: -1 },
       },
     ],
@@ -29,11 +31,13 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Idéntica a la original',
         hint: 'Se agota en dos días.',
+        tono: 'via-pacifica',
         effects: { caja: 1.2, hinchada: 5 },
       },
       {
         label: 'Versión modernizada',
         hint: 'Nadie la quiere. Ni los nostálgicos ni los pibes.',
+        tono: 'mano-dura',
         effects: { caja: 0.3, hinchada: -3 },
       },
     ],
@@ -48,6 +52,7 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Abrir las puertas',
         hint: 'Puede ser una campaña de marketing o un papelón filmado.',
+        tono: 'a-libro-abierto',
         random: [
           { weight: 50, text: 'El documental fue un éxito. El club sumó hinchas en todo el país.', effects: { socios: 6, caja: 2, hinchada: 6 } },
           { weight: 50, text: 'Quedó filmada una discusión de vestuario que dio la vuelta al mundo.', effects: { plantel: -4, hinchada: -6, caja: 2 } },
@@ -56,6 +61,7 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Decir que no',
         hint: 'El vestuario es el vestuario.',
+        tono: 'mano-dura',
         effects: { plantel: 2 },
       },
     ],
@@ -70,11 +76,13 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Calentar el clásico',
         hint: 'La gente te ama esta semana. El rival también se calienta.',
+        tono: 'mano-dura',
         effects: { hinchada: 6, plantel: -2 },
       },
       {
         label: 'Bajar los decibeles',
         hint: 'Institucional. Aburrido. Sano.',
+        tono: 'via-pacifica',
         effects: { influencia: 4, hinchada: -2, plantel: 2 },
       },
     ],
@@ -89,11 +97,13 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Poner la diferencia',
         hint: 'Un gesto que no se olvida.',
+        tono: 'via-pacifica',
         effects: { caja: -0.8, hinchada: 9 },
       },
       {
         label: 'Que la junten ellos',
         hint: 'Ahorrás poco y perdés bastante.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: -6 },
       },
     ],
@@ -108,11 +118,13 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Trabajar toda la noche para dejarla jugable',
         hint: 'Se juega. El campo queda destruido por dos meses.',
+        tono: 'mano-dura',
         effects: { caja: -0.5, plantel: -2 },
       },
       {
         label: 'Pedir postergación con informe técnico',
         hint: 'Depende de con quién hables.',
+        tono: 'pacto',
         random: [
           { weight: 45, text: 'Aceptaron postergarlo. Se jugó dos semanas después con la cancha impecable.', effects: { influencia: -4, plantel: 2 } },
           { weight: 55, text: 'No aceptaron. Se jugó igual y encima quedaste como el que quiso especular.', effects: { hinchada: -4, plantel: -2 } },
@@ -130,11 +142,13 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Trabajar toda la noche para dejarla jugable',
         hint: 'Se juega. El campo queda destruido por dos meses.',
+        tono: 'mano-dura',
         effects: { caja: -0.5, plantel: -2 },
       },
       {
         label: 'Pedir postergación con informe técnico',
         hint: 'Depende de con quién hables.',
+        tono: 'pacto',
         random: [
           { weight: 45, text: 'Aceptaron postergarlo. Se jugó dos semanas después con la cancha impecable.', effects: { influencia: -4, plantel: 2 } },
           { weight: 55, text: 'No aceptaron. Se jugó igual y encima quedaste como el que quiso especular.', effects: { hinchada: -4, plantel: -2 } },
@@ -152,11 +166,13 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Trabajar toda la noche para dejarla jugable',
         hint: 'Se juega. El campo queda destruido por dos meses.',
+        tono: 'mano-dura',
         effects: { caja: -0.5, plantel: -2 },
       },
       {
         label: 'Pedir postergación con informe técnico',
         hint: 'Depende de con quién hables.',
+        tono: 'pacto',
         random: [
           { weight: 45, text: 'Aceptaron postergarlo. Se jugó dos semanas después con la cancha impecable.', effects: { influencia: -4, plantel: 2 } },
           { weight: 55, text: 'No aceptaron. Se jugó igual y encima quedaste como el que quiso especular.', effects: { hinchada: -4, plantel: -2 } },
@@ -174,11 +190,13 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Trabajar toda la noche para dejarla jugable',
         hint: 'Se juega. El campo queda destruido por dos meses.',
+        tono: 'mano-dura',
         effects: { caja: -0.5, plantel: -2 },
       },
       {
         label: 'Pedir postergación con informe técnico',
         hint: 'Depende de con quién hables.',
+        tono: 'pacto',
         random: [
           { weight: 45, text: 'Aceptaron postergarlo. Se jugó dos semanas después con la cancha impecable.', effects: { influencia: -4, plantel: 2 } },
           { weight: 55, text: 'No aceptaron. Se jugó igual y encima quedaste como el que quiso especular.', effects: { hinchada: -4, plantel: -2 } },
@@ -196,11 +214,13 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Trabajar toda la noche para dejarla jugable',
         hint: 'Se juega. El campo queda destruido por dos meses.',
+        tono: 'mano-dura',
         effects: { caja: -0.5, plantel: -2 },
       },
       {
         label: 'Pedir postergación con informe técnico',
         hint: 'Depende de con quién hables.',
+        tono: 'pacto',
         random: [
           { weight: 45, text: 'Aceptaron postergarlo. Se jugó dos semanas después con la cancha impecable.', effects: { influencia: -4, plantel: 2 } },
           { weight: 55, text: 'No aceptaron. Se jugó igual y encima quedaste como el que quiso especular.', effects: { hinchada: -4, plantel: -2 } },
@@ -218,11 +238,13 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Trabajar toda la noche para dejarla jugable',
         hint: 'Se juega. El campo queda destruido por dos meses.',
+        tono: 'mano-dura',
         effects: { caja: -0.5, plantel: -2 },
       },
       {
         label: 'Pedir postergación con informe técnico',
         hint: 'Depende de con quién hables.',
+        tono: 'pacto',
         random: [
           { weight: 45, text: 'Aceptaron postergarlo. Se jugó dos semanas después con la cancha impecable.', effects: { influencia: -4, plantel: 2 } },
           { weight: 55, text: 'No aceptaron. Se jugó igual y encima quedaste como el que quiso especular.', effects: { hinchada: -4, plantel: -2 } },
@@ -240,11 +262,13 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Trabajar toda la noche para dejarla jugable',
         hint: 'Se juega. El campo queda destruido por dos meses.',
+        tono: 'mano-dura',
         effects: { caja: -0.5, plantel: -2 },
       },
       {
         label: 'Pedir postergación con informe técnico',
         hint: 'Depende de con quién hables.',
+        tono: 'pacto',
         random: [
           { weight: 45, text: 'Aceptaron postergarlo. Se jugó dos semanas después con la cancha impecable.', effects: { influencia: -4, plantel: 2 } },
           { weight: 55, text: 'No aceptaron. Se jugó igual y encima quedaste como el que quiso especular.', effects: { hinchada: -4, plantel: -2 } },
@@ -262,11 +286,13 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Trabajar toda la noche para dejarla jugable',
         hint: 'Se juega. El campo queda destruido por dos meses.',
+        tono: 'mano-dura',
         effects: { caja: -0.5, plantel: -2 },
       },
       {
         label: 'Pedir postergación con informe técnico',
         hint: 'Depende de con quién hables.',
+        tono: 'pacto',
         random: [
           { weight: 45, text: 'Aceptaron postergarlo. Se jugó dos semanas después con la cancha impecable.', effects: { influencia: -4, plantel: 2 } },
           { weight: 55, text: 'No aceptaron. Se jugó igual y encima quedaste como el que quiso especular.', effects: { hinchada: -4, plantel: -2 } },
@@ -284,11 +310,13 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Trabajar toda la noche para dejarla jugable',
         hint: 'Se juega. El campo queda destruido por dos meses.',
+        tono: 'mano-dura',
         effects: { caja: -0.5, plantel: -2 },
       },
       {
         label: 'Pedir postergación con informe técnico',
         hint: 'Depende de con quién hables.',
+        tono: 'pacto',
         random: [
           { weight: 45, text: 'Aceptaron postergarlo. Se jugó dos semanas después con la cancha impecable.', effects: { influencia: -4, plantel: 2 } },
           { weight: 55, text: 'No aceptaron. Se jugó igual y encima quedaste como el que quiso especular.', effects: { hinchada: -4, plantel: -2 } },
@@ -306,11 +334,13 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Trabajar toda la noche para dejarla jugable',
         hint: 'Se juega. El campo queda destruido por dos meses.',
+        tono: 'mano-dura',
         effects: { caja: -0.5, plantel: -2 },
       },
       {
         label: 'Pedir postergación con informe técnico',
         hint: 'Depende de con quién hables.',
+        tono: 'pacto',
         random: [
           { weight: 45, text: 'Aceptaron postergarlo. Se jugó dos semanas después con la cancha impecable.', effects: { influencia: -4, plantel: 2 } },
           { weight: 55, text: 'No aceptaron. Se jugó igual y encima quedaste como el que quiso especular.', effects: { hinchada: -4, plantel: -2 } },
@@ -328,11 +358,13 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Ir',
         hint: 'Plata fresca. El equipo arranca el torneo fundido.',
+        tono: 'pacto',
         effects: { caja: 4, plantel: -4 },
       },
       {
         label: 'Quedarse a hacer pretemporada en serio',
         hint: 'Sin plata, pero con equipo.',
+        tono: 'mano-dura',
         effects: { plantel: 4, caja: -0.5 },
       },
     ],
@@ -347,11 +379,13 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Prometerle que van a subir',
         hint: 'Prometer es gratis hasta que no lo es.',
+        tono: 'via-pacifica',
         effects: { hinchada: 4, flags: { promesa_ascenso: true } },
       },
       {
         label: 'Escucharlo y no prometer nada',
         hint: 'Honesto.',
+        tono: 'a-libro-abierto',
         effects: { hinchada: 1, influencia: 2 },
       },
     ],
@@ -365,11 +399,13 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Aprobarla',
         hint: 'A los pibes les encanta. A la popular no.',
+        tono: 'via-pacifica',
         effects: { socios: 2, hinchada: -3, caja: -0.3 },
       },
       {
         label: 'Cajonearla',
         hint: 'Te ahorrás el papelón y el ingreso.',
+        tono: 'patear-para-adelante',
         effects: { influencia: 1 },
       },
     ],
@@ -383,6 +419,7 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Que cante',
         hint: 'Media hora de show antes del partido más tenso del año.',
+        tono: 'via-pacifica',
         random: [
           { weight: 55, text: 'Cantó, se emocionó y la cancha lo aplaudió de pie. Se habló toda la semana.', effects: { hinchada: 7, socios: 3 } },
           { weight: 45, text: 'Se le fue la mano, cantó de más y el equipo salió frío. La popular lo silbó.', effects: { hinchada: -5 } },
@@ -391,6 +428,7 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Invitarlo al palco y nada más',
         hint: 'Una foto, un café, cero riesgo.',
+        tono: 'patear-para-adelante',
         effects: { socios: 1, hinchada: 1 },
       },
     ],
@@ -404,16 +442,19 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Comprarla para el museo',
         hint: 'Plata que no vuelve, en una vitrina que emociona.',
+        tono: 'via-pacifica',
         effects: { caja: -0.9, hinchada: 6, socios: 1 },
       },
       {
         label: 'Pedirle que la preste',
         hint: 'Sale gratis. Se la lleva cuando quiera.',
+        tono: 'pacto',
         effects: { hinchada: 2 },
       },
       {
         label: 'Dejarla pasar',
         hint: 'Es una camiseta vieja. Eso decís vos.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: -2 },
       },
     ],
@@ -427,11 +468,13 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Dársela',
         hint: 'Formaliza algo que ya era parte del folclore.',
+        tono: 'a-libro-abierto',
         effects: { hinchada: 3, caja: -0.1 },
       },
       {
         label: 'Que siga como siempre, sin papeles',
         hint: 'Menos trámite. Menos reconocimiento también.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: 1 },
       },
     ],
@@ -445,11 +488,13 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Aprobar la nueva versión',
         hint: 'Suena mejor. Los de siempre van a extrañar la vieja.',
+        tono: 'mano-dura',
         effects: { caja: -0.4, hinchada: -2, socios: 2 },
       },
       {
         label: 'Dejar el himno como está',
         hint: 'Se sigue escuchando mal. Nadie te lo reclama en la cara.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: 1 },
       },
     ],
@@ -464,11 +509,13 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Financiar la pintura y dejarlos trabajar',
         hint: 'Poca plata para algo que va a quedar años.',
+        tono: 'via-pacifica',
         effects: { caja: -0.3, hinchada: 4, socios: 1 },
       },
       {
         label: 'Pedir que primero lo aprueben en comisión',
         hint: 'Correcto y burocrático. El entusiasmo se puede enfriar.',
+        tono: 'patear-para-adelante',
         effects: { influencia: 1 },
       },
     ],
@@ -482,11 +529,13 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Hacerle un homenaje en la cancha',
         hint: 'Treinta y dos años no los tiene ningún jugador de este plantel.',
+        tono: 'via-pacifica',
         effects: { caja: -0.2, hinchada: 4, socios: 1 },
       },
       {
         label: 'Un simple acto interno',
         hint: 'Correcto puertas adentro. Nadie de afuera se entera.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: 1 },
       },
     ],
@@ -500,11 +549,13 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Imprimirla y venderla como póster oficial',
         hint: 'Nostalgia que se puede colgar en la pared. Y que se puede cobrar.',
+        tono: 'pacto',
         effects: { caja: 0.6, hinchada: 3 },
       },
       {
         label: 'Dejar que circule sola, sin meterse',
         hint: 'Es de la gente. Que siga siendo de la gente.',
+        tono: 'via-pacifica',
         effects: { hinchada: 2 },
       },
     ],
@@ -518,6 +569,7 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Ir a jugar el veraneo',
         hint: 'Plata fresca y prensa liviana. La pretemporada seria queda a medias.',
+        tono: 'pacto',
         random: [
           { weight: 55, text: 'Se llevaron el cuadrangular y volvieron enchufados. Salió redondo.', effects: { caja: 1.2, plantel: 1, hinchada: 3 } },
           { weight: 45, text: 'Cuatro días de playa y asado. Arrancaron el torneo pesados.', effects: { caja: 1.2, plantel: -3 } },
@@ -526,6 +578,7 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Quedarse a hacer pretemporada de verdad',
         hint: 'Sin cachet, con doble turno y sin distracciones.',
+        tono: 'mano-dura',
         effects: { plantel: 3, caja: -0.3 },
       },
     ],
@@ -539,11 +592,13 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Repartir agua y armar puestos de hidratación gratis',
         hint: 'Un gasto chico que la gente agradece con el termómetro así.',
+        tono: 'via-pacifica',
         effects: { caja: -0.4, hinchada: 4 },
       },
       {
         label: 'Sumarse al reclamo del resto de los clubes por los horarios',
         hint: 'Juntos pesan más. La tele igual no mueve nada este fin de semana.',
+        tono: 'pacto',
         effects: { influencia: -2, hinchada: 2 },
       },
     ],
@@ -557,16 +612,19 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Cubrirle el tratamiento en silencio',
         hint: 'No sale en ningún lado. Es lo que corresponde y punto.',
+        tono: 'via-pacifica',
         effects: { caja: -1, hinchada: 3, influencia: 2 },
       },
       {
         label: 'Organizarle un partido homenaje a beneficio',
         hint: 'Junta plata y lo pone otra vez en la cancha. También lo expone.',
+        tono: 'a-libro-abierto',
         effects: { caja: 0.4, hinchada: 6, socios: 2 },
       },
       {
         label: 'Darle un puesto de trabajo en el club',
         hint: 'Una solución de fondo, no un parche. Hay que hacerle lugar.',
+        tono: 'pacto',
         effects: { caja: -0.5, hinchada: 4, influencia: 1 },
       },
     ],
@@ -580,16 +638,19 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Abrirle la puerta con reglas claras',
         hint: 'Llega a un público que el club no toca. El vestuario no lo pidió.',
+        tono: 'a-libro-abierto',
         effects: { socios: 3, hinchada: 1, plantel: -1 },
       },
       {
         label: 'Darle acceso solo a zonas comunes, no al vestuario',
         hint: 'Menos ruido puertas adentro. Menos material para él también.',
+        tono: 'pacto',
         effects: { socios: 1, hinchada: 1 },
       },
       {
         label: 'Agradecer y dejarlo afuera',
         hint: 'El vestuario es el vestuario. Se pierde una vidriera enorme.',
+        tono: 'mano-dura',
         effects: { plantel: 1, socios: -1 },
       },
     ],
@@ -603,16 +664,19 @@ export const COLOR: GameEvent[] = [
       {
         label: 'Mandar cartas documento y salir a la carga',
         hint: 'Podés hacerlos parar. Lleva abogados y tiempo.',
+        tono: 'mano-dura',
         effects: { caja: -0.5, influencia: 2 },
       },
       {
         label: 'Ofrecerles una licencia oficial y cobrar por cada prenda',
         hint: 'Si ya lo usan, que lo paguen. Algunos socios lo van a ver como venderse.',
+        tono: 'pacto',
         effects: { caja: 1.6, hinchada: -3 },
       },
       {
         label: 'Sacar la línea oficial más barata y competirles',
         hint: 'El club pone su propia versión en la calle. Hay que producirla.',
+        tono: 'a-libro-abierto',
         effects: { caja: 0.4, hinchada: 2 },
       },
     ],

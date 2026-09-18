@@ -14,16 +14,19 @@ export const ASCENSO: GameEvent[] = [
       {
         label: 'Denunciarlo en conferencia',
         hint: 'La gente te aplaude. Arriba te anotan en una lista.',
+        tono: 'a-libro-abierto',
         effects: { hinchada: 8, influencia: -9 },
       },
       {
         label: 'Hacer la gestión en silencio',
         hint: 'Se acomoda para la próxima. Se paga con influencia.',
+        tono: 'via-turbia',
         effects: { influencia: -6, plantel: 2 },
       },
       {
         label: 'Aguantar sin decir nada',
         hint: 'No ganás nada. Tampoco perdés nada.',
+        tono: 'patear-para-adelante',
         effects: { influencia: 2 },
       },
     ],
@@ -38,11 +41,13 @@ export const ASCENSO: GameEvent[] = [
       {
         label: 'Poner los micros para que la gente viaje',
         hint: 'Sale plata que no tenés. La gente no se olvida.',
+        tono: 'via-pacifica',
         effects: { caja: -1.2, hinchada: 10 },
       },
       {
         label: 'Jugar sin público y ahorrar',
         hint: 'El equipo pierde su cancha y su gente.',
+        tono: 'mano-dura',
         effects: { plantel: -3, hinchada: -6 },
       },
     ],
@@ -57,11 +62,13 @@ export const ASCENSO: GameEvent[] = [
       {
         label: 'Ponerle cortinas blackout en su casa',
         hint: 'Ridículo, barato y funciona.',
+        tono: 'pacto',
         effects: { caja: -0.2, hinchada: 3 },
       },
       {
         label: 'Mandarle una carta documento',
         hint: 'Puede terminar rápido o en juzgado.',
+        tono: 'mano-dura',
         random: [
           { weight: 50, text: 'Se asustó y no volvió a llamar.', effects: { influencia: 2 } },
           { weight: 50, text: 'Consiguió el amparo. Dos meses sin nocturnos.', effects: { caja: -1.5, hinchada: -5 } },
@@ -79,16 +86,19 @@ export const ASCENSO: GameEvent[] = [
       {
         label: 'Ponerle un contrato profesional',
         hint: 'Deja la obra y rinde. Es un sueldo más.',
+        tono: 'mano-dura',
         effects: { caja: -0.8, plantel: 5, hinchada: 4 },
       },
       {
         label: 'Conseguirle un trabajo liviano en el club',
         hint: 'Solución criolla. Funciona a medias.',
+        tono: 'pacto',
         effects: { caja: -0.3, plantel: 2 },
       },
       {
         label: 'Que se arregle',
         hint: 'Rinde la mitad y en algún momento se rompe.',
+        tono: 'patear-para-adelante',
         effects: { plantel: -3 },
       },
     ],
@@ -103,6 +113,7 @@ export const ASCENSO: GameEvent[] = [
       {
         label: 'Ratificar la promesa',
         hint: 'Doble o nada. Si no subís, es peor.',
+        tono: 'mano-dura',
         effects: {
           hinchada: 6,
           deferred: [{ inSeasons: 1, text: 'La promesa que ratificaste no se cumplió. Te la cobraron con intereses.', effects: { hinchada: -14 } }],
@@ -111,6 +122,7 @@ export const ASCENSO: GameEvent[] = [
       {
         label: 'Pedir disculpas y bajar el tono',
         hint: 'Honesto y poco épico.',
+        tono: 'a-libro-abierto',
         effects: { hinchada: -3, influencia: 3 },
       },
     ],
@@ -126,11 +138,13 @@ export const ASCENSO: GameEvent[] = [
       {
         label: 'Traerlo',
         hint: 'Sube el equipo y llena la cancha. Rompe la escala salarial.',
+        tono: 'mano-dura',
         effects: { caja: -2.5, plantel: 8, hinchada: 12, socios: 3, deferred: [{ inSeasons: 2, text: 'El resto del plantel se enteró de lo que cobra el que vino de Primera. Reclamo general.', effects: { plantel: -5, caja: -1 } }] },
       },
       {
         label: 'Ofrecerle lo mismo que al resto',
         hint: 'O acepta por amor, o se ríe y cuelga.',
+        tono: 'pacto',
         random: [
           { weight: 30, text: 'Aceptó igual. Dijo que quería volver a divertirse.', effects: { plantel: 7, hinchada: 10 } },
           { weight: 70, text: 'Se rió y firmó en otro lado.', effects: { hinchada: -3 } },
@@ -139,6 +153,7 @@ export const ASCENSO: GameEvent[] = [
       {
         label: 'No traerlo',
         hint: 'El plantel sigue siendo un plantel de la categoría.',
+        tono: 'patear-para-adelante',
         effects: { influencia: 2 },
       },
     ],
@@ -153,11 +168,13 @@ export const ASCENSO: GameEvent[] = [
       {
         label: 'Prometer premio si entran',
         hint: 'Motiva de verdad. Sale plata que todavía no tenés.',
+        tono: 'pacto',
         effects: { caja: -1, plantel: 4 },
       },
       {
         label: 'No hablar de plata',
         hint: 'Que jueguen por la camiseta. A veces alcanza.',
+        tono: 'mano-dura',
         effects: { hinchada: 2 },
       },
     ],
@@ -172,11 +189,13 @@ export const ASCENSO: GameEvent[] = [
       {
         label: 'Cambiarlos ahora',
         hint: 'Caro y sin ninguna gloria. Es lo que corresponde.',
+        tono: 'a-libro-abierto',
         effects: { caja: -2.5, hinchada: 4, influencia: 3 },
       },
       {
         label: 'Reforzarlos y seguir',
         hint: 'Aguantan. Hasta que un domingo no aguanten.',
+        tono: 'patear-para-adelante',
         random: [
           { weight: 65, text: 'Aguantaron toda la temporada sin un ruido.', effects: { caja: -0.4 } },
           { weight: 35, text: 'Cedió un sector con gente arriba. Doce heridos leves y una causa.', effects: { hinchada: -16, caja: -3, influencia: -10 } },
@@ -195,11 +214,13 @@ export const ASCENSO: GameEvent[] = [
       {
         label: 'Hacer bandera y bombos, a todo trapo',
         hint: 'La semana se vive distinto. Cuesta unos pesos.',
+        tono: 'via-pacifica',
         effects: { caja: -0.4, hinchada: 7, plantel: 2 },
       },
       {
         label: 'Tratarlo como un partido más',
         hint: 'Profesional y frío. Nadie lo entiende.',
+        tono: 'mano-dura',
         effects: { hinchada: -4, plantel: 1 },
       },
     ],
@@ -214,16 +235,19 @@ export const ASCENSO: GameEvent[] = [
       {
         label: 'Guardar plata desde ahora',
         hint: 'Este año el equipo es más flojo. El que viene, no.',
+        tono: 'a-libro-abierto',
         effects: { plantel: -4, caja: 3 },
       },
       {
         label: 'Apostar todo a subir',
         hint: 'Si sale, sos un genio. Si no, quedaste sin nada.',
+        tono: 'mano-dura',
         effects: { plantel: 6, caja: -3, hinchada: 5 },
       },
       {
         label: 'No pensar tan adelante',
         hint: 'Un problema por vez.',
+        tono: 'patear-para-adelante',
         effects: { influencia: 2 },
       },
     ],
@@ -238,6 +262,7 @@ export const ASCENSO: GameEvent[] = [
       {
         label: 'Que entren a la platea',
         hint: 'Se recauda. Puede terminar mal.',
+        tono: 'via-pacifica',
         random: [
           { weight: 60, text: 'No pasó nada. Dos hinchadas en la misma platea y hasta se saludaron al final.', effects: { caja: 0.4, hinchada: 3 } },
           { weight: 40, text: 'Se agarraron en el entretiempo. Tres fechas de sanción y la foto en todos lados.', effects: { caja: -0.5, hinchada: -8, influencia: -4 } },
@@ -246,6 +271,7 @@ export const ASCENSO: GameEvent[] = [
       {
         label: 'Jugar sin visitantes',
         hint: 'Prolijo, tranquilo y sin la mitad de la recaudación.',
+        tono: 'mano-dura',
         effects: { caja: -0.3 },
       },
     ],
@@ -260,16 +286,19 @@ export const ASCENSO: GameEvent[] = [
       {
         label: 'Comprar uno usado',
         hint: 'Una fortuna para el club. Un alivio para el plantel.',
+        tono: 'mano-dura',
         effects: { caja: -1.1, plantel: 3, hinchada: 2 },
       },
       {
         label: 'Alquilar cuando haga falta',
         hint: 'Más barato por viaje, más caro al final.',
+        tono: 'pacto',
         effects: { caja: -0.5, plantel: 1 },
       },
       {
         label: 'Arreglar el de siempre otra vez',
         hint: 'Aguanta. Hasta que no aguante.',
+        tono: 'patear-para-adelante',
         effects: {
           caja: -0.2,
           deferred: [
@@ -293,11 +322,13 @@ export const ASCENSO: GameEvent[] = [
       {
         label: 'Venderlo ya',
         hint: 'El club se salva. La campaña, no.',
+        tono: 'mano-dura',
         effects: { caja: 3.2, plantel: -9, hinchada: -12 },
       },
       {
         label: 'Aguantarlo hasta fin de temporada',
         hint: 'Si ascendés, valió. Si no, se va gratis en junio.',
+        tono: 'patear-para-adelante',
         random: [
           { weight: 45, text: 'Se quedó, metió los goles del ascenso y después se fue por más plata todavía.', effects: { caja: 3.8, plantel: -6, hinchada: 10 } },
           { weight: 55, text: 'No se ascendió y el club de Primera bajó la oferta a la mitad. Se fue igual.', effects: { caja: 1.2, plantel: -9, hinchada: -6 } },
@@ -306,6 +337,7 @@ export const ASCENSO: GameEvent[] = [
       {
         label: 'Rechazar y renovarle',
         hint: 'Un sueldo que el club no puede pagar.',
+        tono: 'via-pacifica',
         effects: { caja: -0.9, plantel: 2, hinchada: 8 },
       },
     ],

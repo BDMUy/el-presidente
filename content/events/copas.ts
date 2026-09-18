@@ -12,16 +12,19 @@ export const COPAS: GameEvent[] = [
       {
         label: 'Viajar con los titulares',
         hint: 'Se juega la copa en serio. El clásico se juega fundido.',
+        tono: 'mano-dura',
         effects: { plantel: -3, hinchada: 3 },
       },
       {
         label: 'Viajar con suplentes',
         hint: 'Se prioriza el clásico. La copa se complica.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: -5, influencia: -2 },
       },
       {
         label: 'Fletar un charter',
         hint: 'Carísimo. Llegan enteros a los dos partidos.',
+        tono: 'via-pacifica',
         effects: { caja: -2.5, plantel: 3 },
       },
     ],
@@ -36,16 +39,19 @@ export const COPAS: GameEvent[] = [
       {
         label: 'Mandar al abogado del club y pagar hoteles',
         hint: 'Sale plata. Vuelven contando que el club los bancó.',
+        tono: 'via-pacifica',
         effects: { caja: -1, hinchada: 11 },
       },
       {
         label: 'Es un problema de ellos',
         hint: 'Cierto y carísimo en otra moneda.',
+        tono: 'mano-dura',
         effects: { hinchada: -10 },
       },
       {
         label: 'Gestionarlo por arriba, sin gastar',
         hint: 'Cuesta influencia en vez de plata.',
+        tono: 'pacto',
         effects: { influencia: -8, hinchada: 7 },
       },
     ],
@@ -60,11 +66,13 @@ export const COPAS: GameEvent[] = [
       {
         label: 'Salir a decir que se pasa igual',
         hint: 'La gente se ilusiona. Después hay que cumplir.',
+        tono: 'via-pacifica',
         effects: { hinchada: 6, plantel: 1 },
       },
       {
         label: 'Bajar expectativas en público',
         hint: 'Realista y desangelado.',
+        tono: 'a-libro-abierto',
         effects: { hinchada: -3, influencia: 3 },
       },
     ],
@@ -80,11 +88,13 @@ export const COPAS: GameEvent[] = [
       {
         label: 'Venderlo',
         hint: 'La caja se arregla por dos años. La copa se termina acá.',
+        tono: 'mano-dura',
         effects: { caja: 12, plantel: -9, hinchada: -16 },
       },
       {
         label: 'Rechazar hasta que termine la copa',
         hint: 'La gente lo grita. El jugador puede no perdonarlo.',
+        tono: 'via-pacifica',
         effects: { hinchada: 14, deferred: [{ inSeasons: 1, text: 'El goleador al que le frenaste el pase se fue libre y sin saludar.', effects: { plantel: -8, hinchada: -4 } }] },
       },
     ],
@@ -99,16 +109,19 @@ export const COPAS: GameEvent[] = [
       {
         label: 'Pagar lo que piden',
         hint: 'Se juega motivado. La caja lo siente.',
+        tono: 'via-pacifica',
         effects: { caja: -2.5, plantel: 4 },
       },
       {
         label: 'Ofrecer la mitad',
         hint: 'Nadie queda contento del todo.',
+        tono: 'pacto',
         effects: { caja: -1.2, plantel: 1 },
       },
       {
         label: 'No pagar nada',
         hint: 'Principios. Y un vestuario frío.',
+        tono: 'mano-dura',
         effects: { plantel: -4, influencia: 3 },
       },
     ],
@@ -123,11 +136,13 @@ export const COPAS: GameEvent[] = [
       {
         label: 'Llenar de banderas de sponsors',
         hint: 'Entra plata. La popular ve tapado su trapo histórico.',
+        tono: 'pacto',
         effects: { caja: 2, hinchada: -6 },
       },
       {
         label: 'Que se vea el estadio como es',
         hint: 'Sin plata extra y con una postal que da vuelta el continente.',
+        tono: 'via-pacifica',
         effects: { hinchada: 6, socios: 2 },
       },
     ],
@@ -142,16 +157,19 @@ export const COPAS: GameEvent[] = [
       {
         label: 'Bancar al plantel públicamente',
         hint: 'El vestuario lo registra. La gente quería sangre.',
+        tono: 'via-pacifica',
         effects: { plantel: 3, hinchada: -4 },
       },
       {
         label: 'Anunciar cambios profundos',
         hint: 'La tribuna aplaude. El vestuario se paraliza.',
+        tono: 'mano-dura',
         effects: { hinchada: 5, plantel: -4 },
       },
       {
         label: 'No hablar hasta el lunes',
         hint: 'Se enfría solo. Más o menos.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: -2, influencia: 2 },
       },
     ],
@@ -166,11 +184,13 @@ export const COPAS: GameEvent[] = [
       {
         label: 'Ir',
         hint: 'Plata y prestigio. Pretemporada arruinada.',
+        tono: 'mano-dura',
         effects: { caja: 3, plantel: -3, influencia: 5 },
       },
       {
         label: 'Declinar',
         hint: 'Pretemporada completa en casa.',
+        tono: 'patear-para-adelante',
         effects: { plantel: 4 },
       },
     ],
@@ -185,16 +205,19 @@ export const COPAS: GameEvent[] = [
       {
         label: 'Viajar cinco días antes',
         hint: 'Carísimo, y es lo que dice la ciencia.',
+        tono: 'via-pacifica',
         effects: { caja: -1.4, plantel: 3 },
       },
       {
         label: 'Llegar el día anterior',
         hint: 'Barato. Se juega con lo puesto y sin aire.',
+        tono: 'patear-para-adelante',
         effects: { plantel: -4, hinchada: -2 },
       },
       {
         label: 'Pedir cambio de horario a la Conmebol',
         hint: 'Hay que gastar teléfonos para eso.',
+        tono: 'pacto',
         requires: { minInfluencia: 25 },
         effects: { influencia: -12, plantel: 2 },
       },
@@ -210,11 +233,13 @@ export const COPAS: GameEvent[] = [
       {
         label: 'Pagarle el vuelo de vuelta y traerlo al vestuario',
         hint: 'Sale poco y no se olvida nunca.',
+        tono: 'via-pacifica',
         effects: { caja: -0.2, hinchada: 9, socios: 2 },
       },
       {
         label: 'Hacerle un posteo desde la cuenta del club',
         hint: 'Gratis y correcto. Se nota que es gratis.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: 3, socios: 1 },
       },
     ],
@@ -228,11 +253,13 @@ export const COPAS: GameEvent[] = [
       {
         label: 'Viajar con los titulares y un charter',
         hint: 'Se toma en serio. El gasto no estaba en ningún presupuesto.',
+        tono: 'mano-dura',
         effects: { caja: -1.5, plantel: 1 },
       },
       {
         label: 'Ir en micro con un equipo alternativo',
         hint: 'Barato. Si sale mal, la semana es larga.',
+        tono: 'patear-para-adelante',
         random: [
           { weight: 55, text: 'Los suplentes lo resolvieron con un gol de pelota parada y a otra cosa.', effects: { hinchada: 2 } },
           { weight: 45, text: 'Eliminados por un equipo de tercera. Los memes no perdonaron.', effects: { hinchada: -8, plantel: -1, influencia: -2 } },
@@ -241,6 +268,7 @@ export const COPAS: GameEvent[] = [
       {
         label: 'Mandar a la reserva completa y avisar que la prioridad es la liga',
         hint: 'Sincero y polémico. La copa se juega sola.',
+        tono: 'a-libro-abierto',
         effects: { plantel: 2, hinchada: -4 },
       },
     ],
