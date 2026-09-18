@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type CSSProperties } from 'react';
 
 import { enLetras } from '@/lib/engine/election';
 import { assignmentCost, assignmentIndex, costoPorFicha, winProbability } from '@/lib/engine/mesa-chica';
@@ -11,11 +11,13 @@ import {
   FRENTES,
   TITLES,
   type BigMatch,
+  type Club,
   type Frente,
   type FrenteDef,
   type MesaChicaAssignment,
 } from '@/lib/engine/types';
-import { plata } from '@/lib/format';
+import { ordinal, plata } from '@/lib/format';
+import { useTintaClub } from '@/lib/tema';
 import { BarraDecision, Continuar, Ladillo, Recuadro, Titular, Volanta } from './ui';
 import { Festejo } from './festejo';
 
@@ -33,14 +35,18 @@ function etiquetaDeCosto(frente: Frente): string {
 }
 
 export function FaseMesaChica({
+  club,
   match,
+  position,
   onDefinir,
 }: {
+  club: Club;
   match: BigMatch;
+  position: number;
   onDefinir: (choice: number) => void;
 }) {
+  const tintaClub = useTintaClub(club);
   const [reparto, setReparto] = useState<MesaChicaAssignment>(VACIO);
-  const [verCostos, setVerCostos] = useState(false);
 
   const usadas = useMemo(() => Object.values(reparto).reduce((s, n) => s + n, 0), [reparto]);
   const disponibles = FICHAS_MESA_CHICA - usadas;
@@ -60,14 +66,28 @@ export function FaseMesaChica({
   };
 
   return (
-    <div>
+    <div style={{ '--club': tintaClub } as CSSProperties}>
       <div className="text-center">
         <Volanta>La mesa chica</Volanta>
         <Image src="/ilustraciones/mesa-chica.webp" alt="" width={1264} height={848} sizes="(max-width: 600px) 90vw, 520px" className="mt-3 h-24 w-full object-cover object-[center_65%] sm:h-32" />
-        <h1 className="mt-2 text-balance font-titular text-[clamp(1.5rem,7vw,2rem)] leading-[1.05] font-black tracking-tight text-tinta uppercase">
+        <div className="mt-3 flex h-1" aria-hidden>
+          <div className="flex-1" style={{ backgroundColor: club.colors[0] }} />
+          <div className="flex-1" style={{ backgroundColor: club.colors[1] }} />
+        </div>
+        <h1 className="mt-3 text-balance font-titular text-[clamp(1.5rem,7vw,2rem)] leading-[1.05] font-black tracking-tight text-tinta uppercase">
           {match.label}
         </h1>
-        <p className="mt-1.5 font-cuerpo text-[0.9375rem] text-tinta-2">contra {match.rival}</p>
+        <p className="mt-1 font-tabla text-[0.75rem] tracking-[0.06em] text-tinta-2 uppercase">
+          {TITLES[match.title].label} · vas {ordinal(position)}
+        </p>
+
+        <div className="mt-4 grid grid-cols-[1fr_auto_1fr] items-center gap-3">
+          <Escudo nombre={club.short} color="var(--club)" />
+          <span className="font-titular text-[0.8125rem] tracking-[0.1em] text-tinta-2 uppercase">
+            contra
+          </span>
+          <Escudo nombre={match.rival} color="var(--corondel-fuerte)" />
+        </div>
       </div>
 
       <div className="mt-6">
@@ -93,10 +113,11 @@ export function FaseMesaChica({
             style={{ transform: `scaleX(${base})` }}
           />
         </div>
-        <p className="mt-1.5 text-center font-tabla text-[0.75rem] tracking-[0.06em] text-tinta-2 uppercase">
-          {usadas === 0
-            ? 'de ganarla si no movés un dedo'
-            : `de ganarla · ${Math.round(base * 100)}% ya eran tuyos`}
+        <p className="mt-1.5 flex flex-wrap items-baseline justify-center gap-x-3 font-tabla text-[0.75rem] tracking-[0.06em] uppercase">
+          <span className="text-tinta-2">{Math.round(base * 100)}% por la cancha</span>
+          <span className={ganado > 0 ? 'text-favorable' : 'text-tinta-3'}>
+            +{Math.round(ganado * 100)}% por lo que movés
+          </span>
         </p>
       </div>
 
@@ -133,14 +154,6 @@ export function FaseMesaChica({
           <span className="font-tabla text-tinta">−</span> y{' '}
           <span className="font-tabla text-tinta">+</span>. Cada una sube la probabilidad de ganar.
         </p>
-        <button
-          type="button"
-          onClick={() => setVerCostos((v) => !v)}
-          aria-expanded={verCostos}
-          className="mt-1.5 min-h-11 font-tabla text-[0.75rem] tracking-[0.1em] text-tinta-2 uppercase underline underline-offset-4 hover:text-tinta"
-        >
-          {verCostos ? 'Ocultar lo que cuesta cada frente' : 'Ver lo que cuesta cada frente'}
-        </button>
       </div>
 
       <ul className="mt-3 space-y-2">
@@ -150,7 +163,6 @@ export function FaseMesaChica({
             frente={frente}
             puestas={reparto[frente.id]}
             hayFichas={disponibles > 0}
-            verCostos={verCostos}
             primera={indice === 0}
             onPoner={() => poner(frente.id)}
             onSacar={() => sacar(frente.id)}
@@ -174,11 +186,34 @@ export function FaseMesaChica({
   );
 }
 
+function Escudo({ nombre, color }: { nombre: string; color: string }) {
+  const palabras = nombre.split(/\s+/).filter((palabra) => palabra.length > 2);
+  const iniciales = (
+    palabras.length > 1 ? palabras.map((palabra) => palabra[0]).join('') : nombre.slice(0, 3)
+  )
+    .slice(0, 3)
+    .toUpperCase();
+
+  return (
+    <span className="flex min-w-0 flex-col items-center gap-1.5">
+      <span
+        className="flex h-12 w-12 items-center justify-center rounded-full border-2 font-titular text-[0.875rem] leading-none"
+        style={{ borderColor: color, color }}
+        aria-hidden
+      >
+        {iniciales}
+      </span>
+      <span className="font-titular text-[0.8125rem] leading-tight text-balance text-tinta">
+        {nombre}
+      </span>
+    </span>
+  );
+}
+
 function FilaFrente({
   frente,
   puestas,
   hayFichas,
-  verCostos,
   primera,
   onPoner,
   onSacar,
@@ -186,7 +221,6 @@ function FilaFrente({
   frente: FrenteDef;
   puestas: number;
   hayFichas: boolean;
-  verCostos: boolean;
   primera: boolean;
   onPoner: () => void;
   onSacar: () => void;
@@ -214,12 +248,10 @@ function FilaFrente({
 
           <p className="mt-0.5 font-cuerpo text-[0.875rem] leading-snug text-tinta-2">{frente.desc}</p>
 
-          {verCostos && (
-            <p className="entrar-nota mt-1.5 flex flex-wrap items-baseline gap-x-2 font-tabla text-[0.75rem] tracking-[0.04em] uppercase">
-              <span className="text-tinta-2">{etiquetaDeCosto(frente.id)}</span>
-              {frente.riesgo && <span className="text-alerta">· {frente.riesgo}</span>}
-            </p>
-          )}
+          <p className="mt-1.5 flex flex-wrap items-baseline gap-x-2 font-tabla text-[0.75rem] tracking-[0.04em] uppercase">
+            <span className="text-tinta-2">{etiquetaDeCosto(frente.id)}</span>
+            {frente.riesgo && <span className="text-alerta">· {frente.riesgo}</span>}
+          </p>
         </div>
 
         <div className="flex shrink-0 items-center gap-1.5">

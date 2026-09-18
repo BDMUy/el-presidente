@@ -150,6 +150,11 @@ Cada oferta lleva edad, arquetipo y el comentario del jugador en la tarjeta, y
 una etiqueta de tipo donde el color marca la dirección (entra, entra gratis,
 sale) y el borde punteado marca lo temporal: préstamo y cesión. La barra de
 firma solo agrega lo que la tarjeta no dice.
+La mesa chica dice contra quién se juega, por qué título y desde qué puesto:
+filete del club, marca de iniciales para cada lado —no hay escudos de rivales—
+y la probabilidad partida en dos tramos con leyenda, lo que ya era tuyo por la
+cancha y lo que sumaste moviendo fichas. El costo de cada frente está a la
+vista, no detrás de un desplegable.
 Nunca sustituir cifras contractuales por señales vagas.
 El riesgo de un pase dice qué pasa si sale: cuánto suma el jugador lesionado
 frente a lo prometido. Cuando ocurre, el juego lo avisa con nombre en la

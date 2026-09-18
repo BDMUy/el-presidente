@@ -28,7 +28,7 @@ export function QaPalco({ muestras }: { muestras: GameState[] }) {
       {phase.kind === 'mercado' && <FaseMercado offers={phase.offers} inhibido={phase.inhibido} restantes={phase.restantes} season={state.season} caja={state.resources.caja} onElegir={elegir} onFirmar={ofertas => ofertas.forEach(o => setState(s => applyChoice(s, s.phase.kind === 'mercado' ? s.phase.offers.indexOf(o) : 0)))} />}
       {phase.kind === 'evento' && <FaseEvento club={club} event={phase.event} available={phase.available} enLaTemporada={state.eventsThisSeason} porTemporada={EVENTS_PER_SEASON} onElegir={elegir} />}
       {phase.kind === 'resultado-evento' && <FaseResultadoEvento club={club} text={phase.text} effects={phase.effects} onContinuar={continuar} />}
-      {phase.kind === 'mesa-chica' && <FaseMesaChica match={phase.match} onDefinir={elegir} />}
+      {phase.kind === 'mesa-chica' && <FaseMesaChica club={club} match={phase.match} position={phase.position} onDefinir={elegir} />}
       {phase.kind === 'resultado-final' && <FaseResultadoFinal won={phase.won} text={phase.text} match={phase.match} onContinuar={continuar} />}
       {phase.kind === 'temporada' && <FaseTemporada state={state} result={phase.result} onContinuar={continuar} />}
       {phase.kind === 'eleccion' && <FaseEleccion result={phase.result} season={state.season} onContinuar={continuar} />}

@@ -318,7 +318,14 @@ function Pantalla({
       );
 
     case 'mesa-chica':
-      return <FaseMesaChica match={phase.match} onDefinir={onElegir} />;
+      return (
+        <FaseMesaChica
+          club={club}
+          match={phase.match}
+          position={phase.position}
+          onDefinir={onElegir}
+        />
+      );
 
     case 'resultado-final':
       return (
