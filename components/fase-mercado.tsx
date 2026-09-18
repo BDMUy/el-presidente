@@ -169,8 +169,8 @@ export function FaseMercado({
                   <p className="font-titular text-[0.8125rem] leading-tight text-tinta">{offer.name}</p>
                 )}
                 <p className="mt-0.5 font-tabla text-[0.75rem] text-alerta">
-                  Riesgo de lesión: {Math.round(offer.risk * 100)}%. Si se lesiona, suma{' '}
-                  {Math.round(offer.plantelDelta * 0.35)} al plantel en vez de {offer.plantelDelta}.
+                  Riesgo de lesión: {Math.round(offer.risk * 100)}%. Si se lesiona, el impacto en
+                  el equipo es distinto.
                 </p>
               </div>
             ))}
