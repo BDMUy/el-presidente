@@ -39,12 +39,6 @@ export function FaseMercado({
   const [cerrar, setCerrar] = useState(false);
   const primerMovimiento = restantes >= MOVIMIENTOS_POR_VENTANA;
 
-  const plantelTras = (seleccion: PlayerOffer[]) =>
-    seleccion.reduce((total, o) => total + o.plantelDelta, 0);
-
-  const hinchadaTras = (seleccion: PlayerOffer[]) =>
-    seleccion.reduce((total, o) => total + o.hinchadaDelta, 0);
-
   const alternar = (offer: PlayerOffer) => {
     setCerrar(false);
     setElegidas((actuales) =>
@@ -151,9 +145,7 @@ export function FaseMercado({
                 : `${elegidas.length} operaciones`
         }
         detalle={
-          elegidas.length > 0
-            ? `Te deja en ${plata(cajaTras(caja, elegidas))} · plantel ${conSigno(plantelTras(elegidas))} · hinchada ${conSigno(hinchadaTras(elegidas))}`
-            : undefined
+          elegidas.length > 0 ? `Te deja en ${plata(cajaTras(caja, elegidas))}` : undefined
         }
         accion={cerrar ? 'Cerrar la ventana' : elegidas.length > 1 ? 'Firmar todo' : 'Firmar'}
         cifra={elegidas.length > 0 ? plataConSigno(cajaTras(caja, elegidas) - caja) : undefined}
@@ -253,18 +245,6 @@ function FilaOferta({
           tono={offer.cost > 0 ? 'gasto' : 'ingreso'}
         />
         <Dato
-          etiqueta="Plantel"
-          valor={conSigno(offer.plantelDelta)}
-          tono={offer.plantelDelta >= 0 ? 'ingreso' : 'gasto'}
-        />
-        <Dato
-          etiqueta="Hinchada"
-          valor={offer.hinchadaDelta === 0 ? '—' : conSigno(offer.hinchadaDelta)}
-          tono={
-            offer.hinchadaDelta === 0 ? 'neutro' : offer.hinchadaDelta > 0 ? 'ingreso' : 'gasto'
-          }
-        />
-        <Dato
           etiqueta="Riesgo"
           valor={offer.risk === 0 ? '—' : `${Math.round(offer.risk * 100)}%`}
           tono={offer.risk === 0 ? 'neutro' : 'gasto'}
@@ -300,7 +280,3 @@ function Dato({
   );
 }
 
-function conSigno(n: number): string {
-  if (n === 0) return '0';
-  return `${n > 0 ? '+' : '−'}${Math.abs(n)}`;
-}
