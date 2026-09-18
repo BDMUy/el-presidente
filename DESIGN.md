@@ -130,7 +130,14 @@ modo, como el nombre y el retrato.
 El evento se lee como expediente: volanta con su número, lugar y hora de
 entrada bajo el titular —de `content/expedientes.ts`, por id de carta— y los
 montos y las frases textuales del relato marcados con peso y filete
-(`.termino-clave`), nunca con color, hasta tres por relato.
+(`.termino-clave`), nunca con color, hasta tres por relato. Arriba de la
+decisión va la ilustración del expediente, elegida por el tema de la carta
+—`TEMA_POR_EVENTO`, derivado del archivo del que sale— y, si ese tema no tiene
+personaje propio, por el tipo de carta. Nunca entre la decisión y la firma.
+
+Los pies de ilustración son texto real sobre fondo sólido (`bg-fondo/85`),
+nunca quemados en la imagen; como `npm run contraste` no audita texto sobre
+imagen, ese chequeo es a ojo en ambos temas.
 
 Cada opción declara su carácter con una etiqueta de un vocabulario cerrado de
 seis tonos (`TONO_LABEL`), en Chivo sobre el título de la opción. Los tonos se

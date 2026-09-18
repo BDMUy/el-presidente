@@ -159,6 +159,96 @@
         "filtering": "smooth"
       },
       "status": "integrated"
+    },
+    {
+      "id": "personaje-barra",
+      "path": "public/ilustraciones/personaje-barra.webp",
+      "role": "event portrait: supporters group leader",
+      "technical": {
+        "dimensions": [
+          1024,
+          683
+        ],
+        "alpha": false,
+        "frames": 1,
+        "filtering": "smooth"
+      },
+      "status": "integrated"
+    },
+    {
+      "id": "personaje-dirigente",
+      "path": "public/ilustraciones/personaje-dirigente.webp",
+      "role": "event portrait: old club director",
+      "technical": {
+        "dimensions": [
+          1024,
+          683
+        ],
+        "alpha": false,
+        "frames": 1,
+        "filtering": "smooth"
+      },
+      "status": "integrated"
+    },
+    {
+      "id": "personaje-prensa",
+      "path": "public/ilustraciones/personaje-prensa.webp",
+      "role": "event portrait: press room",
+      "technical": {
+        "dimensions": [
+          1024,
+          683
+        ],
+        "alpha": false,
+        "frames": 1,
+        "filtering": "smooth"
+      },
+      "status": "integrated"
+    },
+    {
+      "id": "personaje-hincha",
+      "path": "public/ilustraciones/personaje-hincha.webp",
+      "role": "event portrait: club member",
+      "technical": {
+        "dimensions": [
+          1024,
+          683
+        ],
+        "alpha": false,
+        "frames": 1,
+        "filtering": "smooth"
+      },
+      "status": "integrated"
+    },
+    {
+      "id": "personaje-arbitro",
+      "path": "public/ilustraciones/personaje-arbitro.webp",
+      "role": "event portrait: referee dressing room",
+      "technical": {
+        "dimensions": [
+          1024,
+          683
+        ],
+        "alpha": false,
+        "frames": 1,
+        "filtering": "smooth"
+      },
+      "status": "integrated"
+    },
+    {
+      "id": "escena-golpe",
+      "path": "public/ilustraciones/escena-golpe.webp",
+      "role": "event scene: hard blow",
+      "technical": {
+        "dimensions": [
+          1024,
+          683
+        ],
+        "alpha": false,
+        "frames": 1,
+        "filtering": "smooth"
+      },
+      "status": "integrated"
     }
   ],
   "alternatives": [

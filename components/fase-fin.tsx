@@ -80,7 +80,12 @@ export function FaseFin({
       <Recuadro acento="club">
         {ending.id === 'estatua' && <Festejo titulo="Sos leyenda" detalle="Tu nombre queda en la tribuna." />}
         <ResumenPresidencia state={state} club={club} ending={ending} />
-        <Image src="/ilustraciones/fin-presidencia.webp" alt="" width={1180} height={787} sizes="(max-width: 600px) 85vw, 500px" className="mt-4 h-24 w-full object-cover sm:h-28" />
+        <figure className="relative overflow-hidden rounded-[var(--radio-sm)]">
+          <Image src="/ilustraciones/fin-presidencia.webp" alt="" width={1180} height={787} sizes="(max-width: 600px) 85vw, 500px" className="mt-4 h-24 w-full object-cover sm:h-28" />
+          <figcaption className="absolute bottom-0 left-0 rounded-tr-[var(--radio-sm)] bg-fondo/85 px-2 py-1 font-tabla text-[0.6875rem] tracking-[0.08em] text-tinta uppercase">
+            El despacho, la última tarde
+          </figcaption>
+        </figure>
 
         <Novedad novedades={novedades} />
 

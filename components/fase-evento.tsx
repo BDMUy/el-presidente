@@ -1,8 +1,9 @@
 'use client';
 
+import Image from 'next/image';
 import { useState, type CSSProperties } from 'react';
 
-import { expedienteDe } from '@/content/expedientes';
+import { expedienteDe, ilustracionDeEvento } from '@/content/expedientes';
 import type { Club, Effects, EventKind, GameEvent } from '@/lib/engine/types';
 import { EVENT_KIND_LABEL, TONO_LABEL } from '@/lib/engine/types';
 import { plataConSigno } from '@/lib/format';
@@ -44,6 +45,7 @@ export function FaseEvento({
 }) {
   const tintaClub = useTintaClub(club);
   const { lugar, hora } = expedienteDe(event.id);
+  const ilustracion = ilustracionDeEvento(event.id, event.kind);
   const [elegida, setElegida] = useState<number | null>(null);
   const opcion = elegida === null ? null : event.options[available[elegida]];
   const confirmar = () => {
@@ -67,6 +69,20 @@ export function FaseEvento({
           <p className="mt-2 font-tabla text-[0.75rem] tracking-[0.06em] text-tinta-2 uppercase">
             {lugar} · {hora}
           </p>
+
+          <figure className="relative mt-3 overflow-hidden rounded-[var(--radio-sm)]">
+            <Image
+              src={ilustracion.src}
+              alt=""
+              width={ilustracion.ancho}
+              height={ilustracion.alto}
+              sizes="(max-width: 640px) 92vw, 36rem"
+              className="h-28 w-full object-cover object-center sm:h-36"
+            />
+            <figcaption className="absolute bottom-0 left-0 max-w-full truncate rounded-tr-[var(--radio-sm)] bg-fondo/85 px-2 py-1 font-tabla text-[0.6875rem] tracking-[0.08em] text-tinta uppercase">
+              {ilustracion.rotulo}
+            </figcaption>
+          </figure>
           <Cuerpo className="mt-3">
             {marcarTerminos(event.text).map((tramo, i) =>
               tramo.clave ? (

@@ -27,6 +27,41 @@ export const ALL_EVENTS: GameEvent[] = [
   ...LEGADO,
 ];
 
+export type Tema =
+  | 'vestuario'
+  | 'hinchada'
+  | 'dirigencia'
+  | 'color'
+  | 'economia'
+  | 'inferiores'
+  | 'femenino'
+  | 'corrupcion'
+  | 'ascenso'
+  | 'copas'
+  | 'crisis'
+  | 'legado';
+
+const POR_TEMA: [Tema, GameEvent[]][] = [
+  ['vestuario', VESTUARIO],
+  ['hinchada', HINCHADA],
+  ['dirigencia', DIRIGENCIA],
+  ['color', COLOR],
+  ['economia', ECONOMIA],
+  ['inferiores', INFERIORES],
+  ['femenino', FEMENINO],
+  ['corrupcion', CORRUPCION],
+  ['ascenso', ASCENSO],
+  ['copas', COPAS],
+  ['crisis', CRISIS],
+  ['legado', LEGADO],
+];
+
+// El archivo del que viene cada carta ya es una clasificación temática: se
+// aprovecha acá en vez de agregarle un campo a las 280 cartas.
+export const TEMA_POR_EVENTO: Record<string, Tema> = Object.fromEntries(
+  POR_TEMA.flatMap(([tema, eventos]) => eventos.map((evento) => [evento.id, tema])),
+);
+
 export function findDuplicateIds(): string[] {
   const seen = new Set<string>();
   const dupes: string[] = [];

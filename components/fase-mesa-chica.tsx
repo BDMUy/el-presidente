@@ -70,7 +70,12 @@ export function FaseMesaChica({
     <div style={{ '--club': tintaClub } as CSSProperties}>
       <div className="text-center">
         <Volanta>La mesa chica</Volanta>
-        <Image src="/ilustraciones/mesa-chica.webp" alt="" width={1264} height={848} sizes="(max-width: 600px) 90vw, 520px" className="mt-3 h-24 w-full object-cover object-[center_65%] sm:h-32" />
+        <figure className="relative mt-3 overflow-hidden rounded-[var(--radio-sm)]">
+          <Image src="/ilustraciones/mesa-chica.webp" alt="" width={1264} height={848} sizes="(max-width: 600px) 90vw, 520px" className="h-24 w-full object-cover object-[center_65%] sm:h-32" />
+          <figcaption className="absolute bottom-0 left-0 rounded-tr-[var(--radio-sm)] bg-fondo/85 px-2 py-1 font-tabla text-[0.6875rem] tracking-[0.08em] text-tinta uppercase">
+            Reunión a puertas cerradas
+          </figcaption>
+        </figure>
         <div className="mt-3 flex h-1" aria-hidden>
           <div className="flex-1" style={{ backgroundColor: club.colors[0] }} />
           <div className="flex-1" style={{ backgroundColor: club.colors[1] }} />
