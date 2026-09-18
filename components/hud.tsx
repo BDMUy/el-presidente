@@ -59,7 +59,9 @@ export function Hud({
       className="sticky top-0 z-20"
       style={{ '--club': tintaClub } as CSSProperties}
     >
-      <div className="mx-auto max-w-[40rem] border-b border-corondel bg-fondo" style={{ paddingTop: 'var(--sae-top)' }}>
+      <div className="border-b border-corondel bg-fondo" style={{ paddingTop: 'var(--sae-top)' }}>
+        <div className="palco-partida">
+          <div className="mx-auto w-full max-w-[40rem]">
         <div className="px-4">
           <BarraSuperior onVolver={onVolver} volverLabel="← Inicio" onAjustes={onAjustes} />
         </div>
@@ -146,6 +148,9 @@ export function Hud({
             </button>
           </div>
         )}
+
+          </div>
+        </div>
 
         <div className="flex h-1" aria-hidden>
           <div className="flex-1" style={{ backgroundColor: club.colors[0] }} />

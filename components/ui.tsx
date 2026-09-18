@@ -227,7 +227,7 @@ export function BarraDecision({
       style={{ paddingBottom: 'calc(0.75rem + var(--sae-bottom))' }}
     >
       {children}
-      <div className="barra-decision-fila mx-auto flex max-w-[40rem] items-center gap-3">
+      <div className="barra-decision-fila flex items-center gap-3">
         <div className="min-w-0 flex-1">
           <p className="font-titular text-[0.9375rem] leading-tight text-tinta break-words">
             {resumen}
@@ -255,7 +255,7 @@ export function BarraDecision({
       </div>
 
       {nota && (
-        <p className="mx-auto mt-2 max-w-[40rem] font-tabla text-[0.75rem] leading-snug tracking-[0.04em] text-tinta-2 uppercase">
+        <p className="mt-2 font-tabla text-[0.75rem] leading-snug tracking-[0.04em] text-tinta-2 uppercase">
           {nota}
         </p>
       )}

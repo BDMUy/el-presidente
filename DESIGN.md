@@ -72,7 +72,14 @@ Debajo de 1024px: una sola columna, 1rem interior más áreas seguras.
 Cabecera compacta sin altura rígida. Ranking y vitrina plegables.
 Los fondos verticales se usan debajo de 768px.
 
-Partida, ajustes, ayuda y resumen compartido: ancho de lectura máximo 40rem.
+Ajustes, ayuda y resumen compartido: ancho de lectura máximo 40rem.
+La partida llega hasta 70rem, pero su medida de lectura sigue siendo 40rem y la
+define el contenedor de fase. Desde 1024px, `.palco-partida` arma dos columnas
+—lectura y una secundaria de 20rem— que el HUD repite para alinear con ellas;
+ambas pistas encogen para que con texto grande nada desborde. La columna
+secundaria es hermana del contenedor de fase, nunca hija: el foco automático
+busca dentro de la fase. Debajo de 1024px no se renderiza, para que no caiga
+después de la barra de confirmación.
 HUD, contenido y confirmación comparten alineaciones y fondo.
 HUD sticky arriba; confirmación sticky abajo (con esquinas superiores
 redondeadas y sombra hacia arriba) y en el flujo normal para reservar su

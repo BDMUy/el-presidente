@@ -170,7 +170,7 @@ export function FaseMercado({
         onConfirmar={confirmar}
       >
         {conRiesgo.length > 0 && (
-          <div id="detalle-pase" className="barra-decision-detalle mx-auto mb-3 max-w-[40rem] border-b border-corondel pb-3" aria-live="polite">
+          <div id="detalle-pase" className="barra-decision-detalle mb-3 border-b border-corondel pb-3" aria-live="polite">
             {conRiesgo.map((offer, index) => (
               <div key={`${offer.name}-${index}`} className={index > 0 ? 'mt-2.5 border-t border-corondel pt-2.5' : ''}>
                 {!unica && (

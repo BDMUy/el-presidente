@@ -15,6 +15,7 @@ import { FaseFin } from './fase-fin';
 import { FaseMercado } from './fase-mercado';
 import { FaseMesaChica, FaseResultadoFinal } from './fase-mesa-chica';
 import { Hud } from './hud';
+import { RailPartida } from './rail-partida';
 
 export type Inicio =
   | { tipo: 'nueva'; seed: number; clubId: string; modo: Modo; diaria: string | null }
@@ -219,10 +220,11 @@ export function JuegoEnCurso({
         onAjustes={onAjustes}
       />
 
-      <div
-        ref={faseRef}
-        className="superficie-palco mx-auto w-full max-w-[40rem] flex-1 px-4 py-4 pl-[max(1rem,var(--sae-left))] pr-[max(1rem,var(--sae-right))]"
-      >
+      <div className="superficie-palco palco-partida flex-1">
+        <div
+          ref={faseRef}
+          className="mx-auto w-full max-w-[40rem] px-4 py-4 pl-[max(1rem,var(--sae-left))] pr-[max(1rem,var(--sae-right))]"
+        >
         {mostrarActa ? (
           <ActaAsuncion
             club={club}
@@ -255,6 +257,9 @@ export function JuegoEnCurso({
             </div>
           </>
         )}
+        </div>
+
+        <RailPartida state={state} />
       </div>
     </>
   );
