@@ -11,16 +11,19 @@ export const LEGADO: GameEvent[] = [
       {
         label: 'Agradecer y frenarlo',
         hint: 'Los nombres se ponen cuando te fuiste. Suma más de lo que parece.',
+        tono: 'a-libro-abierto',
         effects: { hinchada: 8, influencia: 6 },
       },
       {
         label: 'Dejar que avance',
         hint: 'Vanidad servida en bandeja. Alguno lo va a usar en tu contra.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: -5, influencia: -4 },
       },
       {
         label: 'Proponer el nombre de un ídolo muerto',
         hint: 'Le corrés el foco a alguien que se lo ganó hace treinta años.',
+        tono: 'pacto',
         effects: { hinchada: 12, influencia: 4 },
       },
     ],
@@ -36,16 +39,19 @@ export const LEGADO: GameEvent[] = [
       {
         label: 'Traerlo',
         hint: 'La gente se vuelve loca. Las piernas ya no son las mismas.',
+        tono: 'via-pacifica',
         effects: { caja: -3, plantel: 2, hinchada: 16, socios: 4 },
       },
       {
         label: 'Traerlo como dirigente, no como jugador',
         hint: 'Honesto y menos romántico.',
+        tono: 'pacto',
         effects: { caja: -0.8, influencia: 8, hinchada: 4 },
       },
       {
         label: 'Decirle que no',
         hint: 'Frío, correcto y muy caro en imagen.',
+        tono: 'mano-dura',
         effects: { hinchada: -10, caja: 0.5 },
       },
     ],
@@ -60,16 +66,19 @@ export const LEGADO: GameEvent[] = [
       {
         label: 'Ungir al leal',
         hint: 'La interna queda tranquila. Las cuentas, no tanto.',
+        tono: 'pacto',
         effects: { influencia: 8, hinchada: 5, caja: -1 },
       },
       {
         label: 'Ungir al que sabe de números',
         hint: 'El club queda mejor parado. Tu gente se siente traicionada.',
+        tono: 'mano-dura',
         effects: { caja: 3, influencia: -8, hinchada: -3 },
       },
       {
         label: 'No ungir a nadie',
         hint: 'Que decidan los socios. Se abre una interna feroz.',
+        tono: 'a-libro-abierto',
         effects: { influencia: -5, hinchada: 6 },
       },
     ],
@@ -84,6 +93,7 @@ export const LEGADO: GameEvent[] = [
       {
         label: 'Abrirle todo',
         hint: 'Si la gestión aguanta la lupa, sale un monumento.',
+        tono: 'a-libro-abierto',
         random: [
           { weight: 55, text: 'El libro salió y quedó como el manual de cómo se maneja un club.', effects: { hinchada: 10, influencia: 10 } },
           { weight: 45, text: 'Encontró tres actas que no convenía leer. El libro se volvió otra cosa.', effects: { hinchada: -12, influencia: -10 } },
@@ -92,11 +102,13 @@ export const LEGADO: GameEvent[] = [
       {
         label: 'Darle solo entrevistas',
         hint: 'Control del relato. Sale tibio.',
+        tono: 'pacto',
         effects: { influencia: 2 },
       },
       {
         label: 'No participar',
         hint: 'Lo va a escribir igual, y peor.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: -3 },
       },
     ],
@@ -111,11 +123,13 @@ export const LEGADO: GameEvent[] = [
       {
         label: 'Ponerlos a todos de titulares un partido',
         hint: 'Una postal para la historia del club. Riesgo deportivo real.',
+        tono: 'via-pacifica',
         effects: { plantel: -3, hinchada: 14, socios: 3 },
       },
       {
         label: 'Integrarlos de a poco',
         hint: 'Lo sensato. Nadie escribe sobre lo sensato.',
+        tono: 'patear-para-adelante',
         effects: { plantel: 4, hinchada: 3 },
       },
     ],
@@ -130,16 +144,19 @@ export const LEGADO: GameEvent[] = [
       {
         label: 'Dárselo entero',
         hint: 'Se lo ganó. La recaudación de una noche no vuelve.',
+        tono: 'via-pacifica',
         effects: { caja: -2, hinchada: 12, influencia: 4 },
       },
       {
         label: 'Partir la recaudación',
         hint: 'Justo para los dos. Romántico para ninguno.',
+        tono: 'pacto',
         effects: { caja: -0.5, hinchada: 4 },
       },
       {
         label: 'Homenaje en el entretiempo',
         hint: 'Cinco minutos y una plaqueta.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: -6, caja: 0.2 },
       },
     ],
@@ -154,11 +171,13 @@ export const LEGADO: GameEvent[] = [
       {
         label: 'Aceptar el cargo y seguir en el club',
         hint: 'Los dos sombreros. Nadie va a creer que no hay conflicto.',
+        tono: 'pacto',
         effects: { influencia: 18, hinchada: -10, caja: 1.5 },
       },
       {
         label: 'Rechazarlo',
         hint: 'Te quedás donde estás. Y lo dicen todos los micrófonos.',
+        tono: 'mano-dura',
         effects: { hinchada: 12, influencia: -6 },
       },
     ],
@@ -173,11 +192,13 @@ export const LEGADO: GameEvent[] = [
       {
         label: 'Aceptar el cargo y seguir en el club',
         hint: 'Los dos sombreros. Nadie va a creer que no hay conflicto.',
+        tono: 'pacto',
         effects: { influencia: 18, hinchada: -10, caja: 1.5 },
       },
       {
         label: 'Rechazarlo',
         hint: 'Te quedás donde estás. Y lo dicen todos los micrófonos.',
+        tono: 'mano-dura',
         effects: { hinchada: 12, influencia: -6 },
       },
     ],
@@ -192,11 +213,13 @@ export const LEGADO: GameEvent[] = [
       {
         label: 'Aceptar el cargo y seguir en el club',
         hint: 'Los dos sombreros. Nadie va a creer que no hay conflicto.',
+        tono: 'pacto',
         effects: { influencia: 18, hinchada: -10, caja: 1.5 },
       },
       {
         label: 'Rechazarlo',
         hint: 'Te quedás donde estás. Y lo dicen todos los micrófonos.',
+        tono: 'mano-dura',
         effects: { hinchada: 12, influencia: -6 },
       },
     ],
@@ -211,11 +234,13 @@ export const LEGADO: GameEvent[] = [
       {
         label: 'Aceptar el cargo y seguir en el club',
         hint: 'Los dos sombreros. Nadie va a creer que no hay conflicto.',
+        tono: 'pacto',
         effects: { influencia: 18, hinchada: -10, caja: 1.5 },
       },
       {
         label: 'Rechazarlo',
         hint: 'Te quedás donde estás. Y lo dicen todos los micrófonos.',
+        tono: 'mano-dura',
         effects: { hinchada: 12, influencia: -6 },
       },
     ],
@@ -230,11 +255,13 @@ export const LEGADO: GameEvent[] = [
       {
         label: 'Aceptar el cargo y seguir en el club',
         hint: 'Los dos sombreros. Nadie va a creer que no hay conflicto.',
+        tono: 'pacto',
         effects: { influencia: 18, hinchada: -10, caja: 1.5 },
       },
       {
         label: 'Rechazarlo',
         hint: 'Te quedás donde estás. Y lo dicen todos los micrófonos.',
+        tono: 'mano-dura',
         effects: { hinchada: 12, influencia: -6 },
       },
     ],
@@ -249,11 +276,13 @@ export const LEGADO: GameEvent[] = [
       {
         label: 'Aceptar el cargo y seguir en el club',
         hint: 'Los dos sombreros. Nadie va a creer que no hay conflicto.',
+        tono: 'pacto',
         effects: { influencia: 18, hinchada: -10, caja: 1.5 },
       },
       {
         label: 'Rechazarlo',
         hint: 'Te quedás donde estás. Y lo dicen todos los micrófonos.',
+        tono: 'mano-dura',
         effects: { hinchada: 12, influencia: -6 },
       },
     ],
@@ -268,11 +297,13 @@ export const LEGADO: GameEvent[] = [
       {
         label: 'Aceptar el cargo y seguir en el club',
         hint: 'Los dos sombreros. Nadie va a creer que no hay conflicto.',
+        tono: 'pacto',
         effects: { influencia: 18, hinchada: -10, caja: 1.5 },
       },
       {
         label: 'Rechazarlo',
         hint: 'Te quedás donde estás. Y lo dicen todos los micrófonos.',
+        tono: 'mano-dura',
         effects: { hinchada: 12, influencia: -6 },
       },
     ],
@@ -287,11 +318,13 @@ export const LEGADO: GameEvent[] = [
       {
         label: 'Aceptar el cargo y seguir en el club',
         hint: 'Los dos sombreros. Nadie va a creer que no hay conflicto.',
+        tono: 'pacto',
         effects: { influencia: 18, hinchada: -10, caja: 1.5 },
       },
       {
         label: 'Rechazarlo',
         hint: 'Te quedás donde estás. Y lo dicen todos los micrófonos.',
+        tono: 'mano-dura',
         effects: { hinchada: 12, influencia: -6 },
       },
     ],
@@ -306,11 +339,13 @@ export const LEGADO: GameEvent[] = [
       {
         label: 'Aceptar el cargo y seguir en el club',
         hint: 'Los dos sombreros. Nadie va a creer que no hay conflicto.',
+        tono: 'pacto',
         effects: { influencia: 18, hinchada: -10, caja: 1.5 },
       },
       {
         label: 'Rechazarlo',
         hint: 'Te quedás donde estás. Y lo dicen todos los micrófonos.',
+        tono: 'mano-dura',
         effects: { hinchada: 12, influencia: -6 },
       },
     ],
@@ -325,11 +360,13 @@ export const LEGADO: GameEvent[] = [
       {
         label: 'Aceptar el cargo y seguir en el club',
         hint: 'Los dos sombreros. Nadie va a creer que no hay conflicto.',
+        tono: 'pacto',
         effects: { influencia: 18, hinchada: -10, caja: 1.5 },
       },
       {
         label: 'Rechazarlo',
         hint: 'Te quedás donde estás. Y lo dicen todos los micrófonos.',
+        tono: 'mano-dura',
         effects: { hinchada: 12, influencia: -6 },
       },
     ],
@@ -344,11 +381,13 @@ export const LEGADO: GameEvent[] = [
       {
         label: 'Ir',
         hint: 'Doce horas de auto por una cena. Se cuenta durante décadas.',
+        tono: 'via-pacifica',
         effects: { hinchada: 7, socios: 2, caja: -0.2 },
       },
       {
         label: 'Mandar una carta y una camiseta firmada',
         hint: 'Correcto. Y todos entienden que no fuiste.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: 1 },
       },
     ],
@@ -364,11 +403,13 @@ export const LEGADO: GameEvent[] = [
       {
         label: 'Llamarlo para un partido homenaje',
         hint: 'La cancha se llena. El club también gasta.',
+        tono: 'via-pacifica',
         effects: { hinchada: 8, caja: -0.5, flags: { arco_crack_a: true } },
       },
       {
         label: 'No hacer nada por ahora',
         hint: 'Una entrevista no es una promesa.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: 1, flags: { arco_crack_a: true } },
       },
     ],
@@ -384,11 +425,13 @@ export const LEGADO: GameEvent[] = [
       {
         label: 'Darle el cargo',
         hint: 'Sabe de fútbol. No necesariamente sabe de gestión.',
+        tono: 'via-pacifica',
         effects: { hinchada: 6, influencia: -4, flags: { arco_crack_b: true } },
       },
       {
         label: 'Ofrecerle un rol solo protocolar',
         hint: 'Cauto. El ídolo capaz lo lee como un desaire.',
+        tono: 'pacto',
         effects: { hinchada: 2, influencia: 2, flags: { arco_crack_b: true } },
       },
     ],
@@ -404,11 +447,13 @@ export const LEGADO: GameEvent[] = [
       {
         label: 'Dar vos el discurso',
         hint: 'Un poco de tu gestión queda pegada a la de él, para siempre.',
+        tono: 'mano-dura',
         effects: { hinchada: 5, influencia: 3 },
       },
       {
         label: 'Dejar que hable solo el ídolo',
         hint: 'Es su día. No el tuyo.',
+        tono: 'via-pacifica',
         effects: { hinchada: 3 },
       },
     ],

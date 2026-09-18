@@ -12,6 +12,7 @@ export const CRISIS: GameEvent[] = [
       {
         label: 'Salir a hablar con ellos',
         hint: 'Se puede desarmar. O puede empeorar mucho.',
+        tono: 'a-libro-abierto',
         random: [
           { weight: 45, text: 'Saliste, los escuchaste una hora y se fueron. Alguno hasta te dio la mano.', effects: { hinchada: 9, influencia: 4 } },
           { weight: 55, text: 'Te insultaron dos horas y filmaron todo. El video tiene medio millón de reproducciones.', effects: { hinchada: -8, influencia: -6 } },
@@ -20,11 +21,13 @@ export const CRISIS: GameEvent[] = [
       {
         label: 'Llamar a la policía',
         hint: 'Se van esa noche. Y no se olvidan nunca.',
+        tono: 'mano-dura',
         effects: { hinchada: -12, influencia: -3 },
       },
       {
         label: 'Apagar las luces y esperar',
         hint: 'Se cansan a las tres de la mañana.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: -4 },
       },
     ],
@@ -39,16 +42,19 @@ export const CRISIS: GameEvent[] = [
       {
         label: 'Aceptarlas y nombrar gente propia',
         hint: 'Te quedás solo pero mandando.',
+        tono: 'mano-dura',
         effects: { influencia: -5, hinchada: -4, flags: { comision_propia: true } },
       },
       {
         label: 'Convencer a dos de que se queden',
         hint: 'Cuesta favores. La comisión sobrevive.',
+        tono: 'pacto',
         effects: { influencia: -10, hinchada: 2 },
       },
       {
         label: 'Denunciar la operación en público',
         hint: 'Escándalo abierto. La gente elige un bando.',
+        tono: 'a-libro-abierto',
         effects: { hinchada: 5, influencia: -8 },
       },
     ],
@@ -64,16 +70,19 @@ export const CRISIS: GameEvent[] = [
       {
         label: 'Pedir un préstamo puente a un socio',
         hint: 'Se destraba. Le vas a deber a alguien que cobra.',
+        tono: 'pacto',
         effects: { caja: 3, influencia: -10, flags: { debe_a_socio: true } },
       },
       {
         label: 'Vender lo que sea, ya',
         hint: 'Se salva la semana. Se hunde el equipo.',
+        tono: 'mano-dura',
         effects: { caja: 5, plantel: -7, hinchada: -8 },
       },
       {
         label: 'Aguantar el embargo',
         hint: 'Sueldos impagos y todo lo que viene con eso.',
+        tono: 'patear-para-adelante',
         effects: { plantel: -5, hinchada: -6, influencia: -4 },
       },
     ],
@@ -88,16 +97,19 @@ export const CRISIS: GameEvent[] = [
       {
         label: 'Responderle en el momento',
         hint: 'Te sacás la bronca. Queda todo filmado.',
+        tono: 'mano-dura',
         effects: { hinchada: -6, influencia: -5, plantel: -2 },
       },
       {
         label: 'Agradecerle y no responder',
         hint: 'Elegancia. Nadie la va a valorar hoy.',
+        tono: 'via-pacifica',
         effects: { influencia: 5, hinchada: 2 },
       },
       {
         label: 'Ascender al DT de la reserva',
         hint: 'Barato, y a la gente le gusta lo de la casa.',
+        tono: 'pacto',
         effects: { caja: 0.5, hinchada: 5, plantel: -2 },
       },
     ],
@@ -113,6 +125,7 @@ export const CRISIS: GameEvent[] = [
       {
         label: 'Hablar el partido',
         hint: 'Sube muchísimo la chance de salvarse. Y queda gente que sabe.',
+        tono: 'via-turbia',
         effects: {
           plantel: 6,
           influencia: -14,
@@ -122,11 +135,13 @@ export const CRISIS: GameEvent[] = [
       {
         label: 'Ni loco',
         hint: 'Te salvás o te vas, pero limpio.',
+        tono: 'mano-dura',
         effects: { influencia: 6, hinchada: 4 },
       },
       {
         label: 'Poner premio por punto',
         hint: 'Lo caro y legal.',
+        tono: 'pacto',
         effects: { caja: -2.5, plantel: 4 },
       },
     ],
@@ -141,16 +156,19 @@ export const CRISIS: GameEvent[] = [
       {
         label: 'Pagar aunque sea un mes',
         hint: 'Vuelven a entrenar. La deuda sigue.',
+        tono: 'via-pacifica',
         effects: { caja: -3, plantel: 3 },
       },
       {
         label: 'Poner a los pibes de la reserva',
         hint: 'Se juega igual, con chicos de dieciocho.',
+        tono: 'mano-dura',
         effects: { plantel: -8, hinchada: 4, caja: 1 },
       },
       {
         label: 'Hablar de frente y pedir tiempo',
         hint: 'Depende de cuánto te crean todavía.',
+        tono: 'a-libro-abierto',
         random: [
           { weight: 40, text: 'Te dieron un mes. El capitán salió a bancarte en la puerta.', effects: { plantel: 2, hinchada: 3 } },
           { weight: 60, text: 'No te creyeron. Dos jugadores se fueron libres esa misma semana.', effects: { plantel: -6, hinchada: -5 } },
@@ -168,11 +186,13 @@ export const CRISIS: GameEvent[] = [
       {
         label: 'Dejarlo elegir',
         hint: 'Se paga la deuda con poder. Trae a sus representados.',
+        tono: 'pacto',
         effects: { caja: 2, plantel: 2, influencia: -12, hinchada: -6 },
       },
       {
         label: 'Devolverle la plata como sea',
         hint: 'Te sacás el problema de encima. Duele.',
+        tono: 'mano-dura',
         effects: { caja: -4, influencia: 8 },
       },
     ],
@@ -187,16 +207,19 @@ export const CRISIS: GameEvent[] = [
       {
         label: 'Convocar a elecciones anticipadas',
         hint: 'Jugada osada: si ganás, quedás blindado.',
+        tono: 'mano-dura',
         effects: { hinchada: 8, influencia: -6 },
       },
       {
         label: 'Encerrarte a trabajar',
         hint: 'Ni una declaración durante dos meses.',
+        tono: 'patear-para-adelante',
         effects: { influencia: 3, hinchada: -3 },
       },
       {
         label: 'Comprar dos programas con pauta',
         hint: 'Baja el volumen. Se nota y se paga.',
+        tono: 'via-turbia',
         effects: { caja: -2, hinchada: 4, influencia: -8 },
       },
     ],
@@ -211,11 +234,13 @@ export const CRISIS: GameEvent[] = [
       {
         label: 'Aceptar',
         hint: 'El club se salva y deja de llamarse como se llamaba.',
+        tono: 'pacto',
         effects: { caja: 16, plantel: 6, hinchada: -22, influencia: -10 },
       },
       {
         label: 'Rechazar',
         hint: 'El nombre queda intacto. La deuda también.',
+        tono: 'mano-dura',
         effects: { hinchada: 10, influencia: 5 },
       },
     ],
@@ -230,16 +255,19 @@ export const CRISIS: GameEvent[] = [
       {
         label: 'Pagar con lo que sea',
         hint: 'Se saca de donde no hay.',
+        tono: 'mano-dura',
         effects: { caja: -1.4, hinchada: 2 },
       },
       {
         label: 'Entrenar en un club amigo',
         hint: 'Un favor grande, que se devuelve algún día.',
+        tono: 'pacto',
         effects: { influencia: -9, plantel: -2 },
       },
       {
         label: 'Que entrenen igual',
         hint: 'Con lo que hay. Se ve desde la calle.',
+        tono: 'patear-para-adelante',
         effects: { plantel: -4, hinchada: -7 },
       },
     ],
@@ -254,16 +282,19 @@ export const CRISIS: GameEvent[] = [
       {
         label: 'Comprar al contado lo mínimo',
         hint: 'Alcanza para el mes. Nada más.',
+        tono: 'mano-dura',
         effects: { caja: -0.5 },
       },
       {
         label: 'Pedirle a la gente que done',
         hint: 'La hinchada responde. Y se entera de todo.',
+        tono: 'a-libro-abierto',
         effects: { hinchada: -3, socios: 1, plantel: 1 },
       },
       {
         label: 'Que las inferiores presten las suyas',
         hint: 'La primera entrena. Los pibes miran.',
+        tono: 'patear-para-adelante',
         effects: { plantel: 1, hinchada: -4 },
       },
     ],
@@ -278,6 +309,7 @@ export const CRISIS: GameEvent[] = [
       {
         label: 'Insistir hasta que alguno ceda',
         hint: 'Humillante y a veces sirve.',
+        tono: 'mano-dura',
         random: [
           { weight: 40, text: 'Uno te atendió y te dio una mano. Dijo que no lo contaras.', effects: { influencia: 9, caja: 0.6 } },
           { weight: 60, text: 'Ninguno atendió. La versión de que estás terminado ya circula sola.', effects: { influencia: -5, hinchada: -6 } },
@@ -286,6 +318,7 @@ export const CRISIS: GameEvent[] = [
       {
         label: 'Dejar de llamar',
         hint: 'Se arregla sin ellos. Todo cuesta el doble.',
+        tono: 'patear-para-adelante',
         effects: { caja: -0.8, hinchada: 3 },
       },
     ],
@@ -301,11 +334,13 @@ export const CRISIS: GameEvent[] = [
       {
         label: 'Abrir una auditoría interna',
         hint: 'Cuesta y demuestra que no hay nada que esconder. O que sí hay.',
+        tono: 'a-libro-abierto',
         effects: { influencia: 4, caja: -1, flags: { arco_causa_a: true } },
       },
       {
         label: 'Ignorar la denuncia',
         hint: 'Una denuncia anónima más. O el principio de algo.',
+        tono: 'patear-para-adelante',
         effects: { influencia: -2, flags: { arco_causa_a: true } },
       },
     ],
@@ -321,11 +356,13 @@ export const CRISIS: GameEvent[] = [
       {
         label: 'Declarar y colaborar con todo',
         hint: 'Más lento hoy, mejor parado mañana.',
+        tono: 'a-libro-abierto',
         effects: { influencia: 3, caja: -2, flags: { arco_causa_colaboro: true } },
       },
       {
         label: 'Contratar al mejor estudio para frenarla',
         hint: 'Sale caro. Compra tiempo, no compra inocencia.',
+        tono: 'mano-dura',
         effects: { caja: -6, influencia: -1, flags: { arco_causa_freno: true } },
       },
     ],
@@ -341,11 +378,13 @@ export const CRISIS: GameEvent[] = [
       {
         label: 'Festejar el sobreseimiento en conferencia',
         hint: 'Poca gente escucha las buenas noticias con el mismo volumen.',
+        tono: 'a-libro-abierto',
         effects: { influencia: 5, hinchada: 2 },
       },
       {
         label: 'Pasar página en silencio',
         hint: 'No revivís nada. Tampoco te reivindicás.',
+        tono: 'patear-para-adelante',
         effects: { influencia: 2 },
       },
     ],
@@ -361,11 +400,13 @@ export const CRISIS: GameEvent[] = [
       {
         label: 'Seguir pagando la defensa',
         hint: 'Cada temporada, un poco más de plata a los abogados.',
+        tono: 'mano-dura',
         effects: { caja: -4, influencia: 1 },
       },
       {
         label: 'Buscar un arreglo extrajudicial',
         hint: 'Se cierra rápido. Y queda una firma que alguien puede leer distinto.',
+        tono: 'pacto',
         effects: { caja: -3, influencia: -3, flagsSuma: { prontuario: 1 } },
       },
     ],

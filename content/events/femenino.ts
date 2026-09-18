@@ -10,16 +10,19 @@ export const FEMENINO: GameEvent[] = [
       {
         label: 'Darles el horario de la tarde',
         hint: 'Alguien de masculina se corre. Y se queja.',
+        tono: 'mano-dura',
         effects: { plantel: -1, hinchada: 4, socios: 1 },
       },
       {
         label: 'Alquilar una cancha más',
         hint: 'Se arregla con plata, que es lo que no hay.',
+        tono: 'pacto',
         effects: { caja: -0.9, hinchada: 3 },
       },
       {
         label: 'Que sigan a las siete',
         hint: 'Nadie se corre. Se van dos titulares.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: -5, socios: -1 },
       },
     ],
@@ -33,6 +36,7 @@ export const FEMENINO: GameEvent[] = [
       {
         label: 'Abrir el estadio',
         hint: 'Sale caro. Puede no ir nadie.',
+        tono: 'mano-dura',
         random: [
           { weight: 55, text: 'Se llenó la popular. Nadie esperaba eso, y menos los que decían que no iba a ir nadie.', effects: { caja: -0.4, hinchada: 11, socios: 4 } },
           { weight: 45, text: 'Fueron seiscientas personas en un estadio para cuarenta mil. Las fotos fueron crueles.', effects: { caja: -1.1, hinchada: -3 } },
@@ -41,11 +45,13 @@ export const FEMENINO: GameEvent[] = [
       {
         label: 'Dejarlo en la auxiliar',
         hint: 'Prolijo, barato y del año pasado.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: -3 },
       },
       {
         label: 'Abrirlo con entrada gratis',
         hint: 'Te asegurás la foto. No entra un peso.',
+        tono: 'via-pacifica',
         effects: { caja: -1.1, hinchada: 8, socios: 3 },
       },
     ],
@@ -59,16 +65,19 @@ export const FEMENINO: GameEvent[] = [
       {
         label: 'Firmar y usar la plata donde haga falta',
         hint: 'Entra plata. Las jugadoras posan igual.',
+        tono: 'pacto',
         effects: { caja: 1.5, hinchada: -2 },
       },
       {
         label: 'Exigir que parte vaya a sueldos',
         hint: 'Menos plata, y un plantel que se entera.',
+        tono: 'mano-dura',
         effects: { caja: 0.7, hinchada: 5, plantel: 1 },
       },
       {
         label: 'Rechazarlo',
         hint: 'Digno y carísimo.',
+        tono: 'a-libro-abierto',
         effects: { hinchada: 3, socios: -1 },
       },
     ],
@@ -83,16 +92,19 @@ export const FEMENINO: GameEvent[] = [
       {
         label: 'Pagar remises y que lleguen como sea',
         hint: 'Llegan tarde y caros, pero llegan.',
+        tono: 'via-pacifica',
         effects: { caja: -0.5, plantel: -1, hinchada: 1 },
       },
       {
         label: 'Suspender el viaje',
         hint: 'Puntos perdidos y un plantel que entendió el mensaje.',
+        tono: 'mano-dura',
         effects: { plantel: -3, hinchada: -7 },
       },
       {
         label: 'Contratar un servicio fijo para toda la temporada',
         hint: 'Caro, y no vuelve a pasar.',
+        tono: 'pacto',
         effects: { caja: -1.2, hinchada: 5, plantel: 2 },
       },
     ],
@@ -107,16 +119,19 @@ export const FEMENINO: GameEvent[] = [
       {
         label: 'Dejarla ir sin pedir nada',
         hint: 'Se gana un club al que las jugadoras quieren venir.',
+        tono: 'via-pacifica',
         effects: { plantel: -3, hinchada: 6, socios: 1 },
       },
       {
         label: 'Negociar hasta el último peso',
         hint: 'Entra algo. Se cuenta en todos los vestuarios.',
+        tono: 'mano-dura',
         effects: { caja: 0.8, plantel: -3, hinchada: -4 },
       },
       {
         label: 'Ofrecerle quedarse con mejor contrato',
         hint: 'Puede aceptar. Puede irse igual.',
+        tono: 'pacto',
         random: [
           { weight: 40, text: 'Se quedó. Salió en todos lados que acá se le paga a las jugadoras.', effects: { caja: -0.7, hinchada: 9, plantel: 2, socios: 2 } },
           { weight: 60, text: 'Se fue igual, y la oferta quedó como un gesto que nadie le pidió.', effects: { caja: -0.2, plantel: -3, hinchada: 2 } },
@@ -133,6 +148,7 @@ export const FEMENINO: GameEvent[] = [
       {
         label: 'Contratar entrenadoras y ampliarla',
         hint: 'Cuesta ahora. Vuelve dentro de mucho.',
+        tono: 'via-pacifica',
         effects: {
           caja: -0.8,
           socios: 4,
@@ -149,6 +165,7 @@ export const FEMENINO: GameEvent[] = [
       {
         label: 'Poner un cupo de treinta',
         hint: 'Se manejan las que entran. Y las ciento sesenta que no.',
+        tono: 'patear-para-adelante',
         effects: { socios: 1, hinchada: -2 },
       },
     ],
@@ -162,16 +179,19 @@ export const FEMENINO: GameEvent[] = [
       {
         label: 'Pagar el molde el club',
         hint: 'Un gasto raro que se nota en la cancha.',
+        tono: 'via-pacifica',
         effects: { caja: -0.6, hinchada: 4, plantel: 1 },
       },
       {
         label: 'Presionar a la marca en la renovación',
         hint: 'Sale gratis y cuesta en otro lado.',
+        tono: 'pacto',
         effects: { caja: -0.9, hinchada: 3 },
       },
       {
         label: 'Que sigan con las de talle S',
         hint: 'Nadie de afuera se entera. Ellas sí.',
+        tono: 'patear-para-adelante',
         effects: { plantel: -1, hinchada: -3 },
       },
     ],
@@ -186,11 +206,13 @@ export const FEMENINO: GameEvent[] = [
       {
         label: 'La ex jugadora del club',
         hint: 'Conoce la casa. Va a aprender el resto en el cargo.',
+        tono: 'via-pacifica',
         effects: { hinchada: 3, plantel: -1 },
       },
       {
         label: 'La DT con experiencia, de afuera',
         hint: 'Menos identidad, más pizarrón.',
+        tono: 'mano-dura',
         effects: { plantel: 2, hinchada: -1 },
       },
     ],
@@ -204,11 +226,13 @@ export const FEMENINO: GameEvent[] = [
       {
         label: 'Profesionalizar el plantel completo',
         hint: 'Se cumple la exigencia. Sale caro de un día para el otro.',
+        tono: 'a-libro-abierto',
         effects: { caja: -2, hinchada: 8, socios: 2 },
       },
       {
         label: 'Profesionalizar solo a las titulares',
         hint: 'Cumple lo mínimo. El resto del plantel sigue como estaba.',
+        tono: 'patear-para-adelante',
         effects: { caja: -0.8, hinchada: 2 },
       },
     ],
@@ -223,11 +247,13 @@ export const FEMENINO: GameEvent[] = [
       {
         label: 'Aceptar la gira',
         hint: 'Experiencia internacional. Ninguna garantía de resultado.',
+        tono: 'via-pacifica',
         effects: { caja: -0.5, plantel: 2, hinchada: 3 },
       },
       {
         label: 'Declinar la invitación',
         hint: 'Se ahorra el gasto. También la experiencia.',
+        tono: 'patear-para-adelante',
         effects: { influencia: 1 },
       },
     ],
@@ -242,11 +268,13 @@ export const FEMENINO: GameEvent[] = [
       {
         label: 'Anunciar una equiparación gradual',
         hint: 'No resuelve todo hoy. Marca una dirección.',
+        tono: 'pacto',
         effects: { caja: -1.5, hinchada: 6, influencia: 2 },
       },
       {
         label: 'Defender la estructura salarial actual',
         hint: 'La estructura no cambia. El reclamo tampoco se apaga.',
+        tono: 'mano-dura',
         effects: { hinchada: -4, influencia: -2 },
       },
     ],
@@ -261,11 +289,13 @@ export const FEMENINO: GameEvent[] = [
       {
         label: 'Reconocerla en un acto oficial',
         hint: 'Un lugar en la historia que hoy no tiene.',
+        tono: 'a-libro-abierto',
         effects: { hinchada: 4, socios: 1 },
       },
       {
         label: 'Dejar que siga siendo una socia más, como ella prefiere',
         hint: 'Respeta su anonimato. También lo perpetúa.',
+        tono: 'via-pacifica',
         effects: { hinchada: 1 },
       },
     ],
@@ -280,11 +310,13 @@ export const FEMENINO: GameEvent[] = [
       {
         label: 'Aceptar el sponsor exclusivo',
         hint: 'Entra plata que hoy no entra. También separa las dos camisetas.',
+        tono: 'pacto',
         effects: { caja: 1.5, hinchada: 3 },
       },
       {
         label: 'Insistir en un sponsor único para todo el club',
         hint: 'Una sola camiseta, un solo logo. Y ningún sponsor nuevo por ahora.',
+        tono: 'mano-dura',
         effects: { influencia: 1 },
       },
     ],
@@ -298,16 +330,19 @@ export const FEMENINO: GameEvent[] = [
       {
         label: 'Aceptar el horario con tal de salir en pantalla',
         hint: 'Es un precedente. En la tele se va a ver una tribuna vacía.',
+        tono: 'via-pacifica',
         effects: { hinchada: 2, socios: 1, plantel: -1 },
       },
       {
         label: 'Negociar un horario que le sirva a la gente',
         hint: 'Puede caerse la transmisión. O puede sentar un estándar.',
+        tono: 'mano-dura',
         effects: { hinchada: 3, socios: 1 },
       },
       {
         label: 'Transmitirlo el club por su propio canal',
         hint: 'Sin plata de la tele y con la producción a cargo del club.',
+        tono: 'a-libro-abierto',
         effects: { caja: -0.4, hinchada: 3, socios: 1 },
       },
     ],
@@ -321,6 +356,7 @@ export const FEMENINO: GameEvent[] = [
       {
         label: 'Ficharla y romper el techo salarial',
         hint: 'Sube el equipo de golpe. El resto del plantel se va a enterar de lo que cobra.',
+        tono: 'mano-dura',
         effects: {
           caja: -1.5,
           plantel: 4,
@@ -333,6 +369,7 @@ export const FEMENINO: GameEvent[] = [
       {
         label: 'Ofrecerle lo mismo que a las titulares',
         hint: 'O acepta por el proyecto, o firma en otro lado.',
+        tono: 'pacto',
         random: [
           { weight: 35, text: 'Aceptó: quería un lugar donde le paguen en fecha. Salió en todos lados.', effects: { plantel: 3, hinchada: 6, socios: 2 } },
           { weight: 65, text: 'Agradeció y firmó en un club que sí le pagaba lo que pedía.', effects: { hinchada: -1 } },
@@ -341,6 +378,7 @@ export const FEMENINO: GameEvent[] = [
       {
         label: 'Dejarla pasar',
         hint: 'El plantel sigue como está y la estructura de sueldos no se toca.',
+        tono: 'patear-para-adelante',
         effects: { plantel: -1 },
       },
     ],

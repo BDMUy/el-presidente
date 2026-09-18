@@ -12,6 +12,7 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Tomar el adelanto',
         hint: 'Entra todo junto. Las próximas tres temporadas vas a extrañarlo.',
+        tono: 'patear-para-adelante',
         effects: {
           caja: 9,
           deferred: [
@@ -23,6 +24,7 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Cobrar como siempre',
         hint: 'Nada cambia. Que es exactamente el problema.',
+        tono: 'mano-dura',
         effects: { caja: 0.5, influencia: 3 },
       },
     ],
@@ -37,6 +39,7 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Duplicar el pedido',
         hint: 'Si el envión sigue, es plata. Si se corta, quedás con depósito lleno.',
+        tono: 'mano-dura',
         random: [
           { weight: 60, text: 'Se vendió todo otra vez. El merchandising salvó el trimestre.', effects: { caja: 2.5, socios: 2 } },
           { weight: 40, text: 'Se cortó el envión y quedaron ocho mil camisetas en el depósito.', effects: { caja: -1.5 } },
@@ -45,6 +48,7 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Mantener la producción',
         hint: 'Se agota rápido y la gente se queda con ganas. No es lo peor.',
+        tono: 'via-pacifica',
         effects: { caja: 1, hinchada: 2 },
       },
     ],
@@ -59,16 +63,19 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Construirlos',
         hint: 'Ingreso alto y estable. Mil familias pierden su lugar de siempre.',
+        tono: 'mano-dura',
         effects: { caja: -3, socios: -4, hinchada: -9, deferred: [{ inSeasons: 2, text: 'Los palcos están llenos todos los domingos. La caja lo agradece.', effects: { caja: 5 } }] },
       },
       {
         label: 'No tocar la platea',
         hint: 'La platea sigue siendo de los socios. Y el presupuesto sigue corto.',
+        tono: 'via-pacifica',
         effects: { hinchada: 6, influencia: 3 },
       },
       {
         label: 'Palcos, pero en la cabecera vacía',
         hint: 'Menos plata, ningún socio desalojado. Cuesta más obra.',
+        tono: 'pacto',
         effects: { caja: -5, deferred: [{ inSeasons: 3, text: 'Los palcos de la cabecera funcionan. Nadie tuvo que mudarse.', effects: { caja: 4, socios: 1 } }] },
       },
     ],
@@ -84,11 +91,13 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Arreglar y pagar',
         hint: 'Duele la caja, pero el club puede seguir fichando.',
+        tono: 'a-libro-abierto',
         effects: { caja: -5, influencia: 3 },
       },
       {
         label: 'Estirar el expediente',
         hint: 'Ganás tiempo. La inhibición te espera a la vuelta.',
+        tono: 'patear-para-adelante',
         effects: {
           influencia: -5,
           deferred: [{ inSeasons: 2, text: 'Llegó la inhibición por el reclamo que no arreglaste. No se puede fichar.', effects: { caja: -8, hinchada: -6 } }],
@@ -97,6 +106,7 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Pedirle a un socio mecenas que lo cubra',
         hint: 'Si aparece, zafás gratis. Si no, perdiste la ventana.',
+        tono: 'pacto',
         random: [
           { weight: 45, text: 'Un socio empresario puso la plata sin pedir nada. Por ahora.', effects: { caja: -0.5, influencia: -6 } },
           { weight: 55, text: 'Nadie puso un peso y el plazo venció igual.', effects: { caja: -6, hinchada: -5 } },
@@ -114,6 +124,7 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Salir a buscar reemplazo ya',
         hint: 'A las apuradas se consigue menos.',
+        tono: 'mano-dura',
         random: [
           { weight: 50, text: 'Apareció uno del rubro alimenticio. Paga menos, pero paga.', effects: { caja: 2 } },
           { weight: 50, text: 'No apareció nadie a tiempo. Se arranca el torneo con el frente vacío.', effects: { caja: -2, hinchada: -4 } },
@@ -122,11 +133,13 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Bajar el precio para retenerlo',
         hint: 'Se queda, pero pagando bastante menos que antes.',
+        tono: 'pacto',
         effects: { caja: 1.5, influencia: -3 },
       },
       {
         label: 'Vender el frente a una marca del barrio',
         hint: 'Poca plata y mucha identidad. La gente lo festeja.',
+        tono: 'via-pacifica',
         effects: { caja: 0.8, hinchada: 8, socios: 2 },
       },
     ],
@@ -141,16 +154,19 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Aceptar los tres',
         hint: 'Mucha plata. El equipo juega dos meses sobre un potrero.',
+        tono: 'mano-dura',
         effects: { caja: 5, plantel: -4, hinchada: -3 },
       },
       {
         label: 'Aceptar uno solo',
         hint: 'La mitad de la plata y la mitad del daño.',
+        tono: 'pacto',
         effects: { caja: 2.5, plantel: -1 },
       },
       {
         label: 'Rechazar',
         hint: 'El césped impecable no paga sueldos.',
+        tono: 'via-pacifica',
         effects: { plantel: 2, influencia: 2 },
       },
     ],
@@ -165,6 +181,7 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Firmarlo',
         hint: 'Entra plata ya. Cada pibe que salga vale la mitad.',
+        tono: 'pacto',
         effects: {
           caja: 8,
           flags: { fideicomiso: true },
@@ -174,6 +191,7 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'No firmar',
         hint: 'El club se queda con todo lo suyo. Y sin plata hoy.',
+        tono: 'mano-dura',
         effects: { influencia: 4, hinchada: 3 },
       },
     ],
@@ -188,16 +206,19 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Lanzarla',
         hint: 'Ingreso fuerte. La popular va a decir que se vende el club.',
+        tono: 'mano-dura',
         effects: { caja: 3.5, socios: 3, hinchada: -8 },
       },
       {
         label: 'Lanzarla sin prioridad de entrada',
         hint: 'Solo beneficios simbólicos. Menos plata, cero conflicto.',
+        tono: 'pacto',
         effects: { caja: 1.2, socios: 1 },
       },
       {
         label: 'Descartarla',
         hint: 'Un socio es un socio. Punto.',
+        tono: 'via-pacifica',
         effects: { hinchada: 5 },
       },
     ],
@@ -213,16 +234,19 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Renegociar contratos uno por uno',
         hint: 'Se salva plata. El vestuario se entera de todo.',
+        tono: 'mano-dura',
         effects: { caja: 2, plantel: -3, influencia: -3 },
       },
       {
         label: 'Bancar los contratos como están',
         hint: 'El plantel te lo agradece. La caja lo sufre.',
+        tono: 'via-pacifica',
         effects: { caja: -4, plantel: 3, hinchada: 2 },
       },
       {
         label: 'Vender un extranjero al exterior',
         hint: 'Cobrás en dólares y te sacás un sueldo de encima.',
+        tono: 'pacto',
         effects: { caja: 5, plantel: -5, hinchada: -4 },
       },
     ],
@@ -238,16 +262,19 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Aceptar la rebaja',
         hint: 'Se cobra menos, pero se sigue cobrando.',
+        tono: 'via-pacifica',
         effects: { caja: -2.5 },
       },
       {
         label: 'Rescindirle y salir a buscar otro',
         hint: 'Unos meses sin nadie en el pecho. Y sin esa plata tampoco.',
+        tono: 'mano-dura',
         effects: { caja: -4, influencia: 2 },
       },
       {
         label: 'Buscar uno que le apueste al mercado local, no al turista',
         hint: 'Menos plata que antes, pero no depende de lo que pase del otro lado del río.',
+        tono: 'pacto',
         effects: { caja: -1.5, hinchada: -2 },
       },
     ],
@@ -263,16 +290,19 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Aceptar cobrar menos hasta que se resuelva',
         hint: 'Una fracción de lo pactado, hasta que el lío se destrabe.',
+        tono: 'via-pacifica',
         effects: { caja: -2.5 },
       },
       {
         label: 'Armar una señal propia por streaming',
         hint: 'Cuesta ponerla en pie. Después no depende de nadie más.',
+        tono: 'mano-dura',
         effects: { caja: -1.5, influencia: 2 },
       },
       {
         label: 'Presionar junto al resto de los clubes',
         hint: 'Juntos pesan más. El conflicto se estira igual un tiempo.',
+        tono: 'pacto',
         effects: {
           influencia: -3,
           hinchada: -1,
@@ -292,16 +322,19 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Escuchar la oferta y negociar',
         hint: 'Entra plata fuerte. La hinchada se entera y no lo toma bien.',
+        tono: 'pacto',
         effects: { caja: 5, hinchada: -12, influencia: -3 },
       },
       {
         label: 'Rechazarla de plano',
         hint: 'La gente respira. La ficha, sin comprador, vale menos si algún día hace falta venderla.',
+        tono: 'via-pacifica',
         effects: { hinchada: 8, influencia: 2 },
       },
       {
         label: 'Usarla de amenaza para pedir ayuda a la alcaldía',
         hint: 'Juego de café con leche. A veces sale bien.',
+        tono: 'via-turbia',
         random: [
           { weight: 50, text: 'La alcaldía aportó para retenerlos. Se salvó el nombre y entró algo de plata.', effects: { caja: 2, influencia: 3 } },
           { weight: 50, text: 'La alcaldía no mordió el anzuelo. Quedaste pidiendo en público y sin nada.', effects: { influencia: -6, hinchada: -4 } },
@@ -320,11 +353,13 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Salir a comprar acciones para blindarte',
         hint: 'Cuesta caja. El control del directorio sigue siendo tuyo.',
+        tono: 'mano-dura',
         effects: { caja: -3, influencia: 4 },
       },
       {
         label: 'No hacer nada, la mayoría la tenés vos',
         hint: 'Ahorrás la plata. El fondo puede seguir comprando igual.',
+        tono: 'patear-para-adelante',
         random: [
           { weight: 55, text: 'El fondo se cansó y vendió su posición con una diferencia menor. Todo sigue como estaba.', effects: { influencia: 2 } },
           { weight: 45, text: 'El fondo juntó suficiente para pedir un directorio y ahora opina de todo.', effects: { influencia: -8, caja: 1 } },
@@ -333,6 +368,7 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Ofrecerle un lugar en el directorio antes de que lo pida',
         hint: 'Cede poder a cambio de tenerlo de tu lado.',
+        tono: 'pacto',
         effects: { influencia: -5, caja: 2 },
       },
     ],
@@ -348,11 +384,13 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Cortar el sponsoreo de esa casa de apuestas',
         hint: 'Perdés un ingreso fijo. Quedás afuera de la foto.',
+        tono: 'mano-dura',
         effects: { caja: -2, influencia: 3 },
       },
       {
         label: 'No opinar, no es un problema tuyo',
         hint: 'El escándalo es de arriba. Puede salpicar igual.',
+        tono: 'patear-para-adelante',
         random: [
           { weight: 60, text: 'El escándalo quedó donde empezó, en la dirigencia. A tu club no lo mencionaron.', effects: { influencia: 1 } },
           { weight: 40, text: 'Un cruce viejo con esa casa de apuestas te metió en la misma nota.', effects: { hinchada: -6, influencia: -5 } },
@@ -361,6 +399,7 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Denunciarlo públicamente',
         hint: 'La gente te banca. Arriba te anotan.',
+        tono: 'a-libro-abierto',
         effects: { hinchada: 6, influencia: -8 },
       },
     ],
@@ -376,11 +415,13 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Viajar con una semana de anticipación',
         hint: 'El cuerpo no rinde si llega de golpe. Cuesta caja y días de trabajo en casa.',
+        tono: 'via-pacifica',
         effects: { caja: -1.5, plantel: 2 },
       },
       {
         label: 'Instalar una cámara hipobárica en el predio',
         hint: 'Inversión grande. Sirve para este viaje y para todos los que vengan.',
+        tono: 'mano-dura',
         effects: {
           caja: -4,
           deferred: [{ inSeasons: 3, text: 'La cámara hipobárica ya se pagó sola: cada viaje a la altura rinde mejor.', effects: { plantel: 3 } }],
@@ -389,6 +430,7 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Viajar el día anterior, como siempre',
         hint: 'Se ahorra el gasto. El equipo llega con la cabeza pesada.',
+        tono: 'patear-para-adelante',
         effects: { plantel: -3 },
       },
     ],
@@ -404,11 +446,13 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Venderlo ya, sin esperar',
         hint: 'Plata segura. Si explota afuera, no vas a ver un centavo más.',
+        tono: 'mano-dura',
         effects: { caja: 4, hinchada: -2 },
       },
       {
         label: 'Esperar a que debute en primera para que suba el precio',
         hint: 'Si rinde, la cifra se multiplica. Si se lesiona, la oferta puede no volver.',
+        tono: 'patear-para-adelante',
         random: [
           { weight: 55, text: 'Debutó, jugó bien, y el mismo club subió la oferta al doble.', effects: { caja: 8, plantel: 2, hinchada: 3 } },
           { weight: 45, text: 'Se cansaron de esperar y se llevaron a otro pibe de otro club.', effects: { hinchada: -3 } },
@@ -417,6 +461,7 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Rechazar la oferta y quedárselo',
         hint: 'Es una apuesta a mediano plazo. El plantel mejora ahora, no la caja.',
+        tono: 'via-pacifica',
         effects: { plantel: 3, caja: -0.3 },
       },
     ],
@@ -432,16 +477,19 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Pagar una parte en dólares en efectivo',
         hint: 'Los retiene. Es plata que no queda en ningún papel.',
+        tono: 'via-turbia',
         effects: { caja: -3, plantel: 4 },
       },
       {
         label: 'Ofrecerles una mejora salarial en bolívares',
         hint: 'Sube el sueldo nominal. La inflación se lo come en dos meses.',
+        tono: 'via-pacifica',
         effects: { caja: -1, plantel: 1 },
       },
       {
         label: 'Dejarlos ir',
         hint: 'Entra algo de plata por el pase. El equipo se debilita.',
+        tono: 'patear-para-adelante',
         random: [
           { weight: 55, text: 'Se fueron los dos. Entró algo de plata, pero el equipo quedó corto.', effects: { caja: 3, plantel: -6, hinchada: -4 } },
           { weight: 45, text: 'Uno se arrepintió al final y se quedó.', effects: { plantel: -2, hinchada: -1 } },
@@ -460,16 +508,19 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Iniciar una demanda para recuperar el control',
         hint: 'Puede tardar años. Mientras tanto, nadie manda con autoridad clara.',
+        tono: 'mano-dura',
         effects: { influencia: -6, caja: -1 },
       },
       {
         label: 'Buscar un comprador local de urgencia',
         hint: 'Sale más barato que lo que pagó el fondo. Entra plata rápido.',
+        tono: 'pacto',
         effects: { caja: 5, influencia: -4, hinchada: -3 },
       },
       {
         label: 'Aprovechar el vacío de poder para consolidar tu propia gestión',
         hint: 'Nadie te controla por un tiempo. Hasta que alguien lo haga.',
+        tono: 'via-turbia',
         effects: { influencia: 6, caja: -2 },
       },
     ],
@@ -484,11 +535,13 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Darles el salón',
         hint: 'Cuesta casi nada y toca una fibra.',
+        tono: 'via-pacifica',
         effects: { caja: -0.3, hinchada: 6, socios: 1 },
       },
       {
         label: 'Ofrecerles un pasillo',
         hint: 'La respuesta burocrática. Nadie se enoja, nadie se emociona.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: -1 },
       },
     ],
@@ -503,11 +556,13 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Construirlas',
         hint: 'Inversión grande. Se paga sola en unas temporadas.',
+        tono: 'mano-dura',
         effects: { caja: -4, deferred: [{ inSeasons: 3, text: 'Las habitaciones del predio están listas: se terminó el gasto de hotel.', effects: { caja: 2.5, plantel: 3 } }] },
       },
       {
         label: 'Seguir con el hotel',
         hint: 'Sale caro todos los meses, para siempre.',
+        tono: 'patear-para-adelante',
         effects: { caja: -1 },
       },
     ],
@@ -522,16 +577,19 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Cubrirlos de urgencia',
         hint: 'Se tapa antes de que crezca.',
+        tono: 'patear-para-adelante',
         effects: { caja: -2.5, influencia: -2 },
       },
       {
         label: 'Echar al tesorero',
         hint: 'Alguien tiene que pagarla. La deuda igual queda.',
+        tono: 'mano-dura',
         effects: { caja: -1.5, influencia: -6, hinchada: 3 },
       },
       {
         label: 'Salir a explicar que fue un error bancario',
         hint: 'Si te creen, no pasa nada.',
+        tono: 'via-turbia',
         random: [
           { weight: 45, text: 'Se lo comieron. Al día siguiente ya nadie hablaba del tema.', effects: { influencia: 2 } },
           { weight: 55, text: 'Nadie te creyó y la palabra "vaciamiento" apareció en un titular.', effects: { hinchada: -9, influencia: -8 } },
@@ -549,11 +607,13 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Pagar todo de una',
         hint: 'Duele en la caja y se termina el problema.',
+        tono: 'mano-dura',
         effects: { caja: -1.9 },
       },
       {
         label: 'Pedir un plan de pagos',
         hint: 'Menos ahora, más después y con interés.',
+        tono: 'patear-para-adelante',
         effects: {
           caja: -0.6,
           deferred: [
@@ -568,6 +628,7 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Mover el partido a la tarde',
         hint: 'Menos gente, menos recaudación, menos vergüenza.',
+        tono: 'via-pacifica',
         effects: { caja: -0.4, hinchada: -4 },
       },
     ],
@@ -581,16 +642,19 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Firmar igual',
         hint: 'Entra plata. Sale una camiseta que no elegiste.',
+        tono: 'pacto',
         effects: { caja: 3.4, hinchada: -6 },
       },
       {
         label: 'Exigir tener la última palabra',
         hint: 'Menos plata, la camiseta de siempre.',
+        tono: 'mano-dura',
         effects: { caja: 1.6, hinchada: 4 },
       },
       {
         label: 'Buscar otra marca',
         hint: 'Una temporada sin sponsor de indumentaria mientras negociás.',
+        tono: 'patear-para-adelante',
         random: [
           { weight: 45, text: 'Apareció una marca chica que te dejó hacer todo a tu manera, y la camiseta fue un éxito.', effects: { caja: 2.2, hinchada: 8, socios: 2 } },
           { weight: 55, text: 'No apareció nadie mejor. Volviste a la misma marca con menos plata que antes.', effects: { caja: 0.8, hinchada: -3 } },
@@ -608,11 +672,13 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Pagar y cerrar el tema',
         hint: 'Un agujero grande, de una sola vez.',
+        tono: 'mano-dura',
         effects: { caja: -3.6 },
       },
       {
         label: 'Apelar',
         hint: 'Ganás tiempo. Los intereses no paran.',
+        tono: 'patear-para-adelante',
         effects: {
           deferred: [
             {
@@ -626,6 +692,7 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Negociar una quita',
         hint: 'Cuesta influencia y algo de orgullo.',
+        tono: 'pacto',
         requires: { minInfluencia: 20 },
         effects: { caja: -2.1, influencia: -8 },
       },
@@ -641,11 +708,13 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Pagarla completa',
         hint: 'Se soluciona hoy. Sale caro.',
+        tono: 'mano-dura',
         effects: { caja: -1.8 },
       },
       {
         label: 'Apagar luces y reducir el consumo',
         hint: 'Menos gasto. Menos comodidad en el día a día.',
+        tono: 'patear-para-adelante',
         effects: { caja: -0.6, plantel: -1 },
       },
     ],
@@ -660,11 +729,13 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Aceptar la venta del nombre',
         hint: 'Cambia la economía del club para siempre. También cambia cómo se llama la cancha.',
+        tono: 'pacto',
         effects: { caja: 8, hinchada: -12, influencia: 3 },
       },
       {
         label: 'Rechazarla',
         hint: 'El nombre de siempre se queda. La plata, no.',
+        tono: 'mano-dura',
         effects: { hinchada: 4 },
       },
     ],
@@ -678,11 +749,13 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Aceptar el acuerdo',
         hint: 'Entra plata ahora. Se comparte lo que entre después por cada venta.',
+        tono: 'pacto',
         effects: { caja: 6, influencia: -5 },
       },
       {
         label: 'Rechazarlo y seguir solos',
         hint: 'Todo lo que se venda de acá en más, queda entero para el club.',
+        tono: 'mano-dura',
         effects: { influencia: 2 },
       },
     ],
@@ -696,11 +769,13 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Subastarlos',
         hint: 'Entra plata. Sale historia del edificio, aunque sea la que sobraba.',
+        tono: 'mano-dura',
         effects: { caja: 1.4, hinchada: -2 },
       },
       {
         label: 'Dejarlos donde están',
         hint: 'Siguen juntando polvo. Nadie se queja de eso tampoco.',
+        tono: 'patear-para-adelante',
         effects: { influencia: 1 },
       },
     ],
@@ -715,11 +790,13 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Aceptar la refinanciación',
         hint: 'Respira la caja hoy. La deuda dura más años de los que dura tu mandato.',
+        tono: 'patear-para-adelante',
         effects: { caja: 4, influencia: -2 },
       },
       {
         label: 'Seguir pagando como está',
         hint: 'Más presión ahora. Sin comprometer al que venga después.',
+        tono: 'mano-dura',
         effects: { influencia: 1 },
       },
     ],
@@ -733,11 +810,13 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Aceptar el alquiler',
         hint: 'Ingreso extra, todos los meses, por algo que ya tenías.',
+        tono: 'pacto',
         effects: { caja: 1, plantel: -1 },
       },
       {
         label: 'Reservar el predio solo para el club',
         hint: 'Cero roce, cero ingreso extra.',
+        tono: 'mano-dura',
         effects: { plantel: 1 },
       },
     ],
@@ -751,11 +830,13 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Usarla para saldar deuda',
         hint: 'Menos vistoso. Duerme mejor a la larga.',
+        tono: 'a-libro-abierto',
         effects: { caja: 2.5 },
       },
       {
         label: 'Usarla para un refuerzo',
         hint: 'Plata que cae del cielo, directo al plantel.',
+        tono: 'via-pacifica',
         effects: { caja: 1.5, plantel: 2 },
       },
     ],
@@ -770,11 +851,13 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Renovar con cobertura ampliada',
         hint: 'Más tranquilidad si pasa algo grave. Sale caro todos los años.',
+        tono: 'via-pacifica',
         effects: { caja: -1.2, influencia: 1 },
       },
       {
         label: 'Renovar la cobertura mínima',
         hint: 'Más barato. Cualquier lesión grave la paga el club de su bolsillo.',
+        tono: 'patear-para-adelante',
         effects: { caja: -0.4 },
       },
     ],
@@ -790,16 +873,19 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Firmar exclusividad total por cinco años',
         hint: 'El cheque más grande que firmó el club. Y el más largo.',
+        tono: 'mano-dura',
         effects: { caja: 5, hinchada: -3, flags: { arco_tv_1: true } },
       },
       {
         label: 'Firmar solo dos años, para probar',
         hint: 'Menos plata y una puerta de salida a mano.',
+        tono: 'patear-para-adelante',
         effects: { caja: 2, flags: { arco_tv_1: true } },
       },
       {
         label: 'Firmar pero dejando los clásicos fuera del trato',
         hint: 'Los partidos grandes siguen en abierto. La productora lo firma a regañadientes.',
+        tono: 'pacto',
         effects: { caja: 3, hinchada: 1, flags: { arco_tv_1: true } },
       },
     ],
@@ -815,16 +901,19 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Reclamar formalmente y aguantar el contrato',
         hint: 'La carta queda linda en el expediente. El horario no cambia.',
+        tono: 'a-libro-abierto',
         effects: { hinchada: -4, influencia: 2, flags: { arco_tv_2: true } },
       },
       {
         label: 'Negociar una salida anticipada del contrato',
         hint: 'Se puede cortar. Sale una multa que ya sabés quién paga.',
+        tono: 'mano-dura',
         effects: { caja: -4, hinchada: 4, flags: { arco_tv_2: true } },
       },
       {
         label: 'Bancar los horarios a cambio de un extra en el cheque',
         hint: 'La platea vacía se cobra. En pantalla se sigue viendo vacía.',
+        tono: 'pacto',
         effects: { caja: 3, hinchada: -6, flags: { arco_tv_2: true } },
       },
     ],
@@ -840,11 +929,13 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Renovar con una cláusula de horarios protegidos',
         hint: 'Aprendiste. Tardaste ocho años, pero aprendiste.',
+        tono: 'a-libro-abierto',
         effects: { caja: 2, hinchada: 4, influencia: 2 },
       },
       {
         label: 'Renovar por la plata y nada más',
         hint: 'El cheque alcanza para no discutir el resto.',
+        tono: 'pacto',
         effects: { caja: 5, hinchada: -3 },
       },
     ],
@@ -858,11 +949,13 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Arrancar el torneo con la camiseta del año pasado',
         hint: 'Se juega igual. La gente que ya pagó la nueva putea.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: -3, caja: -0.4 },
       },
       {
         label: 'Exigirle a la marca una compensación por el incumplimiento',
         hint: 'Está en el contrato. Cobrarlo es otra historia.',
+        tono: 'mano-dura',
         random: [
           { weight: 55, text: 'La marca reconoció la demora y puso una partida extra de merchandising gratis.', effects: { caja: 1.2, hinchada: 2 } },
           { weight: 45, text: 'La marca dijo que fue fuerza mayor y no puso un peso.', effects: { influencia: -2 } },
@@ -871,6 +964,7 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Sacar una camiseta de transición con un proveedor local',
         hint: 'Rápida y con identidad de barrio. La marca oficial no lo toma bien.',
+        tono: 'pacto',
         effects: { caja: -0.5, hinchada: 5, influencia: -2 },
       },
     ],
@@ -884,6 +978,7 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Recambio completo del campo de juego',
         hint: 'Caro y lento. Después queda una alfombra.',
+        tono: 'mano-dura',
         effects: {
           caja: -2,
           plantel: -1,
@@ -895,11 +990,13 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Tratarlo por partes sin parar de jugar',
         hint: 'Más barato. Se juega dos meses sobre un potrero.',
+        tono: 'patear-para-adelante',
         effects: { caja: -0.7, plantel: -3, hinchada: -2 },
       },
       {
         label: 'Mudar la localía a la cancha de un club vecino',
         hint: 'Se cuida el equipo. Se pierde el factor cancha y parte del público.',
+        tono: 'pacto',
         effects: { caja: -1, hinchada: -4 },
       },
     ],
@@ -913,16 +1010,19 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Aceptar con todas las condiciones',
         hint: 'Gimnasio gratis. Y alguien que entra y sale del vestuario cuando quiere.',
+        tono: 'pacto',
         effects: { caja: 3, plantel: 3, influencia: -6, hinchada: -2 },
       },
       {
         label: 'Aceptar solo con una placa de agradecimiento',
         hint: 'Se lo bancás como gesto, no como negocio. Puede tomarlo bien o bajarse.',
+        tono: 'via-pacifica',
         effects: { caja: 2.2, plantel: 3, hinchada: 1 },
       },
       {
         label: 'Agradecer y hacerlo con plata del club, sin condiciones',
         hint: 'El predio no le debe nada a nadie. La caja lo siente.',
+        tono: 'mano-dura',
         effects: { caja: -3, plantel: 3, influencia: 2 },
       },
     ],
@@ -936,16 +1036,19 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Reponer todo y poner seguridad las veinticuatro horas',
         hint: 'No vuelve a pasar. Es un gasto fijo nuevo para siempre.',
+        tono: 'mano-dura',
         effects: { caja: -1.8, hinchada: 1 },
       },
       {
         label: 'Hacer el reclamo al seguro y esperar',
         hint: 'Cubre parte y con demora. El resto lo pone el club igual.',
+        tono: 'patear-para-adelante',
         effects: { caja: -0.9 },
       },
       {
         label: 'Pedir a los socios que ayuden a recuperar lo del museo',
         hint: 'La gente responde con lo que tiene. Y se entera de todo.',
+        tono: 'a-libro-abierto',
         effects: { hinchada: -2, socios: 1, caja: -0.6 },
       },
     ],
@@ -959,6 +1062,7 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Lanzar la preventa agresiva',
         hint: 'Caja llena hoy. Los domingos del año que viene la boletería está floja.',
+        tono: 'patear-para-adelante',
         effects: {
           caja: 5,
           socios: 3,
@@ -970,6 +1074,7 @@ export const ECONOMIA: GameEvent[] = [
       {
         label: 'Abono a precio normal, sin descuento',
         hint: 'Menos plata de golpe. El flujo del año queda sano.',
+        tono: 'mano-dura',
         effects: { caja: 1.5, socios: 1 },
       },
     ],

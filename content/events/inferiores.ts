@@ -10,11 +10,13 @@ export const INFERIORES: GameEvent[] = [
       {
         label: 'Arreglar el techo entero',
         hint: 'Sale caro y no lo ve nadie. Salvo ellos.',
+        tono: 'via-pacifica',
         effects: { caja: -1.4, hinchada: 3, plantel: 2 },
       },
       {
         label: 'Poner baldes y esperar el verano',
         hint: 'Gratis hasta que alguien saque una foto.',
+        tono: 'patear-para-adelante',
         random: [
           { weight: 55, text: 'Aguantó hasta el verano y se arregló en silencio. Nadie se enteró.', effects: {} },
           { weight: 45, text: 'Salió la foto de los baldes en la pensión. Un club de Primera, decía el epígrafe.', effects: { hinchada: -9, socios: -2 } },
@@ -23,6 +25,7 @@ export const INFERIORES: GameEvent[] = [
       {
         label: 'Mandar a los chicos a sus casas dos meses',
         hint: 'Se ahorra todo. Vuelven la mitad.',
+        tono: 'mano-dura',
         effects: { caja: 0.4, plantel: -4, hinchada: -5 },
       },
     ],
@@ -36,16 +39,19 @@ export const INFERIORES: GameEvent[] = [
       {
         label: 'Prohibirle la entrada al predio',
         hint: 'Se lleva a los tres a otro club. Y a dos más.',
+        tono: 'mano-dura',
         effects: { plantel: -3, influencia: 3 },
       },
       {
         label: 'Sentarse a hablar y repartir',
         hint: 'El club cobra su parte. Y le debe una.',
+        tono: 'pacto',
         effects: { caja: 1.2, influencia: -6 },
       },
       {
         label: 'Que el club pague los botines',
         hint: 'Le sacás la excusa. Sale plata todos los meses.',
+        tono: 'via-pacifica',
         effects: { caja: -0.5, plantel: 2, hinchada: 2 },
       },
     ],
@@ -60,6 +66,7 @@ export const INFERIORES: GameEvent[] = [
       {
         label: 'Que debute el domingo',
         hint: 'La gente se enamora. O lo funden en tres partidos.',
+        tono: 'via-pacifica',
         random: [
           { weight: 50, text: 'Entró, encaró dos veces y la cancha se paró. Ya es de ellos.', effects: { plantel: 4, hinchada: 12, socios: 2 } },
           { weight: 50, text: 'Lo marcaron entre dos, no la tocó y salió llorando. Le costó un año recuperarse.', effects: { plantel: -3, hinchada: -4 } },
@@ -68,11 +75,13 @@ export const INFERIORES: GameEvent[] = [
       {
         label: 'Un año más en reserva',
         hint: 'Lo correcto para él. El representante toma nota.',
+        tono: 'patear-para-adelante',
         effects: { plantel: 1, hinchada: -3 },
       },
       {
         label: 'Renovarle el contrato primero',
         hint: 'Lo atás antes de exponerlo. Cuesta.',
+        tono: 'pacto',
         effects: { caja: -0.9, plantel: 2, hinchada: 4 },
       },
     ],
@@ -86,16 +95,19 @@ export const INFERIORES: GameEvent[] = [
       {
         label: 'Ir',
         hint: 'Vidriera para los chicos, agujero para la caja.',
+        tono: 'via-pacifica',
         effects: { caja: -1.7, plantel: 3, hinchada: 4, socios: 1 },
       },
       {
         label: 'Agradecer y no ir',
         hint: 'Nadie se entera. Salvo los veinte chicos.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: -2 },
       },
       {
         label: 'Ir buscando compradores',
         hint: 'Se va con la valija llena de fichas de jugadores.',
+        tono: 'pacto',
         random: [
           { weight: 45, text: 'Volvieron con dos ofertas firmes por chicos de sexta. El viaje se pagó solo tres veces.', effects: { caja: 2.8, plantel: -2 } },
           { weight: 55, text: 'Nadie ofreció nada. Volvieron con el gasto hecho y los chicos preguntando por qué los miraban tanto.', effects: { caja: -1.7, hinchada: -3 } },
@@ -112,6 +124,7 @@ export const INFERIORES: GameEvent[] = [
       {
         label: 'Poner las torres de luz',
         hint: 'Una inversión que rinde recién en tres años.',
+        tono: 'mano-dura',
         effects: {
           caja: -2.1,
           deferred: [
@@ -126,11 +139,13 @@ export const INFERIORES: GameEvent[] = [
       {
         label: 'Alquilar una cancha con luces dos veces por semana',
         hint: 'Menos plata de golpe, todos los meses.',
+        tono: 'pacto',
         effects: { caja: -0.6, plantel: 1 },
       },
       {
         label: 'Que entrenen de mañana',
         hint: 'Gratis. Los que van al colegio, no van más.',
+        tono: 'patear-para-adelante',
         effects: { plantel: -2, hinchada: -3 },
       },
     ],
@@ -145,6 +160,7 @@ export const INFERIORES: GameEvent[] = [
       {
         label: 'Reclamar formación ante la FIFA',
         hint: 'Es poco, es lento y es lo que corresponde.',
+        tono: 'a-libro-abierto',
         effects: {
           influencia: -4,
           deferred: [
@@ -159,11 +175,13 @@ export const INFERIORES: GameEvent[] = [
       {
         label: 'Echar al que manejaba los contratos',
         hint: 'Alguien tiene que pagar. Y alguien va a tener que aprender de nuevo.',
+        tono: 'mano-dura',
         effects: { influencia: 4, plantel: -1, hinchada: 2 },
       },
       {
         label: 'Tragarse el sapo y revisar todos los contratos',
         hint: 'No arregla este. Evita los próximos.',
+        tono: 'patear-para-adelante',
         effects: { caja: -0.4, hinchada: -3, plantel: 3 },
       },
     ],
@@ -177,16 +195,19 @@ export const INFERIORES: GameEvent[] = [
       {
         label: 'Homenaje en el entretiempo del domingo',
         hint: 'Sale una placa y algunas lágrimas.',
+        tono: 'via-pacifica',
         effects: { hinchada: 6, socios: 1 },
       },
       {
         label: 'Ponerle su nombre al comedor',
         hint: 'Cuesta menos que una placa y dura más.',
+        tono: 'pacto',
         effects: { hinchada: 4, plantel: 1 },
       },
       {
         label: 'Un apretón de manos y a otra cosa',
         hint: 'Se va igual. Los chicos miran.',
+        tono: 'patear-para-adelante',
         effects: { plantel: -1, hinchada: -2 },
       },
     ],
@@ -201,11 +222,13 @@ export const INFERIORES: GameEvent[] = [
       {
         label: 'Subirlo ya a los entrenamientos de primera',
         hint: 'Se apura el proceso. Puede quemarlo, puede acelerarlo.',
+        tono: 'mano-dura',
         effects: { plantel: 2, hinchada: 3, flags: { arco_joya_a: true } },
       },
       {
         label: 'Dejarlo un año más en inferiores',
         hint: 'Lo correcto. Menos vistoso.',
+        tono: 'patear-para-adelante',
         effects: { plantel: 1, flags: { arco_joya_a: true } },
       },
     ],
@@ -221,11 +244,13 @@ export const INFERIORES: GameEvent[] = [
       {
         label: 'Venderlo',
         hint: 'Plata que cambia el club. La tribuna no lo va a olvidar tan rápido.',
+        tono: 'mano-dura',
         effects: { caja: 12, hinchada: -8, plantel: -6, flags: { arco_joya_vendida: true } },
       },
       {
         label: 'Rechazar la oferta y retenerlo',
         hint: 'Apuesta a que vale más quedándose. El club se lo debe.',
+        tono: 'via-pacifica',
         effects: { hinchada: 6, influencia: -4, flags: { arco_joya_quedo: true } },
       },
     ],
@@ -241,11 +266,13 @@ export const INFERIORES: GameEvent[] = [
       {
         label: 'Reivindicar la venta en una entrevista',
         hint: 'Con la plata que entró se ordenaron las cuentas. Que lo digan los números.',
+        tono: 'a-libro-abierto',
         effects: { influencia: 4, hinchada: -3 },
       },
       {
         label: 'No decir nada',
         hint: 'Cada vez que juega, alguien te lo va a recordar igual.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: 2 },
       },
     ],
@@ -261,11 +288,13 @@ export const INFERIORES: GameEvent[] = [
       {
         label: 'Aceptar',
         hint: 'Va a jugar con jugadores que crecieron mirando su nombre en la puerta.',
+        tono: 'via-pacifica',
         effects: { hinchada: 10, socios: 3 },
       },
       {
         label: 'Esperar a que se retire',
         hint: 'Protocolar. Correcto. Un poco tibio.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: 3, influencia: 2 },
       },
     ],
@@ -280,11 +309,13 @@ export const INFERIORES: GameEvent[] = [
       {
         label: 'Comprarlo',
         hint: 'Inversión a largo plazo. El resultado se ve en años, no en meses.',
+        tono: 'mano-dura',
         effects: { caja: -3, plantel: 1, socios: 2 },
       },
       {
         label: 'Seguir con el predio actual',
         hint: 'No se gasta nada. Tampoco crece nada.',
+        tono: 'patear-para-adelante',
         effects: { influencia: 1 },
       },
     ],
@@ -299,6 +330,7 @@ export const INFERIORES: GameEvent[] = [
       {
         label: 'Recibirla e investigar el reclamo',
         hint: 'Puede ser un exceso real de algún entrenador. Puede ser otra cosa.',
+        tono: 'a-libro-abierto',
         random: [
           { weight: 50, text: 'El reclamo era real. Se corrigió a tiempo, sin escándalo.', effects: { influencia: 3, hinchada: 1 } },
           { weight: 50, text: 'No había nada de fondo, pero la reunión incomodó a todo el cuerpo técnico.', effects: { influencia: -1, plantel: -1 } },
@@ -307,6 +339,7 @@ export const INFERIORES: GameEvent[] = [
       {
         label: 'Derivarlo directamente a inferiores',
         hint: 'No es tu función bajar a ese detalle. Tampoco parece que a nadie más le importe.',
+        tono: 'patear-para-adelante',
         effects: { influencia: -2 },
       },
     ],
@@ -320,11 +353,13 @@ export const INFERIORES: GameEvent[] = [
       {
         label: 'Prestar la cancha y sumarse',
         hint: 'Un gesto para el barrio que no cuesta casi nada.',
+        tono: 'via-pacifica',
         effects: { caja: -0.1, hinchada: 2, socios: 1 },
       },
       {
         label: 'Declinar la invitación',
         hint: 'La cancha auxiliar sigue libre para el plantel.',
+        tono: 'mano-dura',
         effects: { plantel: 1 },
       },
     ],
@@ -338,11 +373,13 @@ export const INFERIORES: GameEvent[] = [
       {
         label: 'Firmarle el contrato profesional que pide',
         hint: 'Lo atás y frenás la fuga. Rompés la escala de sueldos de inferiores.',
+        tono: 'via-pacifica',
         effects: { caja: -1.2, plantel: 3, hinchada: 4 },
       },
       {
         label: 'Ofrecerle el contrato que le toca por edad',
         hint: 'Lo correcto según el reglamento interno. El representante ya tiene el otro papel firmado.',
+        tono: 'a-libro-abierto',
         random: [
           { weight: 40, text: 'Aceptó igual: quería debutar acá antes de irse. Ganó el club.', effects: { plantel: 2, hinchada: 3 } },
           { weight: 60, text: 'Esperó la mayoría de edad y se fue con lo puesto. Queda el reclamo por formación.', effects: { hinchada: -4, plantel: -1 } },
@@ -351,6 +388,7 @@ export const INFERIORES: GameEvent[] = [
       {
         label: 'Venderle un porcentaje del pase a un fondo ahora',
         hint: 'Entra algo de plata hoy y el club se asegura una parte del futuro.',
+        tono: 'pacto',
         effects: { caja: 2, plantel: -1, hinchada: -2 },
       },
     ],
@@ -364,16 +402,19 @@ export const INFERIORES: GameEvent[] = [
       {
         label: 'Ponerle el mejor equipo médico y acompañarlo de cerca',
         hint: 'Caro y bien hecho. Vuelve entero y agradecido.',
+        tono: 'via-pacifica',
         effects: { caja: -1, plantel: -1 },
       },
       {
         label: 'Rehabilitación estándar en el club',
         hint: 'Sale menos. Con una rodilla así, el margen de error es fino.',
+        tono: 'patear-para-adelante',
         effects: { caja: -0.3, plantel: -2 },
       },
       {
         label: 'Reclamar a la federación que cubra la rehabilitación',
         hint: 'Le corresponde a quien lo convocó. Cobrarlo es otra pelea.',
+        tono: 'pacto',
         effects: { influencia: -2, caja: 0.8 },
       },
     ],
@@ -387,6 +428,7 @@ export const INFERIORES: GameEvent[] = [
       {
         label: 'Aceptar con las dos condiciones',
         hint: 'El predio se duplica casi gratis. Y una cancha lleva un apellido de la política.',
+        tono: 'pacto',
         effects: {
           caja: -0.8,
           socios: 3,
@@ -399,11 +441,13 @@ export const INFERIORES: GameEvent[] = [
       {
         label: 'Aceptar el terreno, pelear lo del nombre',
         hint: 'Las escuelitas sí, el cartel no. Puede caerse todo el acuerdo.',
+        tono: 'mano-dura',
         effects: { caja: -1, socios: 2, plantel: 1, influencia: -1 },
       },
       {
         label: 'Dejarlo pasar',
         hint: 'El club no le debe nada a nadie. El predio sigue siendo el que es.',
+        tono: 'patear-para-adelante',
         effects: { influencia: 1 },
       },
     ],
