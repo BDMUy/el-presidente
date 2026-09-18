@@ -3,7 +3,7 @@
 import { useState, type CSSProperties } from 'react';
 
 import type { Club, Effects, EventKind, GameEvent } from '@/lib/engine/types';
-import { EVENT_KIND_LABEL } from '@/lib/engine/types';
+import { EVENT_KIND_LABEL, TONO_LABEL } from '@/lib/engine/types';
 import { plataConSigno } from '@/lib/format';
 import { useTintaClub } from '@/lib/tema';
 import { GrupoOpciones } from './grupo-opciones';
@@ -83,6 +83,7 @@ export function FaseEvento({
                     key={optionIndex}
                     label={option.label}
                     hint={option.hint}
+                    tono={option.tono && TONO_LABEL[option.tono]}
                     azaroso={Boolean(option.random)}
                     seleccionado={elegida === displayIndex}
                     foco={elegida === null ? displayIndex === 0 : elegida === displayIndex}

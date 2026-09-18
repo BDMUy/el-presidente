@@ -211,6 +211,23 @@ export const EVENT_KIND_LABEL: Record<EventKind, string> = {
   color: 'PASAN COSAS',
 };
 
+export type TonoOpcion =
+  | 'mano-dura'
+  | 'via-pacifica'
+  | 'pacto'
+  | 'via-turbia'
+  | 'a-libro-abierto'
+  | 'patear-para-adelante';
+
+export const TONO_LABEL: Record<TonoOpcion, string> = {
+  'mano-dura': 'Mano dura',
+  'via-pacifica': 'Vía pacífica',
+  pacto: 'Pacto de caballeros',
+  'via-turbia': 'Vía turbia',
+  'a-libro-abierto': 'A libro abierto',
+  'patear-para-adelante': 'Patear para adelante',
+};
+
 export interface Condition {
   minSeason?: number;
   maxSeason?: number;
@@ -240,6 +257,7 @@ export interface RandomOutcome {
 export interface EventOption {
   label: string;
   hint: string;
+  tono?: TonoOpcion;
   effects?: Effects;
   random?: RandomOutcome[];
   requires?: Condition;

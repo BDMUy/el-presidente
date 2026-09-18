@@ -19,6 +19,7 @@
     "cobertura": "tsx scripts/cobertura.ts",
     "coherencia": "tsx scripts/coherencia.ts",
     "cracks": "tsx scripts/cracks.ts",
+    "tonos": "tsx scripts/tonos.ts",
     "contraste": "tsx scripts/contraste.ts"
   },
   "dependencies": {

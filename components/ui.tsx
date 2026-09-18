@@ -106,6 +106,7 @@ export function Cuerpo({
 export function Renglon({
   label,
   hint,
+  tono,
   azaroso = false,
   seleccionado = false,
   foco = false,
@@ -115,6 +116,7 @@ export function Renglon({
 }: {
   label: string;
   hint: string;
+  tono?: string;
   azaroso?: boolean;
   seleccionado?: boolean;
   foco?: boolean;
@@ -141,7 +143,14 @@ export function Renglon({
       </span>
 
       <span className="min-w-0 flex-1">
-        <span className="flex items-baseline gap-2 font-titular text-[1rem] leading-tight text-tinta">
+        {tono && (
+          <span className="block font-tabla text-[0.6875rem] leading-none tracking-[0.1em] text-tinta-2 uppercase">
+            {tono}
+          </span>
+        )}
+        <span
+          className={`${tono ? 'mt-1 ' : ''}flex items-baseline gap-2 font-titular text-[1rem] leading-tight text-tinta`}
+        >
           <span className="min-w-0">{label}</span>
           {azaroso && (
             <span className="ml-auto shrink-0 rounded border border-tinta-2 px-1.5 py-0.5 font-tabla text-[0.75rem] font-bold tracking-wider text-tinta-2 uppercase">
