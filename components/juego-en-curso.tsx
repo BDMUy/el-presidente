@@ -330,9 +330,11 @@ function Pantalla({
     case 'resultado-final':
       return (
         <FaseResultadoFinal
+          club={club}
           won={phase.won}
           text={phase.text}
           match={phase.match}
+          clave={`${state.seed}:${state.season}:${phase.match.label}`}
           onContinuar={() => onElegir(0)}
         />
       );

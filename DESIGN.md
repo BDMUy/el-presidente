@@ -165,6 +165,13 @@ El riesgo de un pase dice qué pasa si sale: cuánto suma el jugador lesionado
 frente a lo prometido. Cuando ocurre, el juego lo avisa con nombre en la
 pantalla siguiente, junto a los avisos de préstamos que vuelven.
 
+El marcador y el minuto a minuto del partido son relato, no simulación: el
+motor decide si se gana o se pierde y `lib/relato-partido.ts` deriva de la
+misma semilla el resultado, los goles y los hitos. Nunca contradicen el
+resultado ni nombran jugadores, porque el estado no tiene plantel con nombres.
+El tablero lleva los colores del club como marca de agua y el hito que definió
+el partido se marca con un filete de acento.
+
 Las ilustraciones marcan contexto: objetos pequeños junto a encabezados,
 escenas panorámicas compactas. Son decorativas, con alt vacío y dimensiones
 reservadas; las etiquetas y números siguen siendo texto real.

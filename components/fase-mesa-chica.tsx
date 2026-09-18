@@ -17,6 +17,7 @@ import {
   type MesaChicaAssignment,
 } from '@/lib/engine/types';
 import { ordinal, plata } from '@/lib/format';
+import { relatoDePartido } from '@/lib/relato-partido';
 import { useTintaClub } from '@/lib/tema';
 import { BarraDecision, Continuar, Ladillo, Recuadro, Titular, Volanta } from './ui';
 import { Festejo } from './festejo';
@@ -293,33 +294,97 @@ function FilaFrente({
 }
 
 export function FaseResultadoFinal({
+  club,
   won,
   text,
   match,
+  clave,
   onContinuar,
 }: {
+  club: Club;
   won: boolean;
   text: string;
   match: BigMatch;
+  clave: string;
   onContinuar: () => void;
 }) {
+  const tintaClub = useTintaClub(club);
+  const relato = relatoDePartido({ won, clave });
+
   return (
     <Recuadro>
-      <div className="flex items-start justify-between gap-4">
-        <Volanta>{match.label}</Volanta>
-        <Ladillo tono={won ? 'favorable' : 'alerta'} animado className="shrink-0">
-          {won ? (match.competition === 'playoff' ? 'Ascenso' : 'Campeón') : 'Perdida'}
-        </Ladillo>
-      </div>
+      <div style={{ '--club': tintaClub } as CSSProperties}>
+        <div className="flex items-start justify-between gap-4">
+          <Volanta>{match.label}</Volanta>
+          <Ladillo tono={won ? 'favorable' : 'alerta'} animado className="shrink-0">
+            {won ? (match.competition === 'playoff' ? 'Ascenso' : 'Campeón') : 'Perdida'}
+          </Ladillo>
+        </div>
 
-      <div className="mt-5">
-        {won
-          ? <Festejo titulo={match.competition === 'playoff' ? '¡Ascendimos!' : '¡Campeones!'} detalle={TITLES[match.title].label} />
-          : <Titular>No se dio</Titular>}
-        <p className="mt-3 font-cuerpo text-[1rem] leading-relaxed text-tinta">{text}</p>
-      </div>
+        <div className="relative mt-4 overflow-hidden rounded-[var(--radio-sm)] bg-fondo-0 px-4 py-5">
+          <div
+            className="absolute inset-y-0 right-0 w-1/2 opacity-[0.14]"
+            style={{
+              background: `linear-gradient(120deg, transparent, ${club.colors[0]} 45%, ${club.colors[1]})`,
+            }}
+            aria-hidden
+          />
+          <div className="relative grid grid-cols-[1fr_auto_1fr] items-center gap-3 text-center">
+            <p className="font-titular text-[0.8125rem] leading-tight text-balance text-tinta">
+              {club.short}
+            </p>
+            <p className="font-titular text-[2.75rem] leading-none tabular-nums text-tinta">
+              {relato.propios}
+              <span className="mx-2 text-tinta-3">:</span>
+              {relato.rival}
+            </p>
+            <p className="font-titular text-[0.8125rem] leading-tight text-balance text-tinta">
+              {match.rival}
+            </p>
+          </div>
+          <p className="relative mt-2 text-center font-tabla text-[0.6875rem] tracking-[0.1em] text-tinta-2 uppercase">
+            {TITLES[match.title].label} · tiempo cumplido
+          </p>
+        </div>
 
-      <Continuar onClick={onContinuar}>Ver la temporada</Continuar>
+        <div className="mt-5">
+          {won
+            ? <Festejo titulo={match.competition === 'playoff' ? '¡Ascendimos!' : '¡Campeones!'} detalle={TITLES[match.title].label} />
+            : <Titular>No se dio</Titular>}
+          <p className="mt-3 font-cuerpo text-[1rem] leading-relaxed text-tinta">{text}</p>
+        </div>
+
+        {relato.hitos.length > 0 && (
+          <div className="mt-5 border-t border-corondel pt-3">
+            <Volanta>Minuto a minuto</Volanta>
+            <ul className="mt-2">
+              {relato.hitos.map((hito, i) => (
+                <li
+                  key={`${hito.minuto}-${i}`}
+                  className={`flex items-baseline gap-3 border-l-2 py-1.5 pl-3 ${
+                    hito.decisivo ? 'border-acento' : 'border-corondel'
+                  }`}
+                >
+                  <span className="w-9 shrink-0 font-tabla text-[0.75rem] text-tinta-2 tabular-nums">
+                    {hito.minuto}&apos;
+                  </span>
+                  <span
+                    className={`font-cuerpo text-[0.9375rem] leading-snug ${
+                      hito.tipo === 'aviso' ? 'text-tinta-2' : 'text-tinta'
+                    }`}
+                  >
+                    {hito.tipo === 'gol-propio' && <b className="font-titular">Gol nuestro. </b>}
+                    {hito.tipo === 'gol-rival' && <b className="font-titular">Gol de ellos. </b>}
+                    {hito.texto}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <Continuar onClick={onContinuar}>Ver la temporada</Continuar>
+      </div>
     </Recuadro>
   );
 }
