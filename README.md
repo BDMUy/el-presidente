@@ -33,7 +33,7 @@ que corra Next: no hay nada propio del proveedor en el código.
 | | |
 |---|---|
 | `npm run dev` | servidor de desarrollo |
-| `npm test` | 186 tests, sin DOM |
+| `npm test` | 204 tests, sin DOM |
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm run lint` | eslint |
 | `npm run build` | build de producción |

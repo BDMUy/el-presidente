@@ -128,9 +128,10 @@ mercado. Las declaraciones salen de `content/declaraciones.ts` por semilla y
 modo, como el nombre y el retrato.
 
 Las opciones narrativas se presentan como tarjetas seleccionables con
-marca de radio (`.fila-opcion` / `.marca-radio`) y consecuencias graduadas,
-como HINCHADA ++. Las operaciones de mercado y mesa chica muestran cifras
-exactas antes de firmar.
+marca de radio (`.fila-opcion` / `.marca-radio`). La asimetría es deliberada:
+la opción narrativa no anticipa números, solo su pista en prosa al
+seleccionarse; el mercado y la mesa chica sí muestran cifras exactas antes de
+firmar, porque son contratos y no decisiones políticas.
 En el mercado se marcan varias operaciones y se firman juntas, hasta el tope de
 la ventana; el botón lleva el neto de caja y la barra, el saldo que queda más
 plantel y hinchada. Queda bloqueado lo que dejaría la caja en el umbral de inhibición, con

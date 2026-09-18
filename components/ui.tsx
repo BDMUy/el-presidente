@@ -1,7 +1,5 @@
 import type { ReactNode } from 'react';
 
-import type { Impacto } from '@/lib/impacto';
-
 export function Recuadro({
   children,
   acento = 'tinta',
@@ -105,30 +103,9 @@ export function Cuerpo({
   );
 }
 
-function signoRepetido(token: Impacto): string {
-  return token.signo === 'neutro' ? '' : token.signo.repeat(token.grado);
-}
-
-function TokenImpacto({ token }: { token: Impacto }) {
-  const color =
-    token.signo === '+'
-      ? 'text-favorable'
-      : token.signo === '−'
-        ? 'text-alerta'
-        : 'text-tinta-2';
-
-  return (
-    <span className={`font-tabla text-[0.75rem] font-bold tracking-[0.06em] uppercase ${color}`}>
-      {token.label}
-      {token.signo !== 'neutro' && <span className="ml-0.5">{signoRepetido(token)}</span>}
-    </span>
-  );
-}
-
 export function Renglon({
   label,
   hint,
-  impacto,
   azaroso = false,
   seleccionado = false,
   foco = false,
@@ -138,7 +115,6 @@ export function Renglon({
 }: {
   label: string;
   hint: string;
-  impacto?: Impacto[] | null;
   azaroso?: boolean;
   seleccionado?: boolean;
   foco?: boolean;
@@ -176,13 +152,6 @@ export function Renglon({
         {seleccionado && (
           <span className="mt-1 block font-cuerpo text-[0.875rem] leading-snug text-tinta-2">
             {hint}
-          </span>
-        )}
-        {impacto && impacto.length > 0 && (
-          <span className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
-            {impacto.map((token) => (
-              <TokenImpacto key={token.id} token={token} />
-            ))}
           </span>
         )}
       </span>

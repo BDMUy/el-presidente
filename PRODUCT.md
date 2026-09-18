@@ -153,7 +153,7 @@ balance.
 - **Balance data** (measured, `greedy` policy completion rates,
   `npm run simulate 3000 --modo=todos`, 2026-09-03): Corta 82.5%, Normal 64.0%,
   Larga 49.6%, En llamas 15.5%.
-- **Test suite:** 186 tests, no DOM, passing; typecheck, lint, and build green.
+- **Test suite:** 204 tests, no DOM, passing; typecheck, lint, and build green.
 - **Docs:** `README.md`, `AGENTS.md`, `DESPLIEGUE.md` (Netlify deployment
   runbook), `.env.example`.
 - **Live:** the game has a public deployment (URL in the deploy environment, not
