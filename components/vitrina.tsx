@@ -7,7 +7,7 @@ import { LOGROS } from '@/content/logros';
 import { getClub } from '@/content/clubs';
 import { TITLES } from '@/lib/engine/types';
 import { leerVitrina, type Vitrina } from '@/lib/vitrina';
-import { Ladillo } from './ui';
+import { GrillaTrofeos } from './grilla-trofeos';
 
 export function VitrinaPanel() {
   const [vitrina, setVitrina] = useState<Vitrina | null>(null);
@@ -70,15 +70,7 @@ export function VitrinaPanel() {
             Copas ganadas ({vitrina.titulos.length} de {Object.keys(TITLES).length})
           </p>
           {vitrina.titulos.length > 0 ? (
-            <ul className="mt-2 flex flex-wrap gap-1.5">
-              {vitrina.titulos.map((id) => (
-                <li key={id}>
-                  <Ladillo tono="acento">
-                    {TITLES[id].label}
-                  </Ladillo>
-                </li>
-              ))}
-            </ul>
+            <GrillaTrofeos titulos={new Map(vitrina.titulos.map((id) => [id, 1]))} />
           ) : (
             <p className="mt-1.5 font-cuerpo text-[0.875rem] text-tinta-2">Todavía ninguna.</p>
           )}

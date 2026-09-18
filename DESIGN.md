@@ -156,6 +156,11 @@ y la probabilidad partida en dos tramos con leyenda, lo que ya era tuyo por la
 cancha y lo que sumaste moviendo fichas. El costo de cada frente está a la
 vista, no detrás de un desplegable.
 Nunca sustituir cifras contractuales por señales vagas.
+Las copas se cuentan en una grilla de dos columnas con ícono, repeticiones y
+puntos (`GrillaTrofeos`), tanto en el resumen de la presidencia como en la
+vitrina del inicio. El cierre de temporada muestra ingresos y egresos en dos
+barras proporcionales antes del detalle línea por línea, y la elección dice
+contra quién se ganó o se perdió.
 El riesgo de un pase dice qué pasa si sale: cuánto suma el jugador lesionado
 frente a lo prometido. Cuando ocurre, el juego lo avisa con nombre en la
 pantalla siguiente, junto a los avisos de préstamos que vuelven.

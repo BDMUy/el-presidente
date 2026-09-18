@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 import { LEAGUES, TITLES, type ElectionResult, type GameState, type SeasonResult } from '@/lib/engine/types';
 import { resolveEconomy } from '@/lib/engine/season';
-import { ordinal, plataConSigno } from '@/lib/format';
+import { ordinal, plata, plataConSigno } from '@/lib/format';
 import { Continuar, Ladillo, Puntos, Recuadro, Titular, Volanta } from './ui';
 import { Festejo } from './festejo';
 
@@ -33,11 +33,18 @@ export function FaseTemporada({
         <Volanta>
           Memoria y balance · {state.year}
         </Volanta>
-        {ladillo && (
-          <Ladillo tono={ladillo.tono} animado className="shrink-0">
-            {ladillo.texto}
-          </Ladillo>
-        )}
+        <span className="flex shrink-0 flex-wrap justify-end gap-1.5">
+          {ladillo && (
+            <Ladillo tono={ladillo.tono} animado>
+              {ladillo.texto}
+            </Ladillo>
+          )}
+          {result.qualifiedContinental && (
+            <Ladillo tono="favorable" animado>
+              A la continental
+            </Ladillo>
+          )}
+        </span>
       </div>
 
       {(result.champion || result.promoted) && (
@@ -89,7 +96,22 @@ export function FaseTemporada({
         </div>
       )}
 
-      <details className="mt-5 border-t border-corondel">
+      <div className="mt-5 border-t border-corondel pt-4">
+        <BarraBalance
+          etiqueta="Ingresos"
+          monto={economia.ingresos}
+          maximo={Math.max(economia.ingresos, Math.abs(economia.egresos))}
+          tono="favorable"
+        />
+        <BarraBalance
+          etiqueta="Egresos"
+          monto={Math.abs(economia.egresos)}
+          maximo={Math.max(economia.ingresos, Math.abs(economia.egresos))}
+          tono="alerta"
+        />
+      </div>
+
+      <details className="mt-4 border-t border-corondel">
         <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-3 py-2 font-tabla text-[0.8125rem]">
           <span className="text-tinta-2">Balance de caja <span className="indicador-mas" aria-hidden>+</span></span>
           <span className={economia.neto < 0 ? 'text-alerta' : 'text-favorable'}>{plataConSigno(economia.neto)}</span>
@@ -122,6 +144,37 @@ export function FaseTemporada({
   );
 }
 
+function BarraBalance({
+  etiqueta,
+  monto,
+  maximo,
+  tono,
+}: {
+  etiqueta: string;
+  monto: number;
+  maximo: number;
+  tono: 'favorable' | 'alerta';
+}) {
+  const proporcion = maximo > 0 ? monto / maximo : 0;
+
+  return (
+    <div className="mt-2 first:mt-0">
+      <p className="flex items-baseline justify-between gap-2 font-tabla text-[0.8125rem]">
+        <span className="text-tinta-2 uppercase">{etiqueta}</span>
+        <span className={tono === 'alerta' ? 'text-alerta' : 'text-favorable'}>
+          {plata(monto)}
+        </span>
+      </p>
+      <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-fondo-3" aria-hidden>
+        <div
+          className={`h-full origin-left rounded-full ${tono === 'alerta' ? 'bg-alerta' : 'bg-favorable'}`}
+          style={{ transform: `scaleX(${proporcion})` }}
+        />
+      </div>
+    </div>
+  );
+}
+
 export function FaseEleccion({
   result,
   season,
@@ -150,6 +203,10 @@ export function FaseEleccion({
         </p>
         <p className="mt-1 font-tabla text-[0.75rem] tracking-[0.16em] text-tinta-2 uppercase">
           de los votos de socios
+        </p>
+        <p className="mt-2 font-cuerpo text-[0.9375rem] text-tinta-2">
+          {result.won ? 'Le ganaste a' : 'Te ganó'} {result.rival}, que se quedó con el{' '}
+          {100 - result.votes}%.
         </p>
       </div>
 

@@ -3,10 +3,11 @@
 import type { CSSProperties } from 'react';
 
 import { computeScore, puntajePorTemporadas } from '@/lib/engine/election';
-import { TITLES, type Club, type Ending, type GameState, type TitleId } from '@/lib/engine/types';
+import type { Club, Ending, GameState, TitleId } from '@/lib/engine/types';
 import { plataCorta } from '@/lib/format';
 import { useTintaClub } from '@/lib/tema';
-import { Ladillo, Volanta } from './ui';
+import { Volanta } from './ui';
+import { GrillaTrofeos } from './grilla-trofeos';
 
 export function ResumenPresidencia({
   state,
@@ -39,9 +40,9 @@ export function ResumenPresidencia({
 
       <div className="mt-7 border-y border-corondel py-4">
         <dl className="grid grid-cols-3 divide-x divide-corondel">
-          <Dato label="Temporadas" valor={String(state.season)} />
-          <Dato label="Títulos" valor={String(state.titles.length)} />
-          <Dato label="Hinchada" valor={String(Math.round(state.resources.hinchada))} />
+          <Dato label="Temporadas" valor={String(state.season)} destacado />
+          <Dato label="Títulos" valor={String(state.titles.length)} destacado />
+          <Dato label="Hinchada" valor={String(Math.round(state.resources.hinchada))} destacado />
         </dl>
         <dl className="mt-4 grid grid-cols-3 divide-x divide-corondel">
           <Dato label="Socios" valor={`${Math.round(state.resources.socios)}k`} />
@@ -53,16 +54,7 @@ export function ResumenPresidencia({
       {porTitulo.size > 0 ? (
         <div className="mt-5">
           <Volanta>Vitrina de esta presidencia</Volanta>
-          <ul className="mt-2 flex flex-wrap gap-2">
-            {[...porTitulo].map(([id, veces]) => (
-              <li key={id}>
-                <Ladillo tono="acento">
-                  {TITLES[id].label}
-                  {veces > 1 && ` ×${veces}`}
-                </Ladillo>
-              </li>
-            ))}
-          </ul>
+          <GrillaTrofeos titulos={porTitulo} />
         </div>
       ) : (
         <p className="mt-5 font-tabla text-[0.75rem] tracking-[0.08em] text-tinta-2 uppercase">
@@ -103,11 +95,23 @@ export function ResumenPresidencia({
   );
 }
 
-function Dato({ label, valor }: { label: string; valor: string }) {
+function Dato({
+  label,
+  valor,
+  destacado = false,
+}: {
+  label: string;
+  valor: string;
+  destacado?: boolean;
+}) {
   return (
     <div className="pl-3 first:pl-0">
       <dt className="font-tabla text-[0.75rem] tracking-[0.08em] text-tinta-2 uppercase">{label}</dt>
-      <dd className="mt-0.5 font-titular text-lg leading-none font-black tabular-nums text-tinta">
+      <dd
+        className={`mt-0.5 font-titular leading-none font-black tabular-nums text-tinta ${
+          destacado ? 'text-[1.75rem]' : 'text-lg'
+        }`}
+      >
         {valor}
       </dd>
     </div>
