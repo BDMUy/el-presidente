@@ -16,6 +16,7 @@ import { INFERIORES } from '@/content/events/inferiores';
 import { LEGADO } from '@/content/events/legado';
 import { VESTUARIO } from '@/content/events/vestuario';
 import type { Condition, GameEvent } from '@/lib/engine/types';
+import { TONO_LABEL } from '@/lib/engine/types';
 import { FaseEvento } from './fase-evento';
 
 interface Frente {
@@ -156,6 +157,7 @@ function Consecuencias({ carta }: { carta: GameEvent }) {
         <div key={i} className="mt-2 first:mt-0">
           <p className="font-tabla text-[0.75rem] tracking-[0.08em] text-tinta-2 uppercase">
             {option.label}
+            {option.tono && ` · ${TONO_LABEL[option.tono]}`}
             {option.requires && ` · ${describirCondicion(option.requires)}`}
           </p>
 

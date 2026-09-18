@@ -12,11 +12,13 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Que hable',
         hint: 'Suele funcionar. Y suele quedar registrado en algún lado.',
+        tono: 'via-turbia',
         effects: { ...SUCIO, plantel: 2, hinchada: 2, influencia: -6 },
       },
       {
         label: 'Decirle que no',
         hint: 'Se juega como se pueda. El viejo toma nota.',
+        tono: 'mano-dura',
         effects: { influencia: -3 },
       },
     ],
@@ -30,16 +32,19 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Firmar los dos',
         hint: 'Sale mucho más barato hoy.',
+        tono: 'via-turbia',
         effects: { ...SUCIO, caja: 0.9, plantel: 2 },
       },
       {
         label: 'Solo el registrado',
         hint: 'Todo en blanco y todo más caro.',
+        tono: 'a-libro-abierto',
         effects: { caja: -1.4, plantel: 3 },
       },
       {
         label: 'Dejar pasar el refuerzo',
         hint: 'Ni plata ni jugador ni problema.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: -3 },
       },
     ],
@@ -54,16 +59,19 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Adjudicarle a esa',
         hint: 'La obra sale igual. La diferencia entra en un sobre.',
+        tono: 'via-turbia',
         effects: { ...SUCIO, caja: 1.3, influencia: -5 },
       },
       {
         label: 'Adjudicar al más barato',
         hint: 'Lo que corresponde. La obra queda igual de fea.',
+        tono: 'mano-dura',
         effects: { caja: -0.9, plantel: 1 },
       },
       {
         label: 'Llamar a licitación pública',
         hint: 'Tarda seis meses y queda impecable.',
+        tono: 'a-libro-abierto',
         effects: { caja: -1.3, hinchada: 4, influencia: 3 },
       },
     ],
@@ -78,11 +86,13 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Que no figure',
         hint: 'Plata que entra y no está en ningún papel.',
+        tono: 'via-turbia',
         effects: { ...SUCIO, caja: 0.9, hinchada: -1 },
       },
       {
         label: 'Poner molinetes y que se cuente todo',
         hint: 'Se termina el negocio de varios. Incluido el tuyo.',
+        tono: 'a-libro-abierto',
         effects: { caja: -1.1, influencia: -6, hinchada: 3 },
       },
     ],
@@ -96,11 +106,13 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Que suban todos',
         hint: 'Nadie lo va a mirar. Hasta que alguien lo mire.',
+        tono: 'via-turbia',
         effects: { ...SUCIO, caja: -0.7, influencia: 2 },
       },
       {
         label: 'Solo la delegación deportiva',
         hint: 'Correcto, y te ganás una tanda de enemigos internos.',
+        tono: 'mano-dura',
         effects: { influencia: -5, caja: 0.3 },
       },
     ],
@@ -115,16 +127,19 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Echarlo',
         hint: 'Se termina el robo. Y veinte años de historia.',
+        tono: 'mano-dura',
         effects: { hinchada: -4, plantel: -1, influencia: 3 },
       },
       {
         label: 'Hablarlo en privado y dejarlo pasar',
         hint: 'Se arregla entre nosotros. Como todo acá.',
+        tono: 'pacto',
         effects: { ...SUCIO, hinchada: 1 },
       },
       {
         label: 'Poner control de inventario',
         hint: 'Cuesta plata y se sabe para qué es.',
+        tono: 'a-libro-abierto',
         effects: { caja: -0.4, influencia: -2, hinchada: 2 },
       },
     ],
@@ -139,11 +154,13 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Contratarlo',
         hint: 'Deja de pegarte mañana mismo.',
+        tono: 'via-turbia',
         effects: { ...SUCIO, caja: -0.6, hinchada: 3, influencia: 1 },
       },
       {
         label: 'No contratarlo',
         hint: 'Te sigue pegando. Al menos es gratis.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: -4 },
       },
     ],
@@ -160,16 +177,19 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Desmentir con un comunicado',
         hint: 'Le das entidad a algo que nadie leyó.',
+        tono: 'a-libro-abierto',
         effects: { hinchada: -6, influencia: -2 },
       },
       {
         label: 'No decir nada',
         hint: 'Se apaga solo. Y queda dando vueltas.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: -4 },
       },
       {
         label: 'Pedirle a un amigo que le baje el volumen',
         hint: 'Un favor más que se debe.',
+        tono: 'pacto',
         effects: { ...SUCIO, influencia: -4 },
       },
     ],
@@ -185,11 +205,13 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Darle la entrevista y bancarse las preguntas',
         hint: 'Dos horas incómodas. Se respeta, y se paga igual.',
+        tono: 'a-libro-abierto',
         effects: { hinchada: -5, influencia: -8 },
       },
       {
         label: 'Mandarle abogados',
         hint: 'Se calla o se agranda. No hay punto medio.',
+        tono: 'mano-dura',
         random: [
           { weight: 45, text: 'La carta documento lo frenó en seco. No volvió a nombrar al club.', effects: { influencia: -6, hinchada: -2 } },
           { weight: 55, text: 'Publicó la carta documento arriba de la nota. Ahora la levantaron todos.', effects: { hinchada: -12, influencia: -8, flagsSuma: { prontuario: 1 } } },
@@ -198,6 +220,7 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Ofrecerle una pauta publicitaria',
         hint: 'Funcionó otras veces. Y esas veces también se supieron.',
+        tono: 'via-turbia',
         effects: { ...SUCIO, caja: -0.9, hinchada: -2 },
       },
     ],
@@ -213,6 +236,7 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Entregar todo',
         hint: 'Lo que encuentren, encontrado está.',
+        tono: 'a-libro-abierto',
         effects: {
           hinchada: -4,
           influencia: -6,
@@ -228,11 +252,13 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Entregar lo que se pueda',
         hint: 'Faltan carpetas. Se nota que faltan.',
+        tono: 'via-turbia',
         effects: { ...SUCIO, hinchada: -6, influencia: -4 },
       },
       {
         label: 'Voltear la comisión revisora',
         hint: 'Cuesta cada teléfono que te queda.',
+        tono: 'mano-dura',
         requires: { minInfluencia: 35 },
         effects: { ...SUCIO, influencia: -22, hinchada: -5 },
       },
@@ -249,16 +275,19 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Dar la cara en conferencia',
         hint: 'Nadie te va a creer. Peor es esconderse.',
+        tono: 'a-libro-abierto',
         effects: { hinchada: -8, influencia: -6 },
       },
       {
         label: 'Silencio y abogados',
         hint: 'Lo que dice tu abogado. Lo que la gente lee es otra cosa.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: -14, caja: -1.2 },
       },
       {
         label: 'Echarle la culpa al tesorero',
         hint: 'Alguien tiene que ser. No sos vos.',
+        tono: 'via-turbia',
         effects: { ...SUCIO, hinchada: -5, influencia: -10 },
       },
     ],
@@ -274,6 +303,7 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Ir a la asamblea y defenderte',
         hint: 'Cara a cara con la gente que te quiere afuera.',
+        tono: 'a-libro-abierto',
         random: [
           { weight: 40, text: 'Hablaste dos horas y te salvaste por poco. Muy poco.', effects: { hinchada: -3, influencia: -14 } },
           { weight: 60, text: 'No te dejaron terminar. Salió en todos lados el video de la silbatina.', effects: { hinchada: -16, influencia: -12 } },
@@ -282,11 +312,13 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Darles lugares en la comisión',
         hint: 'Los que firmaban ahora están adentro. Y adentro se ve todo.',
+        tono: 'pacto',
         effects: { influencia: -12, hinchada: -2 },
       },
       {
         label: 'Comprar las firmas que hagan falta',
         hint: 'La forma más cara y más rápida de seguir.',
+        tono: 'via-turbia',
         requires: { minCaja: 3 },
         effects: { ...SUCIO, caja: -3.2, hinchada: -4, influencia: -8 },
       },
@@ -303,16 +335,19 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Presentarte y colaborar',
         hint: 'Lo único que puede terminar bien. Va a tardar años.',
+        tono: 'a-libro-abierto',
         effects: { hinchada: -6, influencia: -8 },
       },
       {
         label: 'Poner el mejor abogado que exista',
         hint: 'Se puede ganar. Cuesta lo que cuesta.',
+        tono: 'mano-dura',
         effects: { caja: -4.5, hinchada: -4 },
       },
       {
         label: 'Renunciar antes de que sea peor',
         hint: 'Te vas por tu propio pie. No es poco.',
+        tono: 'via-pacifica',
         effects: { hinchada: -10, influencia: -15 },
       },
     ],
@@ -328,17 +363,20 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Aceptar y poner a alguien de confianza',
         hint: 'Salís del cargo y seguís mandando. Eso creés.',
+        tono: 'via-turbia',
         effects: { influencia: -12, hinchada: -8 },
       },
       {
         label: 'Negociar con los que mandan',
         hint: 'Todo lo que te queda, en una llamada.',
+        tono: 'pacto',
         requires: { minInfluencia: 25 },
         effects: { influencia: -25, hinchada: -6 },
       },
       {
         label: 'Ir de frente y pelearla',
         hint: 'Sin teléfonos, con la gente. Puede alcanzar.',
+        tono: 'mano-dura',
         random: [
           { weight: 35, text: 'La hinchada coreó tu nombre durante nueve minutos y la AFA archivó el expediente.', effects: { hinchada: 4, influencia: -6 } },
           { weight: 65, text: 'Te inhabilitaron igual. Firmaste la salida un jueves, sin cámaras.', effects: { hinchada: -20, influencia: -20 } },
@@ -357,17 +395,20 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Aceptar y poner a alguien de confianza',
         hint: 'Salís del cargo y seguís mandando. Eso creés.',
+        tono: 'via-turbia',
         effects: { influencia: -12, hinchada: -8 },
       },
       {
         label: 'Negociar con los que mandan',
         hint: 'Todo lo que te queda, en una llamada.',
+        tono: 'pacto',
         requires: { minInfluencia: 25 },
         effects: { influencia: -25, hinchada: -6 },
       },
       {
         label: 'Ir de frente y pelearla',
         hint: 'Sin teléfonos, con la gente. Puede alcanzar.',
+        tono: 'mano-dura',
         random: [
           { weight: 35, text: 'La hinchada coreó tu nombre durante nueve minutos y la AUF archivó el expediente.', effects: { hinchada: 4, influencia: -6 } },
           { weight: 65, text: 'Te inhabilitaron igual. Firmaste la salida un jueves, sin cámaras.', effects: { hinchada: -20, influencia: -20 } },
@@ -386,17 +427,20 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Aceptar y poner a alguien de confianza',
         hint: 'Salís del cargo y seguís mandando. Eso creés.',
+        tono: 'via-turbia',
         effects: { influencia: -12, hinchada: -8 },
       },
       {
         label: 'Negociar con los que mandan',
         hint: 'Todo lo que te queda, en una llamada.',
+        tono: 'pacto',
         requires: { minInfluencia: 25 },
         effects: { influencia: -25, hinchada: -6 },
       },
       {
         label: 'Ir de frente y pelearla',
         hint: 'Sin teléfonos, con la gente. Puede alcanzar.',
+        tono: 'mano-dura',
         random: [
           { weight: 35, text: 'La hinchada coreó tu nombre durante nueve minutos y la FPF archivó el expediente.', effects: { hinchada: 4, influencia: -6 } },
           { weight: 65, text: 'Te inhabilitaron igual. Firmaste la salida un jueves, sin cámaras.', effects: { hinchada: -20, influencia: -20 } },
@@ -415,17 +459,20 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Aceptar y poner a alguien de confianza',
         hint: 'Salís del cargo y seguís mandando. Eso creés.',
+        tono: 'via-turbia',
         effects: { influencia: -12, hinchada: -8 },
       },
       {
         label: 'Negociar con los que mandan',
         hint: 'Todo lo que te queda, en una llamada.',
+        tono: 'pacto',
         requires: { minInfluencia: 25 },
         effects: { influencia: -25, hinchada: -6 },
       },
       {
         label: 'Ir de frente y pelearla',
         hint: 'Sin teléfonos, con la gente. Puede alcanzar.',
+        tono: 'mano-dura',
         random: [
           { weight: 35, text: 'La hinchada coreó tu nombre durante nueve minutos y la Dimayor archivó el expediente.', effects: { hinchada: 4, influencia: -6 } },
           { weight: 65, text: 'Te inhabilitaron igual. Firmaste la salida un jueves, sin cámaras.', effects: { hinchada: -20, influencia: -20 } },
@@ -444,17 +491,20 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Aceptar y poner a alguien de confianza',
         hint: 'Salís del cargo y seguís mandando. Eso creés.',
+        tono: 'via-turbia',
         effects: { influencia: -12, hinchada: -8 },
       },
       {
         label: 'Negociar con los que mandan',
         hint: 'Todo lo que te queda, en una llamada.',
+        tono: 'pacto',
         requires: { minInfluencia: 25 },
         effects: { influencia: -25, hinchada: -6 },
       },
       {
         label: 'Ir de frente y pelearla',
         hint: 'Sin teléfonos, con la gente. Puede alcanzar.',
+        tono: 'mano-dura',
         random: [
           { weight: 35, text: 'La hinchada coreó tu nombre durante nueve minutos y la ANFP archivó el expediente.', effects: { hinchada: 4, influencia: -6 } },
           { weight: 65, text: 'Te inhabilitaron igual. Firmaste la salida un jueves, sin cámaras.', effects: { hinchada: -20, influencia: -20 } },
@@ -473,17 +523,20 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Aceptar y poner a alguien de confianza',
         hint: 'Salís del cargo y seguís mandando. Eso creés.',
+        tono: 'via-turbia',
         effects: { influencia: -12, hinchada: -8 },
       },
       {
         label: 'Negociar con los que mandan',
         hint: 'Todo lo que te queda, en una llamada.',
+        tono: 'pacto',
         requires: { minInfluencia: 25 },
         effects: { influencia: -25, hinchada: -6 },
       },
       {
         label: 'Ir de frente y pelearla',
         hint: 'Sin teléfonos, con la gente. Puede alcanzar.',
+        tono: 'mano-dura',
         random: [
           { weight: 35, text: 'La hinchada coreó tu nombre durante nueve minutos y la APF archivó el expediente.', effects: { hinchada: 4, influencia: -6 } },
           { weight: 65, text: 'Te inhabilitaron igual. Firmaste la salida un jueves, sin cámaras.', effects: { hinchada: -20, influencia: -20 } },
@@ -502,17 +555,20 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Aceptar y poner a alguien de confianza',
         hint: 'Salís del cargo y seguís mandando. Eso creés.',
+        tono: 'via-turbia',
         effects: { influencia: -12, hinchada: -8 },
       },
       {
         label: 'Negociar con los que mandan',
         hint: 'Todo lo que te queda, en una llamada.',
+        tono: 'pacto',
         requires: { minInfluencia: 25 },
         effects: { influencia: -25, hinchada: -6 },
       },
       {
         label: 'Ir de frente y pelearla',
         hint: 'Sin teléfonos, con la gente. Puede alcanzar.',
+        tono: 'mano-dura',
         random: [
           { weight: 35, text: 'La hinchada coreó tu nombre durante nueve minutos y la FBF archivó el expediente.', effects: { hinchada: 4, influencia: -6 } },
           { weight: 65, text: 'Te inhabilitaron igual. Firmaste la salida un jueves, sin cámaras.', effects: { hinchada: -20, influencia: -20 } },
@@ -531,17 +587,20 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Aceptar y poner a alguien de confianza',
         hint: 'Salís del cargo y seguís mandando. Eso creés.',
+        tono: 'via-turbia',
         effects: { influencia: -12, hinchada: -8 },
       },
       {
         label: 'Negociar con los que mandan',
         hint: 'Todo lo que te queda, en una llamada.',
+        tono: 'pacto',
         requires: { minInfluencia: 25 },
         effects: { influencia: -25, hinchada: -6 },
       },
       {
         label: 'Ir de frente y pelearla',
         hint: 'Sin teléfonos, con la gente. Puede alcanzar.',
+        tono: 'mano-dura',
         random: [
           { weight: 35, text: 'La hinchada coreó tu nombre durante nueve minutos y la LigaPro archivó el expediente.', effects: { hinchada: 4, influencia: -6 } },
           { weight: 65, text: 'Te inhabilitaron igual. Firmaste la salida un jueves, sin cámaras.', effects: { hinchada: -20, influencia: -20 } },
@@ -560,17 +619,20 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Aceptar y poner a alguien de confianza',
         hint: 'Salís del cargo y seguís mandando. Eso creés.',
+        tono: 'via-turbia',
         effects: { influencia: -12, hinchada: -8 },
       },
       {
         label: 'Negociar con los que mandan',
         hint: 'Todo lo que te queda, en una llamada.',
+        tono: 'pacto',
         requires: { minInfluencia: 25 },
         effects: { influencia: -25, hinchada: -6 },
       },
       {
         label: 'Ir de frente y pelearla',
         hint: 'Sin teléfonos, con la gente. Puede alcanzar.',
+        tono: 'mano-dura',
         random: [
           { weight: 35, text: 'La hinchada coreó tu nombre durante nueve minutos y la FVF archivó el expediente.', effects: { hinchada: 4, influencia: -6 } },
           { weight: 65, text: 'Te inhabilitaron igual. Firmaste la salida un jueves, sin cámaras.', effects: { hinchada: -20, influencia: -20 } },
@@ -589,17 +651,20 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Aceptar y poner a alguien de confianza',
         hint: 'Salís del cargo y seguís mandando. Eso creés.',
+        tono: 'via-turbia',
         effects: { influencia: -12, hinchada: -8 },
       },
       {
         label: 'Negociar con los que mandan',
         hint: 'Todo lo que te queda, en una llamada.',
+        tono: 'pacto',
         requires: { minInfluencia: 25 },
         effects: { influencia: -25, hinchada: -6 },
       },
       {
         label: 'Ir de frente y pelearla',
         hint: 'Sin teléfonos, con la gente. Puede alcanzar.',
+        tono: 'mano-dura',
         random: [
           { weight: 35, text: 'La hinchada coreó tu nombre durante nueve minutos y la CBF archivó el expediente.', effects: { hinchada: 4, influencia: -6 } },
           { weight: 65, text: 'Te inhabilitaron igual. Firmaste la salida un jueves, sin cámaras.', effects: { hinchada: -20, influencia: -20 } },
@@ -618,17 +683,20 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Desmentirlo públicamente',
         hint: 'Tu palabra contra la de alguien que tiene papeles.',
+        tono: 'mano-dura',
         effects: { hinchada: -12, influencia: -6 },
       },
       {
         label: 'Arreglar con él por afuera',
         hint: 'Todavía puede desdecirse. Todavía.',
+        tono: 'via-turbia',
         requires: { minCaja: 2 },
         effects: { ...SUCIO, caja: -2.8, hinchada: -4 },
       },
       {
         label: 'Declarar vos también',
         hint: 'Contás todo y arrastrás a varios. Ninguno te lo perdona.',
+        tono: 'a-libro-abierto',
         effects: { hinchada: -18, influencia: -14 },
       },
     ],
@@ -642,11 +710,13 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Firmarla como viene',
         hint: 'Es lo que se hizo siempre. Eso no la hace menos trucha.',
+        tono: 'via-turbia',
         effects: { ...SUCIO, caja: 0.7, influencia: 2 },
       },
       {
         label: 'Pedir los comprobantes reales',
         hint: 'Cortás la costumbre. El tesorero no te lo va a agradecer.',
+        tono: 'a-libro-abierto',
         effects: { caja: -0.3, influencia: 3 },
       },
     ],
@@ -660,11 +730,13 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Mirar para otro lado',
         hint: 'Todos los cargos las revenden un poco. O eso te dicen.',
+        tono: 'patear-para-adelante',
         effects: { ...SUCIO, caja: 0.4, influencia: -2 },
       },
       {
         label: 'Cortarlo de raíz para todos, empezando por vos',
         hint: 'Menos plata en el bolsillo de todos. Más autoridad moral.',
+        tono: 'mano-dura',
         effects: { influencia: 4, hinchada: 2 },
       },
     ],
@@ -678,11 +750,13 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Aceptarlo',
         hint: 'Nadie se va a enterar. Nunca es del todo cierto.',
+        tono: 'via-turbia',
         effects: { ...SUCIO, caja: 1.2, influencia: -3 },
       },
       {
         label: 'Devolverlo y avisar a la comisión',
         hint: 'Incómodo hoy. Un antecedente limpio para siempre.',
+        tono: 'a-libro-abierto',
         effects: { influencia: 5 },
       },
     ],
@@ -697,16 +771,19 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Vendérselo a ese precio',
         hint: 'Entra plata rápido. Sale barato para el que lo compra.',
+        tono: 'via-turbia',
         effects: { ...SUCIO, caja: 2.5, influencia: -5 },
       },
       {
         label: 'Sacarlo a tasación pública',
         hint: 'Tarda más. Entra lo que realmente vale.',
+        tono: 'a-libro-abierto',
         effects: { caja: 1.5, influencia: 3 },
       },
       {
         label: 'No vender nada',
         hint: 'El terreno sigue ahí, sin usarse, sin sumar.',
+        tono: 'patear-para-adelante',
         effects: { influencia: 1 },
       },
     ],
@@ -720,11 +797,13 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Sugerir uno que te debe un favor',
         hint: 'Un torneo que no vale nada, ganado de una manera que sí importa.',
+        tono: 'via-turbia',
         effects: { ...SUCIO, hinchada: 2 },
       },
       {
         label: 'No sugerir a nadie',
         hint: 'Que se arme el fixture como salga.',
+        tono: 'patear-para-adelante',
         effects: { influencia: 1 },
       },
     ],
@@ -738,11 +817,13 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Cerrar la operación',
         hint: 'Un fichaje de papel. Cobra gente que no pisó la cancha.',
+        tono: 'via-turbia',
         effects: { ...SUCIO, caja: -0.3, influencia: -1 },
       },
       {
         label: 'Rechazarla',
         hint: 'Ni jugador de papel, ni comisión repartida.',
+        tono: 'mano-dura',
         effects: { influencia: 2 },
       },
     ],
@@ -756,16 +837,19 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Repartirlo entre los dirigentes, como siempre',
         hint: 'Nadie lo va a mirar. Queda como una costumbre más de la casa.',
+        tono: 'via-turbia',
         effects: { ...SUCIO, influencia: 1 },
       },
       {
         label: 'Devolverlo con una nota agradeciendo',
         hint: 'Corta una práctica de años. Un par de dirigentes te lo van a hacer notar.',
+        tono: 'a-libro-abierto',
         effects: { influencia: -4 },
       },
       {
         label: 'Rifarlo entre los socios y donar lo recaudado',
         hint: 'El gesto queda para afuera. El proveedor entiende el mensaje.',
+        tono: 'pacto',
         effects: { hinchada: 4, influencia: -2, caja: 0.3 },
       },
     ],
@@ -779,16 +863,19 @@ export const CORRUPCION: GameEvent[] = [
       {
         label: 'Que la rifa siga como venía',
         hint: 'Entra una plata que no está en ningún lado. Como el año pasado y el anterior.',
+        tono: 'via-turbia',
         effects: { ...SUCIO, caja: 0.8 },
       },
       {
         label: 'Rifa con escribano y todos los premios entregados',
         hint: 'Impecable y más flaca. El que la manejaba pierde su changa.',
+        tono: 'a-libro-abierto',
         effects: { caja: -0.6, influencia: 3, hinchada: 2 },
       },
       {
         label: 'No hacer más rifa',
         hint: 'Se termina el problema y también el ingreso.',
+        tono: 'mano-dura',
         effects: { hinchada: -2 },
       },
     ],
