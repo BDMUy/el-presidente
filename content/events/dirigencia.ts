@@ -11,6 +11,7 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Votar con ellos',
         hint: 'Te ganás padrinos. Y una deuda de favor.',
+        tono: 'pacto',
         effects: {
           influencia: 14,
           caja: 1.5,
@@ -21,11 +22,13 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Votar en contra',
         hint: 'Independencia. Y una lista de gente que se acuerda.',
+        tono: 'mano-dura',
         effects: { influencia: -10, hinchada: 6 },
       },
       {
         label: 'Faltar a la asamblea',
         hint: 'No quedás bien con nadie, no quedás mal con nadie.',
+        tono: 'patear-para-adelante',
         effects: { influencia: -3 },
       },
     ],
@@ -40,16 +43,19 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Firmar',
         hint: 'Mucha plata. Un sector de los socios va a hacer ruido.',
+        tono: 'via-turbia',
         effects: { caja: 6, hinchada: -7, socios: -2 },
       },
       {
         label: 'Rechazar por principios',
         hint: 'Quedás bien parado y con la mitad de la plata.',
+        tono: 'a-libro-abierto',
         effects: { caja: 2.5, hinchada: 6 },
       },
       {
         label: 'Ponerlo solo en la espalda',
         hint: 'La solución tibia que no conforma del todo a nadie.',
+        tono: 'pacto',
         effects: { caja: 4, hinchada: -2 },
       },
     ],
@@ -64,6 +70,7 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Abrir todo',
         hint: 'Si está limpio, salís fortalecido.',
+        tono: 'a-libro-abierto',
         random: [
           { weight: 60, text: 'No encontraron nada. La transparencia te dio aire político.', effects: { influencia: 12, hinchada: 6 } },
           { weight: 40, text: 'Encontraron gastos que no sabías explicar. Aunque no sean tuyos, llevan tu firma.', effects: { influencia: -14, hinchada: -10 } },
@@ -72,11 +79,13 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Trabar el pedido con formalismos',
         hint: 'Ganás tiempo y confirmás la sospecha.',
+        tono: 'patear-para-adelante',
         effects: { influencia: -6, hinchada: -8, flags: { auditoria_trabada: true } },
       },
       {
         label: 'Negociar con el opositor',
         hint: 'Le das un cargo. Se termina el problema.',
+        tono: 'pacto',
         requires: { minInfluencia: 20 },
         effects: { influencia: -12, caja: -0.8, hinchada: -2 },
       },
@@ -92,16 +101,19 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Vender',
         hint: 'La caja se arregla hoy. Las inferiores se arruinan para siempre.',
+        tono: 'mano-dura',
         effects: { caja: 16, hinchada: -20, deferred: [{ inSeasons: 4, text: 'Sin predio, las inferiores dejaron de producir. Ya no sale nadie de abajo.', effects: { plantel: -8 } }] },
       },
       {
         label: 'No vender',
         hint: 'Lo correcto. Y no resuelve nada de lo urgente.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: 8, influencia: 5 },
       },
       {
         label: 'Alquilar una parte',
         hint: 'Menos plata, menos daño.',
+        tono: 'pacto',
         effects: { caja: 4, hinchada: -5 },
       },
     ],
@@ -115,16 +127,19 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Mandarle una carta documento',
         hint: 'Le das entidad. Se agranda.',
+        tono: 'mano-dura',
         effects: { influencia: -4, hinchada: -3, caja: -0.3 },
       },
       {
         label: 'Ignorarlo',
         hint: 'Se desinfla solo. O no.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: -2 },
       },
       {
         label: 'Pautar publicidad en su programa',
         hint: 'Se compra el silencio. Se paga el silencio.',
+        tono: 'via-turbia',
         effects: { caja: -1.5, influencia: -6, hinchada: 4, flags: { prensa_comprada: true } },
       },
     ],
@@ -139,11 +154,13 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Aceptar',
         hint: 'Entra muchísima plata. Dejás de decidir vos.',
+        tono: 'pacto',
         effects: { caja: 20, influencia: -20, hinchada: -14, flags: { gerenciado: true } },
       },
       {
         label: 'Rechazar de plano',
         hint: 'El club sigue siendo de los socios. Y sigue sin plata.',
+        tono: 'mano-dura',
         effects: { hinchada: 12, influencia: 8 },
       },
     ],
@@ -158,16 +175,19 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Hacer la gestión',
         hint: 'Funciona. Y alguien lo va a saber.',
+        tono: 'via-turbia',
         effects: { influencia: -14, plantel: 3, deferred: [{ inSeasons: 2, text: 'Se filtró la gestión por el árbitro del clásico. Quedaste como el que arregla.', effects: { hinchada: -10, influencia: -8 } }] },
       },
       {
         label: 'Quejarte públicamente',
         hint: 'Le ponés presión al árbitro y quedás como llorón.',
+        tono: 'mano-dura',
         effects: { hinchada: 3, influencia: -5 },
       },
       {
         label: 'No hacer nada',
         hint: 'Que el equipo se arregle solo.',
+        tono: 'patear-para-adelante',
         effects: { influencia: 3 },
       },
     ],
@@ -183,11 +203,13 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Entrar en un plan de pagos',
         hint: 'Duele todos los meses, pero se ordena.',
+        tono: 'a-libro-abierto',
         effects: { caja: -3.5, influencia: 4 },
       },
       {
         label: 'Judicializarla',
         hint: 'Podés ganar tiempo. O perderlo todo con costas.',
+        tono: 'mano-dura',
         random: [
           { weight: 45, text: 'La justicia frenó la ejecución. Ganaste tres años.', effects: { influencia: 6 } },
           { weight: 55, text: 'Perdiste con costas. Ahora es peor que antes.', effects: { caja: -7, influencia: -8 } },
@@ -196,6 +218,7 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Echarle la culpa en público a la gestión anterior',
         hint: 'Políticamente rendidor. No paga la deuda.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: 5, influencia: -3, caja: -1 },
       },
     ],
@@ -210,16 +233,19 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Sacarlo del cargo',
         hint: 'Cortás la interna. Se lleva a su gente con él.',
+        tono: 'mano-dura',
         effects: { influencia: -10, hinchada: -3 },
       },
       {
         label: 'Darle una parcela de poder',
         hint: 'Lo callás dándole lo que quiere. Por ahora.',
+        tono: 'pacto',
         effects: { influencia: -5, caja: -0.8 },
       },
       {
         label: 'Dejarlo hablar',
         hint: 'Si se quema solo, mejor. Si no, ya sabés.',
+        tono: 'patear-para-adelante',
         random: [
           { weight: 45, text: 'Habló de más y la gente lo mandó a callar. Se replegó solo.', effects: { influencia: 8 } },
           { weight: 55, text: 'Le fue creciendo la lista. Ahora tiene estructura propia.', effects: { influencia: -12, hinchada: -4 } },
@@ -237,16 +263,19 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Ir y dar la cara',
         hint: 'Cuatro horas de pie. Se respeta, aunque duela.',
+        tono: 'a-libro-abierto',
         effects: { hinchada: 6, influencia: -4 },
       },
       {
         label: 'Mandar al tesorero',
         hint: 'No te exponés. Tampoco quedás bien.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: -6, influencia: 2 },
       },
       {
         label: 'Suspenderla por un vicio de forma',
         hint: 'Cuesta muchos teléfonos y una fama.',
+        tono: 'via-turbia',
         requires: { minInfluencia: 30 },
         effects: { influencia: -16, hinchada: -8 },
       },
@@ -262,11 +291,13 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Adelantarlas',
         hint: 'Ganás legitimidad. Gastás todo lo que tenías guardado.',
+        tono: 'mano-dura',
         effects: { influencia: -14, hinchada: 10 },
       },
       {
         label: 'Cumplir el mandato como estaba',
         hint: 'Institucional y aburrido. Nadie te lo va a agradecer.',
+        tono: 'a-libro-abierto',
         effects: { influencia: 3 },
       },
     ],
@@ -281,11 +312,13 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Firmar todo, condiciones incluidas',
         hint: 'Entra la plata. También entra alguien que no elegiste.',
+        tono: 'pacto',
         effects: { caja: 4, influencia: -6, flags: { arco_sponsor_a: true } },
       },
       {
         label: 'Firmar solo la plata, no las condiciones',
         hint: 'Menos guita, ninguna silla nueva en la mesa.',
+        tono: 'mano-dura',
         effects: { caja: 1.5, flags: { arco_sponsor_a: true } },
       },
     ],
@@ -301,11 +334,13 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Ficharlo para no perder el contrato',
         hint: 'El sponsor queda contento. El plantel, no tanto.',
+        tono: 'via-pacifica',
         effects: { caja: 3, plantel: -2, influencia: -8, flags: { arco_sponsor_b_cedio: true } },
       },
       {
         label: 'Negarse y arriesgar el contrato',
         hint: 'El plantel lo decidís vos. Puede salir caro.',
+        tono: 'mano-dura',
         effects: { caja: -2, influencia: 6, flags: { arco_sponsor_b_planto: true } },
       },
     ],
@@ -321,11 +356,13 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Aceptar el nuevo trato tal cual viene',
         hint: 'Menos plata, cero dolores de cabeza.',
+        tono: 'via-pacifica',
         effects: { caja: -1, influencia: 4 },
       },
       {
         label: 'Salir a buscar uno más grande',
         hint: 'Puede tardar. Puede no aparecer.',
+        tono: 'mano-dura',
         effects: { caja: -2, influencia: 2, hinchada: 3 },
       },
     ],
@@ -341,11 +378,13 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Cortar el vínculo con el sponsor',
         hint: 'Se pierde la plata. Se recupera el club.',
+        tono: 'mano-dura',
         effects: { caja: -3, influencia: 6 },
       },
       {
         label: 'Aguantar hasta que termine el contrato',
         hint: 'Menos ruido ahora. El jugador sigue sin rendir.',
+        tono: 'patear-para-adelante',
         effects: { influencia: -5, plantel: -1 },
       },
     ],
@@ -360,11 +399,13 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Salir a explicar públicamente qué pasó',
         hint: 'Controlás el relato. También lo alimentás.',
+        tono: 'a-libro-abierto',
         effects: { influencia: 2, hinchada: -2 },
       },
       {
         label: 'No hacer declaraciones',
         hint: 'El silencio deja que cada uno complete la historia como quiera.',
+        tono: 'patear-para-adelante',
         effects: { influencia: -3 },
       },
     ],
@@ -378,11 +419,13 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Ir',
         hint: 'Contactos que después sirven. Tres días sin estar encima de nada.',
+        tono: 'pacto',
         effects: { influencia: 5, caja: -0.3 },
       },
       {
         label: 'Mandar a alguien de tu confianza',
         hint: 'Menos foto para vos. Alguien más gana peso propio.',
+        tono: 'patear-para-adelante',
         effects: { influencia: 1 },
       },
     ],
@@ -396,11 +439,13 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Entregar todo lo pedido',
         hint: 'Transparencia total. También munición, si algo no cierra del todo.',
+        tono: 'a-libro-abierto',
         effects: { influencia: 4, caja: -0.2 },
       },
       {
         label: 'Entregar lo mínimo que exige el estatuto',
         hint: 'Cumplís la letra. La sospecha queda igual, o peor.',
+        tono: 'via-turbia',
         effects: { influencia: -2 },
       },
     ],
@@ -415,11 +460,13 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Darle un rol de peso para tenerlo cerca',
         hint: 'Lo sumás adentro. También le das más para mostrar.',
+        tono: 'pacto',
         effects: { influencia: -3, plantel: 1 },
       },
       {
         label: 'Marcarle la cancha en privado',
         hint: 'Directo. Puede ordenarlo o puede acelerar la ruptura.',
+        tono: 'mano-dura',
         effects: { influencia: 3, hinchada: -1 },
       },
     ],
@@ -435,16 +482,19 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Prometer que nunca se vende a un pibe de inferiores',
         hint: 'Se aplaude fuerte. Y queda en video.',
+        tono: 'via-pacifica',
         effects: { hinchada: 6, flags: { arco_promesa_1: true } },
       },
       {
         label: 'Prometer el club sin deudas en cuatro años',
         hint: 'Suena a gestión seria. El que lo filma sabe contar.',
+        tono: 'a-libro-abierto',
         effects: { hinchada: 4, influencia: 2, flags: { arco_promesa_1: true } },
       },
       {
         label: 'Prometer solo una gestión sin sorpresas',
         hint: 'Lo más prudente que se puede decir con un micrófono en la mano. Quedó dicho igual.',
+        tono: 'patear-para-adelante',
         effects: { influencia: 3, flags: { arco_promesa_1: true } },
       },
     ],
@@ -460,16 +510,19 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Explicar en conferencia qué cambió y por qué',
         hint: 'Argumento razonable contra un video de veinte segundos.',
+        tono: 'a-libro-abierto',
         effects: { hinchada: -4, influencia: 3 },
       },
       {
         label: 'Ratificar la promesa y jurar cumplirla antes de irte',
         hint: 'Volvés a atarte a algo. El reloj corre más rápido que vos.',
+        tono: 'mano-dura',
         effects: { hinchada: 5, influencia: -3 },
       },
       {
         label: 'No decir nada y dejar que pase',
         hint: 'En una semana hay otro tema. La promesa queda flotando.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: -2 },
       },
     ],
@@ -485,11 +538,13 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Reconocer lo que no se cumplió, sin vueltas',
         hint: 'Cierra mejor de lo que parece. Nadie esperaba que lo dijeras.',
+        tono: 'a-libro-abierto',
         effects: { hinchada: 6, influencia: 4 },
       },
       {
         label: 'Enumerar todo lo otro que sí se hizo',
         hint: 'Defensa sólida. También suena a que esquivaste la pregunta.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: 1, influencia: 2 },
       },
     ],
@@ -503,11 +558,13 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Pagarla y no hacer ruido',
         hint: 'Se termina rápido. Duele en la caja.',
+        tono: 'via-pacifica',
         effects: { caja: -1.6 },
       },
       {
         label: 'Apelar punto por punto',
         hint: 'Se puede bajar. También se puede quedar peor por insistir.',
+        tono: 'mano-dura',
         random: [
           { weight: 50, text: 'Bajaron la multa a la mitad y quedó un antecedente a favor.', effects: { caja: -0.7, influencia: 2 } },
           { weight: 50, text: 'Ratificaron todo y sumaron costas por hacerles perder el tiempo.', effects: { caja: -2.3, influencia: -3 } },
@@ -516,6 +573,7 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Pagar y salir a cruzar a la federación en los medios',
         hint: 'La gente te acompaña. Arriba te lo anotan.',
+        tono: 'a-libro-abierto',
         effects: { caja: -1.6, hinchada: 4, influencia: -5 },
       },
     ],
@@ -529,16 +587,19 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Alquilar el salón como a cualquiera',
         hint: 'Entra plata. Al club lo van a asociar con ese cartel igual.',
+        tono: 'pacto',
         effects: { caja: 1.4, hinchada: -4, influencia: -2 },
       },
       {
         label: 'Decir que no y aclararlo por escrito',
         hint: 'El club queda afuera del barro. El que pidió se acuerda.',
+        tono: 'mano-dura',
         effects: { influencia: -3, hinchada: 3 },
       },
       {
         label: 'Ofrecer el salón a todos los espacios por igual',
         hint: 'Prolijo y trabajoso. Nadie queda afuera, nadie del todo contento.',
+        tono: 'a-libro-abierto',
         effects: { caja: 0.6, influencia: 2 },
       },
     ],
@@ -552,16 +613,19 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Poner el audio completo en contexto',
         hint: 'La versión entera es menos jugosa. No todos van a escucharla.',
+        tono: 'a-libro-abierto',
         effects: { influencia: 1, hinchada: -2 },
       },
       {
         label: 'Buscar puertas adentro quién grabó',
         hint: 'Podés encontrar al que filtró. Mientras tanto, la reunión se enfría.',
+        tono: 'mano-dura',
         effects: { influencia: -2, plantel: -1 },
       },
       {
         label: 'No decir nada y que pase',
         hint: 'En una semana hay otro tema. Puede que este no.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: -3 },
       },
     ],
@@ -575,16 +639,19 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Implementarlo para la próxima asamblea',
         hint: 'Más ágil y prolijo. La sospecha va a estar igual en la sala.',
+        tono: 'a-libro-abierto',
         effects: { caja: -0.6, influencia: 3, hinchada: -2 },
       },
       {
         label: 'Dejar el sistema de siempre',
         hint: 'Nadie puede acusarte de nada. Y son doce horas de conteo.',
+        tono: 'patear-para-adelante',
         effects: { influencia: -1 },
       },
       {
         label: 'Probarlo con auditoría de las dos listas',
         hint: 'Cuesta más y baja el ruido. La oposición firma o queda expuesta.',
+        tono: 'pacto',
         effects: { caja: -1, influencia: 4 },
       },
     ],
@@ -598,16 +665,19 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Salir a desmentir con un comunicado firme',
         hint: 'Calma al vestuario esta semana. Si después vendés a alguno, quedás pegado.',
+        tono: 'mano-dura',
         effects: { hinchada: 3, plantel: 2, influencia: -2 },
       },
       {
         label: 'No confirmar ni desmentir nada',
         hint: 'No te atás a nada. El rumor sigue creciendo solo.',
+        tono: 'patear-para-adelante',
         effects: { plantel: -3, hinchada: -2 },
       },
       {
         label: 'Bajar al vestuario a mostrar los números',
         hint: 'La transparencia los calma. También los deja ver que el club está corto.',
+        tono: 'a-libro-abierto',
         effects: { plantel: 3, hinchada: -1, influencia: -1 },
       },
     ],
@@ -621,16 +691,19 @@ export const DIRIGENCIA: GameEvent[] = [
       {
         label: 'Sentarse a negociar una recomposición',
         hint: 'Se destraba el domingo. Es más plata fija todos los meses.',
+        tono: 'pacto',
         effects: { caja: -1.4, influencia: 2 },
       },
       {
         label: 'Contratar una empresa tercerizada para el partido',
         hint: 'El domingo se juega. Adentro queda un clima que no se arregla con eso.',
+        tono: 'mano-dura',
         effects: { caja: -0.8, influencia: -4, hinchada: -2 },
       },
       {
         label: 'Pedirles que aguanten una fecha más',
         hint: 'Ganás una semana. Y algo de bronca acumulada.',
+        tono: 'patear-para-adelante',
         effects: { influencia: -2, hinchada: -2 },
       },
     ],

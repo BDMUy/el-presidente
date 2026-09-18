@@ -12,11 +12,13 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Echarlo',
         hint: 'Pagás la indemnización y traés a otro. Reinicio total.',
+        tono: 'mano-dura',
         effects: { caja: -2.5, plantel: -3, hinchada: 4 },
       },
       {
         label: 'Bancarlo en público',
         hint: 'Si se recupera, sos un visionario. Si no, caés con él.',
+        tono: 'via-pacifica',
         random: [
           { weight: 45, text: 'El equipo reaccionó. Salir a bancarlo fue lo que necesitaba.', effects: { plantel: 5, hinchada: 8, influencia: 6 } },
           { weight: 55, text: 'Siguió perdiendo. Ahora sos vos el que no tiene salida.', effects: { hinchada: -12, influencia: -8 } },
@@ -33,16 +35,19 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Renovarlo',
         hint: 'La gente lo festeja. El plantel se envejece.',
+        tono: 'via-pacifica',
         effects: { caja: -1.8, hinchada: 9, plantel: -2 },
       },
       {
         label: 'Dejarlo libre',
         hint: 'Decisión fría y correcta. Te la van a cobrar igual.',
+        tono: 'mano-dura',
         effects: { hinchada: -13, plantel: -1, caja: 0.5 },
       },
       {
         label: 'Ofrecerle un año y puesto de dirigente',
         hint: 'Cuesta influencia convencerlo, pero cierra bien.',
+        tono: 'pacto',
         requires: { minInfluencia: 25 },
         effects: { influencia: -12, hinchada: 5, caja: -0.6 },
       },
@@ -57,6 +62,7 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Que debute ya',
         hint: 'Si explota, es tuyo. Si se quema, lo quemaste vos.',
+        tono: 'via-pacifica',
         random: [
           { weight: 55, text: 'Debutó y metió dos. El estadio coreó su nombre.', effects: { plantel: 6, hinchada: 12, caja: 0.5 } },
           { weight: 45, text: 'Se lo comió la presión. Volvió a reserva sin confianza.', effects: { plantel: -1, hinchada: -4 } },
@@ -65,11 +71,13 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Venderlo ahora',
         hint: 'Plata fresca, y la gente nunca te lo perdona.',
+        tono: 'mano-dura',
         effects: { caja: 7, hinchada: -18, plantel: -2 },
       },
       {
         label: 'Dejarlo madurar',
         hint: 'Lo correcto. Aburrido, pero correcto.',
+        tono: 'patear-para-adelante',
         effects: { plantel: 2, flags: { pibe_madurando: true } },
       },
     ],
@@ -85,16 +93,19 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Pagar como sea',
         hint: 'Te endeudás más, pero el vestuario queda tranquilo.',
+        tono: 'via-pacifica',
         effects: { caja: -4, plantel: 2 },
       },
       {
         label: 'Pedirles que aguanten',
         hint: 'Ganás tiempo. El equipo juega como si no le importara.',
+        tono: 'patear-para-adelante',
         effects: { plantel: -6, hinchada: -4 },
       },
       {
         label: 'Adelantar plata de un sponsor',
         hint: 'Si el sponsor acepta, zafás. Si no, se filtra todo.',
+        tono: 'pacto',
         random: [
           { weight: 60, text: 'El sponsor adelantó el año. Zafaste por poco.', effects: { caja: 3, influencia: -6 } },
           { weight: 40, text: 'El sponsor dijo que no y alguien filtró la charla. Papelón.', effects: { hinchada: -9, influencia: -8, plantel: -4 } },
@@ -112,16 +123,19 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Multar a los dos y cerrarlo puertas adentro',
         hint: 'Autoridad. El vestuario se ordena, la prensa igual se entera.',
+        tono: 'mano-dura',
         effects: { plantel: 1, hinchada: -3, influencia: 3 },
       },
       {
         label: 'Vender al nueve',
         hint: 'Entra plata, se va el goleador.',
+        tono: 'pacto',
         effects: { caja: 5, plantel: -7, hinchada: -6 },
       },
       {
         label: 'Hacer de cuenta que no pasó',
         hint: 'O se olvida, o el video sale el domingo.',
+        tono: 'patear-para-adelante',
         random: [
           { weight: 50, text: 'No salió nunca. Alguien cobró por no publicarlo.', effects: { caja: -1, influencia: -4 } },
           { weight: 50, text: 'Salió en todos lados. Quedaron como una manga de improvisados.', effects: { hinchada: -10, plantel: -3, influencia: -6 } },
@@ -140,16 +154,19 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Venderlo',
         hint: 'Salva el año económico. Se cae el equipo en el peor momento.',
+        tono: 'mano-dura',
         effects: { caja: 11, plantel: -9, hinchada: -15 },
       },
       {
         label: 'Rechazarla',
         hint: 'La gente te aplaude de pie. El jugador se va libre en un año.',
+        tono: 'via-pacifica',
         effects: { hinchada: 14, deferred: [{ inSeasons: 2, text: 'Se fue libre, como estaba cantado. No entró un peso.', effects: { plantel: -8, caja: 0 } }] },
       },
       {
         label: 'Venderlo con recompra',
         hint: 'Menos plata ahora, y una carta para más adelante.',
+        tono: 'pacto',
         requires: { minInfluencia: 30 },
         effects: { caja: 7, plantel: -9, hinchada: -6, influencia: -8, flags: { recompra: true } },
       },
@@ -166,11 +183,13 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Operarlo con el mejor médico del país',
         hint: 'Caro. Vuelve entero.',
+        tono: 'via-pacifica',
         effects: { caja: -1.5, plantel: -4 },
       },
       {
         label: 'Tratamiento conservador',
         hint: 'Barato. Puede volver mal.',
+        tono: 'patear-para-adelante',
         random: [
           { weight: 45, text: 'Volvió bien y antes de lo previsto. Sale barato ser prudente.', effects: { plantel: -2 } },
           { weight: 55, text: 'Recayó. No volvió a ser el mismo jugador.', effects: { plantel: -8, hinchada: -5 } },
@@ -188,16 +207,19 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Bancarlo públicamente',
         hint: 'Le baja la presión. La gente te lo suma a tu cuenta.',
+        tono: 'via-pacifica',
         effects: { plantel: 2, hinchada: -5 },
       },
       {
         label: 'Rescindirle el contrato',
         hint: 'Admitís el error y pagás por admitirlo.',
+        tono: 'a-libro-abierto',
         effects: { caja: -2, plantel: -2, hinchada: 3 },
       },
       {
         label: 'Prestarlo al ascenso',
         hint: 'Se lo saca de encima sin pagar todo.',
+        tono: 'pacto',
         effects: { caja: -0.5, plantel: -1, hinchada: 1 },
       },
     ],
@@ -212,16 +234,19 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Rescindirle el contrato',
         hint: 'Se va contento y caro. El vestuario toma nota.',
+        tono: 'mano-dura',
         effects: { caja: -2.2, plantel: -1, hinchada: -3 },
       },
       {
         label: 'Dejarlo entrenar aparte',
         hint: 'No cuesta un peso hoy. Cuesta después.',
+        tono: 'patear-para-adelante',
         effects: { plantel: -4, hinchada: -2, influencia: -3 },
       },
       {
         label: 'Bancarlo y decirle al DT que lo use',
         hint: 'El plantel te lo agradece. El técnico, no.',
+        tono: 'via-pacifica',
         effects: { plantel: -2, hinchada: 4, influencia: -4 },
       },
     ],
@@ -235,6 +260,7 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Doble turno',
         hint: 'Llegan mejor. Alguno se rompe en el camino.',
+        tono: 'mano-dura',
         random: [
           { weight: 55, text: 'Llegaron enteros y se notó: el equipo corre más que nadie.', effects: { plantel: 7, hinchada: 3 } },
           { weight: 45, text: 'Tres desgarros en cinco fechas. Medio plantel mirando desde afuera.', effects: { plantel: -6, hinchada: -4 } },
@@ -243,6 +269,7 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Carga normal',
         hint: 'Nadie se rompe. Nadie mejora tampoco.',
+        tono: 'via-pacifica',
         effects: { plantel: 1 },
       },
     ],
@@ -256,11 +283,13 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Multarlo y sentarlo en la tribuna',
         hint: 'Disciplina. Y un vestuario que se calla por miedo.',
+        tono: 'mano-dura',
         effects: { plantel: -2, influencia: 4, hinchada: -2 },
       },
       {
         label: 'Ponerlo de titular el domingo',
         hint: 'Nadie lo vio venir. Puede salir cualquier cosa.',
+        tono: 'via-pacifica',
         random: [
           { weight: 40, text: 'Atajó todo. La cancha coreó su nombre y el titular no dijo una palabra.', effects: { plantel: 3, hinchada: 8 } },
           { weight: 60, text: 'Le hicieron tres. Volvió al banco y esta vez no habló más.', effects: { plantel: -2, hinchada: -5 } },
@@ -269,6 +298,7 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Hacer como que no pasó nada',
         hint: 'En dos días se olvida. O no.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: -1, influencia: -2 },
       },
     ],
@@ -283,11 +313,13 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'El más veterano del plantel',
         hint: 'Autoridad garantizada. Cero sorpresas.',
+        tono: 'via-pacifica',
         effects: { plantel: 1, influencia: 2 },
       },
       {
         label: 'El más joven con carácter',
         hint: 'Mensaje claro puertas adentro. No todos lo bancan.',
+        tono: 'mano-dura',
         effects: { plantel: 2, hinchada: 3 },
       },
     ],
@@ -302,11 +334,13 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Confiar en lo que muestra la cancha',
         hint: 'Un partido no es una temporada. Pero algo dice.',
+        tono: 'a-libro-abierto',
         effects: { plantel: 2 },
       },
       {
         label: 'Confiar en lo que dice el DT',
         hint: 'Él los ve todos los días. Vos ves uno.',
+        tono: 'pacto',
         effects: { plantel: 1, influencia: 1 },
       },
     ],
@@ -320,6 +354,7 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Hablarlo con él en privado',
         hint: 'Puede tomarlo bien. Puede no tomarlo nada bien.',
+        tono: 'pacto',
         random: [
           { weight: 55, text: 'Lo tomó bien. Volvió a entrenar como antes.', effects: { plantel: 3, hinchada: 2 } },
           { weight: 45, text: 'Se ofendió. Rindió peor las siguientes fechas.', effects: { plantel: -2, hinchada: -1 } },
@@ -328,6 +363,7 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'No decir nada mientras siga metiendo goles',
         hint: 'Funciona hasta que deja de funcionar.',
+        tono: 'patear-para-adelante',
         effects: { plantel: -1, hinchada: 1 },
       },
     ],
@@ -341,11 +377,13 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Ir y quedarte un rato',
         hint: 'Bajás a tierra. Algunos lo valoran, otros lo ven raro.',
+        tono: 'via-pacifica',
         effects: { hinchada: 1, influencia: 1, plantel: 1 },
       },
       {
         label: 'Mandar un regalo y no ir',
         hint: 'Correcto y distante, como casi todo lo tuyo con ellos.',
+        tono: 'patear-para-adelante',
         effects: { caja: -0.2 },
       },
     ],
@@ -359,11 +397,13 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Cultivar esa relación en privado',
         hint: 'Un canal informal que puede valer más que cualquier reunión.',
+        tono: 'pacto',
         effects: { plantel: 2, influencia: -1 },
       },
       {
         label: 'Ignorarlo y tratar a todos por igual',
         hint: 'Correcto en el papel. Más difícil en la práctica.',
+        tono: 'a-libro-abierto',
         effects: { plantel: -1, influencia: 1 },
       },
     ],
@@ -377,11 +417,13 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Dársela al nuevo',
         hint: 'Mensaje claro sobre quién manda hoy en la cancha.',
+        tono: 'mano-dura',
         effects: { plantel: 1, hinchada: -2 },
       },
       {
         label: 'Que se la quede el de siempre',
         hint: 'Respeta lo ganado. El nuevo empieza con un sabor amargo.',
+        tono: 'via-pacifica',
         effects: { hinchada: 1 },
       },
     ],
@@ -396,11 +438,13 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Bancar el cambio de menú',
         hint: 'A la ciencia le cuesta entrar a un vestuario acostumbrado a otra cosa.',
+        tono: 'mano-dura',
         effects: { caja: -0.4, plantel: 2 },
       },
       {
         label: 'Mantener el menú de siempre',
         hint: 'Nadie se queja. Tampoco cambia nada.',
+        tono: 'patear-para-adelante',
         effects: { plantel: -1 },
       },
     ],
@@ -416,11 +460,13 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Bancar en serio el discurso de los tres años',
         hint: 'Si sale, la idea lleva tu firma. Si no, también.',
+        tono: 'mano-dura',
         effects: { hinchada: 4, influencia: -2, flags: { arco_dt_1: true } },
       },
       {
         label: 'Firmarle un año con opción y no atarte tanto',
         hint: 'Menos épica en la presentación. Más margen en marzo.',
+        tono: 'pacto',
         effects: { influencia: 2, flags: { arco_dt_1: true } },
       },
     ],
@@ -436,11 +482,13 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Salir a bancarlo de nuevo, con la cara',
         hint: 'Doblás la apuesta en público. No hay tercera conferencia para esto.',
+        tono: 'a-libro-abierto',
         effects: { hinchada: -3, influencia: -2, flags: { arco_dt_banco: true } },
       },
       {
         label: 'Agradecerle y cerrar el proyecto',
         hint: 'Pagás la indemnización y te comés el yo lo presenté.',
+        tono: 'mano-dura',
         effects: { caja: -2, plantel: -2, hinchada: 3, flags: { arco_dt_ruptura: true } },
       },
     ],
@@ -456,11 +504,13 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Renovarlo por tres años sin cláusulas raras',
         hint: 'Se lo ganó. Los grandes ya preguntan por él.',
+        tono: 'a-libro-abierto',
         effects: { hinchada: 10, influencia: 6, caja: -1 },
       },
       {
         label: 'Festejar el título y dejar la renovación para más adelante',
         hint: 'Te ahorrás la charla incómoda. Alguno la lee como desconfianza.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: 6, influencia: 2 },
       },
     ],
@@ -476,11 +526,13 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Admitir que la idea era buena y el momento malo',
         hint: 'Honestidad que no cambia la tabla, pero se agradece.',
+        tono: 'a-libro-abierto',
         effects: { hinchada: 3, influencia: 2 },
       },
       {
         label: 'Defender la decisión y mirar para adelante',
         hint: 'Cada gol de ellos te lo van a poner en la cuenta igual.',
+        tono: 'mano-dura',
         effects: { influencia: 1, hinchada: -2 },
       },
     ],
@@ -496,11 +548,13 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Contestar que no está en venta y cortar ahí',
         hint: 'Corto y claro. Ellos tienen tiempo y vos un solo jugador así.',
+        tono: 'mano-dura',
         effects: { influencia: 2, flags: { arco_figura_1: true } },
       },
       {
         label: 'Escuchar hasta dónde llegan, sin comprometerse',
         hint: 'Saber el número no cuesta nada. O cuesta, si se filtra.',
+        tono: 'pacto',
         effects: { hinchada: -2, flags: { arco_figura_1: true } },
       },
     ],
@@ -516,16 +570,19 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Venderlo ahora, con la cifra en la mesa',
         hint: 'La plata ordena el club por años. La platea tarda en entenderlo.',
+        tono: 'mano-dura',
         effects: { caja: 10, plantel: -8, hinchada: -10, flags: { arco_figura_2: true } },
       },
       {
         label: 'Rechazar y renovarle con una cláusula más alta',
         hint: 'Se queda un año más, caro. El grande vuelve en junio.',
+        tono: 'via-pacifica',
         effects: { caja: -2, hinchada: 8, influencia: -3, flags: { arco_figura_2: true } },
       },
       {
         label: 'Decirle que se queda esta temporada y después se habla',
         hint: 'Ganás seis meses. El jugador juega pensando en otra cosa.',
+        tono: 'patear-para-adelante',
         effects: { plantel: -3, hinchada: 2, flags: { arco_figura_2: true } },
       },
     ],
@@ -541,11 +598,13 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Venderlo por lo que haya',
         hint: 'Menos de lo que valía. Más que cero, que es lo que entra si se va libre.',
+        tono: 'mano-dura',
         effects: { caja: 5, plantel: -7, hinchada: -6 },
       },
       {
         label: 'Retenerlo hasta que se le termine el contrato',
         hint: 'La gente lo disfruta un año más. La caja no ve un peso.',
+        tono: 'via-pacifica',
         effects: { hinchada: 6, plantel: 1, deferred: [{ inSeasons: 2, text: 'Tu figura se fue libre al grande, sin dejar un peso. Estaba cantado.', effects: { plantel: -6, hinchada: -3 } }] },
       },
     ],
@@ -559,16 +618,19 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Respaldar al DT y multar al jugador',
         hint: 'Ordena el vestuario. El jugador y su representante toman nota.',
+        tono: 'mano-dura',
         effects: { plantel: -2, influencia: 3, hinchada: 1 },
       },
       {
         label: 'Bajar un cambio y arreglarlo puertas adentro',
         hint: 'Se apaga el incendio de hoy. Nadie queda del todo conforme.',
+        tono: 'pacto',
         effects: { plantel: 1, influencia: -2 },
       },
       {
         label: 'Ponerlo en la lista de transferibles',
         hint: 'Mensaje claro. Y un titular menos si nadie lo compra.',
+        tono: 'patear-para-adelante',
         effects: { plantel: -3, hinchada: -2 },
       },
     ],
@@ -582,16 +644,19 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Rescindirle y cortar por lo sano',
         hint: 'Se va un sueldo alto y una apuesta que no salió.',
+        tono: 'mano-dura',
         effects: { caja: -1.5, plantel: -3, hinchada: -2 },
       },
       {
         label: 'Pagarle el pasaje a la familia y darle tiempo',
         hint: 'Un gasto chico contra la chance de recuperar la inversión.',
+        tono: 'via-pacifica',
         effects: { caja: -0.6, plantel: 2, hinchada: 1 },
       },
       {
         label: 'Prestarlo a un club de su país',
         hint: 'No cobrás el préstamo entero y te sacás el sueldo de encima.',
+        tono: 'pacto',
         effects: { caja: -0.4, plantel: -2 },
       },
     ],
@@ -605,11 +670,13 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Multarlos y hacerlo público',
         hint: 'La gente pide un gesto. El vestuario se ordena por miedo.',
+        tono: 'mano-dura',
         effects: { plantel: -1, hinchada: 3, influencia: 2 },
       },
       {
         label: 'Resolverlo adentro sin comunicados',
         hint: 'No le das aire al tema. Alguno lo lee como que no pasó nada.',
+        tono: 'pacto',
         random: [
           { weight: 55, text: 'En una semana nadie se acordaba. El clásico lo taparon con un buen partido.', effects: { plantel: 1, hinchada: 1 } },
           { weight: 45, text: 'Perdieron el clásico y el video volvió a circular con otra intención.', effects: { hinchada: -6, plantel: -2 } },
@@ -626,11 +693,13 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Jugar con los pibes de la reserva',
         hint: 'Los titulares descansan. El resultado del fin de semana es una incógnita.',
+        tono: 'via-pacifica',
         effects: { plantel: -2, hinchada: -1 },
       },
       {
         label: 'Ponerlos apenas bajan del avión',
         hint: 'El once de siempre, fundido y con el cuerpo en otro huso horario.',
+        tono: 'mano-dura',
         random: [
           { weight: 50, text: 'Aguantaron con lo justo y sacaron un empate que servía.', effects: { plantel: -1 } },
           { weight: 50, text: 'Se quedaron sin piernas a los sesenta y lo perdieron sobre la hora.', effects: { plantel: -3, hinchada: -4 } },
@@ -639,6 +708,7 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Pedir la postergación con informe médico',
         hint: 'Cuesta gestión y buena voluntad ajena.',
+        tono: 'pacto',
         effects: { influencia: -4, plantel: 1 },
       },
     ],
@@ -652,16 +722,19 @@ export const VESTUARIO: GameEvent[] = [
       {
         label: 'Bancarle el micro veinte horas cada viaje',
         hint: 'Llega molido a la mitad de los partidos de visitante.',
+        tono: 'via-pacifica',
         effects: { caja: -0.5, plantel: -1 },
       },
       {
         label: 'Pagarle sesiones con un especialista',
         hint: 'Puede resolverse. Lleva su tiempo.',
+        tono: 'pacto',
         effects: { caja: -0.4, plantel: 1 },
       },
       {
         label: 'Decirle que viaja como todos o no juega',
         hint: 'Autoridad. Y un titular que capaz no está el domingo.',
+        tono: 'mano-dura',
         effects: { plantel: -2, influencia: 2 },
       },
     ],

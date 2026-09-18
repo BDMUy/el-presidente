@@ -11,6 +11,7 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Darles lo que piden',
         hint: 'Paz social comprada. Vuelven en seis meses por más.',
+        tono: 'via-pacifica',
         effects: {
           caja: -1.5,
           influencia: -5,
@@ -22,6 +23,7 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Negarles todo',
         hint: 'Dignidad. Y un problema que no se resuelve solo.',
+        tono: 'mano-dura',
         random: [
           { weight: 40, text: 'Se fueron puteando y no pasó nada más. A veces alcanza con plantarse.', effects: { influencia: 8, hinchada: 2 } },
           { weight: 60, text: 'Al domingo siguiente colgaron un trapo pidiendo tu renuncia. Y bajaron a la platea.', effects: { hinchada: -11, influencia: -6 } },
@@ -30,6 +32,7 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Meterlos en el club como "seguridad"',
         hint: 'Los controlás. Ahora son parte de la estructura.',
+        tono: 'via-turbia',
         effects: { caja: -0.8, influencia: -10, hinchada: 5, flags: { barra_adentro: true }, flagsSuma: { prontuario: 2 }, deferred: [{ inSeasons: 3, text: 'La barra que metiste adentro ya maneja la puerta del estadio. Y no te consulta.', effects: { influencia: -12, hinchada: -8 } }] },
       },
     ],
@@ -44,16 +47,19 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Aumentarla fuerte',
         hint: 'Entra plata. Se van socios y los que quedan te odian.',
+        tono: 'mano-dura',
         effects: { caja: 3, socios: -6, hinchada: -8 },
       },
       {
         label: 'Aumento mínimo',
         hint: 'No alcanza para nada, pero nadie se queja.',
+        tono: 'patear-para-adelante',
         effects: { caja: 0.8, socios: -1 },
       },
       {
         label: 'Congelarla y salir a buscar socios nuevos',
         hint: 'Apuesta a volumen. Cuesta ahora, rinde después.',
+        tono: 'a-libro-abierto',
         effects: { caja: -1.2, socios: 5, hinchada: 6 },
       },
     ],
@@ -68,6 +74,7 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Salir a dar la cara en conferencia',
         hint: 'Puede calmar las aguas o ser gasolina.',
+        tono: 'a-libro-abierto',
         random: [
           { weight: 50, text: 'Diste la cara y la gente lo valoró. No te salvó, pero frenó la caída.', effects: { hinchada: 7, influencia: 4 } },
           { weight: 50, text: 'Te trabaste, te contradijiste y el video circuló todo el día.', effects: { hinchada: -8, influencia: -5 } },
@@ -76,11 +83,13 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Silencio de radio',
         hint: 'No alimentás el incendio. Tampoco lo apagás.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: -3 },
       },
       {
         label: 'Anunciar refuerzos que todavía no cerraste',
         hint: 'Ganás dos semanas. Después hay que cumplir.',
+        tono: 'via-turbia',
         effects: { hinchada: 9, deferred: [{ inSeasons: 1, text: 'Los refuerzos que anunciaste nunca llegaron. La gente se acuerda de todo.', effects: { hinchada: -14, influencia: -8 } }] },
       },
     ],
@@ -94,11 +103,13 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Abrirle el estadio',
         hint: 'La gente no se va a olvidar de esto.',
+        tono: 'via-pacifica',
         effects: { hinchada: 8, caja: -0.2 },
       },
       {
         label: 'Un minuto de silencio y nada más',
         hint: 'Protocolar. Correcto. Frío.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: -2 },
       },
     ],
@@ -112,16 +123,19 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Sorteo entre socios al día',
         hint: 'Justo, transparente y deja cuatro mil enojados.',
+        tono: 'a-libro-abierto',
         effects: { hinchada: -2, socios: 2, influencia: 4 },
       },
       {
         label: 'Prioridad por antigüedad',
         hint: 'Los viejos te aman, los pibes se sienten expulsados.',
+        tono: 'via-pacifica',
         effects: { hinchada: 1, socios: -2 },
       },
       {
         label: 'Vender el cupo restante a precio de reventa',
         hint: 'Entra plata. Sale un escándalo.',
+        tono: 'via-turbia',
         effects: { caja: 2.5, hinchada: -12, influencia: -6 },
       },
     ],
@@ -136,11 +150,13 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Bajar y hablarles',
         hint: 'Te ponés a la altura del momento.',
+        tono: 'via-pacifica',
         effects: { hinchada: 7, influencia: 3 },
       },
       {
         label: 'Dejar que sea de los jugadores',
         hint: 'No te colgás de la foto. Nadie lo nota, pero está bien.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: 3, plantel: 2 },
       },
     ],
@@ -155,16 +171,19 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Hacer la obra completa',
         hint: 'Carísima ahora. Cambia el club para siempre.',
+        tono: 'mano-dura',
         effects: { caja: -9, deferred: [{ inSeasons: 3, text: 'Se inauguró la tribuna nueva. Entra el doble de gente y se nota en la caja.', effects: { socios: 12, hinchada: 15, caja: 3 } }] },
       },
       {
         label: 'Parche mínimo',
         hint: 'Aguanta. Hasta que no aguante.',
+        tono: 'patear-para-adelante',
         effects: { caja: -2, deferred: [{ inSeasons: 4, text: 'Clausuraron la popular. El parche era un parche.', effects: { socios: -8, hinchada: -12, caja: -3 } }] },
       },
       {
         label: 'Buscar un sponsor que la pague',
         hint: 'Si aparece, es gratis. Si no, perdiste un año.',
+        tono: 'pacto',
         random: [
           { weight: 40, text: 'Una empresa puso el nombre y la plata. Salió gratis y salió bien.', effects: { socios: 8, hinchada: 6, influencia: -5 } },
           { weight: 60, text: 'Nadie quiso poner un peso. Perdiste una temporada entera buscando.', effects: { caja: -0.5, hinchada: -4 } },
@@ -182,11 +201,13 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Saludar desde el palco',
         hint: 'Te lo ganaste. Disfrutalo.',
+        tono: 'via-pacifica',
         effects: { hinchada: 4, influencia: 6 },
       },
       {
         label: 'Quedarte sentado',
         hint: 'El cargo es prestado y vos lo sabés.',
+        tono: 'patear-para-adelante',
         effects: { influencia: 3, hinchada: 2 },
       },
     ],
@@ -201,11 +222,13 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Aceptar la sanción',
         hint: 'Tres fechas sin recaudación y sin aliento.',
+        tono: 'via-pacifica',
         effects: { caja: -1.6, hinchada: -6 },
       },
       {
         label: 'Apelar hasta el final',
         hint: 'Se puede dar vuelta. Y se puede empeorar.',
+        tono: 'mano-dura',
         random: [
           { weight: 40, text: 'Se levantó la clausura. La popular volvió y no se calló en noventa minutos.', effects: { hinchada: 9, influencia: -4 } },
           { weight: 60, text: 'Ratificaron la sanción y le sumaron dos fechas más por insistir.', effects: { caja: -2.4, hinchada: -9, influencia: -3 } },
@@ -222,16 +245,19 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Poner los micros el club',
         hint: 'Un gasto que no está en ningún presupuesto.',
+        tono: 'via-pacifica',
         effects: { caja: -1.3, hinchada: 11 },
       },
       {
         label: 'Que se arregle cada uno',
         hint: 'Es lo lógico. También es lo frío.',
+        tono: 'mano-dura',
         effects: { hinchada: -4 },
       },
       {
         label: 'Subsidiar la mitad',
         hint: 'Media alegría, medio gasto.',
+        tono: 'pacto',
         effects: { caja: -0.7, hinchada: 5 },
       },
     ],
@@ -245,11 +271,13 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Abrir la cancha para el velatorio',
         hint: 'No sale nada y no se olvida nunca.',
+        tono: 'via-pacifica',
         effects: { hinchada: 8, socios: 1.5 },
       },
       {
         label: 'Un minuto de silencio y una placa',
         hint: 'Correcto. Suficiente. Poco.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: 2 },
       },
     ],
@@ -264,11 +292,13 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Darles un espacio en el club para ensayar',
         hint: 'Poca plata, mucho gesto.',
+        tono: 'via-pacifica',
         effects: { hinchada: 4, caja: -0.3, flags: { arco_pena_a: true } },
       },
       {
         label: 'Dejarlos hacer, sin involucrarse',
         hint: 'No cuesta nada. Tampoco suma mucho.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: 2, flags: { arco_pena_a: true } },
       },
     ],
@@ -284,11 +314,13 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Dárselo y bancar el conflicto con la barra',
         hint: 'La popular cambia de dueño. No sin ruido.',
+        tono: 'mano-dura',
         effects: { hinchada: 8, influencia: -6, flags: { arco_pena_b: true } },
       },
       {
         label: 'Negociar un sector nuevo, más chico',
         hint: 'Nadie se va del todo conforme. Nadie se va del todo enojado.',
+        tono: 'pacto',
         effects: { hinchada: 3, caja: -0.5, flags: { arco_pena_b: true } },
       },
     ],
@@ -304,11 +336,13 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Reconocerlos oficialmente como la hinchada organizada',
         hint: 'Sella algo que la cancha ya decidió sola.',
+        tono: 'a-libro-abierto',
         effects: { hinchada: 10, influencia: 3 },
       },
       {
         label: 'Mantener la ambigüedad de siempre',
         hint: 'Funciona. Hasta que deja de funcionar.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: 4 },
       },
     ],
@@ -323,11 +357,13 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Salir a saludarlos',
         hint: 'Diez minutos que la gente cuenta durante meses.',
+        tono: 'via-pacifica',
         effects: { hinchada: 6 },
       },
       {
         label: 'Mandar a alguien de prensa en tu lugar',
         hint: 'Queda cubierto. No es lo mismo y se nota.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: 2 },
       },
     ],
@@ -341,11 +377,13 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Aceptar la cadena',
         hint: 'La cantina que todos conocían deja de existir. Entra plata todos los meses.',
+        tono: 'mano-dura',
         effects: { caja: 1.8, hinchada: -5 },
       },
       {
         label: 'Sostenerla como está',
         hint: 'Se sigue perdiendo plata. Nadie se queja de eso en la platea.',
+        tono: 'patear-para-adelante',
         effects: { caja: -0.6, hinchada: 3 },
       },
     ],
@@ -359,11 +397,13 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Organizar el homenaje en el entretiempo',
         hint: 'Cien años de historia parados en la mitad de la cancha.',
+        tono: 'via-pacifica',
         effects: { caja: -0.3, hinchada: 5, socios: 2 },
       },
       {
         label: 'Mandarle una nota firmada',
         hint: 'Correcto. Y se nota la diferencia con lo otro.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: 1 },
       },
     ],
@@ -377,11 +417,13 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Ayudarlo a coordinar la nota',
         hint: 'Buena prensa gratis, con una historia real detrás.',
+        tono: 'pacto',
         effects: { hinchada: 4, influencia: 1 },
       },
       {
         label: 'No meterse',
         hint: 'Que la nota salga como salga, sin el club en el medio.',
+        tono: 'patear-para-adelante',
         effects: { hinchada: 1 },
       },
     ],
@@ -397,11 +439,13 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Anunciarla con acto y maqueta en el hall',
         hint: 'La gente se ilusiona. El primer ladrillo todavía no está.',
+        tono: 'a-libro-abierto',
         effects: { hinchada: 8, influencia: 3, flags: { arco_estadio_1: true } },
       },
       {
         label: 'Aprobarla en silencio y empezar por los cimientos',
         hint: 'Sin foto y sin promesa. El pozo igual se ve desde la calle.',
+        tono: 'mano-dura',
         effects: { caja: -3, influencia: 2, flags: { arco_estadio_1: true } },
       },
     ],
@@ -417,16 +461,19 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Frenar y cubrir el esqueleto hasta que haya fondos',
         hint: 'Aguanta a la intemperie. La gente pregunta cada domingo.',
+        tono: 'patear-para-adelante',
         effects: { caja: -1, hinchada: -6, flags: { arco_estadio_2: true } },
       },
       {
         label: 'Endeudarse para no parar la obra',
         hint: 'El hormigón no espera. El crédito tampoco.',
+        tono: 'mano-dura',
         effects: { caja: -6, hinchada: 3, flags: { arco_estadio_2: true } },
       },
       {
         label: 'Vender palcos de la platea que todavía no existe',
         hint: 'Plata por adelantado contra una fecha de entrega que ya moviste dos veces.',
+        tono: 'via-turbia',
         effects: { caja: 4, hinchada: -3, flags: { arco_estadio_2: true } },
       },
     ],
@@ -442,11 +489,13 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Ponerle el nombre del socio que empujó la obra desde el día uno',
         hint: 'El tuyo puede esperar. Este gesto no.',
+        tono: 'via-pacifica',
         effects: { hinchada: 12, socios: 4, influencia: 3 },
       },
       {
         label: 'Abrirla sin nombre, con la tribuna llena y nada más',
         hint: 'La obra habla sola. Vos también, pero más bajo.',
+        tono: 'a-libro-abierto',
         effects: { hinchada: 8, socios: 3, caja: 2 },
       },
     ],
@@ -461,11 +510,13 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Poner el club y la plata de los juguetes',
         hint: 'Sale poco y queda una foto buena. También queda un precedente.',
+        tono: 'via-pacifica',
         effects: { caja: -0.4, hinchada: 4, flags: { arco_barra_1: true } },
       },
       {
         label: 'Prestar el predio y que los juguetes los pongan ellos',
         hint: 'Colaborás sin abrir la caja. Toman nota igual.',
+        tono: 'pacto',
         effects: { hinchada: 2, flags: { arco_barra_1: true } },
       },
     ],
@@ -481,16 +532,19 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Dárselo para tener la fiesta en paz',
         hint: 'Se termina la discusión de hoy. Empieza la de dentro de dos años.',
+        tono: 'via-pacifica',
         effects: { caja: -1, influencia: -6, hinchada: 2, flags: { arco_barra_2: true }, flagsSuma: { prontuario: 1 } },
       },
       {
         label: 'Ofrecerles un puesto de choripán y nada más',
         hint: 'Les das algo, no el negocio. Se van midiendo la respuesta.',
+        tono: 'pacto',
         effects: { hinchada: -2, influencia: 2, flags: { arco_barra_2: true } },
       },
       {
         label: 'Decirles que no a todo',
         hint: 'Plantado. El domingo se ve si alcanzaba con plantarse.',
+        tono: 'mano-dura',
         effects: { influencia: 4, hinchada: -4, flags: { arco_barra_2: true } },
       },
     ],
@@ -506,11 +560,13 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Denunciarlos y prohibirles la entrada al club',
         hint: 'Se pudre del todo y salís en todos lados. Después hay que sostenerlo.',
+        tono: 'mano-dura',
         effects: { hinchada: -6, influencia: 6, plantel: -1 },
       },
       {
         label: 'Ceder ahora y ordenar el tema cuando bajen las cámaras',
         hint: 'El micro sale. La deuda con ellos también sigue saliendo.',
+        tono: 'via-pacifica',
         effects: { influencia: -8, hinchada: 3, flagsSuma: { prontuario: 1 } },
       },
     ],
@@ -524,11 +580,13 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Dejar entrar a todos y contar el lío después',
         hint: 'Nadie se pierde el partido. La caja no cierra por ningún lado.',
+        tono: 'via-pacifica',
         effects: { caja: -1.2, hinchada: 4 },
       },
       {
         label: 'Cortar el ingreso y filtrar uno por uno',
         hint: 'Se cuida la recaudación. Media popular empieza el partido en la calle.',
+        tono: 'mano-dura',
         random: [
           { weight: 50, text: 'Se ordenó la fila y entró casi todo el mundo antes del segundo tiempo.', effects: { hinchada: -3 } },
           { weight: 50, text: 'Se armó un tumulto en la puerta, forzaron un molinete y salió en todos lados.', effects: { hinchada: -9, influencia: -4 } },
@@ -537,6 +595,7 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Denunciar la maniobra y poner control digital para la próxima',
         hint: 'Se corta el negocio para adelante. Cuesta y no resuelve el hoy.',
+        tono: 'a-libro-abierto',
         effects: { caja: -0.8, influencia: 3, hinchada: -1 },
       },
     ],
@@ -550,16 +609,19 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'No reconocer a ninguno y hablar solo con socios',
         hint: 'Te sacás el problema de encima. Los dos grupos quedan enojados con vos.',
+        tono: 'mano-dura',
         effects: { hinchada: -3, influencia: 4 },
       },
       {
         label: 'Mediar para que se repartan sin sangre',
         hint: 'Cuesta reuniones y desgaste. Baja un poco el ruido.',
+        tono: 'pacto',
         effects: { influencia: -4, hinchada: 2 },
       },
       {
         label: 'Dejar que lo arreglen entre ellos',
         hint: 'No gastás nada. El domingo se ve cómo salió.',
+        tono: 'patear-para-adelante',
         random: [
           { weight: 45, text: 'Se acomodaron solos y la popular volvió a cantar como si nada.', effects: { hinchada: 2 } },
           { weight: 55, text: 'Se agarraron a la salida y la imagen la levantaron todos los canales.', effects: { hinchada: -7, influencia: -3 } },
@@ -576,6 +638,7 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Refaccionar todo el natatorio',
         hint: 'Un gasto grande hoy por algo que el fútbol no ve.',
+        tono: 'via-pacifica',
         effects: {
           caja: -3,
           socios: 2,
@@ -587,11 +650,13 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'Poner un parche en el techo y seguir',
         hint: 'Barato. Aguanta hasta que no aguante.',
+        tono: 'patear-para-adelante',
         effects: { caja: -0.6, socios: -1 },
       },
       {
         label: 'Cerrarlo hasta que haya plata',
         hint: 'Se ahorra el mantenimiento. Se van las familias que iban por la pileta.',
+        tono: 'mano-dura',
         effects: { socios: -5, hinchada: -2 },
       },
     ],
@@ -605,16 +670,19 @@ export const HINCHADA: GameEvent[] = [
       {
         label: 'La gala con mesas para sponsors',
         hint: 'Deja plata y una foto elegante. La popular no se siente parte.',
+        tono: 'pacto',
         effects: { caja: 1.5, hinchada: -3, socios: 1 },
       },
       {
         label: 'La jornada a puertas abiertas',
         hint: 'No entra un peso. Se llena de gente que lo va a contar por años.',
+        tono: 'via-pacifica',
         effects: { caja: -0.6, hinchada: 7, socios: 2 },
       },
       {
         label: 'Las dos cosas, en un fin de semana partido',
         hint: 'Contentás a todos y organizás el doble.',
+        tono: 'a-libro-abierto',
         effects: { caja: 0.4, hinchada: 3, influencia: -1 },
       },
     ],
