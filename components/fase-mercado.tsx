@@ -4,16 +4,18 @@ import { useState, type KeyboardEvent } from 'react';
 import Image from 'next/image';
 
 import { MOVIMIENTOS_POR_VENTANA, type PlayerOffer } from '@/lib/engine/types';
-import { plata, plataCorta } from '@/lib/format';
+import { plata, plataConSigno, plataCorta } from '@/lib/format';
 import { cajaTras, motivoBloqueo } from '@/lib/mercado-seleccion';
-import { BarraDecision, Ladillo, Recuadro, Titular, Volanta } from './ui';
+import { BarraDecision, Cupos, Ladillo, Recuadro, Titular, Volanta } from './ui';
 
-const ETIQUETA: Record<PlayerOffer['kind'], string> = {
-  compra: 'Compra',
-  libre: 'Libre',
-  venta: 'Venta',
-  prestamo: 'Préstamo',
-  cesion: 'Cesión',
+// Color: entra (neutro), entra gratis (favorable), sale (alerta).
+// Borde punteado: la operación es temporal y el jugador vuelve.
+const TIPO: Record<PlayerOffer['kind'], { label: string; chip: string }> = {
+  compra: { label: 'Compra', chip: 'border-corondel text-tinta-2' },
+  libre: { label: 'Libre', chip: 'border-favorable/50 text-favorable' },
+  venta: { label: 'Venta', chip: 'border-alerta/50 text-alerta' },
+  prestamo: { label: 'Préstamo', chip: 'border-dashed border-corondel text-tinta-2' },
+  cesion: { label: 'Cesión', chip: 'border-dashed border-alerta/50 text-alerta' },
 };
 
 export function FaseMercado({
@@ -70,19 +72,22 @@ export function FaseMercado({
   };
 
   const unica = elegidas.length === 1 ? elegidas[0] : null;
+  const conRiesgo = elegidas.filter((offer) => offer.risk > 0);
+  const salidas = elegidas.filter((offer) => offer.kind === 'venta' || offer.kind === 'cesion');
 
   return (
     <>
       <Recuadro denso>
         <div className="flex items-start justify-between gap-4">
-          <Volanta>
-            Temporada {season} · {restantes} {restantes === 1 ? 'firma disponible' : 'firmas disponibles'}
-          </Volanta>
-          {inhibido && (
-            <Ladillo tono="alerta" className="shrink-0">
-              Inhibido
-            </Ladillo>
-          )}
+          <Volanta>Temporada {season}</Volanta>
+          <span className="flex shrink-0 items-center gap-2">
+            <Cupos
+              total={MOVIMIENTOS_POR_VENTANA}
+              llenos={restantes - elegidas.length}
+              etiqueta={`${restantes - elegidas.length} de ${MOVIMIENTOS_POR_VENTANA} firmas disponibles`}
+            />
+            {inhibido && <Ladillo tono="alerta">Inhibido</Ladillo>}
+          </span>
         </div>
 
         <div className="mt-4">
@@ -100,7 +105,7 @@ export function FaseMercado({
             role="group"
             aria-label="Operaciones"
             onKeyDown={alTeclado}
-            className="grid grid-cols-2 gap-2 sm:grid-cols-3"
+            className="grid grid-cols-1 gap-2 sm:grid-cols-2"
           >
             {offers.map((offer, index) => (
               <FilaOferta
@@ -120,7 +125,7 @@ export function FaseMercado({
               }}
               role="checkbox"
               aria-checked={cerrar}
-              className={`col-span-full min-h-11 w-full border px-3 py-2.5 text-left transition-colors ${
+              className={`col-span-full min-h-11 w-full rounded-[var(--radio-sm)] border px-3 py-2.5 text-left transition-colors ${
                 cerrar ? 'border-tinta bg-tinta/10' : 'border-corondel hover:bg-tinta/6 active:bg-tinta/12'
               }`}
             >
@@ -151,21 +156,32 @@ export function FaseMercado({
             : undefined
         }
         accion={cerrar ? 'Cerrar la ventana' : elegidas.length > 1 ? 'Firmar todo' : 'Firmar'}
+        cifra={elegidas.length > 0 ? plataConSigno(cajaTras(caja, elegidas) - caja) : undefined}
+        nota={
+          cerrar
+            ? 'La ventana se cierra hasta la próxima temporada.'
+            : salidas.length > 0
+              ? `${salidas.length === 1 ? 'Sale' : 'Salen'} del plantel al firmar.`
+              : undefined
+        }
+        urgente={cerrar || salidas.length > 0}
         tono={cerrar ? 'neutra' : 'firma'}
         habilitada={cerrar || elegidas.length > 0}
         onConfirmar={confirmar}
       >
-        {unica && (
+        {conRiesgo.length > 0 && (
           <div id="detalle-pase" className="barra-decision-detalle mx-auto mb-3 max-w-[40rem] border-b border-corondel pb-3" aria-live="polite">
-            <p className="font-cuerpo text-[0.875rem] leading-snug text-tinta">
-              {unica.archetype}, {unica.age} años. {unica.note}
-            </p>
-            {unica.risk > 0 && (
-              <p className="mt-1 font-tabla text-[0.75rem] text-alerta">
-                Riesgo de lesión: {Math.round(unica.risk * 100)}%. Si se lesiona, suma{' '}
-                {Math.round(unica.plantelDelta * 0.35)} al plantel en vez de {unica.plantelDelta}.
-              </p>
-            )}
+            {conRiesgo.map((offer, index) => (
+              <div key={`${offer.name}-${index}`} className={index > 0 ? 'mt-2.5 border-t border-corondel pt-2.5' : ''}>
+                {!unica && (
+                  <p className="font-titular text-[0.8125rem] leading-tight text-tinta">{offer.name}</p>
+                )}
+                <p className="mt-0.5 font-tabla text-[0.75rem] text-alerta">
+                  Riesgo de lesión: {Math.round(offer.risk * 100)}%. Si se lesiona, suma{' '}
+                  {Math.round(offer.plantelDelta * 0.35)} al plantel en vez de {offer.plantelDelta}.
+                </p>
+              </div>
+            ))}
           </div>
         )}
       </BarraDecision>
@@ -207,21 +223,25 @@ function FilaOferta({
       role="checkbox"
       aria-checked={seleccionada}
       aria-disabled={bloqueada}
-      aria-describedby={seleccionada ? 'detalle-pase' : undefined}
-      className={`oferta-mercado flex min-h-11 min-w-0 flex-col border p-2.5 text-left transition-colors ${marco}`}
+      aria-describedby={seleccionada && offer.risk > 0 ? 'detalle-pase' : undefined}
+      className={`oferta-mercado flex min-h-11 min-w-0 flex-col rounded-[var(--radio-sm)] border p-2.5 text-left transition-colors ${marco}`}
     >
       <span className="flex w-full items-center justify-between gap-2">
         <span
-          className={`shrink-0 font-tabla text-[0.75rem] tracking-[0.08em] uppercase ${
-            esSalida ? 'text-alerta' : 'text-tinta-2'
-          }`}
+          className={`shrink-0 rounded border px-1.5 py-0.5 font-tabla text-[0.6875rem] tracking-[0.08em] uppercase ${TIPO[offer.kind].chip}`}
         >
-          {ETIQUETA[offer.kind]}
+          {TIPO[offer.kind].label}
         </span>
         <span aria-hidden className="oferta-marca font-tabla text-[0.75rem]">✓</span>
       </span>
       <span className="mt-1.5 block font-titular text-[0.9375rem] leading-tight font-bold break-words text-tinta">
         {offer.name}
+      </span>
+      <span className="mt-0.5 block font-cuerpo text-[0.8125rem] leading-snug text-tinta-3">
+        {offer.age} años · {offer.archetype}
+      </span>
+      <span className="mt-1 block font-cuerpo text-[0.875rem] leading-snug text-tinta-2 italic">
+        {offer.note}
       </span>
       {bloqueada && (
         <span className="mt-1 block font-tabla text-[0.75rem] leading-snug text-alerta">{motivo}</span>

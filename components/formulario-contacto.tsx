@@ -112,7 +112,7 @@ export function FormularioContacto() {
           onChange={(e) => setNombre(e.target.value)}
           maxLength={24}
           autoComplete="name"
-          className="mt-1.5 w-full border border-corondel bg-fondo-2 px-3 py-2.5 font-cuerpo text-[0.9375rem] text-tinta focus:border-tinta focus:outline-none"
+          className="mt-1.5 w-full rounded-[var(--radio-sm)] border border-corondel bg-fondo-2 px-3 py-2.5 font-cuerpo text-[0.9375rem] text-tinta focus:border-acento focus:outline-none"
         />
       </label>
 
@@ -132,7 +132,7 @@ export function FormularioContacto() {
           aria-describedby={estado.fase === 'error' ? 'contacto-error' : undefined}
           autoComplete="email"
           placeholder="para poder responderte"
-          className="mt-1.5 w-full border border-corondel bg-fondo-2 px-3 py-2.5 font-cuerpo text-[0.9375rem] text-tinta placeholder:text-tinta-2 focus:border-tinta focus:outline-none"
+          className="mt-1.5 w-full rounded-[var(--radio-sm)] border border-corondel bg-fondo-2 px-3 py-2.5 font-cuerpo text-[0.9375rem] text-tinta placeholder:text-tinta-2 focus:border-acento focus:outline-none"
         />
       </label>
 
@@ -158,14 +158,14 @@ export function FormularioContacto() {
           aria-required
           aria-invalid={faltaMensaje}
           aria-describedby={estado.fase === 'error' ? 'contacto-error' : undefined}
-          className="mt-1.5 w-full border border-corondel bg-fondo-2 px-3 py-2.5 font-cuerpo text-[0.9375rem] text-tinta focus:border-tinta focus:outline-none"
+          className="mt-1.5 w-full rounded-[var(--radio-sm)] border border-corondel bg-fondo-2 px-3 py-2.5 font-cuerpo text-[0.9375rem] text-tinta focus:border-acento focus:outline-none"
         />
       </label>
 
       <button
         type="submit"
         disabled={estado.fase === 'enviando'}
-        className="min-h-11 w-full bg-tinta py-2.5 font-titular text-[0.8125rem] font-black tracking-[0.1em] text-fondo uppercase transition-colors active:bg-tinta-2 disabled:opacity-50"
+        className="min-h-11 w-full rounded-[var(--radio-sm)] bg-tinta py-2.5 font-titular text-[0.8125rem] tracking-[0.1em] text-fondo uppercase transition-colors active:bg-tinta-2 disabled:opacity-50"
       >
         {estado.fase === 'enviando' ? 'Enviando' : 'Enviar'}
       </button>

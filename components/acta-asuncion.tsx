@@ -3,13 +3,21 @@
 import Image from 'next/image';
 import { useEffect, useState, type CSSProperties } from 'react';
 
+import { declaracionDeSemilla } from '@/content/declaraciones';
 import { nombreDelPresidente, retratoDeSemilla } from '@/lib/dispositivo';
 import { enLetras, mandatosDe } from '@/lib/engine/election';
 import type { Club, Modo, Resources } from '@/lib/engine/types';
 import { entero, plataCorta, socios } from '@/lib/format';
 import { RECURSOS } from '@/lib/recursos';
 import { useTintaClub } from '@/lib/tema';
-import { Continuar, Ladillo, Puntos, Recuadro, Titular, Volanta } from './ui';
+import { Continuar, Puntos, Recuadro, Titular, Volanta } from './ui';
+
+const LETRAS_FOLIO = 'ABCDEFGH';
+
+function folioDeSemilla(seed: number): string {
+  const numero = (Math.abs(seed) % 9000) + 1000;
+  return `${numero}-${LETRAS_FOLIO[Math.abs(seed) % LETRAS_FOLIO.length]}`;
+}
 
 export function ActaAsuncion({
   club,
@@ -27,6 +35,8 @@ export function ActaAsuncion({
   const mandatos = mandatosDe(modo);
   const tintaClub = useTintaClub(club);
   const retrato = retratoDeSemilla(seed);
+  const folio = folioDeSemilla(seed);
+  const declaracion = declaracionDeSemilla(seed, modo);
 
   const [nombre, setNombre] = useState('');
   const [abierto, setAbierto] = useState<keyof Resources | null>(null);
@@ -49,32 +59,36 @@ export function ActaAsuncion({
         </div>
 
         <div className="flex items-start justify-between gap-4">
-          <Volanta>Acta de asunción · {club.name}</Volanta>
-          <Ladillo tono="club" animado className="shrink-0">
+          <Volanta>
+            Acta n.º 001 · Folio {folio}
+          </Volanta>
+          <span className="sello-acta entrar-nota shrink-0 px-2.5 py-1 font-titular text-[0.8125rem] tracking-[0.18em] uppercase">
             Asumido
-          </Ladillo>
+          </span>
         </div>
 
-        <div className="mt-4 flex items-start justify-between gap-4">
-          <div className="min-w-0">
-            <Titular>Recibís el club</Titular>
+        <div className="mt-4">
+          <Titular>Toma de posesión</Titular>
+        </div>
 
-            {nombre && (
-              <p className="mt-2 flex items-baseline font-tabla text-[0.75rem] tracking-[0.06em] uppercase">
-                <span className="text-tinta-2">Presidente</span>
-                <Puntos />
-                <span
-                  className="border-b-2 pb-0.5 font-bold text-tinta"
-                  style={{ borderColor: club.colors[1] }}
-                >
-                  {nombre}
-                </span>
-              </p>
-            )}
+        <div className="tarjeta-plana mt-4 flex items-start justify-between gap-4 p-3">
+          <div className="min-w-0">
+            <p className="font-tabla text-[0.75rem] tracking-[0.1em] text-tinta-2 uppercase">
+              Presidente designado
+            </p>
+            <p
+              className="mt-1 inline-block border-b-2 pb-0.5 font-titular text-[clamp(1.25rem,5vw,1.75rem)] leading-tight break-words text-tinta"
+              style={{ borderColor: club.colors[1] }}
+            >
+              {nombre || ' '}
+            </p>
+            <p className="mt-1.5 font-cuerpo text-[0.9375rem] leading-snug text-tinta-2">
+              {club.name} · {enLetras(mandatos)} mandatos
+            </p>
           </div>
 
           {retrato && (
-            <div className="mt-1 h-24 w-24 shrink-0 overflow-hidden border border-tinta-2 bg-fondo-2">
+            <div className="h-24 w-24 shrink-0 overflow-hidden rounded-[var(--radio-sm)] border border-tinta-2 bg-fondo-2">
               <Image
                 src={`/dirigentes/${retrato}.png`}
                 alt=""
@@ -100,6 +114,20 @@ export function ActaAsuncion({
             el plantel, que es lo único que el club tiene para ganar.
           </p>
         )}
+
+        <div className="tarjeta-plana mt-4 p-3">
+          <p className="font-tabla text-[0.75rem] tracking-[0.1em] text-tinta-2 uppercase">
+            Declaración en conferencia de prensa
+          </p>
+          <p className="mt-2 font-cuerpo text-[1.0625rem] leading-relaxed text-tinta italic">
+            «{declaracion}»
+          </p>
+          {nombre && (
+            <p className="mt-2 font-tabla text-[0.75rem] tracking-[0.06em] text-tinta-2 uppercase">
+              — {nombre}, ante los micrófonos
+            </p>
+          )}
+        </div>
 
         <Continuar onClick={onAsumir}>
           Abrir el mercado <span className="flecha-accion" aria-hidden>→</span>

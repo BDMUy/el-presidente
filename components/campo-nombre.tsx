@@ -71,7 +71,7 @@ export function CampoNombre({ pais }: { pais?: Country }) {
           autoComplete="name"
           autoCorrect="off"
           spellCheck={false}
-          className="min-h-11 min-w-0 flex-1 border border-corondel bg-fondo-2 px-3 py-2.5 font-cuerpo text-[1rem] text-tinta placeholder:text-tinta-2 focus:border-tinta focus:outline-none"
+          className="min-h-11 min-w-0 flex-1 rounded-[var(--radio-sm)] border border-corondel bg-fondo-2 px-3 py-2.5 font-cuerpo text-[1rem] text-tinta placeholder:text-tinta-2 focus:border-acento focus:outline-none"
         />
         <button
           type="button"

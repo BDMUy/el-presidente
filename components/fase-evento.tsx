@@ -75,7 +75,7 @@ export function FaseEvento({
             <GrupoOpciones
               etiqueta="La decisión"
               onConfirmar={confirmar}
-              className="mt-2 border-t border-corondel"
+              className="mt-3 flex flex-col gap-2"
             >
               {available.map((optionIndex, displayIndex) => {
                 const option = event.options[optionIndex];
@@ -102,6 +102,7 @@ export function FaseEvento({
         resumen={opcion ? opcion.label : 'Elegí cómo resolverlo'}
         detalle={opcion?.random ? 'El resultado se sortea' : undefined}
         accion="Firmar"
+        nota="Se firma y no se vuelve atrás."
         habilitada={elegida !== null}
         onConfirmar={confirmar}
       />

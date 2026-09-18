@@ -31,10 +31,7 @@ export function ResumenPresidencia({
         {club.name} · {state.history[0]?.year ?? state.year}–{state.year}
       </Volanta>
 
-      <h1
-        className="revelar-titular mt-3 font-titular text-[clamp(2.25rem,10vw,4rem)] leading-[0.9] font-black tracking-[-0.02em] text-tinta uppercase"
-        style={{ fontStretch: '75%' }}
-      >
+      <h1 className="revelar-titular mt-3 font-titular text-[clamp(2.25rem,10vw,4rem)] leading-[0.9] tracking-[-0.02em] text-tinta uppercase">
         {ending.title}
       </h1>
 

@@ -1,11 +1,17 @@
 import type { Metadata, Viewport } from 'next';
-import { Archivo, Newsreader } from 'next/font/google';
+import { Anton, Chivo, Newsreader } from 'next/font/google';
 import './globals.css';
 
-const archivo = Archivo({
-  variable: '--font-archivo',
+const anton = Anton({
+  variable: '--font-anton',
   subsets: ['latin'],
-  axes: ['wdth'],
+  weight: '400',
+});
+
+const chivo = Chivo({
+  variable: '--font-chivo',
+  subsets: ['latin'],
+  weight: ['400', '600', '700', '900'],
 });
 
 const newsreader = Newsreader({
@@ -47,7 +53,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
     <html
       lang="es-AR"
-      className={`${archivo.variable} ${newsreader.variable} h-full antialiased`}
+      className={`${anton.variable} ${chivo.variable} ${newsreader.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <head>

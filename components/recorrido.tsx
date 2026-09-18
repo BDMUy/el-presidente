@@ -189,10 +189,7 @@ export function Recorrido({
         <p className="font-tabla text-[0.75rem] tracking-[0.1em] text-tinta-2 uppercase tabular-nums">
           Paso {indice + 1} de {visibles.length}
         </p>
-        <p
-          className="mt-2 font-titular text-[1.125rem] leading-tight font-black text-tinta uppercase"
-          style={{ fontStretch: '75%' }}
-        >
+        <p className="mt-2 font-titular text-[1.125rem] leading-tight text-tinta uppercase">
           {paso.titulo}
         </p>
         <p className="mt-1.5 font-cuerpo text-[0.875rem] leading-snug text-tinta-2">{paso.cuerpo}</p>

@@ -39,7 +39,7 @@ export function CampoSelect({
           value={valor}
           onChange={(e) => onChange(e.target.value)}
           disabled={disabled}
-          className={`campo-select min-h-11 w-full appearance-none border border-corondel bg-fondo-2 py-2.5 pr-9 font-titular text-[0.9375rem] font-bold text-tinta focus:border-tinta focus:outline-none disabled:opacity-45 ${icono ? 'pl-10' : 'pl-3'}`}
+          className={`campo-select min-h-11 w-full appearance-none rounded-[var(--radio-sm)] border border-corondel bg-fondo-2 py-2.5 pr-9 font-titular text-[0.9375rem] text-tinta focus:border-acento focus:outline-none disabled:opacity-45 ${icono ? 'pl-10' : 'pl-3'}`}
         >
           {children}
         </select>

@@ -194,10 +194,7 @@ export function Arranque({
 
       <header className="portada-inicio">
         <p className="portada-volanta">Tu club. Tu firma. Todo en juego.</p>
-        <h1
-          className="font-titular text-[clamp(2.75rem,11vw,4.5rem)] leading-[0.9] font-black tracking-[-0.03em] text-tinta uppercase"
-          style={{ fontStretch: '80%' }}
-        >
+        <h1 className="font-titular text-[clamp(2.75rem,11vw,4.5rem)] leading-[0.9] tracking-[-0.03em] text-tinta uppercase">
           El <span className="portada-nombre">Presidente</span>
         </h1>
 
@@ -386,7 +383,7 @@ function PanelEnCurso({
 
   return (
     <div
-      className="mb-6 border-b border-corondel pb-4"
+      className="tarjeta mb-6 p-4"
       style={{ '--club': tintaClub } as CSSProperties}
     >
       <div className="grid gap-x-4 sm:grid-cols-[minmax(0,1fr)_auto]">
@@ -406,7 +403,7 @@ function PanelEnCurso({
         <button
           type="button"
           onClick={onContinuar}
-          className="mt-3 min-h-11 border border-acento px-4 py-2 font-titular text-[0.875rem] font-bold text-acento sm:col-start-2 sm:row-start-2 sm:row-span-2 sm:mt-0"
+          className="mt-3 min-h-11 rounded-[var(--radio-sm)] border border-acento px-4 py-2 font-titular text-[0.875rem] text-acento sm:col-start-2 sm:row-start-2 sm:row-span-2 sm:mt-0"
         >
           {terminada ? 'Ver el epílogo' : 'Continuar'}
         </button>
@@ -420,14 +417,14 @@ function PanelEnCurso({
               <button
                 type="button"
                 onClick={onAbandonar}
-                className="min-h-11 flex-1 border border-alerta px-3 font-tabla text-[0.75rem] tracking-[0.1em] text-alerta uppercase transition-colors hover:bg-alerta/10"
+                className="min-h-11 flex-1 rounded-[var(--radio-sm)] border border-alerta px-3 font-tabla text-[0.75rem] tracking-[0.1em] text-alerta uppercase transition-colors hover:bg-alerta/10"
               >
                 Renunciar
               </button>
               <button
                 type="button"
                 onClick={() => setConfirmando(false)}
-                className="min-h-11 flex-1 border border-corondel px-3 font-tabla text-[0.75rem] tracking-[0.1em] text-tinta-2 uppercase transition-colors hover:text-tinta"
+                className="min-h-11 flex-1 rounded-[var(--radio-sm)] border border-corondel px-3 font-tabla text-[0.75rem] tracking-[0.1em] text-tinta-2 uppercase transition-colors hover:text-tinta"
               >
                 Seguir
               </button>

@@ -65,10 +65,7 @@ export function Hud({
         </div>
 
         <div className="flex items-baseline justify-between gap-3 px-3 pt-2.5 sm:px-4">
-          <p
-            className="break-words font-titular text-[0.9375rem] leading-tight font-black tracking-tight text-tinta"
-            style={{ fontStretch: '75%' }}
-          >
+          <p className="break-words font-titular text-[0.9375rem] leading-tight tracking-tight text-tinta">
             {club.name}
           </p>
           <p className="shrink-0 font-tabla text-[0.75rem] font-bold tracking-[0.06em] text-tinta-2 uppercase tabular-nums">
@@ -83,7 +80,7 @@ export function Hud({
 
         <div
           data-recorrido="hud-recursos"
-          className="mt-2 grid grid-cols-3 gap-1 border-t border-corondel px-2 py-2 divide-corondel min-[360px]:grid-cols-5 min-[360px]:divide-x min-[400px]:gap-1 sm:px-3"
+          className="mx-2 mt-2 mb-2.5 grid grid-cols-3 gap-1 rounded-[var(--radio-sm)] bg-fondo-2 p-1.5 min-[360px]:mx-3 min-[580px]:grid-cols-5 sm:mx-4"
         >
           <Cifra
             label="Caja"

@@ -87,7 +87,7 @@ export function FaseFin({
         <button
           type="button"
           onClick={compartir}
-          className="mt-6 w-full overflow-hidden border-2 border-tinta py-3.5 font-titular text-[0.875rem] font-black tracking-[0.12em] text-tinta uppercase transition-colors hover:bg-tinta hover:text-fondo"
+          className="mt-6 w-full overflow-hidden rounded-[var(--radio-sm)] border-2 border-tinta py-3.5 font-titular text-[0.875rem] tracking-[0.12em] text-tinta uppercase transition-colors hover:bg-tinta hover:text-fondo"
         >
           <span key={copiado ? 'copiado' : 'compartir'} className="entrar-nota inline-block">
             {copiado ? 'Link copiado' : 'Compartir esta presidencia'}
@@ -95,7 +95,7 @@ export function FaseFin({
         </button>
 
         {linkManual && (
-          <div className="entrar-nota mt-3 border border-corondel bg-fondo-2 p-3">
+          <div className="entrar-nota tarjeta-plana mt-3 p-3">
             <p className="font-tabla text-[0.75rem] font-bold tracking-[0.1em] text-tinta-2 uppercase">
               Copiá el link a mano
             </p>
@@ -105,7 +105,7 @@ export function FaseFin({
               readOnly
               value={linkManual}
               onFocus={(e) => e.currentTarget.select()}
-              className="mt-1.5 min-h-11 w-full border border-corondel bg-fondo px-2.5 font-cuerpo text-[0.875rem] text-tinta focus:border-tinta focus:outline-none"
+              className="mt-1.5 min-h-11 w-full rounded-[var(--radio-sm)] border border-corondel bg-fondo px-2.5 font-cuerpo text-[0.875rem] text-tinta focus:border-acento focus:outline-none"
             />
           </div>
         )}

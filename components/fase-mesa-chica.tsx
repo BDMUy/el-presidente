@@ -83,7 +83,7 @@ export function FaseMesaChica({
           )}
         </div>
 
-        <div className="relative mt-3 h-2.5 w-full overflow-hidden border border-corondel" aria-hidden>
+        <div className="relative mt-3 h-2.5 w-full overflow-hidden rounded-full border border-corondel" aria-hidden>
           <div
             className="absolute inset-0 origin-left bg-favorable transition-transform duration-200 ease-out"
             style={{ transform: `scaleX(${probabilidad})` }}
@@ -193,12 +193,12 @@ function FilaFrente({
 }) {
   const activo = puestas > 0;
   const botonStepper =
-    'flex min-h-11 min-w-11 shrink-0 items-center justify-center border border-corondel font-titular text-[20px] leading-none font-black text-tinta transition-colors hover:border-tinta active:bg-tinta/15 disabled:opacity-40 disabled:hover:border-corondel';
+    'flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-[var(--radio-sm)] border border-corondel font-titular text-[20px] leading-none text-tinta transition-colors hover:border-acento active:bg-tinta/15 disabled:opacity-40 disabled:hover:border-corondel';
 
   return (
     <li
-      className={`border px-3 py-2.5 transition-colors ${
-        activo ? 'border-tinta/70 bg-tinta/12' : 'border-corondel bg-fondo-2/40'
+      className={`rounded-[var(--radio-sm)] border px-3 py-2.5 transition-colors ${
+        activo ? 'border-acento bg-[color-mix(in_srgb,var(--acento)_12%,var(--fondo-2))]' : 'border-corondel bg-fondo-2/40'
       }`}
     >
       <div className="flex items-start gap-3">

@@ -75,7 +75,7 @@ export function GaleriaCartas() {
             onChange={(e) => setBusqueda(e.target.value)}
             placeholder="Buscar en el texto de las cartas"
             aria-label="Buscar en el texto de las cartas"
-            className="mt-2 min-h-11 w-full border border-corondel bg-fondo px-3 font-cuerpo text-[0.9375rem] text-tinta placeholder:text-tinta-2"
+            className="mt-2 min-h-11 w-full rounded-[var(--radio-sm)] border border-corondel bg-fondo px-3 font-cuerpo text-[0.9375rem] text-tinta placeholder:text-tinta-2"
           />
 
           <div className="mt-2 flex flex-wrap gap-1.5">
@@ -203,7 +203,7 @@ function Chip({
       type="button"
       onClick={onClick}
       aria-pressed={activo}
-      className={`inline-flex min-h-11 items-center px-2.5 font-tabla text-[0.75rem] tracking-[0.08em] uppercase ${
+      className={`inline-flex min-h-11 items-center rounded px-2.5 font-tabla text-[0.75rem] tracking-[0.08em] uppercase ${
         activo ? 'bg-tinta text-fondo' : 'border border-corondel text-tinta-2'
       }`}
     >

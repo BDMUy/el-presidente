@@ -138,13 +138,13 @@ export function EnvioAlRanking({ state, diaria }: { state: GameState; diaria: st
             aria-invalid={estado.fase === 'error'}
             aria-describedby={estado.fase === 'error' ? 'ranking-error' : undefined}
             placeholder="Tu nombre"
-            className="w-full border border-corondel bg-fondo-2 px-3 py-2.5 font-cuerpo text-[0.9375rem] text-tinta placeholder:text-tinta-2 focus:border-tinta focus:outline-none"
+            className="w-full rounded-[var(--radio-sm)] border border-corondel bg-fondo-2 px-3 py-2.5 font-cuerpo text-[0.9375rem] text-tinta placeholder:text-tinta-2 focus:border-acento focus:outline-none"
           />
         </label>
         <button
           type="submit"
           disabled={estado.fase === 'enviando'}
-          className="shrink-0 bg-tinta px-5 py-2.5 font-titular text-[0.8125rem] font-black tracking-[0.1em] text-fondo uppercase transition-colors active:bg-tinta-2 disabled:opacity-50"
+          className="shrink-0 rounded-[var(--radio-sm)] bg-tinta px-5 py-2.5 font-titular text-[0.8125rem] tracking-[0.1em] text-fondo uppercase transition-colors active:bg-tinta-2 disabled:opacity-50"
         >
           {estado.fase === 'enviando' ? 'Enviando' : 'Enviar'}
         </button>

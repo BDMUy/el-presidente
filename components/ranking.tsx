@@ -73,7 +73,7 @@ export function Ranking() {
               type="button"
               onClick={() => setTipo(t)}
               aria-pressed={tipo === t}
-              className={`flex min-h-11 items-center border px-3 font-tabla text-[0.75rem] tracking-[0.04em] uppercase transition-colors ${
+              className={`flex min-h-11 items-center rounded-[var(--radio-sm)] border px-3 font-tabla text-[0.75rem] tracking-[0.04em] uppercase transition-colors ${
                 tipo === t
                   ? 'border-tinta bg-tinta/12 text-tinta'
                   : 'border-corondel text-tinta-2 hover:text-tinta'
@@ -106,7 +106,7 @@ export function Ranking() {
                     : `${TEMPORADAS_POR_MODO[m]} temporadas`
                 }
                 onClick={() => setModo(m)}
-                className={`flex min-h-11 min-w-11 items-center justify-center border px-2.5 font-tabla text-[0.75rem] tabular-nums transition-colors ${
+                className={`flex min-h-11 min-w-11 items-center justify-center rounded-[var(--radio-sm)] border px-2.5 font-tabla text-[0.75rem] tabular-nums transition-colors ${
                   modo === m
                     ? 'border-tinta bg-tinta/12 text-tinta'
                     : 'border-corondel text-tinta-2 hover:text-tinta'

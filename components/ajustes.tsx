@@ -22,10 +22,7 @@ export function Ajustes({ onVolver, onAyuda }: { onVolver: () => void; onAyuda: 
         <p className="border-b border-corondel pb-1.5 font-tabla text-[0.75rem] tracking-[0.14em] text-tinta-2 uppercase">
           Ajustes
         </p>
-        <h1
-          className="mt-4 font-titular text-[clamp(2rem,8vw,3rem)] leading-[0.9] font-black tracking-[-0.02em] text-tinta uppercase"
-          style={{ fontStretch: '80%' }}
-        >
+        <h1 className="mt-4 font-titular text-[clamp(2rem,8vw,3rem)] leading-[0.9] tracking-[-0.02em] text-tinta uppercase">
           Ajustes
         </h1>
       </header>
@@ -48,7 +45,7 @@ export function Ajustes({ onVolver, onAyuda }: { onVolver: () => void; onAyuda: 
                 type="button"
                 aria-pressed={activo}
                 onClick={() => elegirTexto(opcion.id)}
-                className={`min-h-11 flex-1 border px-3 font-tabla text-[0.75rem] tracking-[0.1em] uppercase transition-colors ${
+                className={`min-h-11 flex-1 rounded-[var(--radio-sm)] border px-3 font-tabla text-[0.75rem] tracking-[0.1em] uppercase transition-colors ${
                   activo
                     ? 'border-tinta bg-tinta text-fondo'
                     : 'border-corondel text-tinta-2 hover:border-tinta hover:text-tinta'

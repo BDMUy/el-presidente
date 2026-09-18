@@ -77,15 +77,15 @@ export function PresidenciaDelDia({ onJugar }: { onJugar: () => void }) {
   return (
     <section
       data-recorrido="diaria"
-      className="pb-6 border-b border-corondel"
+      className="tarjeta mb-6 overflow-hidden p-0"
       style={{ '--club': tintaClub } as CSSProperties}
     >
-      <div className="flex h-1" aria-hidden>
+      <div className="flex h-1.5" aria-hidden>
         <div className="flex-1" style={{ backgroundColor: club.colors[0] }} />
         <div className="flex-1" style={{ backgroundColor: club.colors[1] }} />
       </div>
 
-      <div className="pt-3">
+      <div className="p-4">
         <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
           <Volanta as="h2">Presidencia del día</Volanta>
           <p className="shrink-0 font-tabla text-[0.75rem] tracking-[0.06em] text-tinta-2 tabular-nums uppercase">
@@ -112,7 +112,7 @@ export function PresidenciaDelDia({ onJugar }: { onJugar: () => void }) {
               <button
                 type="button"
                 onClick={onJugar}
-                className="min-h-11 w-full border border-corondel px-3 py-3 font-titular text-[0.75rem] font-black tracking-[0.06em] text-tinta uppercase transition-colors hover:bg-[var(--club)]/10"
+                className="min-h-11 w-full rounded-[var(--radio-sm)] border border-corondel px-3 py-3 font-titular text-[0.75rem] tracking-[0.06em] text-tinta uppercase transition-colors hover:border-acento hover:bg-[var(--club)]/10"
               >
                 Jugar la del día
               </button>

@@ -175,7 +175,7 @@ export function SelectorClub({
           aria-controls={`${id}-lista`}
           aria-labelledby={`${id}-etiqueta`}
           aria-activedescendant={abierto ? `${id}-op-${activo}` : undefined}
-          className="flex min-h-11 w-full items-center gap-2.5 border border-corondel bg-fondo-2 py-2 pr-3 pl-3 text-left transition-colors focus:border-tinta focus:outline-none"
+          className="flex min-h-11 w-full items-center gap-2.5 rounded-[var(--radio-sm)] border border-corondel bg-fondo-2 py-2 pr-3 pl-3 text-left transition-colors focus:border-acento focus:outline-none"
         >
           {elegido ? (
             <>
@@ -204,7 +204,7 @@ export function SelectorClub({
             data-arriba={sitio.haciaArriba}
             aria-labelledby={`${id}-etiqueta`}
             style={{ maxHeight: sitio.alto }}
-            className={`selector-lista absolute inset-x-0 z-40 overflow-y-auto overscroll-contain border-2 border-tinta bg-fondo-2 ${
+            className={`selector-lista absolute inset-x-0 z-40 overflow-y-auto overscroll-contain rounded-[var(--radio-sm)] border-2 border-tinta bg-fondo-2 shadow-[var(--sombra)] ${
               sitio.haciaArriba ? 'bottom-full mb-1' : 'top-full mt-1'
             }`}
           >
