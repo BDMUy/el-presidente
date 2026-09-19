@@ -472,6 +472,17 @@ details[open] > summary .indicador-mas {
   transform: rotate(45deg);
 }
 
+.detalle-recursos > summary {
+  list-style: none;
+}
+.detalle-recursos > summary::-webkit-details-marker,
+.detalle-recursos > summary::marker {
+  display: none;
+}
+.detalle-recursos[open] > summary {
+  color: var(--tinta);
+}
+
 .selector-lista {
   opacity: 0;
   transform: scaleY(0.98);

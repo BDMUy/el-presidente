@@ -129,13 +129,11 @@ export function ActaAsuncion({
           )}
         </div>
 
-        <Continuar onClick={onAsumir}>
-          Abrir el mercado <span className="flecha-accion" aria-hidden>→</span>
-        </Continuar>
+        <Continuar onClick={onAsumir}>Abrir el mercado</Continuar>
 
-        <details className="mt-4 border-t border-corondel">
-          <summary className="min-h-11 cursor-pointer py-3 font-tabla text-[0.75rem] text-tinta-2 uppercase">
-            Cómo está el club al asumir <span className="indicador-mas" aria-hidden>+</span>
+        <details className="detalle-recursos mt-4 border-t border-corondel">
+          <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 py-3 font-tabla text-[0.75rem] tracking-[0.06em] text-tinta-2 uppercase transition-colors hover:text-tinta">
+            Cómo está el club al asumir
           </summary>
           <ul className="mt-1">
             {RECURSOS.map((recurso) => {
