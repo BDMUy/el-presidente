@@ -23,8 +23,8 @@ export function VitrinaPanel() {
 
   if (vitrina.partidas === 0) {
     return (
-      <details className="mt-6 border-t border-corondel py-3">
-        <summary className="flex min-h-11 cursor-pointer items-center justify-between font-titular font-bold">Tu vitrina <span className="indicador-mas" aria-hidden>+</span></summary>
+      <details className="mt-6">
+        <summary className="fila-abrir flex min-h-11 cursor-pointer items-center justify-between px-3 py-2.5 font-titular font-bold">Tu vitrina</summary>
         <Image src="/ilustraciones/vitrina-vacia.webp" alt="" width={1264} height={848} sizes="(max-width: 600px) 85vw, 400px" className="mt-2 h-24 w-full object-cover object-center" />
         <div className="py-3">
           <h2 className="font-titular text-[0.9375rem] font-bold">Esta vitrina te espera</h2>
@@ -38,13 +38,13 @@ export function VitrinaPanel() {
   const conseguidos = new Set(vitrina.logros);
 
   return (
-    <div className="mt-6 border-t border-corondel pt-3">
+    <div className="mt-6">
       <button
         type="button"
         onClick={() => setAbierta((v) => !v)}
         aria-expanded={abierta}
         aria-controls={panelId}
-        className="flex min-h-11 w-full items-center gap-3 py-2.5 text-left transition-colors hover:bg-tinta/6"
+        className="fila-abrir flex min-h-11 w-full items-center gap-3 px-3 py-2.5 text-left"
       >
         <span className="min-w-0 flex-1">
           <span className="block font-tabla text-[0.75rem] tracking-[0.06em] text-tinta-2 uppercase">
@@ -55,12 +55,6 @@ export function VitrinaPanel() {
             Mejor puntaje {vitrina.mejorPuntaje.toLocaleString('es-AR')}
             {club && <span className="font-cuerpo font-normal text-tinta-2"> con {club.short}</span>}
           </span>
-        </span>
-        <span
-          aria-hidden
-          className="indicador-mas shrink-0 font-titular text-[1.125rem] leading-none font-black text-tinta-2"
-        >
-          +
         </span>
       </button>
 

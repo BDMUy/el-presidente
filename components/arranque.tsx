@@ -252,7 +252,7 @@ export function Arranque({
                 onClick={() => club && onEmpezar(club.id, modo)}
                 className="boton-jugar w-full px-4 py-3.5 font-titular text-[0.9375rem] font-black tracking-[0.06em] uppercase"
               >
-                Empezar mi presidencia <span className="flecha-accion" aria-hidden>→</span>
+                Empezar mi presidencia
               </button>
               <p className="mt-2 text-center font-tabla text-[0.75rem] text-tinta-2" aria-live="polite">
                 {club ? PARTIDAS[modo] : 'Elegí un club o probá Al azar'}
@@ -266,7 +266,6 @@ export function Arranque({
                   <span className="block font-tabla text-[0.75rem] text-tinta uppercase">Personalizar partida</span>
                   <span className="mt-1 block font-cuerpo text-[0.875rem] leading-snug text-tinta-2">Duración y dificultad</span>
                 </span>
-                <span className="indicador-mas" aria-hidden>+</span>
               </summary>
               <div className="personalizar-contenido p-3" inert={!!sorteo}>
                 <CampoSelect etiqueta="Partida" valor={modo} onChange={(v) => setModo(v as Modo)}>

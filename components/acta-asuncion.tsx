@@ -131,20 +131,20 @@ export function ActaAsuncion({
 
         <Continuar onClick={onAsumir}>Abrir el mercado</Continuar>
 
-        <details className="detalle-recursos mt-4 border-t border-corondel">
-          <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 py-3 font-tabla text-[0.75rem] tracking-[0.06em] text-tinta-2 uppercase transition-colors hover:text-tinta">
+        <details className="mt-4">
+          <summary className="fila-abrir flex min-h-11 cursor-pointer items-center justify-between gap-2 px-3 py-3 font-tabla text-[0.75rem] tracking-[0.06em] text-tinta-2 uppercase">
             Cómo está el club al asumir
           </summary>
-          <ul className="mt-1">
+          <ul className="mt-1.5 space-y-1.5">
             {RECURSOS.map((recurso) => {
               const abiertoAca = abierto === recurso.id;
               return (
-                <li key={recurso.id} className="border-t border-corondel">
+                <li key={recurso.id}>
                   <button
                     type="button"
                     onClick={() => setAbierto((a) => (a === recurso.id ? null : recurso.id))}
                     aria-expanded={abiertoAca}
-                    className="flex min-h-11 w-full items-baseline gap-2 py-2.5 text-left"
+                    className="fila-abrir flex min-h-11 w-full items-baseline gap-2 px-3 py-2.5 text-left"
                   >
                     <span className="font-tabla text-[0.8125rem] font-bold text-tinta uppercase">
                       {recurso.label}
@@ -153,18 +153,10 @@ export function ActaAsuncion({
                     <span className="font-tabla text-[0.8125rem] font-bold text-tinta tabular-nums">
                       {valor(recurso.id)}
                     </span>
-                    <span
-                      aria-hidden
-                      className={`shrink-0 self-center font-titular text-[0.75rem] text-tinta-3 transition-transform duration-200 ${
-                        abiertoAca ? 'rotate-180' : ''
-                      }`}
-                    >
-                      ▼
-                    </span>
                   </button>
 
                   {abiertoAca && (
-                    <div className="entrar-nota pb-3">
+                    <div className="entrar-nota px-3 pt-2 pb-1">
                       <p className="font-cuerpo text-[0.875rem] leading-snug text-tinta-2">
                         {recurso.texto}
                       </p>

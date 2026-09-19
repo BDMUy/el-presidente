@@ -15,7 +15,7 @@ export function Ajustes({ onVolver, onAyuda }: { onVolver: () => void; onAyuda: 
   return (
     <div className="mx-auto w-full max-w-[40rem] px-4 pb-10 pl-[max(1rem,var(--sae-left))] pr-[max(1rem,var(--sae-right))]">
       <div className="pt-3">
-        <BarraSuperior onVolver={onVolver} volverLabel="← Volver" />
+        <BarraSuperior onVolver={onVolver} volverLabel="Volver" />
       </div>
 
       <header className="pt-8">
@@ -67,7 +67,7 @@ export function Ajustes({ onVolver, onAyuda }: { onVolver: () => void; onAyuda: 
           onClick={onAyuda}
           className="min-h-11 font-tabla text-[0.75rem] tracking-[0.1em] text-tinta-2 uppercase underline underline-offset-4 transition-colors hover:text-tinta"
         >
-          Cómo se juega y cómo se gana →
+          Cómo se juega y cómo se gana
         </button>
       </section>
     </div>

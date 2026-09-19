@@ -8,6 +8,14 @@ export function IconoAjustes() {
   );
 }
 
+export function IconoVolver() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+      <path d="M15 5l-7 7 7 7" />
+    </svg>
+  );
+}
+
 export function IconoDado() {
   return (
     <svg className="icono-dado" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true" focusable="false">

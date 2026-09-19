@@ -63,7 +63,7 @@ export function Hud({
         <div className="palco-partida">
           <div className="mx-auto w-full max-w-[40rem]">
         <div className="px-4">
-          <BarraSuperior onVolver={onVolver} volverLabel="← Inicio" onAjustes={onAjustes} />
+          <BarraSuperior onVolver={onVolver} volverLabel="Inicio" onAjustes={onAjustes} />
         </div>
 
         <div className="flex items-baseline justify-between gap-3 px-3 pt-2.5 sm:px-4">

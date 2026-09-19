@@ -111,9 +111,9 @@ export function FaseTemporada({
         />
       </div>
 
-      <details className="mt-4 border-t border-corondel">
-        <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-3 py-2 font-tabla text-[0.8125rem]">
-          <span className="text-tinta-2">Balance de caja <span className="indicador-mas" aria-hidden>+</span></span>
+      <details className="mt-4">
+        <summary className="fila-abrir flex min-h-11 cursor-pointer items-center justify-between gap-3 px-3 py-2 font-tabla text-[0.8125rem]">
+          <span className="text-tinta-2">Balance de caja</span>
           <span className={economia.neto < 0 ? 'text-alerta' : 'text-favorable'}>{plataConSigno(economia.neto)}</span>
         </summary>
         <ul className="mt-2">

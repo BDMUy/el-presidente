@@ -108,6 +108,13 @@ del club o cierra la ventana; la nota que la acompaña va en tinta-2, nunca en
 rojo. Los cupos que se gastan se cuentan en puntos llenos de acento sobre
 puntos vacíos (`Cupos`), con el número disponible para lectores de pantalla.
 
+Lo que se puede abrir (detalles, plegables, acordeones) se nota por ser
+una superficie propia — fondo-3 y radio, `.fila-abrir` — nunca por un "+"
+o una flecha: el estado abierto oscurece un poco esa superficie. La flecha
+queda solo para volver atrás (`IconoVolver`, un chevron propio, no el
+carácter "←") y para los desplegables nativos de selección (`▼`), que
+siguen la convención estándar de un `<select>`.
+
 País, liga y club permanecen visibles en secuencia vertical.
 El campo de país lleva a la izquierda la bandera del país elegido, con borde
 propio para que las bandas blancas no se pierdan contra la superficie, y el

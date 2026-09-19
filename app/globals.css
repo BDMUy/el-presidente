@@ -337,14 +337,6 @@ a {
 }
 
 .personalizar-partida > summary::-webkit-details-marker { display: none; }
-.personalizar-partida > summary .indicador-mas {
-  display: grid;
-  place-items: center;
-  width: 1.75rem;
-  height: 1.75rem;
-  color: var(--acento);
-  font: 700 22px var(--font-titular), sans-serif;
-}
 
 .personalizar-partida[open] > summary { border-bottom: 1px solid var(--corondel); }
 .personalizar-partida[open] .personalizar-contenido { animation: entrar-nota 200ms var(--ease-out); }
@@ -456,9 +448,7 @@ a {
 }
 
 
-.flecha-accion,
-.indicador-desplegable,
-.indicador-mas {
+.indicador-desplegable {
   display: inline-block;
   transition: transform 180ms var(--ease-out);
 }
@@ -467,20 +457,26 @@ a {
   transform: rotate(180deg);
 }
 
-[aria-expanded='true'] .indicador-mas,
-details[open] > summary .indicador-mas {
-  transform: rotate(45deg);
-}
-
-.detalle-recursos > summary {
+/* Lo que se puede abrir se nota por ser una superficie propia (fondo y
+   radio), no por una flecha o un signo más: el estado abierto oscurece
+   un poco esa superficie. */
+.fila-abrir {
   list-style: none;
+  border-radius: var(--radio-sm);
+  background: var(--fondo-3);
+  transition: background-color 160ms var(--ease-out);
 }
-.detalle-recursos > summary::-webkit-details-marker,
-.detalle-recursos > summary::marker {
+.fila-abrir::-webkit-details-marker,
+.fila-abrir::marker {
   display: none;
 }
-.detalle-recursos[open] > summary {
-  color: var(--tinta);
+.fila-abrir:hover,
+.fila-abrir:focus-visible {
+  background: color-mix(in srgb, var(--tinta) 8%, var(--fondo-3));
+}
+details[open] > summary.fila-abrir,
+.fila-abrir[aria-expanded='true'] {
+  background: color-mix(in srgb, var(--tinta) 12%, var(--fondo-3));
 }
 
 .selector-lista {

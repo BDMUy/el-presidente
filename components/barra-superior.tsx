@@ -4,12 +4,12 @@ import Link from 'next/link';
 import { useId } from 'react';
 
 import { elegirTema, leerTema, temaDelSistema, useTemaActual, type Tema } from '@/lib/tema';
-import { IconoAjustes } from './iconos';
+import { IconoAjustes, IconoVolver } from './iconos';
 
 export function BarraSuperior({
   onVolver,
   volverHref,
-  volverLabel = '← Volver al inicio',
+  volverLabel = 'Volver al inicio',
   onAjustes,
 }: {
   onVolver?: () => void;
@@ -24,16 +24,18 @@ export function BarraSuperior({
           type="button"
           onClick={onVolver}
           data-volver
-          className="-mx-2 min-h-11 px-2 font-tabla text-[0.75rem] tracking-[0.1em] text-tinta-2 uppercase transition-colors hover:text-tinta"
+          className="-mx-2 inline-flex min-h-11 items-center gap-1.5 px-2 font-tabla text-[0.75rem] tracking-[0.1em] text-tinta-2 uppercase transition-colors hover:text-tinta"
         >
+          <IconoVolver />
           {volverLabel}
         </button>
       ) : volverHref ? (
         <Link
           href={volverHref}
           data-volver
-          className="-mx-2 inline-flex min-h-11 items-center px-2 font-tabla text-[0.75rem] tracking-[0.1em] text-tinta-2 uppercase transition-colors hover:text-tinta"
+          className="-mx-2 inline-flex min-h-11 items-center gap-1.5 px-2 font-tabla text-[0.75rem] tracking-[0.1em] text-tinta-2 uppercase transition-colors hover:text-tinta"
         >
+          <IconoVolver />
           {volverLabel}
         </Link>
       ) : (

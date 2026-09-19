@@ -27,7 +27,7 @@ export function Plegable({
         onClick={() => setAbierto((a) => !a)}
         aria-expanded={abierto}
         aria-controls={id}
-        className="flex min-h-11 w-full items-center gap-3 border-b border-corondel text-left lg:hidden"
+        className="fila-abrir flex min-h-11 w-full items-center gap-3 px-3 py-2.5 text-left lg:hidden"
       >
         <span className="min-w-0 flex-1">
           <span className="block font-tabla text-[0.75rem] font-bold tracking-[0.1em] text-tinta-2 uppercase">
@@ -38,12 +38,6 @@ export function Plegable({
               {resumen}
             </span>
           )}
-        </span>
-        <span
-          aria-hidden
-          className="indicador-mas shrink-0 font-titular text-[1.125rem] leading-none font-black text-tinta"
-        >
-          +
         </span>
       </button>
 
